@@ -12,6 +12,7 @@ This repository provides a structured, multi-chapter exploration of the most pre
 - [Chapter 6 – AI Governance](#chapter-6--ai-governance)
 - [Chapter 7 – AI Economics, Law and Ethics](#chapter-7--ai-economics-law-and-ethics)
 - [Chapter 8 – AI Diplomacy and Democracy](#chapter-8--ai-diplomacy-and-democracy)
+- [Appendix – AI Fundamentals](#appendix--ai-fundamentals)
 
 ---
 
@@ -119,3 +120,18 @@ The final chapter looks outward, considering how AI transforms international rel
 
 ---
 
+## Appendix – AI Fundamentals
+
+- **A1:** Linear Algebra  
+- **A2:** Probability and Statistics  
+- **A3:** Calculus  
+- **A4:** Machine Learning  
+- **A5:** Deep Learning  
+- **A6:** Programming  
+- **A7:** Data Science  
+- **A8:** Project Management Principles  
+- **A9:** Software Development Life Cycle  
+- **A10:** Machine Learning with Python  
+- **A11:** Supervised Learning  
+- **A12:** Unsupervised Learning  
+- **A13:** Reinforcement Learning
