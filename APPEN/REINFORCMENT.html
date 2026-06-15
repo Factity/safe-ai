@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appendix A13 — Reinforcement Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&family=STIX+Two+Math&display=swap" rel="stylesheet">
+    <style>
+        /* ── THEME TOKENS ── */
+        [data-theme="light"] {
+            --paper: #f7f4ec;
+            --paper2: #eae6db;
+            --paper3: #dedad0;
+            --ink: #080706;
+            --ink2: #1c1a14;
+            --ink3: #3e3830;
+            --ink4: #736c62;
+            --ink5: #b0a99f;
+            --rule: rgba(8, 7, 6, 0.20);
+            --rule2: rgba(8, 7, 6, 0.11);
+            --rule3: rgba(8, 7, 6, 0.06);
+            --crimson: #5c0a0a;
+            --crimson2: #7a1010;
+            --crimson-lo: rgba(92, 10, 10, 0.07);
+            --hover-lo: rgba(8, 7, 6, 0.05);
+            --gold: #513d08;
+            --gold-lo: rgba(81, 61, 8, 0.09);
+            --teal: #0a2d3d;
+            --fm-bg: #080705;
+            --fm-rule: #5c0a0a;
+            --fm-accent: #a02020;
+            --fm-text: #ffffff;
+            --fm-muted: rgba(255, 255, 255, 0.45);
+            --fm-border: rgba(255, 255, 255, 0.11);
+            --toggle-bg: rgba(255, 255, 255, 0.10);
+            --toggle-ico: rgba(255, 255, 255, 0.60);
+            --section-bg: rgba(8, 7, 6, 0.04);
+            --section-border: rgba(8, 7, 6, 0.16);
+            --section-num: rgba(92, 10, 10, 0.60);
+            --tag-available-bg: rgba(92, 10, 10, 0.09);
+            --tag-available-border: rgba(92, 10, 10, 0.26);
+            --tag-available-color: #5c0a0a;
+            --tag-draft-bg: rgba(81, 61, 8, 0.09);
+            --tag-draft-border: rgba(81, 61, 8, 0.24);
+            --tag-draft-color: #513d08;
+            --callout-bg: rgba(92, 10, 10, 0.04);
+            --callout-border: rgba(92, 10, 10, 0.22);
+            --code-bg: rgba(8, 7, 6, 0.04);
+            --code-border: rgba(8, 7, 6, 0.10);
+            --eq-bg: rgba(8, 7, 6, 0.025);
+            --eq-border: rgba(8, 7, 6, 0.13);
+        }
+
+        [data-theme="dark"] {
+            --paper: #0c0b08;
+            --paper2: #141310;
+            --paper3: #1d1c18;
+            --ink: #f2ede2;
+            --ink2: #d8d2c4;
+            --ink3: #b0a898;
+            --ink4: #766e62;
+            --ink5: #3a3730;
+            --rule: rgba(242, 237, 226, 0.18);
+            --rule2: rgba(242, 237, 226, 0.10);
+            --rule3: rgba(242, 237, 226, 0.05);
+            --crimson: #e07070;
+            --crimson2: #f08080;
+            --crimson-lo: rgba(224, 112, 112, 0.12);
+            --hover-lo: rgba(242, 237, 226, 0.05);
+            --gold: #d4aa55;
+            --gold-lo: rgba(212, 170, 85, 0.11);
+            --teal: #5ab0cc;
+            --fm-bg: #080706;
+            --fm-rule: #8b2020;
+            --fm-accent: #e07070;
+            --fm-text: #f2ede2;
+            --fm-muted: rgba(242, 237, 226, 0.42);
+            --fm-border: rgba(242, 237, 226, 0.10);
+            --toggle-bg: rgba(242, 237, 226, 0.10);
+            --toggle-ico: rgba(242, 237, 226, 0.60);
+            --section-bg: rgba(242, 237, 226, 0.04);
+            --section-border: rgba(242, 237, 226, 0.12);
+            --section-num: rgba(224, 112, 112, 0.65);
+            --tag-available-bg: rgba(224, 112, 112, 0.12);
+            --tag-available-border: rgba(224, 112, 112, 0.30);
+            --tag-available-color: #e07070;
+            --tag-draft-bg: rgba(212, 170, 85, 0.11);
+            --tag-draft-border: rgba(212, 170, 85, 0.28);
+            --tag-draft-color: #d4aa55;
+            --callout-bg: rgba(224, 112, 112, 0.06);
+            --callout-border: rgba(224, 112, 112, 0.25);
+            --code-bg: rgba(242, 237, 226, 0.04);
+            --code-border: rgba(242, 237, 226, 0.10);
+            --eq-bg: rgba(242, 237, 226, 0.025);
+            --eq-border: rgba(242, 237, 226, 0.11);
+        }
+
+        /* ── RESET ── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background 0.22s ease, color 0.22s ease;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--paper2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--ink5);
+        }
+
+        /* ── FRONTMATTER ── */
+        .frontmatter {
+            background: var(--fm-bg);
+            color: var(--fm-text);
+            position: relative;
+            overflow: hidden;
+        }
+        .frontmatter::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 6px,
+                    rgba(255, 255, 255, 0.012) 6px,
+                    rgba(255, 255, 255, 0.012) 7px);
+            pointer-events: none;
+        }
+        .fm-rule-top {
+            height: 3px;
+            background: var(--fm-rule);
+        }
+        .fm-series-bar {
+            border-bottom: 1px solid var(--fm-border);
+            padding: .55rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .65rem;
+            font-weight: 600;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.58);
+        }
+        .fm-body {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 3.5rem 3rem 3rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 3rem;
+            align-items: end;
+            position: relative;
+        }
+        .fm-eyebrow {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .26em;
+            text-transform: uppercase;
+            color: var(--fm-accent);
+            margin-bottom: 1.1rem;
+        }
+        .fm-title {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+            font-weight: 500;
+            font-style: italic;
+            line-height: 1.04;
+            letter-spacing: -.015em;
+            color: var(--fm-text);
+            margin-bottom: .85rem;
+        }
+        .fm-title em {
+            font-style: normal;
+            font-weight: 400;
+            color: var(--fm-muted);
+        }
+        .fm-subtitle {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .9rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, .62);
+            line-height: 1.75;
+            max-width: 58ch;
+        }
+        .fm-meta {
+            display: flex;
+            flex-direction: column;
+            gap: .85rem;
+            font-family: 'Source Code Pro', monospace;
+            font-size: .62rem;
+            min-width: 200px;
+            border-left: 1px solid var(--fm-border);
+            padding-left: 2rem;
+            position: relative;
+        }
+        .fm-meta-row {
+            display: flex;
+            flex-direction: column;
+            gap: .15rem;
+        }
+        .fm-meta-label {
+            color: rgba(255, 255, 255, .40);
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            font-size: .52rem;
+        }
+        .fm-meta-value {
+            color: rgba(255, 255, 255, .90);
+        }
+        .fm-rule-bot {
+            height: 1px;
+            background: var(--fm-border);
+            margin: 0 3rem;
+        }
+        .fm-folio-bar {
+            padding: .55rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Source Code Pro', monospace;
+            font-size: .58rem;
+            color: rgba(255, 255, 255, .38);
+            letter-spacing: .08em;
+        }
+
+        /* ── THEME TOGGLE ── */
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: .9rem 3rem 0 0;
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            z-index: 10;
+        }
+        .toggle-label {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .6rem;
+            font-weight: 600;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--fm-muted);
+            user-select: none;
+        }
+        .toggle-btn {
+            width: 40px;
+            height: 20px;
+            background: var(--toggle-bg);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: background .2s;
+            flex-shrink: 0;
+        }
+        .toggle-btn::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            transition: transform .22s cubic-bezier(.4, 0, .2, 1);
+        }
+        [data-theme="dark"] .toggle-btn::after {
+            transform: translateX(20px);
+        }
+        [data-theme="dark"] .toggle-btn {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* ── PAGE BODY ── */
+        .page {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 3rem 6rem;
+            display: grid;
+            grid-template-columns: 1fr 268px;
+            gap: 5rem;
+            align-items: start;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .content {
+            padding-top: 3.5rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            margin-bottom: 2rem;
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .62rem;
+            font-weight: 600;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--ink4);
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: var(--crimson);
+            text-decoration: none;
+            transition: color .18s;
+        }
+        .breadcrumb a:hover {
+            color: var(--crimson2);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .breadcrumb .sep {
+            color: var(--ink5);
+            font-weight: 400;
+        }
+        .breadcrumb .current {
+            color: var(--ink2);
+        }
+
+        /* Section heading */
+        .section-block {
+            margin-bottom: 3.2rem;
+            scroll-margin-top: 2rem;
+        }
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: .55rem;
+            border-bottom: 1px solid var(--rule);
+        }
+        .section-num-large {
+            font-family: 'Source Code Pro', monospace;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--crimson);
+            letter-spacing: .04em;
+            flex-shrink: 0;
+            min-width: 3.6rem;
+        }
+        .section-title-large {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--ink);
+            line-height: 1.2;
+            letter-spacing: -.005em;
+        }
+        .section-body {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .88rem;
+            font-weight: 400;
+            color: var(--ink2);
+            line-height: 1.85;
+        }
+        .section-body p {
+            margin-bottom: 1rem;
+        }
+        .section-body p:last-child {
+            margin-bottom: 0;
+        }
+        .section-body strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        /* Intro callout */
+        .intro-note {
+            background: var(--callout-bg);
+            border-left: 3px solid var(--callout-border);
+            padding: 1.1rem 1.4rem;
+            margin-bottom: 2.6rem;
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .84rem;
+            color: var(--ink2);
+            line-height: 1.8;
+            border-radius: 0 6px 6px 0;
+        }
+        .intro-note strong {
+            color: var(--crimson);
+            font-weight: 600;
+        }
+
+        /* Equation block – LaTeX‑style math font */
+        .equation-block {
+            background: var(--eq-bg);
+            border: 1px solid var(--eq-border);
+            border-radius: 5px;
+            padding: 1.1rem 1.3rem;
+            margin: 1rem 0 1.2rem;
+            font-family: 'STIX Two Math', 'Latin Modern Math', 'Cambria Math', serif;
+            font-size: .94rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--ink);
+            overflow-x: auto;
+            line-height: 1.95;
+            letter-spacing: .02em;
+            white-space: nowrap;
+        }
+
+        /* Variable definition list */
+        .var-def-list {
+            list-style: none;
+            margin: .6rem 0 1.4rem;
+            border-top: 1px solid var(--rule3);
+        }
+        .var-def-item {
+            display: flex;
+            gap: .75rem;
+            padding: .38rem 0;
+            border-bottom: 1px solid var(--rule3);
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .78rem;
+            font-weight: 400;
+            color: var(--ink3);
+            line-height: 1.55;
+            align-items: baseline;
+        }
+        .var-symbol {
+            font-family: 'STIX Two Math', 'Latin Modern Math', 'Cambria Math', serif;
+            font-weight: 500;
+            font-style: italic;
+            color: var(--crimson);
+            min-width: 4.6rem;
+            flex-shrink: 0;
+            font-size: .82rem;
+            letter-spacing: .03em;
+            text-align: right;
+        }
+        .var-desc {
+            flex: 1;
+            color: var(--ink2);
+        }
+        .var-def-note {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .72rem;
+            font-weight: 400;
+            color: var(--ink4);
+            font-style: italic;
+            margin-top: .35rem;
+            padding-left: .2rem;
+        }
+
+        /* Conceptual label note */
+        .conceptual-note {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .72rem;
+            font-weight: 400;
+            color: var(--ink4);
+            font-style: italic;
+            margin-top: .5rem;
+            padding: .4rem .6rem;
+            background: var(--section-bg);
+            border-radius: 3px;
+            display: inline-block;
+            letter-spacing: .02em;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            padding-top: 3.5rem;
+        }
+        .sb-section {
+            margin-bottom: 2.6rem;
+        }
+        .sb-heading {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin-bottom: .9rem;
+            padding-bottom: .4rem;
+            border-bottom: 1px solid var(--rule);
+        }
+        .sb-body {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .82rem;
+            font-weight: 400;
+            color: var(--ink3);
+            line-height: 1.75;
+        }
+        .sb-body p {
+            margin-bottom: .65rem;
+        }
+        .sb-body p:last-child {
+            margin-bottom: 0;
+        }
+        .sb-body strong {
+            color: var(--ink2);
+            font-weight: 600;
+        }
+        .sb-nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+        }
+        .sb-nav-list li {
+            border-bottom: 1px solid var(--rule3);
+        }
+        .sb-nav-list a {
+            display: block;
+            padding: .55rem 0;
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .78rem;
+            font-weight: 400;
+            color: var(--ink3);
+            text-decoration: none;
+            transition: color .16s;
+            letter-spacing: .02em;
+        }
+        .sb-nav-list a:hover {
+            color: var(--crimson);
+        }
+        .sb-nav-num {
+            font-family: 'Source Code Pro', monospace;
+            font-size: .6rem;
+            color: var(--crimson);
+            margin-right: .4rem;
+            letter-spacing: .04em;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--paper2);
+            border-top: 2px solid var(--ink);
+        }
+        .ft-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+        .ft-title {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--ink2);
+        }
+        .ft-right {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .68rem;
+            font-weight: 300;
+            color: var(--ink4);
+            letter-spacing: .04em;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:820px) {
+            .page {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .sidebar {
+                border-top: 2px solid var(--ink);
+                padding-top: 2.5rem;
+            }
+            .var-symbol {
+                min-width: 3.8rem;
+                font-size: .74rem;
+            }
+            .var-def-item {
+                font-size: .73rem;
+                gap: .5rem;
+            }
+            .equation-block {
+                font-size: .84rem;
+                padding: .95rem 1rem;
+            }
+        }
+        @media(max-width:680px) {
+            .page {
+                padding: 0 1.5rem 4rem;
+            }
+            .fm-body {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 2.5rem 1.5rem 2rem;
+            }
+            .fm-meta {
+                border-left: none;
+                border-top: 1px solid var(--fm-border);
+                padding-left: 0;
+                padding-top: 1.25rem;
+            }
+            .fm-rule-bot {
+                margin: 0 1.5rem;
+            }
+            .fm-folio-bar {
+                padding: .55rem 1.5rem;
+            }
+            .fm-series-bar {
+                padding: .55rem 1.5rem;
+            }
+            .ft-inner {
+                padding: 1.2rem 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: .4rem;
+            }
+            .theme-toggle {
+                padding: .7rem 1.5rem 0 0;
+            }
+            .section-num-large {
+                min-width: 2.8rem;
+                font-size: .9rem;
+            }
+            .section-title-large {
+                font-size: 1.3rem;
+            }
+            .equation-block {
+                white-space: normal;
+                word-break: break-all;
+                font-size: .78rem;
+            }
+            .var-symbol {
+                font-size: .74rem;
+                min-width: 3rem;
+            }
+        }
+        @media(prefers-reduced-motion:reduce) {
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FRONTMATTER / TITLE PAGE -->
+    <div class="frontmatter">
+        <div class="fm-rule-top"></div>
+        <div class="fm-series-bar">
+            <span>AI Safety &amp; Governance Series</span>
+            <span>Appendix — Technical Foundations</span>
+        </div>
+        <div class="fm-body">
+            <div class="fm-left">
+                <div class="fm-eyebrow">Appendix &nbsp;·&nbsp; Section A13</div>
+                <h1 class="fm-title">Reinforcement<br><em>Learning</em></h1>
+                <p class="fm-subtitle">A condensed, symbol‑dense reference covering the mathematical foundations of reinforcement learning — from the critique of supervised learning through the core formalism of states, actions, rewards, and return. Designed as a rapid technical primer for the agentic AI systems discussed in the main chapters.</p>
+            </div>
+            <div class="fm-meta">
+                <div class="fm-meta-row">
+                    <span class="fm-meta-label">Status</span>
+                    <span class="fm-meta-value">Open Draft</span>
+                </div>
+                <div class="fm-meta-row">
+                    <span class="fm-meta-label">Sections</span>
+                    <span class="fm-meta-value">8 Sub‑sections</span>
+                </div>
+                <div class="fm-meta-row">
+                    <span class="fm-meta-label">Parent Chapter</span>
+                    <span class="fm-meta-value">Appendix — AI Fundamentals</span>
+                </div>
+                <div class="fm-meta-row">
+                    <span class="fm-meta-label">Domain</span>
+                    <span class="fm-meta-value">ML · RL · Mathematics</span>
+                </div>
+                <div class="fm-meta-row">
+                    <span class="fm-meta-label">Author</span>
+                    <span class="fm-meta-value">Mukul Namagiri</span>
+                </div>
+            </div>
+            <div class="theme-toggle" aria-label="Toggle colour theme">
+                <span class="toggle-label" id="toggle-label-text">Light</span>
+                <button class="toggle-btn" id="themeToggle" aria-label="Switch to dark mode" role="switch" aria-checked="false"></button>
+            </div>
+        </div>
+        <div class="fm-rule-bot"></div>
+        <div class="fm-folio-bar">
+            <span>Appendix A13</span>
+            <span>Reinforcement Learning — Symbol‑Dense Reference</span>
+        </div>
+    </div>
+
+    <!-- PAGE BODY -->
+    <div class="page">
+
+        <!-- MAIN CONTENT -->
+        <main class="content">
+
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="#">Building Safe Superintelligence</a>
+                <span class="sep">›</span>
+                <a href="#">Appendix</a>
+                <span class="sep">›</span>
+                <span class="current">A13 — Reinforcement Learning</span>
+            </nav>
+
+            <!-- Introductory note -->
+            <div class="intro-note">
+                <strong>Note on scope.</strong> Reinforcement learning is a vast topic and would require an entire book of its own to proceed forward — which is not plausible here. We have therefore tried to condense as many concepts as possible in a very information‑dense way. What better way to condense than with a bunch of symbols.
+            </div>
+
+            <!-- A13.1 -->
+            <div class="section-block" id="a13-1">
+                <div class="section-heading">
+                    <span class="section-num-large">A13.1</span>
+                    <h2 class="section-title-large">Critique of Supervised Learning</h2>
+                </div>
+                <div class="section-body">
+                    <p>The supervised learning phenomenon purely interpolates or extrapolates from existing data sets. But learning can also happen <strong>without previous experience</strong> — through exploration. Hence reinforcement learning was necessary.</p>
+                </div>
+            </div>
+
+            <!-- A13.2 -->
+            <div class="section-block" id="a13-2">
+                <div class="section-heading">
+                    <span class="section-num-large">A13.2</span>
+                    <h2 class="section-title-large">Origin of Reinforcement</h2>
+                </div>
+                <div class="section-body">
+                    <p>The word <strong>reinforcement</strong> comes from behaviour psychology and denotes <strong>reward or punishment</strong>. It depends on the agent's decisions and on external factors.</p>
+                </div>
+            </div>
+
+            <!-- A13.3 -->
+            <div class="section-block" id="a13-3">
+                <div class="section-heading">
+                    <span class="section-num-large">A13.3</span>
+                    <h2 class="section-title-large">Agent</h2>
+                </div>
+                <div class="section-body">
+                    <p>The <strong>decision‑maker</strong> that selects actions.</p>
+                    <div class="conceptual-note">No mathematical variables; &ldquo;agent&rdquo; is a conceptual label.</div>
+                </div>
+            </div>
+
+            <!-- A13.4 -->
+            <div class="section-block" id="a13-4">
+                <div class="section-heading">
+                    <span class="section-num-large">A13.4</span>
+                    <h2 class="section-title-large">Environment</h2>
+                </div>
+                <div class="section-body">
+                    <p>The <strong>system outside the agent</strong> that produces the next state and reward.</p>
+                    <div class="conceptual-note">No mathematical variables; &ldquo;environment&rdquo; is a conceptual label.</div>
+                </div>
+            </div>
+
+            <!-- A13.5 -->
+            <div class="section-block" id="a13-5">
+                <div class="section-heading">
+                    <span class="section-num-large">A13.5</span>
+                    <h2 class="section-title-large">State</h2>
+                </div>
+                <div class="section-body">
+                    <div class="equation-block">
+                        S<sub>t</sub> &isin; S,&emsp;
+                        Pr{ S<sub>t+1</sub> &mid; S<sub>t</sub>, A<sub>t</sub> } = Pr{ S<sub>t+1</sub> &mid; S<sub>0</sub>, A<sub>0</sub>, &hellip;, S<sub>t</sub>, A<sub>t</sub> }
+                    </div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">t</span><span class="var-desc">discrete time step index (t = 0, 1, 2, &hellip;).</span></li>
+                        <li class="var-def-item"><span class="var-symbol">S</span><span class="var-desc">the set (space) of all possible states.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">S<sub>t</sub></span><span class="var-desc">the state at time t; a particular element of S.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">S<sub>t+1</sub></span><span class="var-desc">the next state, after taking action A<sub>t</sub>.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">A<sub>t</sub></span><span class="var-desc">the action chosen at time t (see A13.6).</span></li>
+                        <li class="var-def-item"><span class="var-symbol">Pr{&middot;&mid;&middot;}</span><span class="var-desc">conditional probability.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">S<sub>0</sub>,A<sub>0</sub>,&hellip;</span><span class="var-desc">the entire history of states and actions up to time t.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A13.6 -->
+            <div class="section-block" id="a13-6">
+                <div class="section-heading">
+                    <span class="section-num-large">A13.6</span>
+                    <h2 class="section-title-large">Action</h2>
+                </div>
+                <div class="section-body">
+                    <div class="equation-block">
+                        A<sub>t</sub> &isin; A
+                    </div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">t</span><span class="var-desc">time step.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">A</span><span class="var-desc">the set (space) of all possible actions; sometimes written A(s) if the available actions depend on state.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">A<sub>t</sub></span><span class="var-desc">the action taken at time t.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A13.7 -->
+            <div class="section-block" id="a13-7">
+                <div class="section-heading">
+                    <span class="section-num-large">A13.7</span>
+                    <h2 class="section-title-large">Reward</h2>
+                </div>
+                <div class="section-body">
+                    <div class="equation-block">
+                        R<sub>t</sub> &isin; &Ropf;,&emsp;
+                        R<sub>t</sub> = R( S<sub>t&minus;1</sub>, A<sub>t&minus;1</sub>, S<sub>t</sub> )
+                    </div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">t</span><span class="var-desc">time step when the reward is received.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">&Ropf;</span><span class="var-desc">the real numbers.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">R<sub>t</sub></span><span class="var-desc">scalar reward signal received at time t.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">S<sub>t&minus;1</sub></span><span class="var-desc">the state immediately before the action.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">A<sub>t&minus;1</sub></span><span class="var-desc">the action that led to the reward.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">S<sub>t</sub></span><span class="var-desc">the state entered after taking the action (the state in which the reward is received).</span></li>
+                        <li class="var-def-item"><span class="var-symbol">R(&middot;)</span><span class="var-desc">the reward function mapping a transition (S<sub>t&minus;1</sub>, A<sub>t&minus;1</sub>, S<sub>t</sub>) to a real number.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A13.8 -->
+            <div class="section-block" id="a13-8">
+                <div class="section-heading">
+                    <span class="section-num-large">A13.8</span>
+                    <h2 class="section-title-large">Return</h2>
+                </div>
+                <div class="section-body">
+                    <div class="equation-block">
+                        G<sub>t</sub> &doteq; <span style="font-size:1.1em;">&sum;</span><sub>k=0</sub><sup>&infin;</sup> &gamma;<sup>k</sup> R<sub>t+k+1</sub>
+                    </div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">t</span><span class="var-desc">the time step from which we compute the return.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">G<sub>t</sub></span><span class="var-desc">the (discounted) return starting from time t.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">&doteq;</span><span class="var-desc">definitional equality.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">&gamma;</span><span class="var-desc">discount factor, 0 &le; &gamma; &le; 1, weighting future rewards.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">k</span><span class="var-desc">summation index over future time steps.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">&infin;</span><span class="var-desc">the sum extends indefinitely (or until terminal state).</span></li>
+                        <li class="var-def-item"><span class="var-symbol">R<sub>t+k+1</sub></span><span class="var-desc">reward received at time t+k+1.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sb-section">
+                <div class="sb-heading">On This Page</div>
+                <ul class="sb-nav-list">
+                    <li><a href="#a13-1"><span class="sb-nav-num">A13.1</span> Critique of Supervised Learning</a></li>
+                    <li><a href="#a13-2"><span class="sb-nav-num">A13.2</span> Origin of Reinforcement</a></li>
+                    <li><a href="#a13-3"><span class="sb-nav-num">A13.3</span> Agent</a></li>
+                    <li><a href="#a13-4"><span class="sb-nav-num">A13.4</span> Environment</a></li>
+                    <li><a href="#a13-5"><span class="sb-nav-num">A13.5</span> State</a></li>
+                    <li><a href="#a13-6"><span class="sb-nav-num">A13.6</span> Action</a></li>
+                    <li><a href="#a13-7"><span class="sb-nav-num">A13.7</span> Reward</a></li>
+                    <li><a href="#a13-8"><span class="sb-nav-num">A13.8</span> Return</a></li>
+                </ul>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-heading">About This Appendix</div>
+                <div class="sb-body">
+                    <p><strong>Section A13</strong> provides a condensed, symbol‑dense reference for the mathematical foundations of reinforcement learning — one of the core paradigms underpinning modern AI systems.</p>
+                    <p>This material is referenced extensively in <strong>Chapter 4 (Agentic AI Systems)</strong> and <strong>Chapter 5 (Safe AI and Evaluation)</strong>, where RL dynamics intersect with alignment concerns.</p>
+                    <p>Readers are encouraged to review this appendix before engaging with the agentic systems and safety evaluation chapters.</p>
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-heading">Related Sections</div>
+                <div class="sb-body">
+                    <p><strong>A11 — Supervised Learning</strong><br>Foundational techniques for learning from labelled data.</p>
+                    <p><strong>A12 — Unsupervised Learning</strong><br>Discovering structure in unlabelled data.</p>
+                    <p><strong>A4 — Machine Learning</strong><br>Broad overview of the ML paradigm.</p>
+                    <p><strong>A5 — Deep Learning</strong><br>Neural network architectures and training.</p>
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-heading">Status</div>
+                <div class="sb-body">
+                    <p>This appendix section is currently an <strong>open draft</strong>. Feedback and corrections are welcomed and will be incorporated into subsequent revisions.</p>
+                    <p>Last updated: <strong>June 2026</strong></p>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <footer>
+        <div class="ft-inner">
+            <span class="ft-title">Author — Mukul Namagiri</span>
+            <span class="ft-right">Email &nbsp;·&nbsp; mukul.namagiri.pm@gmail.com &nbsp;·&nbsp; AI Safety &amp; Governance Series</span>
+        </div>
+    </footer>
+
+    <script>
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        const lbl = document.getElementById('toggle-label-text');
+
+        const saved = localStorage.getItem('ns-theme');
+        if (saved) {
+            html.setAttribute('data-theme', saved);
+            syncUI();
+        }
+
+        btn.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('ns-theme', next);
+            syncUI();
+        });
+
+        function syncUI() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            lbl.textContent = isDark ? 'Dark' : 'Light';
+            btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
+        }
+    </script>
+</body>
+</html>
