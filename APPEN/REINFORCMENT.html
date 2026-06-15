@@ -598,6 +598,777 @@
                 </div>
             </div>
 
+            <!-- A13.14 Laplacian Determinism (note) -->
+<div class="section-block" id="a13-14">
+    <div class="section-heading"><span class="section-num-large">A13.14</span><h2 class="section-title-large">Laplacian Determinism</h2></div>
+    <div class="section-body">
+        <div class="note-block">
+            <p>Laplacian determinism is the view that the evolution of a system is fully determined by its initial conditions and governing differential equations. In optimal control theory this means that optimal actions <em>a(s,t)</em> are sought analytically, rather than through trial‑and‑error learning.</p>
+            <blockquote>
+                The essential point is the last one: the theory considers, for a given system of differential equations, ways of finding the optimal <em>a(s,t)</em> analytically. Drawing an analogy with the problem of maximizing, say, a differentiable function <em>f(x) → max<sub>x</sub></em>, optimal control theory looks for necessary conditions of the solution: for example, that at an extremum of a function we must have <em>∇<sub>x</sub> f(x) = 0</em>. No “learning by trial and error” is assumed here.
+            </blockquote>
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">a(s,t)</span><span class="var-desc">optimal action as a function of state and time, determined analytically.</span></li>
+            <li class="var-def-item"><span class="var-symbol">f(x)</span><span class="var-desc">an objective function to be maximised.</span></li>
+            <li class="var-def-item"><span class="var-symbol">∇<sub>x</sub> f(x) = 0</span><span class="var-desc">necessary first‑order condition for an extremum (gradient vanishes).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+<!-- A13.15 Time‑homogeneous (stationary) Markov chain -->
+<div class="section-block" id="a13-15">
+    <div class="section-heading"><span class="section-num-large">A13.15</span><h2 class="section-title-large">Time‑homogeneous (Stationary) Markov Chain</h2></div>
+    <div class="section-body">
+        <div class="equation-block multiline">
+            ∀t, &ensp; p(s<sub>t+1</sub> ∣ s<sub>t</sub>) = p(s<sub>1</sub> ∣ s<sub>0</sub>)<br><br>
+            p(s′ ∣ s) ≐ Pr{S<sub>t+1</sub>=s′ ∣ S<sub>t</sub>=s}
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">t</span><span class="var-desc">time step; the condition states that the distribution is identical for all <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s<sub>t+1</sub> ∣ s<sub>t</sub>)</span><span class="var-desc">time‑dependent transition probability (if any).</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s<sub>1</sub> ∣ s<sub>0</sub>)</span><span class="var-desc">the transition probability from the initial step, used as the reference.</span></li>
+            <li class="var-def-item"><span class="var-symbol">s, s′</span><span class="var-desc">a current state <em>s</em> and next state <em>s′</em> (the prime notation ′ indicates the next time step).</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s)</span><span class="var-desc">the stationary transition kernel, a single conditional probability distribution Pr{S<sub>t+1</sub>=s′ ∣ S<sub>t</sub>=s} valid for every <em>t</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.16 Stationary MDP -->
+<div class="section-block" id="a13-16">
+    <div class="section-heading"><span class="section-num-large">A13.16</span><h2 class="section-title-large">Stationary MDP</h2></div>
+    <div class="section-body">
+        <p>A stationary (time‑homogeneous) MDP is one where both the transition dynamics <em>p</em> and the reward function <em>r</em> are independent of time <em>t</em>.</p>
+    </div>
+</div>
+
+<!-- A13.17 Environment (controlled Markov chain) -->
+<div class="section-block" id="a13-17">
+    <div class="section-heading"><span class="section-num-large">A13.17</span><h2 class="section-title-large">Environment (Controlled Markov Chain)</h2></div>
+    <div class="section-body">
+        <p>An environment (or controlled Markov chain) is a triple <em>(S, A, P)</em> that specifies the state space, action space, and stationary transition dynamics governing the system’s evolution.</p>
+        <div class="equation-block multiline">
+            Environment ≐ (S, A, P)<br><br>
+            P = { p(s′ ∣ s, a) ∣ s, s′ ∈ S, a ∈ A }<br>
+            p(s′ ∣ s, a) ≐ Pr{S<sub>t+1</sub>=s′ ∣ S<sub>t</sub>=s, A<sub>t</sub>=a}
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">S</span><span class="var-desc">set of states (state space).</span></li>
+            <li class="var-def-item"><span class="var-symbol">A</span><span class="var-desc">set of actions (action space).</span></li>
+            <li class="var-def-item"><span class="var-symbol">P</span><span class="var-desc">transition function (world dynamics) – a family of conditional distributions.</span></li>
+            <li class="var-def-item"><span class="var-symbol">s</span><span class="var-desc">current state, s ∈ S.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a</span><span class="var-desc">action chosen by the agent, a ∈ A.</span></li>
+            <li class="var-def-item"><span class="var-symbol">s′</span><span class="var-desc">next state, s′ ∈ S.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">probability of moving to state s′ given that the agent took action a in state s; implicitly stationary (time‑independent) and Markovian.</span></li>
+            <li class="var-def-item"><span class="var-symbol">S<sub>t</sub>, A<sub>t</sub>, S<sub>t+1</sub></span><span class="var-desc">random variables for state, action, and next state at step t.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.18 Fully Observable Environment -->
+<div class="section-block" id="a13-18">
+    <div class="section-heading"><span class="section-num-large">A13.18</span><h2 class="section-title-large">Fully Observable Environment</h2></div>
+    <div class="section-body">
+        <p>An environment is fully observable when at each time <em>t</em> the agent receives the complete state <em>S<sub>t</sub></em> as its observation, i.e. the observation equals the state; otherwise the problem is a partially observable Markov decision process (POMDP).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">S<sub>t</sub></span><span class="var-desc">the true state of the environment at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Observation</span><span class="var-desc">the signal the agent receives; here it is exactly S<sub>t</sub> (no additional symbol, because observation ≡ state).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Fully observable</span><span class="var-desc">implies that the agent’s decision rule can be a function of S<sub>t</sub> alone without needing any memory of the past.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.19 Action Spaces -->
+<div class="section-block" id="a13-19">
+    <div class="section-heading"><span class="section-num-large">A13.19</span><h2 class="section-title-large">Action Spaces</h2></div>
+    <div class="section-body">
+        <p>Two common types of action space are distinguished:</p>
+        <dl class="var-def-list">
+            <dt class="var-def-item"><span class="var-symbol">Finite (discrete)</span><span class="var-desc">|A| &lt; +∞, with the additional practical assumption that the number of actions |A| is reasonably small.</span></dt>
+            <dt class="var-def-item"><span class="var-symbol">Continuous</span><span class="var-desc">A ⊆ [−1,1]<sup>m</sup>. The choice of the interval [−1,1] is a widespread convention that does not sacrifice generality. Problems with such an action space are also called <em>continuous control</em> problems.</span></dt>
+        </dl>
+    </div>
+</div>
+
+<!-- A13.20 Trajectory -->
+<div class="section-block" id="a13-20">
+    <div class="section-heading"><span class="section-num-large">A13.20</span><h2 class="section-title-large">Trajectory</h2></div>
+    <div class="section-body">
+        <p>A sequence</p>
+        <div class="equation-block multiline">
+            T ≐ (s<sub>0</sub>, a<sub>0</sub>, s<sub>1</sub>, a<sub>1</sub>, s<sub>2</sub>, a<sub>2</sub>, s<sub>3</sub>, a<sub>3</sub>, …)
+        </div>
+        <p>is called a <strong>trajectory</strong>.</p>
+    </div>
+</div>
+
+<!-- A13.21 Trajectory Distribution and Expectation -->
+<div class="section-block" id="a13-21">
+    <div class="section-heading"><span class="section-num-large">A13.21</span><h2 class="section-title-large">Trajectory Distribution &amp; Expectation</h2></div>
+    <div class="section-body">
+        <p>For a given environment, policy π, and initial state s<sub>0</sub> ∈ S, the distribution from which trajectories T are drawn is called the <strong>trajectory distribution</strong>:</p>
+        <div class="equation-block multiline">
+            p(T) = p(a<sub>0</sub>, s<sub>1</sub>, a<sub>1</sub>, …) = ∏<sub>t≥0</sub> π(a<sub>t</sub> ∣ s<sub>t</sub>) p(s<sub>t+1</sub> ∣ s<sub>t</sub>, a<sub>t</sub>)
+        </div>
+        <p>Expectations over trajectories are denoted by <strong>E<sub>T</sub></strong> and understood as an infinite chain of nested expectations:</p>
+        <div class="equation-block multiline">
+            E<sub>T</sub> (⋅) := E<sub>π(a<sub>0</sub>∣s<sub>0</sub>)</sub> E<sub>p(s<sub>1</sub>∣s<sub>0</sub>,a<sub>0</sub>)</sub> E<sub>π(a<sub>1</sub>∣s<sub>1</sub>)</sub> … (⋅) &emsp;(1.1)
+        </div>
+        <p>A convenient shorthand unpacks this chain as</p>
+        <div class="equation-block multiline">
+            E<sub>T</sub> (⋅) = E<sub>a<sub>0</sub></sub> E<sub>s<sub>1</sub></sub> E<sub>a<sub>1</sub></sub> … (⋅)
+        </div>
+        <p>In such notation one should remember that actions come from a fixed policy π. Where clarity is needed, the notation <strong>E<sub>T∼π</sub></strong> is used.</p>
+    </div>
+</div>
+
+<!-- A13.22 Policy -->
+<div class="section-block" id="a13-22">
+    <div class="section-heading"><span class="section-num-large">A13.22</span><h2 class="section-title-large">Policy</h2></div>
+    <div class="section-body">
+        <p>A policy specifies the agent’s behaviour as a mapping from states to a probability distribution over actions.</p>
+        <div class="equation-block multiline">
+            π(a ∣ s) ≐ Pr{A<sub>t</sub>=a ∣ S<sub>t</sub>=s}
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π</span><span class="var-desc">policy (decision rule).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π(a ∣ s)</span><span class="var-desc">probability of selecting action <em>a</em> in state <em>s</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">stationary policy</span><span class="var-desc">a policy that depends only on the current state and is independent of time <em>t</em> (as implied by the definition above).</span></li>
+        </ul>
+        <p>A deterministic policy maps each state to a single action; a stochastic policy gives a distribution over actions.</p>
+    </div>
+</div>
+
+
+
+<div class="section-block" id="a13-23">
+    <div class="section-heading"><span class="section-num-large">A13.23</span><h2 class="section-title-large">Theorem  — Equivalent MDP Formulations</h2></div>
+    <div class="section-body">
+        <p><strong>Theorem.</strong> MDP may equivalently use: <em>r(s)</em>, <em>r(s,a)</em>, <em>r(s,a,s′)</em>, <em>p(r,s′|s,a)</em>, or <em>s<sub>0</sub>~p(s<sub>0</sub>)</em>.</p>
+        <p><em>Proof.</em> Push all randomness into <em>p(s′|s,a)</em> by augmenting the state with last <em>(a,r)</em>; then reward becomes deterministic <em>r(s)</em>. ∎</p>
+    </div>
+</div>
+
+
+<!-- A13.24 Finite (Tabular) MDP -->
+<div class="section-block" id="a13-24">
+    <div class="section-heading"><span class="section-num-large">A13.24</span><h2 class="section-title-large">Finite (Tabular) MDP</h2></div>
+    <div class="section-body">
+        <p>An MDP is called <strong>finite</strong> (or <strong>tabular</strong>) if and only if both the state space and action space are finite:</p>
+        <div class="equation-block">
+            |S| &lt; ∞, &emsp; |A| &lt; ∞
+        </div>
+    </div>
+</div>
+
+
+<!-- A13.25 Episodicity -->
+<div class="section-block" id="a13-25">
+    <div class="section-heading"><span class="section-num-large">A13.25</span><h2 class="section-title-large">Episodicity</h2></div>
+    <div class="section-body">
+        <p>In many cases the agent–environment interaction may “end” under certain conditions, and the fact of termination is accessible to the agent.</p>
+        <p><strong>Definition (Terminal State).</strong> A state <em>s</em> is called <strong>terminal</strong> in an MDP if for all actions <em>a ∈ A</em>:</p>
+        <div class="equation-block">
+            P(s′ = s ∣ s, a) = 1, &emsp; r(s, a) = 0,
+        </div>
+        <p>i.e., with probability 1 the agent cannot leave the state.</p>
+        <p>One cycle of the process from a starting state up to a terminal state is called an <strong>episode</strong>.</p>
+    </div>
+</div>
+
+<!-- A13.26 Episodic Environment -->
+<div class="section-block" id="a13-26">
+    <div class="section-heading"><span class="section-num-large">A13.26</span><h2 class="section-title-large">Episodic Environment</h2></div>
+    <div class="section-body">
+        <p>An environment is called <strong>episodic</strong> if, for any strategy, the interaction process is guaranteed to terminate within at most some finite number of steps <em>T<sub>max</sub></em>.</p>
+    </div>
+</div>
+
+
+<!-- A13.27 Theorem 2 — Tree Structure of Episodic Environments -->
+<div class="section-block" id="a13-27">
+    <div class="section-heading"><span class="section-num-large">A13.27</span><h2 class="section-title-large">Theorem  — Tree Structure of Episodic Environments</h2></div>
+    <div class="section-body">
+        <p><strong>Theorem.</strong> In an episodic environment, the probability of returning to a previously visited state within a single episode is zero. Consequently, the state‑action graph is a tree.</p>
+        <p><em>Proof.</em> Suppose state <em>s</em> can be revisited with probability <em>p &gt; 0</em> after <em>T</em> steps. By the Markov property, repeating the same actions yields an episode of at least <em>nT</em> steps with probability <em>p<sup>n</sup> &gt; 0</em> for any <em>n</em>, violating the existence of a finite bound <em>T<sub>max</sub></em>. ∎</p>
+    </div>
+</div>
+
+
+
+<!-- A13.28 Discounting -->
+<div class="section-block" id="a13-28">
+    <div class="section-heading"><span class="section-num-large">A13.28</span><h2 class="section-title-large">Discounting</h2></div>
+    <div class="section-body">
+        <p>The objective is to find a policy <em>π</em> that maximizes the expected total reward:</p>
+        <div class="equation-block multiline">
+            𝔼<sub>T∼π</sub> ∑<sub>t≥0</sub> r<sub>t</sub> → max<sub>π</sub>, (1.2)
+        </div>
+        <p>where <em>r<sub>t</sub> ≐ r(s<sub>t</sub>, a<sub>t</sub>)</em> is the reward at step <em>t</em>. To exclude cases where this sum diverges, we first bound the per‑step reward:</p>
+        <div class="equation-block">
+            ∀s, a : |r(s, a)| ≤ r<sub>max</sub>. (1.3)
+        </div>
+        <p>Even with this bound, infinite horizons can still lead to unbounded sums. We therefore introduce <strong>discounting</strong> with factor <em>γ</em>, defining the <strong>discounted return</strong>:</p>
+        <div class="equation-block">
+            G ≐ ∑<sub>t=0</sub><sup>∞</sup> γ<sup>t</sup> r<sub>t</sub>.
+        </div>
+        <p>For any <em>γ ∈ [0, 1)</em> and bounded rewards, this series converges absolutely. The new objective becomes</p>
+        <div class="equation-block">
+            𝔼<sub>T∼π</sub> [G] → max<sub>π</sub>.
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub></span><span class="var-desc">reward received at time step <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>max</sub></span><span class="var-desc">uniform bound on the absolute reward, |r(s,a)| ≤ r<sub>max</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ &lt; 1, controlling the present value of future rewards.</span></li>
+            <li class="var-def-item"><span class="var-symbol">G</span><span class="var-desc">discounted return (cumulative discounted reward).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+<!-- A13.29 Score (Performance) of a Policy -->
+<div class="section-block" id="a13-29">
+    <div class="section-heading"><span class="section-num-large">A13.29</span><h2 class="section-title-large">Score (Performance) of a Policy</h2></div>
+    <div class="section-body">
+        <p>The <strong>score</strong> (or <strong>performance</strong>) of a policy <em>π</em> in a given MDP is the expected discounted return over trajectories:</p>
+        <div class="equation-block multiline">
+            J(π) ≐ 𝔼<sub>T∼π</sub> [ G ] = 𝔼<sub>T∼π</sub> [ ∑<sub>t=0</sub><sup>∞</sup> γ<sup>t</sup> r<sub>t</sub> ]. (1.5)
+        </div>
+        <p>The <strong>reinforcement learning problem</strong> consists of maximising this objective:</p>
+        <div class="equation-block">
+            J(π) → max<sub>π</sub>.
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">J(π)</span><span class="var-desc">score (performance) of policy π.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π</span><span class="var-desc">stationary policy, π(a|s).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">trajectory (state‑action sequence).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T ∼ π</span><span class="var-desc">distribution of trajectories under π.</span></li>
+            <li class="var-def-item"><span class="var-symbol">G</span><span class="var-desc">discounted return, Σ γ<sup>t</sup> r<sub>t</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ &lt; 1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub></span><span class="var-desc">immediate reward at time t, bounded |r| ≤ r<sub>max</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>T∼π</sub>[·]</span><span class="var-desc">expectation over trajectories under π.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.30 Claim 1 — Bounded Score -->
+<div class="section-block" id="a13-30">
+    <div class="section-heading"><span class="section-num-large">A13.30</span><h2 class="section-title-large">Claim 1 — Score Is Bounded</h2></div>
+    <div class="section-body">
+        <p><strong>Claim 1.</strong> Under the stated assumptions (bounded rewards and either discounting <em>γ &lt; 1</em> or finite episode length <em>T<sub>max</sub></em> with <em>γ = 1</em>), the score <em>J(π)</em> is bounded.</p>
+        <p><em>Proof.</em></p>
+        <div class="equation-block multiline">
+            If γ &lt; 1: |R(T)| = |∑<sub>t≥0</sub> γ<sup>t</sup> r<sub>t</sub>| ≤ ∑<sub>t≥0</sub> γ<sup>t</sup> r<sub>max</sub> = <strong>1/(1 − γ)</strong> r<sub>max</sub>.<br>
+            If γ = 1 (episodic with horizon T<sub>max</sub>): |R(T)| ≤ T<sub>max</sub> r<sub>max</sub>.
+        </div>
+        <p>In either case, the absolute return of any trajectory is bounded by a constant <em>M</em> (where <em>M = r<sub>max</sub>/(1−γ)</em> or <em>M = T<sub>max</sub> r<sub>max</sub></em>). Consequently, its expectation <em>J(π) = 𝔼[R(T)]</em> also satisfies <em>|J(π)| ≤ M</em>. ∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">R(T)</span><span class="var-desc">return (cumulative discounted reward) of trajectory T.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub></span><span class="var-desc">reward at step t, bounded: |r(s,a)| ≤ r<sub>max</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>max</sub></span><span class="var-desc">uniform upper bound on |r(s,a)|.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor (γ &lt; 1 in the discounted case, γ = 1 in episodic).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T<sub>max</sub></span><span class="var-desc">maximum episode length when γ = 1.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.31 Note -->
+<div class="section-block" id="a13-31">
+    <div class="section-heading"><span class="section-num-large">A13.31</span><h2 class="section-title-large">Note</h2></div>
+    <div class="section-body">
+        <p>If rewards are unbounded, policies with infinite return become indistinguishable (e.g., +1 every step vs. +1 every second step). Bounding avoids this.</p>
+        <p>Without discounting or bounded returns, the infinite sum may oscillate (e.g., +1/−1 alternating) and fail to converge, making the objective ill‑defined.</p>
+        <p>All functions are assumed measurable to ensure that all expectations and integrals exist.</p>
+    </div>
+</div>
+
+
+
+<!-- A13.32 Transition -->
+<div class="section-block" id="a13-32">
+    <div class="section-heading"><span class="section-num-large">A13.32</span><h2 class="section-title-large">Transition</h2></div>
+    <div class="section-body">
+        <p>The tuples</p>
+        <div class="equation-block multiline">
+            T ≐ (s, a, r, s′, done)
+        </div>
+        <p>where <em>r ≐ r(s, a)</em>, <em>s′ ∼ p(s′ ∣ s, a)</em>, and <em>done ≐ done(s′)</em>, are called <strong>transitions</strong>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">s</span><span class="var-desc">current state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a</span><span class="var-desc">action taken.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r</span><span class="var-desc">immediate reward, r(s, a).</span></li>
+            <li class="var-def-item"><span class="var-symbol">s′</span><span class="var-desc">next state, sampled from p(s′ ∣ s, a).</span></li>
+            <li class="var-def-item"><span class="var-symbol">done</span><span class="var-desc">boolean flag indicating whether s′ is terminal.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">transition probability from s to s′ given action a.</span></li>
+            <li class="var-def-item"><span class="var-symbol">done(s′)</span><span class="var-desc">function returning 1 if s′ is terminal, else 0.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+<!-- A13.33 Claim — Supervised Learning as Special Case of RL (condensed) -->
+<div class="section-block" id="a13-33">
+    <div class="section-heading"><span class="section-num-large">A13.33</span><h2 class="section-title-large">Claim — Supervised Learning is a Special Case of RL</h2></div>
+    <div class="section-body">
+        <p><strong>Claim.</strong> Supervised learning with loss <em>ℓ(ŷ, y)</em> is an episodic MDP with horizon 1, <em>γ = 1</em>, and reward <em>r = −ℓ</em>.</p>
+        <p><em>Proof.</em> Let <em>S = X × Y ∪ {s<sub>0</sub>}</em>, <em>A = Ŷ</em>. From initial state <em>s<sub>0</sub></em>, environment draws <em>(x, y) ∼ D</em> and transitions to state <em>s = (x, y)</em> (reward 0). From <em>s</em>, action <em>ŷ</em> leads to a terminal state with reward <em>−ℓ(ŷ, y)</em>. The expected return is then</p>
+        <div class="equation-block">
+            J(π) = 𝔼<sub>(x,y)∼D</sub>[−ℓ(π(x), y)] = −𝔼[ℓ(π(x), y)].
+        </div>
+        <p>Maximising <em>J(π)</em> is equivalent to minimising the expected supervised loss. ∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">X, Y</span><span class="var-desc">input space and target space of the supervised problem.</span></li>
+            <li class="var-def-item"><span class="var-symbol">D</span><span class="var-desc">data distribution over X × Y.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ℓ(ŷ, y)</span><span class="var-desc">supervised loss function.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ŷ</span><span class="var-desc">space of predictions (action space A).</span></li>
+            <li class="var-def-item"><span class="var-symbol">s<sub>0</sub></span><span class="var-desc">initial dummy state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">s</span><span class="var-desc">state (x, y) containing the input–target pair.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π(x)</span><span class="var-desc">deterministic policy (predictor) mapping input x to prediction ŷ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">J(π)</span><span class="var-desc">expected return (negative expected loss).</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, γ = 1 (episodic with horizon 1).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r = −ℓ</span><span class="var-desc">reward = negative loss.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.34 Simulator (Access to Transition Function) -->
+<div class="section-block" id="a13-34">
+    <div class="section-heading"><span class="section-num-large">A13.34</span><h2 class="section-title-large">Simulator (Access to Transition Function)</h2></div>
+    <div class="section-body">
+        <p>The agent has a <strong>simulator</strong> (or <strong>access to the transition function</strong>) if it knows the reward function <em>r(s,a)</em> and can, at any moment during learning, sample an arbitrary number of draws from the transition kernel <em>p(s′ ∣ s, a)</em> for any chosen state‑action pair <em>(s, a)</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">simulator</span><span class="var-desc">model providing on‑demand samples of <em>s′ ∼ p(s′ ∣ s, a)</em> and the known reward <em>r(s,a)</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">transition probability distribution.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">reward function, assumed known.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.35 Model‑Free Algorithm -->
+<div class="section-block" id="a13-35">
+    <div class="section-heading"><span class="section-num-large">A13.35</span><h2 class="section-title-large">Model‑Free Algorithm</h2></div>
+    <div class="section-body">
+        <p>An RL algorithm is classified as <strong>model‑free</strong> if it does not use, and does not attempt to learn, a model of the environment dynamics</p>
+        <div class="equation-block">
+            p(s′ ∣ s, a)
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">transition probability; a model‑free algorithm explicitly avoids estimating this distribution.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.36 Off‑Policy & On‑Policy Algorithms -->
+<div class="section-block" id="a13-36">
+    <div class="section-heading"><span class="section-num-large">A13.36</span><h2 class="section-title-large">Off‑Policy &amp; On‑Policy Algorithms</h2></div>
+    <div class="section-body">
+        <p><strong>Off‑policy.</strong> An RL algorithm is called off‑policy if it can use the interaction experience of an arbitrary policy for training.</p>
+        <p><strong>On‑policy.</strong> An RL algorithm is called on‑policy if, for the next iteration of the algorithm, it requires interaction experience from some specific policy that is provided by the algorithm itself.</p>
+    </div>
+</div>
+
+
+<!-- A13.37 Metaheuristics -->
+<div class="section-block" id="a13-37">
+    <div class="section-heading"><span class="section-num-large">A13.37</span><h2 class="section-title-large">Metaheuristics</h2></div>
+    <div class="section-body">
+        <p>A <strong>metaheuristic</strong> is a high‑level, problem‑independent algorithmic framework that guides a subordinate heuristic to explore the search space of an optimization problem. Unlike RL, metaheuristics typically do not maintain a value function or a policy gradient; they rely on generic operators (e.g., mutation, crossover, annealing) and evaluate candidate solutions solely via a fitness (cost) function.</p>
+    </div>
+</div>
+
+<!-- A13.38 Value‑based Algorithms -->
+<div class="section-block" id="a13-38">
+    <div class="section-heading"><span class="section-num-large">A13.38</span><h2 class="section-title-large">Value‑based Algorithms</h2></div>
+    <div class="section-body">
+        <p><strong>Value‑based</strong> RL algorithms learn the optimal action‑value (or value) function, from which the policy is derived implicitly, typically by acting greedily with respect to the estimated values.</p>
+        <div class="equation-block">
+            Q<sup>π</sup>(s, a) ≐ 𝔼<sub>π</sub>[ G<sub>t</sub> ∣ S<sub>t</sub> = s, A<sub>t</sub> = a ]
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q<sup>π</sup>(s, a)</span><span class="var-desc">action‑value function under policy π.</span></li>
+            <li class="var-def-item"><span class="var-symbol">G<sub>t</sub></span><span class="var-desc">discounted return from time t, Σ<sub>k=0</sub><sup>∞</sup> γ<sup>k</sup> R<sub>t+k+1</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ ≤ 1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>π</sub>[·]</span><span class="var-desc">expectation over trajectories following policy π.</span></li>
+        </ul>
+        <p>The policy is then defined by acting greedily: π(s) = arg max<sub>a</sub> Q(s, a).</p>
+    </div>
+</div>
+
+<!-- A13.39 Policy Gradient Algorithms -->
+<div class="section-block" id="a13-39">
+    <div class="section-heading"><span class="section-num-large">A13.39</span><h2 class="section-title-large">Policy Gradient Algorithms</h2></div>
+    <div class="section-body">
+        <p><strong>Policy gradient</strong> algorithms directly parameterize the policy <em>π<sub>θ</sub>(a|s)</em> and optimize the performance <em>J(θ)</em> via stochastic gradient ascent. The gradient is given by the policy gradient theorem:</p>
+        <div class="equation-block">
+            ∇<sub>θ</sub> J(θ) = 𝔼<sub>T∼π<sub>θ</sub></sub>[ ∑<sub>t=0</sub><sup>∞</sup> ∇<sub>θ</sub> log π<sub>θ</sub>(A<sub>t</sub>|S<sub>t</sub>) G<sub>t</sub> ]
+        </div>
+        <p>These algorithms are typically <strong>on‑policy</strong>, requiring samples from the current parameterized policy to compute unbiased gradient estimates.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">θ</span><span class="var-desc">parameters of the policy (e.g., neural network weights).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub>(a|s)</span><span class="var-desc">stochastic policy parameterized by θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">J(θ)</span><span class="var-desc">expected return, J(θ) = 𝔼<sub>π<sub>θ</sub></sub>[G].</span></li>
+            <li class="var-def-item"><span class="var-symbol">G<sub>t</sub></span><span class="var-desc">discounted return from time t, Σ<sub>k=0</sub><sup>∞</sup> γ<sup>k</sup> R<sub>t+k+1</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">∇<sub>θ</sub> log π<sub>θ</sub>(a|s)</span><span class="var-desc">score function (gradient of log‑probability).</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>T∼π<sub>θ</sub></sub>[·]</span><span class="var-desc">expectation over trajectories generated by π<sub>θ</sub>.</span></li>
+        </ul>
+    </div>
+</div>
+<!-- A13.40 Monte‑Carlo Performance Estimate -->
+<div class="section-block" id="a13-40">
+    <div class="section-heading"><span class="section-num-large">A13.40</span><h2 class="section-title-large">Monte‑Carlo Performance Estimate</h2></div>
+    <div class="section-body">
+        <p>The <strong>performance</strong> of a policy <em>π</em> can be estimated from <em>N</em> sampled trajectories (episodes) by the unbiased Monte‑Carlo estimator:</p>
+        <div class="equation-block multiline">
+            J(π) ≐ 𝔼<sub>T∼π</sub>[G] &ensp;≈&ensp; Ĵ(π) = (1/N) ∑<sub>i=1</sub><sup>N</sup> G(τ<sub>i</sub>),
+        </div>
+        <p>where each <em>τ<sub>i</sub></em> is a trajectory independently drawn under <em>π</em> and <em>G(τ)</em> is its return.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">J(π)</span><span class="var-desc">true expected return (score) of π.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(π)</span><span class="var-desc">Monte‑Carlo estimate of J(π).</span></li>
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">number of sampled trajectories.</span></li>
+            <li class="var-def-item"><span class="var-symbol">τ<sub>i</sub></span><span class="var-desc">the i‑th trajectory, τ = (s<sub>0</sub>, a<sub>0</sub>, r<sub>1</sub>, s<sub>1</sub>, …).</span></li>
+            <li class="var-def-item"><span class="var-symbol">G(τ)</span><span class="var-desc">discounted return of trajectory τ, Σ<sub>t≥0</sub> γ<sup>t</sup> r<sub>t</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ ≤ 1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">T∼π</span><span class="var-desc">trajectory distribution induced by policy π.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+<!-- A13.41 Wall‑Clock Time -->
+<div class="section-block" id="a13-41">
+    <div class="section-heading"><span class="section-num-large">A13.41</span><h2 class="section-title-large">Wall‑Clock Time</h2></div>
+    <div class="section-body">
+        <p><strong>Wall‑clock time</strong> is the real (elapsed) time required by an RL algorithm to achieve a given level of performance, measured in full analogy with classical optimization methods.</p>
+    </div>
+</div>
+
+
+<!-- A13.42 Sample Efficiency -->
+<div class="section-block" id="a13-42">
+    <div class="section-heading"><span class="section-num-large">A13.42</span><h2 class="section-title-large">Sample Efficiency</h2></div>
+    <div class="section-body">
+        <p><strong>Sample efficiency</strong> is the number of samples (or steps) of interaction with the environment required by the algorithm to achieve a given level of performance. This factor is crucial when real‑world interaction is expensive (e.g., training a physical robot).</p>
+    </div>
+</div>
+
+<!-- A13.43 Note -->
+<div class="section-block" id="a13-43">
+    <div class="section-heading"><span class="section-num-large">A13.43</span><h2 class="section-title-large">Note</h2></div>
+    <div class="section-body">
+        <p>Sample efficiency increases with algorithmic complexity: metaheuristics ≪ policy gradient ≪ value‑based ≪ model‑based, while wall‑clock time per update follows the reverse order.</p>
+    </div>
+</div>
+<!-- A13.44 Local Optima Problem -->
+<div class="section-block" id="a13-44">
+    <div class="section-heading"><span class="section-num-large">A13.44</span><h2 class="section-title-large">Local Optima Problem</h2></div>
+    <div class="section-body">
+        <p>The policy may converge to a local maximum of the expected return, i.e. <em>J(π) &lt; J(π*)</em> while <em>J(π*) = max<sub>π′</sub> J(π′)</em>. In non‑convex policy landscapes this prevents reaching the global optimum.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">J(π)</span><span class="var-desc">expected return of policy π.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π*</span><span class="var-desc">globally optimal policy.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.45 Sample Inefficiency Problem -->
+<div class="section-block" id="a13-45">
+    <div class="section-heading"><span class="section-num-large">A13.45</span><h2 class="section-title-large">Sample Inefficiency Problem</h2></div>
+    <div class="section-body">
+        <p>Many RL algorithms require millions of environment interactions to converge, making them impractical when data collection is expensive (e.g., real‑world robots). Sample efficiency is often measured as the number of transitions needed to reach a given performance level.</p>
+    </div>
+</div>
+
+<!-- A13.46 Exploration–Exploitation Trade‑off -->
+<div class="section-block" id="a13-46">
+    <div class="section-heading"><span class="section-num-large">A13.46</span><h2 class="section-title-large">Exploration–Exploitation Trade‑off</h2></div>
+    <div class="section-body">
+        <p>The agent must balance <strong>exploration</strong> (trying new actions to discover higher rewards) and <strong>exploitation</strong> (choosing actions known to yield high rewards). Suboptimal balancing leads to either premature convergence or excessive wandering.</p>
+    </div>
+</div>
+
+<!-- A13.47 Credit Assignment Problem -->
+<div class="section-block" id="a13-47">
+    <div class="section-heading"><span class="section-num-large">A13.47</span><h2 class="section-title-large">Credit Assignment Problem</h2></div>
+    <div class="section-body">
+        <p>Determining which past actions contributed to a delayed reward is challenging. The return <em>G<sub>t</sub> = Σ<sub>k=0</sub><sup>∞</sup> γ<sup>k</sup> r<sub>t+k+1</sub></em> mixes the effects of many decisions, and temporal credit assignment methods (e.g., TD‑learning) are used to disentangle them.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">G<sub>t</sub></span><span class="var-desc">discounted return from time t.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ ≤ 1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub></span><span class="var-desc">reward at time t.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.49 Reward Hypothesis -->
+<div class="section-block" id="a13-48">
+    <div class="section-heading"><span class="section-num-large">A13.48</span><h2 class="section-title-large">Reward Hypothesis</h2></div>
+    <div class="section-body">
+        <p>Any intellectual task can be stated (defined) by means of a reward function.</p>
+    </div>
+</div>
+
+
+<!-- A13.50 Reward Shaping -->
+<div class="section-block" id="a13-49">
+    <div class="section-heading"><span class="section-num-large">A13.49</span><h2 class="section-title-large">Reward Shaping</h2></div>
+    <div class="section-body">
+        <p>Reward shaping transforms the original reward <em>r(s, a)</em> into a shaped reward <em>r̃(s, a, s′)</em> using a potential function <em>Φ(s)</em> without changing the optimal policy.</p>
+        <div class="equation-block multiline">
+            r̃(s, a, s′) ≐ r(s, a) + γ Φ(s′) − Φ(s) (1.7)
+        </div>
+        <p><em>Proof.</em> The shaped return over a trajectory is</p>
+        <div class="equation-block multiline">
+            ∑<sub>t≥0</sub> γ<sup>t</sup> r̃<sub>t</sub> = ∑<sub>t≥0</sub> γ<sup>t</sup> r<sub>t</sub> + ∑<sub>t≥0</sub> (γ<sup>t+1</sup> Φ(s<sub>t+1</sub>) − γ<sup>t</sup> Φ(s<sub>t</sub>)).
+        </div>
+        <p>The second sum telescopes: all intermediate terms cancel, leaving only <em>−Φ(s<sub>0</sub>)</em> and the vanishing boundary term <em>lim<sub>t→∞</sub> γ<sup>t</sup> Φ(s<sub>t</sub>) = 0</em> (or <em>Φ(s<sub>T</sub>) = 0</em> for terminal states). The constant <em>−Φ(s<sub>0</sub>)</em> is independent of the policy and thus does not affect the optimisation. Hence, maximising the shaped return is equivalent to maximising the original return. ∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">original reward function.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r̃(s, a, s′)</span><span class="var-desc">shaped reward function.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Φ(s)</span><span class="var-desc">bounded potential function on states.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ &lt; 1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">s<sub>0</sub></span><span class="var-desc">initial state (constant offset vanishes from optimisation).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.50 Individual (Particle) and Fitness -->
+<div class="section-block" id="a13-50">
+    <div class="section-heading"><span class="section-num-large">A13.50</span><h2 class="section-title-large">Individual (Particle) and Fitness</h2></div>
+    <div class="section-body">
+        <p>The point <em>θ</em> at which the optimization algorithm queries the oracle value is called an <strong>individual</strong> (or <strong>particle</strong>), and the value <em>Ĵ(θ)</em> itself for a given individual is its <strong>estimate</strong> or <strong>fitness</strong>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">θ</span><span class="var-desc">parameter vector (individual/particle).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(θ)</span><span class="var-desc">estimated performance (fitness) of individual θ.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.51 Search Strategy -->
+<div class="section-block" id="a13-51">
+    <div class="section-heading"><span class="section-num-large">A13.51</span><h2 class="section-title-large">Search Strategy</h2></div>
+    <div class="section-body">
+        <p>A distribution <em>q(θ)</em> in the parameter space <em>Θ</em> is called a <strong>search strategy</strong>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">q(θ)</span><span class="var-desc">probability distribution over parameter vectors θ ∈ Θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Θ</span><span class="var-desc">parameter space (set of all possible policy parameters).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.52 Random Search -->
+<div class="section-block" id="a13-52">
+    <div class="section-heading"><span class="section-num-large">A13.52</span><h2 class="section-title-large">Random Search</h2></div>
+    <div class="section-body">
+        <p><strong>Random search</strong> consists of sampling individuals <em>θ<sub>k</sub> ∼ q(θ)</em>, <em>k ∈ {0,1,2,…}</em>, from a search strategy <em>q(θ)</em>, evaluating their fitness <em>Ĵ(θ<sub>k</sub>)</em>, and returning the individual with the best estimate as the result:</p>
+        <div class="equation-block">
+            θ<sup>*</sup> = arg max<sub>k</sub> Ĵ(θ<sub>k</sub>).
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">θ<sub>k</sub></span><span class="var-desc">the k‑th sampled individual (policy parameter vector).</span></li>
+            <li class="var-def-item"><span class="var-symbol">q(θ)</span><span class="var-desc">search strategy (distribution from which individuals are drawn).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(θ)</span><span class="var-desc">estimated fitness of individual θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ<sup>*</sup></span><span class="var-desc">best individual found (maximising estimated fitness).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.53 Population -->
+<div class="section-block" id="a13-53">
+    <div class="section-heading"><span class="section-num-large">A13.53</span><h2 class="section-title-large">Population</h2></div>
+    <div class="section-body">
+        <p>A set of individuals</p>
+        <div class="equation-block">
+            P ≐ ( θ<sub>i</sub> ∣ i ∈ {1, 2, …, N} )
+        </div>
+        <p>is called a <strong>population</strong> of size <em>N</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">P</span><span class="var-desc">population (collection of individuals).</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ<sub>i</sub></span><span class="var-desc">the i‑th individual in the population (parameter vector).</span></li>
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">size of the population (number of individuals).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.54 Evaluation of the Population -->
+<div class="section-block" id="a13-54">
+    <div class="section-heading"><span class="section-num-large">A13.54</span><h2 class="section-title-large">Evaluation of the Population</h2></div>
+    <div class="section-body">
+        <p>Querying the oracle for all individuals of the population is called <strong>evaluation of the population</strong>:</p>
+        <div class="equation-block">
+            Ĵ(P) ≐ ( Ĵ(θ<sub>i</sub>) ∣ i ∈ {1, 2, …, N} )
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Ĵ(P)</span><span class="var-desc">evaluation of the population; vector of fitness estimates.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(θ<sub>i</sub>)</span><span class="var-desc">estimated fitness of the i‑th individual.</span></li>
+            <li class="var-def-item"><span class="var-symbol">P</span><span class="var-desc">population, P = (θ<sub>1</sub>, …, θ<sub>N</sub>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ<sub>i</sub></span><span class="var-desc">the i‑th individual (policy parameter vector).</span></li>
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">size of the population.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.55 Selection Procedure -->
+<div class="section-block" id="a13-55">
+    <div class="section-heading"><span class="section-num-large">A13.55</span><h2 class="section-title-large">Selection Procedure</h2></div>
+    <div class="section-body">
+        <p>A <strong>selection procedure</strong> is the choice (possibly random, possibly with repetitions) of <em>M</em> individuals from the population. Formally, it is a conditional distribution</p>
+        <div class="equation-block">
+            <em>select</em>(P<sup>+</sup> ∣ P, Ĵ(P))
+        </div>
+        <p>such that, with probability 1, every individual in the new set <em>P<sup>+</sup></em> belongs to the original population <em>P</em>:</p>
+        <div class="equation-block">
+            ∀θ ∈ P<sup>+</sup> : θ ∈ P &ensp; (w.p. 1).
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">P</span><span class="var-desc">original population (set of N individuals).</span></li>
+            <li class="var-def-item"><span class="var-symbol">P<sup>+</sup></span><span class="var-desc">selected subset (or multiset) of size M.</span></li>
+            <li class="var-def-item"><span class="var-symbol">M</span><span class="var-desc">number of individuals selected.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(P)</span><span class="var-desc">vector of fitness estimates for the population.</span></li>
+            <li class="var-def-item"><span class="var-symbol">select(· ∣ ·)</span><span class="var-desc">probability distribution over subsets P<sup>+</sup> given the current population and its fitness values.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.56 Greedy Selection -->
+<div class="section-block" id="a13-56">
+    <div class="section-heading"><span class="section-num-large">A13.56</span><h2 class="section-title-large">Greedy Selection</h2></div>
+    <div class="section-body">
+        <p><strong>Greedy selection</strong> (<em>select<sub>top M</sub></em>) is the deterministic choice of the <em>M</em> individuals with the highest estimated fitness from the population:</p>
+        <div class="equation-block">
+            P<sup>+</sup> = { θ ∈ P : Ĵ(θ) is among the top <em>M</em> values in Ĵ(P) }.
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">M</span><span class="var-desc">number of individuals to select (e.g., top‑M).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(θ)</span><span class="var-desc">estimated fitness of individual θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(P)</span><span class="var-desc">vector of fitness estimates for population P.</span></li>
+            <li class="var-def-item"><span class="var-symbol">P<sup>+</sup></span><span class="var-desc">selected set of top‑M individuals.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.57 Note -->
+<div class="section-block" id="a13-57">
+    <div class="section-heading"><span class="section-num-large">A13.57</span><h2 class="section-title-large">Note</h2></div>
+    <div class="section-body">
+        <p>A selection procedure only allows one to “reduce” the diversity of the population.</p>
+    </div>
+</div>
+
+
+<!-- A13.58 Mutation -->
+<div class="section-block" id="a13-58">
+    <div class="section-heading"><span class="section-num-large">A13.58</span><h2 class="section-title-large">Mutation</h2></div>
+    <div class="section-body">
+        <p>A <strong>mutation</strong> is a stochastic operator that generates a new individual (the <em>child</em>) from an existing one (the <em>parent</em>). Formally, it is a conditional probability distribution</p>
+        <div class="equation-block">
+            m(θ̂ ∣ θ),
+        </div>
+        <p>where <em>θ</em> is the parent and <em>θ̂</em> is the child. The distribution may be parameterised (e.g., by a step‑size or noise level) and is used to introduce variation into the population.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">m(θ̂ ∣ θ)</span><span class="var-desc">probability (or density) of obtaining child θ̂ given parent θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ</span><span class="var-desc">parent individual (current parameter vector).</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ̂</span><span class="var-desc">child individual (mutated parameter vector).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.59 Simulated Annealing -->
+<div class="section-block" id="a13-59">
+    <div class="section-heading"><span class="section-num-large">A13.59</span><h2 class="section-title-large">Simulated Annealing</h2></div>
+    <div class="section-body">
+        <p><strong>Simulated annealing</strong> is a stochastic optimization algorithm that introduces a temperature‑controlled acceptance probability for new individuals. At iteration <em>k</em>, a child <em>θ̂<sub>k+1</sub> ∼ m(θ̂ ∣ θ<sub>k</sub>)</em> is generated from the parent <em>θ<sub>k</sub></em>. The child is accepted as the next point with probability</p>
+        <div class="equation-block multiline">
+            Pr(θ<sub>k+1</sub> = θ̂<sub>k+1</sub>) := min( 1, exp( (Ĵ(θ̂<sub>k+1</sub>) − Ĵ(θ<sub>k</sub>)) / τ<sub>k</sub> ) ),
+        </div>
+        <p>where <em>τ<sub>k</sub> &gt; 0</em> is the <strong>temperature</strong> at step <em>k</em>. If the child is fitter, it is accepted with probability 1; if worse, it may still be accepted with a probability that decreases as the temperature decreases, encouraging exploration early and exploitation later.</p>
+        <p>The sequence <em>θ<sub>0</sub>, θ<sub>1</sub>, …</em> forms a Markov chain with a stationary distribution that, under suitable conditions on the cooling schedule <em>τ<sub>k</sub></em>, converges to a distribution concentrated around the global optimum of <em>J</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">θ<sub>k</sub></span><span class="var-desc">current individual (parent) at iteration k.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ̂<sub>k+1</sub></span><span class="var-desc">proposed new individual (child) drawn from mutation distribution m(·|θ<sub>k</sub>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(θ)</span><span class="var-desc">estimated fitness (performance) of individual θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">τ<sub>k</sub></span><span class="var-desc">temperature parameter at iteration k; τ<sub>k</sub> &gt; 0 controls the probability of accepting worse solutions.</span></li>
+            <li class="var-def-item"><span class="var-symbol">m(θ̂ ∣ θ)</span><span class="var-desc">mutation distribution (proposal kernel).</span></li>
+            <li class="var-def-item"><span class="var-symbol">stationary distribution</span><span class="var-desc">the limiting distribution of the Markov chain as k → ∞, independent of initial θ<sub>0</sub>.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.60 Metropolis–Hastings Algorithm -->
+<div class="section-block" id="a13-60">
+    <div class="section-heading"><span class="section-num-large">A13.60</span><h2 class="section-title-large">Metropolis–Hastings Algorithm</h2></div>
+    <div class="section-body">
+        <p>The <strong>Metropolis–Hastings algorithm</strong> is a Markov chain Monte Carlo method that generates samples from a target distribution <em>p(θ)</em> by proposing candidates from a conditional distribution <em>q(θ̂ ∣ θ)</em> and accepting them with probability</p>
+        <div class="equation-block">
+            α(θ, θ̂) = min( 1,  [p(θ̂) q(θ ∣ θ̂)] / [p(θ) q(θ̂ ∣ θ)] ).
+        </div>
+        <p>If the candidate is rejected, the chain stays at <em>θ</em>. Under mild conditions the chain has stationary distribution <em>p(θ)</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">p(θ)</span><span class="var-desc">target distribution (may be unnormalised).</span></li>
+            <li class="var-def-item"><span class="var-symbol">q(θ̂ ∣ θ)</span><span class="var-desc">proposal distribution for candidate θ̂ given current state θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ</span><span class="var-desc">current state of the chain.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ̂</span><span class="var-desc">proposed next state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">α(θ, θ̂)</span><span class="var-desc">acceptance probability; a uniform draw u ∼ U[0,1] decides acceptance.</span></li>
+            <li class="var-def-item"><span class="var-symbol">stationary distribution</span><span class="var-desc">the limiting distribution of the chain, p(θ).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.61 Claim — Stationary Distribution of Simulated Annealing -->
+<div class="section-block" id="a13-61">
+    <div class="section-heading"><span class="section-num-large">A13.61</span><h2 class="section-title-large">Claim — Stationary Distribution of Simulated Annealing</h2></div>
+    <div class="section-body">
+        <p><strong>Claim.</strong> Suppose the oracle is exact, i.e. <em>Ĵ(θ) ≡ J(θ)</em>, and the mutation distribution <em>m(θ̂ ∣ θ)</em> is symmetric and strictly positive:</p>
+        <div class="equation-block">
+            ∀ θ, θ̂ : &ensp; m(θ̂ ∣ θ) = m(θ ∣ θ̂) &gt; 0.
+        </div>
+        <p>If the temperature <em>τ</em> is kept constant (independent of the iteration <em>k</em>), then for any initial point <em>θ<sub>0</sub></em> the sequence <em>(θ<sub>k</sub>)</em> generated by simulated annealing forms a Markov chain with the stationary distribution</p>
+        <div class="equation-block">
+            lim<sub>k→∞</sub> p(θ<sub>k</sub>) ∝ exp( J(θ<sub>k</sub>) / τ ).
+        </div>
+        <p>In other words, the chain samples from a Boltzmann‑Gibbs distribution over the parameter space, where <em>J</em> plays the role of the negative energy and <em>τ</em> is the temperature.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">J(θ)</span><span class="var-desc">true performance (expected return) of policy π<sub>θ</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(θ)</span><span class="var-desc">estimated performance; here assumed exact (Ĵ ≡ J).</span></li>
+            <li class="var-def-item"><span class="var-symbol">m(θ̂ ∣ θ)</span><span class="var-desc">mutation kernel (proposal distribution); symmetric means m(θ̂|θ)=m(θ|θ̂).</span></li>
+            <li class="var-def-item"><span class="var-symbol">τ</span><span class="var-desc">constant temperature (&gt;0) controlling the concentration of the stationary distribution.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ<sub>k</sub></span><span class="var-desc">individual at iteration k of the simulated annealing chain.</span></li>
+            <li class="var-def-item"><span class="var-symbol">exp(J/τ)</span><span class="var-desc">unnormalised density of the limiting Boltzmann‑Gibbs distribution.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.62 Evolutionary Algorithm -->
+<div class="section-block" id="a13-62">
+    <div class="section-heading"><span class="section-num-large">A13.62</span><h2 class="section-title-large">Evolutionary Algorithm</h2></div>
+    <div class="section-body">
+        <p>An algorithm is called <strong>evolutionary</strong> if it constructs a sequence of populations <em>P<sub>1</sub>, P<sub>2</sub>, …</em>, where at the <em>k</em>-th step the next generation <em>P<sub>k</sub></em> is built on the basis of the previous one <em>P<sub>k−1</sub></em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">P<sub>k</sub></span><span class="var-desc">population at generation k (a set of individuals).</span></li>
+            <li class="var-def-item"><span class="var-symbol">P<sub>k−1</sub></span><span class="var-desc">previous population.</span></li>
+        </ul>
+    </div>
+</div>
+
         </main>
 
         <aside class="sidebar">
