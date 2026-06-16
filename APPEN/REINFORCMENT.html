@@ -5308,15 +5308,200 @@
     </div>
 </div>
 
+<!-- A13.188 Maximum Entropy RL -->
+<div class="section-block" id="a13-188">
+    <div class="section-heading"><span class="section-num-large">A13.188</span><h2 class="section-title-large">Maximum Entropy RL</h2></div>
+    <div class="section-body">
+        <p>The <strong>Maximum Entropy RL</strong> (or entropy‑regularised RL) problem augments the standard expected return objective with an entropy bonus that encourages stochasticity. The goal is to maximise the functional</p>
+        <div class="equation-block multiline">
+            J<sub>soft</sub>(π) ≐ 𝔼<sub>T ∼ π</sub> ∑<sub>t≥0</sub> γ<sup>t</sup> [ r<sub>t</sub> + α H( π(·∣s<sub>t</sub>) ) ] → max<sub>π</sub>,
+        </div>
+        <p>where <em>α ≥ 0</em> is the <strong>temperature</strong> hyperparameter that trades off reward maximisation and entropy maximisation, and <em>H(π(·∣s))</em> is the entropy of the policy in state <em>s</em> (A13.187).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">J<sub>soft</sub>(π)</span><span class="var-desc">soft (entropy‑regularised) expected return.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π</span><span class="var-desc">a stochastic policy π(a|s).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T ∼ π</span><span class="var-desc">trajectory distribution induced by π.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub></span><span class="var-desc">reward at time t.</span></li>
+            <li class="var-def-item"><span class="var-symbol">α</span><span class="var-desc">temperature parameter (α ≥ 0); controls the strength of the entropy bonus.</span></li>
+            <li class="var-def-item"><span class="var-symbol">H(π(·∣s))</span><span class="var-desc">entropy of the action distribution at state s (A13.187).</span></li>
+        </ul>
+    </div>
+</div>
 
 
+<!-- A13.189 Soft Relationship Equations -->
+<div class="section-block" id="a13-189">
+    <div class="section-heading"><span class="section-num-large">A13.189</span><h2 class="section-title-large">Soft Relationship Equations</h2></div>
+    <div class="section-body">
+        <p>For a policy <em>π</em> and temperature <em>α = 1</em>, the soft Q‑function <em>Q<sub>soft</sub><sup>π</sup></em> and soft V‑function <em>V<sub>soft</sub><sup>π</sup></em> are defined via the soft return (A13.188) and satisfy the following pair of equations:</p>
+        <div class="equation-block multiline">
+            Q<sub>soft</sub><sup>π</sup>(s, a) = r(s, a) + γ 𝔼<sub>s′ ∼ p(·∣s,a)</sub> V<sub>soft</sub><sup>π</sup>(s′) (6.9)<br>
+            V<sub>soft</sub><sup>π</sup>(s) = 𝔼<sub>a ∼ π(·∣s)</sub>[ Q<sub>soft</sub><sup>π</sup>(s, a) − log π(a∣s) ] (6.10)
+        </div>
+        <p><em>Proof.</em> <strong>(6.9)</strong> By definition, <em>Q<sub>soft</sub><sup>π</sup>(s, a)</em> is the expected soft return starting from <em>s</em>, taking action <em>a</em>, and then following <em>π</em>. The soft return decomposes into the immediate reward <em>r(s, a)</em> plus the discounted soft return from the next state. The latter, by the definition of the soft V‑function, is exactly <em>γ 𝔼<sub>s′</sub> V<sub>soft</sub><sup>π</sup>(s′)</em>.</p>
+        <p><strong>(6.10)</strong> The soft V‑function <em>V<sub>soft</sub><sup>π</sup>(s)</em> is the expected soft return from state <em>s</em>. Expanding the expectation over the first action <em>a ∼ π(·∣s)</em>:</p>
+        <div class="equation-block multiline">
+            V<sub>soft</sub><sup>π</sup>(s) = 𝔼<sub>a</sub>[ r(s, a) + (−log π(a∣s)) + γ 𝔼<sub>s′</sub> V<sub>soft</sub><sup>π</sup>(s′) ].
+        </div>
+        <p>Here the term <em>−log π(a∣s)</em> is the contribution of the policy entropy at state <em>s</em> to the soft return (since <em>H(π(·∣s)) = −𝔼<sub>a</sub> log π(a∣s)</em>). Substituting <em>Q<sub>soft</sub><sup>π</sup>(s, a)</em> from (6.9) for <em>r(s, a) + γ 𝔼<sub>s′</sub> V<sub>soft</sub><sup>π</sup>(s′)</em> yields (6.10). ∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q<sub>soft</sub><sup>π</sup>(s, a)</span><span class="var-desc">soft action‑value function: expected soft return after taking action <em>a</em> in state <em>s</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sub>soft</sub><sup>π</sup>(s)</span><span class="var-desc">soft state value function: expected soft return from state <em>s</em> under policy <em>π</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">expected immediate reward.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">transition probability.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π(a∣s)</span><span class="var-desc">stochastic policy.</span></li>
+            <li class="var-def-item"><span class="var-symbol">log π(a∣s)</span><span class="var-desc">log‑probability of the action; its negative adds the entropy bonus.</span></li>
+        </ul>
+    </div>
+</div>
 
 
+<!-- A13.190 Soft Bellman Equations -->
+<div class="section-block" id="a13-190">
+    <div class="section-heading"><span class="section-num-large">A13.190</span><h2 class="section-title-large">Soft Bellman Equations</h2></div>
+    <div class="section-body">
+        <p>For a policy <em>π</em> and temperature <em>α = 1</em>, the <strong>soft Bellman expectation equations</strong> for the soft Q‑function and soft V‑function are:</p>
+        <div class="equation-block multiline">
+            Q<sub>soft</sub><sup>π</sup>(s, a) = r(s, a) + γ 𝔼<sub>s′ ∼ p(·∣s,a)</sub> 𝔼<sub>a′ ∼ π(·∣s′)</sub>[ Q<sub>soft</sub><sup>π</sup>(s′, a′) − log π(a′ ∣ s′) ] (6.11)<br>
+            V<sub>soft</sub><sup>π</sup>(s) = 𝔼<sub>a ∼ π(·∣s)</sub>[ r(s, a) − log π(a ∣ s) + γ 𝔼<sub>s′ ∼ p(·∣s,a)</sub> V<sub>soft</sub><sup>π</sup>(s′) ] (6.12)
+        </div>
+        <p><em>Proof.</em> These equations follow directly from the soft relationship equations (A13.189).</p>
+        <p><strong>(6.11):</strong> From <em>Q<sub>soft</sub><sup>π</sup>(s, a) = r(s, a) + γ 𝔼<sub>s′</sub> V<sub>soft</sub><sup>π</sup>(s′)</em> (equation 6.9). Substituting the expression for <em>V<sub>soft</sub><sup>π</sup>(s′)</em> from (6.10) into the expectation over <em>s′</em> yields</p>
+        <div class="equation-block multiline">
+            Q<sub>soft</sub><sup>π</sup>(s, a) = r(s, a) + γ 𝔼<sub>s′</sub>[ 𝔼<sub>a′ ∼ π(·∣s′)</sub>( Q<sub>soft</sub><sup>π</sup>(s′, a′) − log π(a′ ∣ s′) ) ].
+        </div>
+        <p><strong>(6.12):</strong> From <em>V<sub>soft</sub><sup>π</sup>(s) = 𝔼<sub>a ∼ π(·∣s)</sub>[ Q<sub>soft</sub><sup>π</sup>(s, a) − log π(a ∣ s) ]</em> (equation 6.10). Replacing <em>Q<sub>soft</sub><sup>π</sup>(s, a)</em> with the right‑hand side of (6.9) gives</p>
+        <div class="equation-block multiline">
+            V<sub>soft</sub><sup>π</sup>(s) = 𝔼<sub>a</sub>[ r(s, a) + γ 𝔼<sub>s′</sub> V<sub>soft</sub><sup>π</sup>(s′) − log π(a ∣ s) ].
+        </div>
+        <p>∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q<sub>soft</sub><sup>π</sup>(s, a)</span><span class="var-desc">soft action‑value function for policy π (expected soft return after action a).</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sub>soft</sub><sup>π</sup>(s)</span><span class="var-desc">soft state value function for policy π (expected soft return from state s).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">expected immediate reward.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">transition probability.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π(a∣s)</span><span class="var-desc">stochastic policy.</span></li>
+            <li class="var-def-item"><span class="var-symbol">log π(a∣s)</span><span class="var-desc">log‑policy term representing the immediate entropy bonus in the soft return.</span></li>
+        </ul>
+    </div>
+</div>
 
+<!-- A13.191 Soft Policy Evaluation -->
+<div class="section-block" id="a13-191">
+    <div class="section-heading"><span class="section-num-large">A13.191</span><h2 class="section-title-large">Soft Policy Evaluation</h2></div>
+    <div class="section-body">
+        <p><strong>Soft policy evaluation</strong> is the process of computing the soft state value function <em>V<sub>soft</sub><sup>π</sup></em> and the soft action‑value function <em>Q<sub>soft</sub><sup>π</sup></em> for a given policy <em>π</em> under the maximum entropy RL objective (A13.188). These functions satisfy the soft Bellman expectation equations (A13.190) and can be found by iteratively applying the soft Bellman operator until convergence.</p>
+        <p>For a tabular MDP, soft policy evaluation repeatedly applies the update:</p>
+        <div class="equation-block multiline">
+            V<sub>new</sub>(s) ← 𝔼<sub>a ∼ π(·∣s)</sub>[ r(s, a) − α log π(a∣s) + γ 𝔼<sub>s′ ∼ p(·∣s,a)</sub> V<sub>old</sub>(s′) ],
+        </div>
+        <p>where <em>α</em> is the temperature. Equivalently, the soft Q‑function can be updated as</p>
+        <div class="equation-block multiline">
+            Q<sub>new</sub>(s, a) ← r(s, a) + γ 𝔼<sub>s′ ∼ p(·∣s,a)</sub>[ 𝔼<sub>a′ ∼ π(·∣s′)</sub>( Q<sub>old</sub>(s′, a′) − α log π(a′∣s′) ) ].
+        </div>
+        <p>When the dynamics are unknown, function approximators and stochastic gradient descent are used to minimize the soft Bellman error, giving rise to algorithms such as Soft Actor‑Critic (SAC).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">V<sub>soft</sub><sup>π</sup>(s)</span><span class="var-desc">soft state value function for policy π (target of evaluation).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sub>soft</sub><sup>π</sup>(s, a)</span><span class="var-desc">soft action‑value function for policy π.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π(a∣s)</span><span class="var-desc">given stochastic policy.</span></li>
+            <li class="var-def-item"><span class="var-symbol">α</span><span class="var-desc">temperature parameter controlling the entropy bonus (A13.188).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">expected immediate reward.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ &lt; 1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">transition probability.</span></li>
+        </ul>
+    </div>
+</div>
 
+<!-- A13.192 Soft Policy Improvement -->
+<div class="section-block" id="a13-192">
+    <div class="section-heading"><span class="section-num-large">A13.192</span><h2 class="section-title-large">Soft Policy Improvement</h2></div>
+    <div class="section-body">
+        <p><strong>Soft policy improvement</strong> is the step in entropy‑regularised RL that updates the policy towards the exponential of the current soft Q‑function, guaranteeing a monotonic increase in the soft expected return.</p>
+        <p>Given a policy <em>π<sub>old</sub></em> and the corresponding soft state‑action value <em>Q<sub>soft</sub><sup>π<sub>old</sub></sup></em>, define a new policy <em>π<sub>new</sub></em> as the Boltzmann distribution (for temperature <em>α &gt; 0</em>):</p>
+        <div class="equation-block multiline">
+            π<sub>new</sub>(a ∣ s) = <span class="frac">exp( Q<sub>soft</sub><sup>π<sub>old</sub></sup>(s, a) / α )</span><span class="frac">∑<sub>a′</sub> exp( Q<sub>soft</sub><sup>π<sub>old</sub></sup>(s, a′) / α )</span>.
+        </div>
+        <p>Then <em>π<sub>new</sub></em> is strictly better than <em>π<sub>old</sub></em> unless <em>π<sub>old</sub></em> is already optimal under the maximum entropy objective: for all states <em>s</em>,</p>
+        <div class="equation-block multiline">
+            V<sub>soft</sub><sup>π<sub>new</sub></sup>(s) ≥ V<sub>soft</sub><sup>π<sub>old</sub></sup>(s).
+        </div>
 
+        <p><em>Proof sketch.</em> Using the soft relationship equation <em>V<sub>soft</sub><sup>π<sub>old</sub></sup>(s) = 𝔼<sub>a ∼ π<sub>old</sub></sub>[ Q<sub>soft</sub><sup>π<sub>old</sub></sup>(s, a) − α log π<sub>old</sub>(a∣s) ]</em> and the fact that <em>π<sub>new</sub></em> maximises the right‑hand side with respect to all possible policies, we obtain <em>V<sub>soft</sub><sup>π<sub>old</sub></sup>(s) ≤ 𝔼<sub>a ∼ π<sub>new</sub></sub>[ Q<sub>soft</sub><sup>π<sub>old</sub></sup>(s, a) − α log π<sub>new</sub>(a∣s) ]</em>. Applying the soft Bellman expectation equation recursively then shows <em>V<sub>soft</sub><sup>π<sub>new</sub></sup>(s) ≥ V<sub>soft</sub><sup>π<sub>old</sub></sup>(s)</em>. If equality holds for all states, <em>π<sub>old</sub></em> satisfies the soft Bellman optimality equation and is optimal. ∎</p>
+        <p>Alternating soft policy evaluation and soft policy improvement converges to the optimal maximum‑entropy policy, forming the basis of Soft Actor‑Critic (SAC).</p>
 
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>old</sub>, π<sub>new</sub></span><span class="var-desc">current and improved stochastic policies.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sub>soft</sub><sup>π<sub>old</sub></sup>(s, a)</span><span class="var-desc">soft Q‑function of the old policy (A13.189).</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sub>soft</sub><sup>π</sup>(s)</span><span class="var-desc">soft state value function (A13.189).</span></li>
+            <li class="var-def-item"><span class="var-symbol">α</span><span class="var-desc">temperature parameter (A13.188).</span></li>
+            <li class="var-def-item"><span class="var-symbol">soft optimality</span><span class="var-desc">the unique policy that maximises the soft return J<sub>soft</sub>.</span></li>
+        </ul>
+    </div>
+</div>
 
+<!-- A13.193 Soft Actor‑Critic (SAC) -->
+<div class="section-block" id="a13-193">
+    <div class="section-heading"><span class="section-num-large">A13.193</span><h2 class="section-title-large">Soft Actor‑Critic (SAC)</h2></div>
+    <div class="section-body">
+        <p><strong>Soft Actor‑Critic (SAC)</strong> is an off‑policy maximum entropy reinforcement learning algorithm for continuous action spaces. It learns a stochastic policy <em>π<sub>φ</sub>(a|s)</em> that maximises the entropy‑regularised return <em>J<sub>soft</sub>(π) = 𝔼[∑ γ<sup>t</sup> (r<sub>t</sub> + α H(π(·|s<sub>t</sub>))) ]</em>. To mitigate overestimation, SAC uses two separate Q‑networks (<em>Q<sub>θ<sub>1</sub></sub>, Q<sub>θ<sub>2</sub></sub></em>) and takes their minimum for the target. The temperature <em>α</em> can be fixed or automatically tuned by treating it as a learnable parameter that maintains a target entropy level.</p>
+
+        <p><strong>Algorithm (SAC with automatic entropy tuning):</strong></p>
+        <ul>
+            <li><strong>Hyperparameters:</strong> learning rates <em>η<sub>θ</sub>, η<sub>φ</sub>, η<sub>α</sub></em>, soft update coefficient <em>τ</em>, discount <em>γ</em>, target entropy <em>H̄</em> (e.g., <em>−dim(A)</em>), replay buffer size, mini‑batch size <em>B</em>.</li>
+            <li><strong>Initialization:</strong> policy parameters <em>φ</em> (outputs mean <em>μ<sub>φ</sub>(s)</em> and log‑std <em>log σ<sub>φ</sub>(s)</em>); two Q‑networks <em>Q<sub>θ<sub>1</sub></sub>, Q<sub>θ<sub>2</sub></sub></em>; target networks <em>θ̄<sub>1</sub> ← θ<sub>1</sub>, θ̄<sub>2</sub> ← θ<sub>2</sub></em>; temperature <em>α</em> (or log <em>α</em>); replay buffer <em>D</em>.</li>
+        </ul>
+
+        <p><strong>For each step:</strong></p>
+        <ol>
+            <li>Observe state <em>s</em>. Sample action <em>a ∼ π<sub>φ</sub>(·|s)</em> (e.g., Gaussian with reparameterization: <em>a = μ<sub>φ</sub>(s) + σ<sub>φ</sub>(s) ⊙ ε</em>, <em>ε ∼ N(0,I)</em>). Clip to valid action range.</li>
+            <li>Execute <em>a</em>, observe reward <em>r</em>, next state <em>s′</em>, and terminal flag <em>done</em>. Store transition <em>(s, a, r, s′, done)</em> in <em>D</em>.</li>
+            <li>Sample a mini‑batch of <em>B</em> transitions from <em>D</em>.</li>
+            <li><strong>Compute the target value</strong> for the Q‑networks (using target networks and a sample of the current policy):
+                <div class="equation-block multiline">
+                    y = r + γ (1 − done) ( min<sub>i=1,2</sub> Q<sub>θ̄<sub>i</sub></sub>(s′, ã) − α log π<sub>φ</sub>(ã ∣ s′) ),<br>
+                    ã ∼ π<sub>φ</sub>(·∣s′).
+                </div>
+            </li>
+            <li><strong>Update the Q‑networks</strong> by one step of gradient descent on the mean squared Bellman error:
+                <div class="equation-block multiline">
+                    L<sub>Q</sub>(θ<sub>i</sub>) = (1/B) ∑ ( Q<sub>θ<sub>i</sub></sub>(s, a) − y )<sup>2</sup>,  i = 1, 2.
+                </div>
+            </li>
+            <li><strong>Update the policy</strong> by one step of gradient ascent on the entropy‑regularised expected return (using the minimum of the two critics to reduce overestimation):
+                <div class="equation-block multiline">
+                    L<sub>π</sub>(φ) = − (1/B) ∑ ( min<sub>i=1,2</sub> Q<sub>θ<sub>i</sub></sub>(s, ã) − α log π<sub>φ</sub>(ã ∣ s) ),<br>
+                    ã = μ<sub>φ</sub>(s) + σ<sub>φ</sub>(s) ⊙ ε,  ε ∼ N(0,I) (reparameterized).
+                </div>
+                The gradient flows through the Q‑networks (which are not updated in this step).
+            </li>
+            <li><strong>Automatically tune the temperature</strong> by minimising the loss:
+                <div class="equation-block multiline">
+                    L(α) = − α (1/B) ∑ ( log π<sub>φ</sub>(ã ∣ s) + H̄ ),
+                </div>
+                where <em>H̄</em> is the desired average entropy (e.g., <em>−dim(A)</em>). Update <em>α</em> (or log <em>α</em>) by gradient descent on <em>L(α)</em>.
+            </li>
+            <li><strong>Soft‑update the target networks</strong>:
+                <div class="equation-block">
+                    θ̄<sub>i</sub> ← τ θ<sub>i</sub> + (1 − τ) θ̄<sub>i</sub>,  i = 1, 2.
+                </div>
+            </li>
+        </ol>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>φ</sub>(a|s)</span><span class="var-desc">stochastic policy parameterised by <em>φ</em> (typically Gaussian).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sub>θ<sub>1</sub></sub>, Q<sub>θ<sub>2</sub></sub></span><span class="var-desc">two online Q‑networks (critics) with parameters <em>θ<sub>1</sub>, θ<sub>2</sub></em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ̄<sub>1</sub>, θ̄<sub>2</sub></span><span class="var-desc">target Q‑networks with Polyak averaged parameters.</span></li>
+            <li class="var-def-item"><span class="var-symbol">α</span><span class="var-desc">temperature coefficient (entropy weight); can be learned or fixed.</span></li>
+            <li class="var-def-item"><span class="var-symbol">H̄</span><span class="var-desc">target entropy (usually <em>−dim(A)</em>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">τ</span><span class="var-desc">soft update interpolation factor (0 &lt; τ &lt; 1).</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ε ∼ N(0,I)</span><span class="var-desc">noise vector used for action reparameterization.</span></li>
+            <li class="var-def-item"><span class="var-symbol">y</span><span class="var-desc">TD target computed from target networks and entropy term.</span></li>
+        </ul>
+    </div>
+</div>
 
 
 
