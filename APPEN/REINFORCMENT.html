@@ -1369,6 +1369,821 @@
     </div>
 </div>
 
+
+<!-- A13.63 Evolution Strategy -->
+<div class="section-block" id="a13-63">
+    <div class="section-heading"><span class="section-num-large">A13.63</span><h2 class="section-title-large">Evolution Strategy (ES)</h2></div>
+    <div class="section-body">
+        <p>An <strong>evolution strategy</strong> is a black‑box optimisation algorithm that maintains a population of search points and iteratively improves them through mutation and selection. The canonical form is the <em>(μ/ρ +, λ)-ES</em>, where μ parents produce λ offspring using ρ recombination parents per offspring.</p>
+
+        <div class="algorithm-block" style="border:1px solid #aaa; padding:12px; margin:10px 0;">
+            <p><strong>Algorithm (simple (μ, λ)-ES):</strong></p>
+            <ol>
+                <li><strong>Initialisation:</strong> Sample μ parents <em>P = {θ<sub>1</sub>, …, θ<sub>μ</sub>}</em> randomly.</li>
+                <li><strong>Repeat</strong> until a termination criterion is met:
+                    <ol type="a">
+                        <li><strong>Mutation:</strong> For <em>j = 1, …, λ</em>, select a parent uniformly and generate offspring: &emsp; <em>θ′<sub>j</sub> = θ<sub>parent</sub> + ε<sub>j</sub></em>, &emsp; <em>ε<sub>j</sub> ∼ 𝒩(0, σ<sup>2</sup> I)</em>.</li>
+                        <li><strong>Evaluation:</strong> Compute fitness <em>Ĵ(θ′<sub>j</sub>)</em> for all offspring.</li>
+                        <li><strong>Selection:</strong> Form the new parent population <em>P</em> by taking the μ best offspring (comma selection).</li>
+                        <li><strong>Adaptation (optional):</strong> Update step‑size <em>σ</em> (e.g., 1/5th success rule).</li>
+                    </ol>
+                </li>
+                <li><strong>Return</strong> the best individual found.</li>
+            </ol>
+        </div>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">μ</span><span class="var-desc">number of parents (population size).</span></li>
+            <li class="var-def-item"><span class="var-symbol">λ</span><span class="var-desc">number of offspring per generation (λ ≥ μ).</span></li>
+            <li class="var-def-item"><span class="var-symbol">ρ</span><span class="var-desc">number of parents recombined per offspring (ρ = 1 means no recombination).</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ</span><span class="var-desc">individual (parameter vector).</span></li>
+            <li class="var-def-item"><span class="var-symbol">ε ~ 𝒩(0, σ<sup>2</sup> I)</span><span class="var-desc">mutation noise drawn from a multivariate Gaussian with zero mean and covariance σ<sup>2</sup> I.</span></li>
+            <li class="var-def-item"><span class="var-symbol">σ</span><span class="var-desc">mutation step‑size (global or per‑dimension).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(θ)</span><span class="var-desc">estimated fitness of individual θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">comma (“,”) selection</span><span class="var-desc">next parent population chosen only from offspring.</span></li>
+            <li class="var-def-item"><span class="var-symbol">plus (“+”) selection</span><span class="var-desc">next parent population chosen from union of parents and offspring.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.64 Genetic Algorithm -->
+<div class="section-block" id="a13-64">
+    <div class="section-heading"><span class="section-num-large">A13.64</span><h2 class="section-title-large">Genetic Algorithm (GA)</h2></div>
+    <div class="section-body">
+        <p>A <strong>genetic algorithm</strong> is an evolutionary optimisation method that evolves a population of individuals using selection, crossover (recombination), and mutation.</p>
+
+        <div class="algorithm-block" style="border:1px solid #aaa; padding:12px; margin:10px 0;">
+            <p><strong>Algorithm 2: Genetic Search</strong></p>
+            <ol>
+                <li><strong>Initialisation:</strong> Generate an initial population <em>P<sub>0</sub></em> of <em>N</em> individuals (random parameter vectors).</li>
+                <li><strong>Repeat</strong> for each generation <em>k = 0, 1, 2, …</em> until termination:
+                    <ol type="a">
+                        <li><strong>Evaluation:</strong> Compute fitness <em>Ĵ(θ)</em> for all individuals in <em>P<sub>k</sub></em>.</li>
+                        <li><strong>Selection:</strong> Select parents from <em>P<sub>k</sub></em> based on fitness (e.g., roulette wheel, tournament selection).</li>
+                        <li><strong>Crossover:</strong> With probability <em>p<sub>c</sub></em>, pair parents and exchange genetic material to produce offspring.</li>
+                        <li><strong>Mutation:</strong> With probability <em>p<sub>m</sub></em>, randomly perturb offspring (e.g., Gaussian noise).</li>
+                        <li><strong>Replacement:</strong> Form <em>P<sub>k+1</sub></em> by replacing the old population with offspring (optionally keep the best individuals via elitism).</li>
+                    </ol>
+                </li>
+                <li><strong>Return</strong> the best individual found.</li>
+            </ol>
+        </div>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">population size.</span></li>
+            <li class="var-def-item"><span class="var-symbol">P<sub>k</sub></span><span class="var-desc">population at generation k.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(θ)</span><span class="var-desc">fitness (performance) of individual θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p<sub>c</sub></span><span class="var-desc">crossover probability.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p<sub>m</sub></span><span class="var-desc">mutation probability.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.65 Evolutionary Strategy (Distribution) -->
+<div class="section-block" id="a13-65">
+    <div class="section-heading"><span class="section-num-large">A13.65</span><h2 class="section-title-large">Evolutionary Strategy (Distribution)</h2></div>
+    <div class="section-body">
+        <p>The distribution <em>q(θ ∣ λ<sub>k</sub>)</em> from which the individuals of the <em>k</em>-th population are generated is called an <strong>evolutionary strategy</strong> (ES). The population is then</p>
+        <div class="equation-block">
+            P<sub>k</sub> ≐ { θ<sub>i</sub> ∼ q(θ ∣ λ<sub>k</sub>) ∣ i ∈ {1, 2, …, N} }.
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">q(θ ∣ λ<sub>k</sub>)</span><span class="var-desc">evolutionary strategy distribution (e.g., a Gaussian with mean and covariance parameters λ<sub>k</sub>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">λ<sub>k</sub></span><span class="var-desc">parameters of the search distribution at iteration k.</span></li>
+            <li class="var-def-item"><span class="var-symbol">P<sub>k</sub></span><span class="var-desc">population of size N drawn i.i.d. from q(·|λ<sub>k</sub>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ<sub>i</sub></span><span class="var-desc">the i‑th individual in the population.</span></li>
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">population size.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.63 Estimation of a Rare Probability Event -->
+<div class="section-block" id="a13-66">
+    <div class="section-heading"><span class="section-num-large">A13.66</span><h2 class="section-title-large">Estimation of a Rare Probability Event</h2></div>
+    <div class="section-body">
+        <p><strong>Rare event estimation</strong> is the problem of estimating a very small probability <em>p = P(X ∈ A)</em> where <em>P(X ∈ A) ≪ 1</em>. Standard Monte Carlo fails due to high variance; importance sampling (IS) is typically used, shifting the sampling distribution to <em>q</em> and reweighting:</p>
+        <div class="equation-block multiline">
+            p = 𝔼<sub>f</sub>[𝟙<sub>A</sub>(X)] = 𝔼<sub>q</sub>[ (f(X) / q(X)) 𝟙<sub>A</sub>(X) ].
+        </div>
+        <p>The IS estimator from <em>N</em> samples <em>X<sub>i</sub> ∼ q</em> is</p>
+        <div class="equation-block">
+            p̂<sub>IS</sub> = (1/N) ∑<sub>i=1</sub><sup>N</sup> (f(X<sub>i</sub>) / q(X<sub>i</sub>)) 𝟙<sub>A</sub>(X<sub>i</sub>).
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">p</span><span class="var-desc">target rare probability, p ≪ 1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">X</span><span class="var-desc">random vector with original density f.</span></li>
+            <li class="var-def-item"><span class="var-symbol">A</span><span class="var-desc">rare event set.</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝟙<sub>A</sub>(x)</span><span class="var-desc">indicator function: 1 if x ∈ A, 0 otherwise.</span></li>
+            <li class="var-def-item"><span class="var-symbol">q</span><span class="var-desc">importance sampling distribution, q(x) > 0 whenever f(x)𝟙<sub>A</sub>(x) > 0.</span></li>
+            <li class="var-def-item"><span class="var-symbol">w(x) = f(x)/q(x)</span><span class="var-desc">importance weight.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p̂<sub>IS</sub></span><span class="var-desc">importance sampling estimator of p.</span></li>
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">number of samples drawn from q.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- A13.67 Algorithm: Cross‑Entropy Method for Rare‑Event Probability -->
+<div class="section-block" id="a13-67">
+    <div class="section-heading"><span class="section-num-large">A13.67</span><h2 class="section-title-large">Algorithm: Cross‑Entropy Method for Rare‑Event Probability</h2></div>
+    <div class="section-body">
+        <p><strong>At the <em>k</em>-th step:</strong></p>
+        <ol>
+            <li>Sample <em>x<sub>1</sub>, …, x<sub>N</sub> ∼ q(x ∣ λ<sub>k</sub>)</em>.</li>
+            <li>Sort the values <em>f(x<sub>i</sub>)</em>: <em>f<sub>(1)</sub> ≤ f<sub>(2)</sub> ≤ ⋯ ≤ f<sub>(N)</sub></em>.</li>
+            <li>Set <em>γ<sub>k</sub> = min( γ, f<sub>(M)</sub> )</em>, where <em>M = ⌈ρN⌉</em> (elite sample count).</li>
+            <li>Solve the weighted maximum likelihood problem:
+                <div class="equation-block multiline">
+                    λ<sub>k+1</sub> = arg max<sub>λ</sub> (1/N) ∑<sub>j=1</sub><sup>N</sup> I[ f(x<sub>j</sub>) ≥ γ<sub>k</sub> ]
+                    <span style="display:inline-block; vertical-align:middle; text-align:center;">
+                        <span style="display:block; padding:0 0.1em;">p(x<sub>j</sub>)</span>
+                        <span style="display:block; border-top:1px solid black; padding:0 0.1em;">q(x<sub>j</sub>∣λ<sub>k</sub>)</span>
+                    </span>
+                    log q(x<sub>j</sub> ∣ λ). (2.4)
+                </div>
+            </li>
+            <li>Stopping criterion: <em>γ<sub>k</sub> = γ</em>.</li>
+        </ol>
+        <p><strong>Obtaining the final estimate:</strong></p>
+        <ol>
+            <li>Sample <em>x<sub>1</sub>, …, x<sub>N</sub> ∼ q(x ∣ λ<sub>k</sub>)</em>.</li>
+            <li>Return
+                <div class="equation-block">
+                    ℓ ≈ (1/N) ∑<sub>j=1</sub><sup>N</sup> I[ f(x<sub>j</sub>) ≥ γ<sub>k</sub> ]
+                    <span style="display:inline-block; vertical-align:middle; text-align:center;">
+                        <span style="display:block; padding:0 0.1em;">p(x<sub>j</sub>)</span>
+                        <span style="display:block; border-top:1px solid black; padding:0 0.1em;">q(x<sub>j</sub>∣λ<sub>k</sub>)</span>
+                    </span>
+                </div>
+            </li>
+        </ol>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">p(x)</span><span class="var-desc">original density of the random vector.</span></li>
+            <li class="var-def-item"><span class="var-symbol">q(x ∣ λ)</span><span class="var-desc">parametric importance density with parameter λ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">λ<sub>k</sub></span><span class="var-desc">parameter at iteration k.</span></li>
+            <li class="var-def-item"><span class="var-symbol">f(x)</span><span class="var-desc">scoring function; the rare event is {f(X) ≥ γ}.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">target level defining the rare event.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ<sub>k</sub></span><span class="var-desc">adaptive threshold at step k.</span></li>
+            <li class="var-def-item"><span class="var-symbol">M</span><span class="var-desc">number of elite samples, M = ⌈ρN⌉.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ρ</span><span class="var-desc">fraction of elite samples (e.g., 0.1).</span></li>
+            <li class="var-def-item"><span class="var-symbol">I[·]</span><span class="var-desc">indicator function.</span></li>
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">sample size per iteration.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ℓ</span><span class="var-desc">final importance sampling estimate of the rare‑event probability.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.68 Cross‑Entropy Method for Stochastic Optimization -->
+<div class="section-block" id="a13-68">
+    <div class="section-heading"><span class="section-num-large">A13.68</span><h2 class="section-title-large">Cross‑Entropy Method for Stochastic Optimization</h2></div>
+    <div class="section-body">
+        <p>The <strong>Cross‑Entropy Method</strong> (CEM) for stochastic optimization finds a parameter <em>θ</em> that maximises an objective function <em>J(θ)</em>. It maintains a parametric sampling distribution <em>q(θ ∣ λ)</em> and iteratively refines its parameter <em>λ</em> by sampling a population, selecting an elite subset of the best‑performing individuals, and updating <em>λ</em> to the maximum likelihood estimate on that elite set.</p>
+        <p><strong>At iteration <em>k</em>:</strong></p>
+        <ol>
+            <li>Draw <em>N</em> samples <em>θ<sub>1</sub>, …, θ<sub>N</sub> ∼ q(θ ∣ λ<sub>k</sub>)</em>.</li>
+            <li>Evaluate <em>J(θ<sub>i</sub>)</em> for all <em>i</em>.</li>
+            <li>Sort the values: <em>J<sub>(1)</sub> ≤ J<sub>(2)</sub> ≤ … ≤ J<sub>(N)</sub></em>.</li>
+            <li>Define the elite set <em>E<sub>k</sub> = {θ<sub>i</sub> : J(θ<sub>i</sub>) ≥ γ<sub>k</sub>}</em>, where <em>γ<sub>k</sub> = J<sub>(⌈ρN⌉)</sub></em> is the <em>(1−ρ)</em>-quantile of the current sample scores.</li>
+            <li>Update the distribution parameter by maximum likelihood:
+                <div class="equation-block multiline">
+                    λ<sub>k+1</sub> = arg max<sub>λ</sub> ∑<sub>θ ∈ E<sub>k</sub></sub> log q(θ ∣ λ).
+                </div>
+            </li>
+            <li>If a stopping criterion is met, return the best found solution; otherwise increment <em>k</em>.</li>
+        </ol>
+        <p>The process shifts the sampling distribution toward regions of high objective value, typically collapsing to a point mass near a local (or global) optimum.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">J(θ)</span><span class="var-desc">objective function (reward, fitness) to be maximised.</span></li>
+            <li class="var-def-item"><span class="var-symbol">q(θ ∣ λ)</span><span class="var-desc">parametric probability density over the solution space Θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">λ</span><span class="var-desc">parameter of the sampling distribution (e.g., mean μ and covariance Σ for a Gaussian).</span></li>
+            <li class="var-def-item"><span class="var-symbol">λ<sub>k</sub></span><span class="var-desc">distribution parameter at iteration k.</span></li>
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">population size (number of samples per iteration).</span></li>
+            <li class="var-def-item"><span class="var-symbol">ρ</span><span class="var-desc">elite fraction, typically 0.05–0.2; determines the size of the elite set M = ⌈ρN⌉.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ<sub>k</sub></span><span class="var-desc">threshold equal to the J-value of the M‑th best sample (adaptive level).</span></li>
+            <li class="var-def-item"><span class="var-symbol">E<sub>k</sub></span><span class="var-desc">elite set of individuals whose objective values lie at or above γ<sub>k</sub>.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.69 Algorithm 4: Cross‑Entropy Method for Optimization with a Zeroth‑Order Oracle -->
+<div class="section-block" id="a13-69">
+    <div class="section-heading"><span class="section-num-large">A13.69</span><h2 class="section-title-large">Algorithm Cross‑Entropy Method for Optimization with a Zeroth‑Order Oracle</h2></div>
+    <div class="section-body">
+        <p><strong>Algorithm </strong> applies the cross‑entropy method to maximize an objective <em>J(θ)</em> when only function evaluations (a zeroth‑order oracle) are available. A parametric distribution <em>q(θ ∣ λ)</em> is iteratively updated by selecting the best‑performing samples (elites) and moving the distribution toward them.</p>
+        <p><strong>Input:</strong> oracle <em>J(θ)</em>, initial parameter <em>λ<sub>0</sub></em>, sample size <em>N</em>, elite fraction <em>ρ</em>, max iterations <em>K</em>.</p>
+        <p><strong>For</strong> <em>k = 0, 1, …, K−1</em> <strong>do</strong></p>
+        <ol>
+            <li>Draw <em>θ<sub>1</sub>, …, θ<sub>N</sub> ∼ q(θ ∣ λ<sub>k</sub>)</em>.</li>
+            <li>Evaluate <em>J(θ<sub>i</sub>)</em> for all <em>i</em>.</li>
+            <li>Sort the values: <em>J<sub>(1)</sub> ≤ J<sub>(2)</sub> ≤ … ≤ J<sub>(N)</sub></em>.</li>
+            <li>Determine the elite set <em>E<sub>k</sub> = {θ<sub>i</sub> : J(θ<sub>i</sub>) ≥ γ<sub>k</sub>}</em> where <em>γ<sub>k</sub> = J<sub>(⌈ρN⌉)</sub></em>.</li>
+            <li>Update the distribution parameter by maximizing the log‑likelihood on the elite set:
+                <div class="equation-block multiline">
+                    λ<sub>k+1</sub> = arg max<sub>λ</sub> ∑<sub>θ ∈ E<sub>k</sub></sub> log q(θ ∣ λ).
+                </div>
+            </li>
+        </ol>
+        <p><strong>Output:</strong> the best individual found during the whole process, <em>θ<sup>*</sup> = arg max<sub>i,k</sub> J(θ<sub>i</sub>)</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">J(θ)</span><span class="var-desc">objective function (zeroth‑order oracle).</span></li>
+            <li class="var-def-item"><span class="var-symbol">q(θ ∣ λ)</span><span class="var-desc">parametric sampling density (e.g., Gaussian).</span></li>
+            <li class="var-def-item"><span class="var-symbol">λ<sub>k</sub></span><span class="var-desc">distribution parameter at iteration k.</span></li>
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">number of samples per iteration.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ρ</span><span class="var-desc">elite fraction, 0 < ρ ≤ 1, typical value 0.1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ<sub>k</sub></span><span class="var-desc">adaptive elite threshold (quantile).</span></li>
+            <li class="var-def-item"><span class="var-symbol">E<sub>k</sub></span><span class="var-desc">elite set of the top‑ρN individuals.</span></li>
+            <li class="var-def-item"><span class="var-symbol">K</span><span class="var-desc">number of iterations.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.70 Cross‑Entropy Method for Reinforcement Learning -->
+<div class="section-block" id="a13-70">
+    <div class="section-heading"><span class="section-num-large">A13.70</span><h2 class="section-title-large">Cross‑Entropy Method for Reinforcement Learning</h2></div>
+    <div class="section-body">
+        <p>The <strong>Cross‑Entropy Method</strong> (CEM) for RL is a derivative‑free, population‑based policy search algorithm. It parameterises the policy <em>π<sub>θ</sub></em> with parameters <em>θ</em> and maintains a Gaussian distribution <em>q(θ ∣ λ) = N(θ ∣ μ, Σ)</em> over <em>θ</em>. The goal is to maximise the expected return <em>J(θ) = 𝔼<sub>π<sub>θ</sub></sub>[G]</em>. CEM iteratively refines <em>μ, Σ</em> by sampling a population of parameter vectors, evaluating their performance via Monte‑Carlo rollouts, selecting the top‑performing elite set, and updating <em>μ, Σ</em> to the maximum likelihood estimate on that elite set.</p>
+        <p><strong>Algorithm.</strong> Given initial <em>μ<sub>0</sub>, Σ<sub>0</sub></em>, population size <em>N</em>, elite fraction <em>ρ</em>, and <em>K</em> iterations:</p>
+        <ol>
+            <li><strong>For</strong> <em>k = 0, …, K−1</em>:</li>
+            <ol type="a">
+                <li>Sample <em>θ<sub>i</sub> ∼ N(μ<sub>k</sub>, Σ<sub>k</sub>)</em>, <em>i = 1,…, N</em>.</li>
+                <li>For each <em>θ<sub>i</sub></em>, run policy <em>π<sub>θ<sub>i</sub></sub></em> in the environment and estimate <em>Ĵ(θ<sub>i</sub>)</em> (e.g., average return over one or more episodes).</li>
+                <li>Sort <em>Ĵ(θ<sub>i</sub>)</em> and select the <em>M = ⌈ρN⌉</em> best‑performing samples as the elite set <em>E<sub>k</sub></em>.</li>
+                <li>Update the Gaussian parameters by computing the empirical mean and covariance of the elites:
+                    <div class="equation-block multiline">
+                        μ<sub>k+1</sub> = mean(E<sub>k</sub>),  Σ<sub>k+1</sub> = cov(E<sub>k</sub>).
+                    </div>
+                </li>
+                <li>Optionally, apply a regularisation (e.g., add small diagonal to <em>Σ<sub>k+1</sub></em>) to prevent premature collapse.</li>
+            </ol>
+            <li><strong>Output:</strong> the policy <em>π<sub>θ<sup>*</sup></sub></em> with the highest estimated <em>Ĵ</em> observed during training, or the final <em>μ<sub>K</sub></em>.</li>
+        </ol>
+        <p>CEM ignores the temporal structure of RL and treats <em>J(θ)</em> as a black‑box function; it is therefore a zeroth‑order method. It is often used in model‑free settings when gradient information is unavailable or unreliable.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">θ</span><span class="var-desc">policy parameters.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub></span><span class="var-desc">stochastic or deterministic policy parameterised by θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">J(θ)</span><span class="var-desc">expected discounted return of π<sub>θ</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(θ)</span><span class="var-desc">Monte‑Carlo estimate of J(θ) from one or more episodes.</span></li>
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">population size per iteration.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ρ</span><span class="var-desc">elite fraction (e.g., 0.1).</span></li>
+            <li class="var-def-item"><span class="var-symbol">μ<sub>k</sub>, Σ<sub>k</sub></span><span class="var-desc">mean vector and covariance matrix of the Gaussian sampling distribution at iteration k.</span></li>
+            <li class="var-def-item"><span class="var-symbol">E<sub>k</sub></span><span class="var-desc">elite set containing the M best samples from iteration k.</span></li>
+            <li class="var-def-item"><span class="var-symbol">M = ⌈ρN⌉</span><span class="var-desc">number of elite samples.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.71 Natural Evolution Strategies -->
+<div class="section-block" id="a13-71">
+    <div class="section-heading"><span class="section-num-large">A13.71</span><h2 class="section-title-large">Natural Evolution Strategies</h2></div>
+    <div class="section-body">
+        <p><strong>Natural Evolution Strategies</strong> (NES) is a family of black‑box optimisation algorithms that update a parametric search distribution <em>q(θ ∣ λ)</em> by following the natural gradient of the expected fitness <em>J(λ) = 𝔼<sub>θ∼q(·|λ)</sub>[J(θ)]</em>. The gradient with respect to <em>λ</em> is given by the “log‑likelihood trick”:</p>
+        <div class="equation-block multiline">
+            ∇<sub>λ</sub> J(λ) = 𝔼<sub>θ∼q(·|λ)</sub>[ J(θ) ∇<sub>λ</sub> log q(θ ∣ λ) ].
+        </div>
+        <p>The natural gradient is then obtained by premultiplying with the inverse Fisher information matrix <em>F(λ)</em> of <em>q(·|λ)</em>:</p>
+        <div class="equation-block multiline">
+            λ<sub>k+1</sub> = λ<sub>k</sub> + η F(λ<sub>k</sub>)<sup>−1</sup> ∇<sub>λ</sub> J(λ<sub>k</sub>).
+        </div>
+        <p>In practice, the gradient is estimated from a population of samples, and rank‑based fitness shaping is often used for invariance. NES includes algorithms like xNES (exponential NES) and separable NES (sNES).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">q(θ ∣ λ)</span><span class="var-desc">parametric search distribution (e.g., Gaussian with mean and covariance in λ).</span></li>
+            <li class="var-def-item"><span class="var-symbol">λ</span><span class="var-desc">parameters of the search distribution.</span></li>
+            <li class="var-def-item"><span class="var-symbol">J(λ)</span><span class="var-desc">expected fitness under the search distribution.</span></li>
+            <li class="var-def-item"><span class="var-symbol">J(θ)</span><span class="var-desc">fitness (return) of an individual policy with parameters θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">∇<sub>λ</sub> log q(θ∣λ)</span><span class="var-desc">score function (gradient of log‑density).</span></li>
+            <li class="var-def-item"><span class="var-symbol">F(λ)</span><span class="var-desc">Fisher information matrix of q(·∣λ).</span></li>
+            <li class="var-def-item"><span class="var-symbol">η</span><span class="var-desc">learning rate (step size).</span></li>
+            <li class="var-def-item"><span class="var-symbol">natural gradient</span><span class="var-desc">F(λ)<sup>−1</sup> ∇<sub>λ</sub> J(λ); follows the steepest ascent direction under the KL‑divergence metric.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.72 Theorem 5 — Gradient of Expected Fitness -->
+<div class="section-block" id="a13-72">
+    <div class="section-heading"><span class="section-num-large">A13.72</span><h2 class="section-title-large">Theorem  — Gradient of Expected Fitness</h2></div>
+    <div class="section-body">
+        <p><strong>Theorem </strong> Let <em>q(θ ∣ λ)</em> be a probability density over parameters <em>θ</em>, differentiable w.r.t. <em>λ</em>, and let <em>J(θ)</em> be a function independent of <em>λ</em>. Define the expected fitness</p>
+        <div class="equation-block">
+            g(λ) ≐ 𝔼<sub>θ ∼ q(·∣λ)</sub> [ J(θ) ] = ∫ J(θ) q(θ ∣ λ) dθ.
+        </div>
+        <p>Then, under suitable regularity conditions, the gradient of <em>g</em> is</p>
+        <div class="equation-block multiline">
+            ∇<sub>λ</sub> g(λ) = 𝔼<sub>θ ∼ q(·∣λ)</sub> [ J(θ) ∇<sub>λ</sub> log q(θ ∣ λ) ]. (2.6)
+        </div>
+        <p><em>Proof.</em></p>
+        <div class="equation-block multiline">
+            ∇<sub>λ</sub> g(λ) = ∇<sub>λ</sub> ∫ J(θ) q(θ ∣ λ) dθ<br>
+            = ∫ J(θ) ∇<sub>λ</sub> q(θ ∣ λ) dθ &emsp;(dominated convergence, differentiation under the integral)<br>
+            = ∫ J(θ) q(θ ∣ λ) ∇<sub>λ</sub> log q(θ ∣ λ) dθ &emsp;(since ∇<sub>λ</sub> q = q ∇<sub>λ</sub> log q)<br>
+            = 𝔼<sub>θ ∼ q(·∣λ)</sub> [ J(θ) ∇<sub>λ</sub> log q(θ ∣ λ) ].
+        </div>
+        <p>∎</p>
+        <p>This identity, often called the <strong>score function estimator</strong> or <strong>REINFORCE gradient</strong>, allows estimating the gradient of an expectation by sampling from <em>q</em> and computing weighted log‑density gradients. It is a cornerstone of both evolutionary strategies and policy gradient methods.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">g(λ)</span><span class="var-desc">expected fitness under the search distribution parameterised by λ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">q(θ ∣ λ)</span><span class="var-desc">probability density of the parameters θ given distribution parameters λ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">J(θ)</span><span class="var-desc">fitness (or return) of the policy with parameters θ; assumed independent of λ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">∇<sub>λ</sub> log q(θ ∣ λ)</span><span class="var-desc">score function (gradient of the log‑density with respect to λ).</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>θ∼q(·∣λ)</sub>[·]</span><span class="var-desc">expectation over θ drawn from q(·∣λ).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.73 Lemma — Zero-Mean Gaussian Perturbation -->
+<div class="section-block" id="a13-73">
+    <div class="section-heading"><span class="section-num-large">A13.73</span><h2 class="section-title-large">Lemma — Zero-Mean Gaussian Perturbation</h2></div>
+    <div class="section-body">
+        <p>Since <em>ν</em> is sampled from a standard Gaussian, on average:</p>
+        <div class="equation-block multiline">
+            𝔼<sub>ν ∼ 𝒩(0, I)</sub> [ Ĵ(θ) / σ · ν ] = (Ĵ(θ) / σ) 𝔼<sub>ν ∼ 𝒩(0, I)</sub> [ν] = 0.
+        </div>
+        <p>Consequently, (2.10) estimates the same gradient as the formula</p>
+        <div class="equation-block multiline">
+            θ<sub>k+1</sub> := θ<sub>k</sub> + α ∑<sub>i=0</sub><sup>N</sup> (Ĵ(θ + σ ν<sub>i</sub>) / σ) ν<sub>i</sub>,
+        </div>
+        <p>which coincides with the <strong>OpenAI-ES</strong> formula up to a change of notation: it suffices to note that <em>θ + σν</em> is a sample from <em>𝒩(θ, σ²I)</em>. ∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">ν</span><span class="var-desc">perturbation vector drawn from the standard Gaussian 𝒩(0, I).</span></li>
+            <li class="var-def-item"><span class="var-symbol">σ</span><span class="var-desc">standard deviation of the search distribution; controls exploration scale.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Ĵ(θ)</span><span class="var-desc">estimated fitness (or return) of the policy with parameters θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ + σν</span><span class="var-desc">a sample from the Gaussian search distribution 𝒩(θ, σ²I).</span></li>
+            <li class="var-def-item"><span class="var-symbol">α</span><span class="var-desc">learning rate (step size) for the parameter update.</span></li>
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">number of perturbation samples (population size).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.74 Remark — Generality–Efficiency Tradeoff -->
+<div class="section-block" id="a13-74">
+    <div class="section-heading"><span class="section-num-large">A13.74</span><h2 class="section-title-large">Remark — Generality–Efficiency Tradeoff</h2></div>
+    <div class="section-body">
+        <p>The <strong>generality–efficiency tradeoff</strong> governs the relationship between problem structure and algorithm performance:</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">More general problem</span><span class="var-desc">(less structure) → less efficient algorithm. The algorithm must search a larger hypothesis space with weaker inductive biases, requiring more samples and compute to converge.</span></li>
+            <li class="var-def-item"><span class="var-symbol">More assumptions</span><span class="var-desc">(more structure) → provably better algorithms. Exploiting domain-specific structure — convexity, smoothness, Lipschitz continuity, linearity — yields tighter convergence rates and lower sample complexity.</span></li>
+        </ul>
+        <p>This tradeoff is a fundamental organising principle across optimisation and learning theory: the <em>no free lunch</em> theorems imply that no algorithm outperforms all others on <em>every</em> problem class, while structural assumptions enable specialised methods that excel on restricted subclasses. It also mirrors the <strong>bias–variance</strong> and <strong>sample complexity–model capacity</strong> tradeoffs in statistical learning. ∎</p>
+    </div>
+</div>
+
+
+<!-- A13.75 Remark — Glutton's Paradox -->
+<div class="section-block" id="a13-75">
+    <div class="section-heading"><span class="section-num-large">A13.75</span><h2 class="section-title-large">Remark — Glutton's Paradox</h2></div>
+    <div class="section-body">
+        <p><strong>Glutton's Paradox</strong> captures a subtle failure mode in optimisation and sequential decision-making: an agent that greedily consumes the largest immediate reward at each step may, in the long run, end up worse off than one that exercises restraint.</p>
+        <p>The paradox arises when the objective function has <strong>diminishing returns</strong>, <strong>hidden state dependencies</strong>, or <strong>non-stationary structure</strong> — the greedy choice depletes future resources, forecloses valuable options, or shifts the environment to an unfavourable regime. It is a cautionary tale against conflating <em>myopic optimality</em> with <em>global optimality</em>, and it motivates mechanisms such as <strong>exploration bonuses</strong>, <strong>long-term credit assignment</strong>, and <strong>budget constraints</strong> that temper short-term greed with long-term foresight. ∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Myopic optimality</span><span class="var-desc">choosing the action with the highest immediate payoff without considering future consequences.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Global optimality</span><span class="var-desc">maximising cumulative return over the full horizon, which may require sacrificing short-term gain.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Diminishing returns</span><span class="var-desc">a setting where each additional unit of a resource yields progressively smaller marginal benefit.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Exploration bonus</span><span class="var-desc">an added reward term that incentivises visiting under-explored states, counteracting greed.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.76 Lemma — Markov Independence (Conditional Independence) -->
+<div class="section-block" id="a13-76">
+    <div class="section-heading"><span class="section-num-large">A13.76</span><h2 class="section-title-large">Lemma — Markov Independence (Conditional Independence)</h2></div>
+    <div class="section-body">
+        <p><strong>Claim.</strong></p>
+        <div class="equation-block">
+            p(T<sub>:t</sub>, T<sub>t:</sub> ∣ s<sub>t</sub>) = p(T<sub>:t</sub> ∣ s<sub>t</sub>) · p(T<sub>t:</sub> ∣ s<sub>t</sub>).
+        </div>
+        <p>In words: the <em>past</em> and <em>future</em> are conditionally independent given the <em>present</em>.</p>
+        <p><em>Proof.</em></p>
+        <div class="equation-block multiline">
+            p(T<sub>:t</sub>, T<sub>t:</sub> ∣ s<sub>t</sub>)<br>
+            = p(T<sub>:t</sub> ∣ s<sub>t</sub>) · p(T<sub>t:</sub> ∣ s<sub>t</sub>, T<sub>:t</sub>) &emsp;(chain rule of probability)<br>
+            = p(T<sub>:t</sub> ∣ s<sub>t</sub>) · p(T<sub>t:</sub> ∣ s<sub>t</sub>) &emsp;(Markov property: the future depends on the past only through the present state).
+        </div>
+        <p>∎</p>
+        <p>This property is the defining feature of Markov systems: once the current state <em>s<sub>t</sub></em> is known, additional knowledge of the history <em>T<sub>:t</sub></em> provides no extra information about the future <em>T<sub>t:</sub></em>. It underpins the <strong>Bellman equation</strong>, the factorisation of value functions, and the efficiency of dynamic programming in MDPs.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">T<sub>:t</sub></span><span class="var-desc">the past trajectory (transitions and rewards up to time t).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T<sub>t:</sub></span><span class="var-desc">the future trajectory (transitions and rewards from time t onward).</span></li>
+            <li class="var-def-item"><span class="var-symbol">s<sub>t</sub></span><span class="var-desc">the present state — a sufficient statistic that renders past and future independent.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Markov property</span><span class="var-desc">the conditional independence p(future ∣ past, present) = p(future ∣ present).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.77 Definition — Reward-to-Go -->
+<div class="section-block" id="a13-77">
+    <div class="section-heading"><span class="section-num-large">A13.77</span><h2 class="section-title-large">Definition — Reward-to-Go</h2></div>
+    <div class="section-body">
+        <p><strong>Reward-to-Go.</strong> The discounted return from time <em>t</em> onward:</p>
+        <div class="equation-block">
+            R<sub>t</sub> ≐ R(T<sub>t:</sub>) = ∑<sub>t̂ ≥ t</sub> γ<sup>t̂ − t</sup> r<sub>t̂</sub>.
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">t̂ = t</span><span class="var-desc">weight γ<sup>0</sup> = 1: the current step's reward counts fully, with no discount.</span></li>
+            <li class="var-def-item"><span class="var-symbol">t̂ > t</span><span class="var-desc">weight γ<sup>t̂ − t</sup>: future rewards are exponentially discounted by the time lag.</span></li>
+        </ul>
+        <p>This object isolates the <em>future</em> contribution to the total return, discarding the past. It is the natural target for <strong>state-value</strong> and <strong>action-value</strong> functions, and it satisfies the recursive identity <em>R<sub>t</sub> = r<sub>t</sub> + γ R<sub>t+1</sub></em>, which is the foundation of the Bellman equation. ∎</p>
+ <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">R<sub>t</sub></span><span class="var-desc">return from time t onward; also called the reward-to-go or discounted future return.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, γ ∈ [0, 1], controlling the present value of future rewards.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t̂</sub></span><span class="var-desc">scalar reward received at time step t̂.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.78 Future Determinism by Current State -->
+<div class="section-block" id="a13-78">
+    <div class="section-heading"><span class="section-num-large">A13.78</span><h2 class="section-title-large">Future Determinism by Current State</h2></div>
+    <div class="section-body">
+        <p><strong>Claim.</strong> The distribution of the future trajectory from time <em>t</em> given the current state <em>s<sub>t</sub> = s</em> is identical to the distribution of a full trajectory starting from initial state <em>s<sub>0</sub> = s</em>:</p>
+        <div class="equation-block multiline">
+            p(T<sub>t:</sub> ∣ s<sub>t</sub> = s) ≡ p(T ∣ s<sub>0</sub> = s).
+        </div>
+        <p>In words: the future from <em>t</em> looks exactly like a complete trajectory generated from the beginning with the same starting state.</p>
+        <p><em>Proof.</em> Let <em>T<sub>t:</sub> = (a<sub>t</sub>, s<sub>t+1</sub>, a<sub>t+1</sub>, …)</em>. Then</p>
+        <div class="equation-block multiline">
+            p(T<sub>t:</sub> ∣ s<sub>t</sub> = s) = ∏<sub>t̂ ≥ t</sub> p(s<sub>t̂+1</sub> ∣ s<sub>t̂</sub>, a<sub>t̂</sub>) π(a<sub>t̂</sub> ∣ s<sub>t̂</sub>),
+        </div>
+        <p>where the product runs over time indices starting at <em>t</em>. This is exactly the same infinite product as the trajectory distribution <em>p(T ∣ s<sub>0</sub> = s)</em> (see A13.21), merely with a shift in the index. By the Markov property and time‑homogeneity of the environment and policy, the conditional probabilities depend only on the state and action, not on the absolute time. Hence the two distributions coincide. ∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">T<sub>t:</sub></span><span class="var-desc">future trajectory from time t onward: (a<sub>t</sub>, s<sub>t+1</sub>, a<sub>t+1</sub>, …).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">full trajectory starting at t = 0: (s<sub>0</sub>, a<sub>0</sub>, s<sub>1</sub>, a<sub>1</sub>, …).</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(T<sub>t:</sub> ∣ s<sub>t</sub> = s)</span><span class="var-desc">distribution of the future after time t given s<sub>t</sub> = s.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(T ∣ s<sub>0</sub> = s)</span><span class="var-desc">trajectory distribution with initial state s (as defined in A13.21).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π(a ∣ s)</span><span class="var-desc">stationary policy (see A13.22).</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">time‑homogeneous transition kernel (see A13.15).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.79 V‑Function (State Value Function) -->
+<div class="section-block" id="a13-79">
+    <div class="section-heading"><span class="section-num-large">A13.79</span><h2 class="section-title-large">V‑Function (State Value Function)</h2></div>
+    <div class="section-body">
+        <p>For a given MDP and policy <em>π</em>, the <strong>state value function</strong> (or <strong>V‑function</strong>) <em>V<sup>π</sup>(s)</em> is the expected return when starting from state <em>s</em> and following <em>π</em> thereafter:</p>
+        <div class="equation-block multiline">
+            V<sup>π</sup>(s) ≐ 𝔼<sub>T∼π ∣ s<sub>0</sub>=s</sub> [ R(T) ] (3.2)
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">V<sup>π</sup>(s)</span><span class="var-desc">value of state <em>s</em> under policy <em>π</em>; expected cumulative discounted reward.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π</span><span class="var-desc">a stationary policy, π(a|s).</span></li>
+            <li class="var-def-item"><span class="var-symbol">s</span><span class="var-desc">initial state (s<sub>0</sub> = s).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">trajectory (s<sub>0</sub>, a<sub>0</sub>, s<sub>1</sub>, a<sub>1</sub>, …) drawn under π and the environment dynamics.</span></li>
+            <li class="var-def-item"><span class="var-symbol">T ∼ π ∣ s<sub>0</sub>=s</span><span class="var-desc">trajectory distribution conditioned on starting at state s.</span></li>
+            <li class="var-def-item"><span class="var-symbol">R(T)</span><span class="var-desc">return of trajectory T (discounted sum of rewards).</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼[·]</span><span class="var-desc">expectation with respect to the trajectory distribution.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.80 Claims on the V‑Function -->
+<div class="section-block" id="a13-80">
+    <div class="section-heading"><span class="section-num-large">A13.80</span><h2 class="section-title-large">Claims on the V‑Function</h2></div>
+    <div class="section-body">
+        <p><strong>Claim </strong> For any time step <em>t</em>, the value function can be expressed in terms of the future return from that time:</p>
+        <div class="equation-block">
+            V<sup>π</sup>(s) = 𝔼<sub>T∼π ∣ s<sub>t</sub>=s</sub> [ R<sub>t</sub> ],
+        </div>
+        <p>where <em>R<sub>t</sub></em> is the return (discounted cumulative reward) from step <em>t</em> onward.</p>
+        <p><em>Explanation.</em> Apply Claim 8 (future determinism by current state, A13.78) to the return random variable. ∎</p>
+
+        <p><strong>Claim </strong> <em>V<sup>π</sup>(s)</em> is bounded:
+        <div class="equation-block">
+            | V<sup>π</sup>(s) | ≤ <span class="frac">r<sub>max</sub></span><span class="frac">1 − γ</span>  (or ≤ T<sub>max</sub> r<sub>max</sub> when γ = 1).
+        </div>
+        </p>
+
+        <p><strong>Claim </strong> For a terminal state <em>s</em> (see A13.25), the value is zero:
+        <div class="equation-block">
+            V<sup>π</sup>(s) = 0.
+        </div>
+        </p>
+
+        <p>Notice that any policy <em>π</em> induces a unique function <em>V<sup>π</sup></em>. For a given MDP and policy <em>π</em>, the value function is well‑defined by its definition, though computing it exactly is a separate challenge.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">V<sup>π</sup>(s)</span><span class="var-desc">state value function under policy π (see A13.79).</span></li>
+            <li class="var-def-item"><span class="var-symbol">R<sub>t</sub></span><span class="var-desc">return from step t: R<sub>t</sub> = Σ<sub>k=0</sub><sup>∞</sup> γ<sup>k</sup> r<sub>t+k+1</sub> (or simply the future discounted sum).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T ∼ π ∣ s<sub>t</sub>=s</span><span class="var-desc">trajectory distribution conditioned on being in state s at time t.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>max</sub></span><span class="var-desc">uniform bound on absolute rewards.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ ≤ 1.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- A13.81 Bellman Expectation Equation for V<sup>π</sup> -->
+<div class="section-block" id="a13-81">
+    <div class="section-heading"><span class="section-num-large">A13.81</span><h2 class="section-title-large">Bellman Expectation Equation for V<sup>π</sup></h2></div>
+    <div class="section-body">
+        <p>The value function <em>V<sup>π</sup></em> satisfies a recursive consistency condition known as the <strong>Bellman expectation equation</strong>:</p>
+        <div class="equation-block multiline">
+            V<sup>π</sup>(s) = 𝔼<sub>a ∼ π(·∣s)</sub> [ r(s, a) + γ 𝔼<sub>s′ ∼ p(·∣s,a)</sub> V<sup>π</sup>(s′) ]. (3.3)
+        </div>
+        <p><em>Proof.</em> Starting from the definition (A13.79) and using the structure of the trajectory distribution (A13.21):</p>
+        <div class="equation-block multiline">
+            V<sup>π</sup>(s) = 𝔼<sub>T∼π∣s<sub>0</sub>=s</sub>[ R(T) ]<br>
+            = 𝔼<sub>a<sub>0</sub>∼π(·∣s)</sub> 𝔼<sub>s<sub>1</sub>∼p(·∣s,a<sub>0</sub>)</sub> 𝔼<sub>a<sub>1</sub>,s<sub>2</sub>,…</sub>[ r(s, a<sub>0</sub>) + γ (r<sub>1</sub> + γ r<sub>2</sub> + …) ]<br>
+            = 𝔼<sub>a∼π(·∣s)</sub> [ r(s, a) + γ 𝔼<sub>s′∼p(·∣s,a)</sub> 𝔼<sub>future∣s<sub>1</sub>=s′</sub>[ Σ<sub>k=0</sub><sup>∞</sup> γ<sup>k</sup> r<sub>k+1</sub> ] ]<br>
+            = 𝔼<sub>a∼π(·∣s)</sub> [ r(s, a) + γ 𝔼<sub>s′∼p(·∣s,a)</sub> V<sup>π</sup>(s′) ].
+        </div>
+        <p>The last equality follows because, by the Markov property and Claim 8 (A13.78), the inner expectation from <em>s′</em> onward is exactly <em>V<sup>π</sup>(s′)</em>. ∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">V<sup>π</sup>(s)</span><span class="var-desc">state value function for policy π (A13.79).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π(a∣s)</span><span class="var-desc">policy distribution over actions in state s.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">expected immediate reward for taking action a in state s.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ ≤ 1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′∣s, a)</span><span class="var-desc">transition probability from s to s′ given action a.</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>a∼π</sub>, 𝔼<sub>s′∼p</sub></span><span class="var-desc">expectations under the policy and environment dynamics.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+<!-- A13.82 Optimal Policy -->
+<div class="section-block" id="a13-82">
+    <div class="section-heading"><span class="section-num-large">A13.82</span><h2 class="section-title-large">Optimal Policy</h2></div>
+    <div class="section-body">
+        <p>A policy <em>π<sup>*</sup></em> is <strong>optimal</strong> if it achieves the highest possible value from every state:</p>
+        <div class="equation-block">
+            ∀ π, s :  V<sup>π<sup>*</sup></sup>(s) ≥ V<sup>π</sup>(s).
+        </div>
+        <p>Equivalently, it is sufficient that it dominates all other policies from the initial state <em>s<sub>0</sub></em>:</p>
+        <div class="equation-block">
+            ∀ π :  V<sup>π<sup>*</sup></sup>(s<sub>0</sub>) ≥ V<sup>π</sup>(s<sub>0</sub>).
+        </div>
+        <p>Under mild conditions (e.g., stationary MDP with discounting, or finite horizon), these two characterisations coincide. The first, stronger definition is used to derive the Bellman optimality equations.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sup>*</sup></span><span class="var-desc">optimal policy.</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sup>π</sup>(s)</span><span class="var-desc">state value function under policy π (A13.79).</span></li>
+            <li class="var-def-item"><span class="var-symbol">s<sub>0</sub></span><span class="var-desc">initial state of the MDP.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+<!-- A13.83 Non‑Equivalence of Optimality Definitions -->
+<div class="section-block" id="a13-83">
+    <div class="section-heading"><span class="section-num-large">A13.83</span><h2 class="section-title-large">Non‑Equivalence of Optimality Definitions</h2></div>
+    <div class="section-body">
+        <p><strong>Claim.</strong> The condition “<em>∀π, s : V<sup>π<sup>*</sup></sup>(s) ≥ V<sup>π</sup>(s)</em>” (optimal from every state) is <strong>not equivalent</strong> to “<em>∀π : V<sup>π<sup>*</sup></sup>(s<sub>0</sub>) ≥ V<sup>π</sup>(s<sub>0</sub>)</em>” (optimal only from the initial state) without additional assumptions (e.g., ergodicity).</p>
+        <p><em>Proof (counterexample).</em> Consider an MDP with two states, <em>s<sub>0</sub></em> and <em>s<sub>1</sub></em>. The initial state is <em>s<sub>0</sub></em>. Transitions from <em>s<sub>0</sub></em>: every action leads deterministically to a terminal state <em>s<sub>T</sub></em> with reward 1. From <em>s<sub>1</sub></em>: two actions are available — action <em>a</em> yields reward 0 and terminal; action <em>b</em> yields reward 100 and terminal. The environment dynamics never transition to <em>s<sub>1</sub></em> from <em>s<sub>0</sub></em>; <em>s<sub>1</sub></em> is unreachable under any policy.</p>
+        <p>Now define two policies:</p>
+        <ul>
+            <li>π<sub>1</sub> : in <em>s<sub>0</sub></em> any action (same), in <em>s<sub>1</sub></em> choose <em>a</em> (reward 0).</li>
+            <li>π<sub>2</sub> : in <em>s<sub>0</sub></em> any action, in <em>s<sub>1</sub></em> choose <em>b</em> (reward 100).</li>
+        </ul>
+        <p>Values from <em>s<sub>0</sub></em> are identical: <em>V<sup>π<sub>1</sub></sup>(s<sub>0</sub>) = V<sup>π<sub>2</sub></sup>(s<sub>0</sub>) = 1</em> (the reward from the single step). Both policies are equally good from <em>s<sub>0</sub></em> and satisfy the second definition relative to each other. However, from <em>s<sub>1</sub></em> we have <em>V<sup>π<sub>1</sub></sup>(s<sub>1</sub>) = 0 &lt; 100 = V<sup>π<sub>2</sub></sup>(s<sub>1</sub>)</em>. Hence π<sub>1</sub> is <strong>not</strong> optimal under the state‑wise definition because it is strictly worse from <em>s<sub>1</sub></em>. The two optimality notions diverge when the MDP contains states unreachable from <em>s<sub>0</sub></em>. ∎</p>
+        <p>In practical RL, one often assumes that all states are reachable under some policy (or that the optimal value function is unique up to irrelevant states), making the definitions effectively equivalent, but the distinction matters in general.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">s<sub>0</sub></span><span class="var-desc">initial state (start state).</span></li>
+            <li class="var-def-item"><span class="var-symbol">s<sub>1</sub></span><span class="var-desc">unreachable state in the counterexample.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>1</sub>, π<sub>2</sub></span><span class="var-desc">policies demonstrating the non‑equivalence.</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sup>π</sup>(s)</span><span class="var-desc">state value function (A13.79).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+<!-- A13.84 Optimal V‑Function -->
+<div class="section-block" id="a13-84">
+    <div class="section-heading"><span class="section-num-large">A13.84</span><h2 class="section-title-large">Optimal V‑Function</h2></div>
+    <div class="section-body">
+        <p>The <strong>optimal state value function</strong> <em>V<sup>*</sup></em> is the maximum possible expected return achievable from any state <em>s</em> under any policy:</p>
+        <div class="equation-block multiline">
+            V<sup>*</sup>(s) ≐ max<sub>π</sub> V<sup>π</sup>(s) (3.4)
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">V<sup>*</sup>(s)</span><span class="var-desc">optimal value of state s; the highest expected return from s.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π</span><span class="var-desc">any stationary policy.</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sup>π</sup>(s)</span><span class="var-desc">state value function under policy π (A13.79).</span></li>
+        </ul>
+        <p>If an optimal policy <em>π<sup>*</sup></em> exists, then <em>V<sup>*</sup>(s) = V<sup>π<sup>*</sup></sup>(s)</em> for all <em>s</em>. The function <em>V<sup>*</sup></em> plays a central role in the Bellman optimality equations.</p>
+    </div>
+</div>
+
+
+
+<!-- A13.85 Q‑Function (State‑Action Value Function) -->
+<div class="section-block" id="a13-85">
+    <div class="section-heading"><span class="section-num-large">A13.85</span><h2 class="section-title-large">Q‑Function (State‑Action Value Function)</h2></div>
+    <div class="section-body">
+        <p>For a given MDP and policy <em>π</em>, the <strong>Q‑function</strong> (or <strong>state‑action value function</strong>) <em>Q<sup>π</sup>(s, a)</em> is the expected return when starting from state <em>s</em>, taking action <em>a</em>, and following <em>π</em> thereafter:</p>
+        <div class="equation-block multiline">
+            Q<sup>π</sup>(s, a) ≐ 𝔼<sub>T∼π ∣ s<sub>0</sub>=s, a<sub>0</sub>=a</sub> ∑<sub>t≥0</sub> γ<sup>t</sup> r<sub>t</sub>
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q<sup>π</sup>(s, a)</span><span class="var-desc">expected return when taking action <em>a</em> in state <em>s</em> and then following policy <em>π</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π</span><span class="var-desc">stationary policy, π(a|s).</span></li>
+            <li class="var-def-item"><span class="var-symbol">s</span><span class="var-desc">initial state (s<sub>0</sub> = s).</span></li>
+            <li class="var-def-item"><span class="var-symbol">a</span><span class="var-desc">initial action (a<sub>0</sub> = a).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">trajectory (s<sub>0</sub>, a<sub>0</sub>, s<sub>1</sub>, a<sub>1</sub>, …) drawn under the given condition.</span></li>
+            <li class="var-def-item"><span class="var-symbol">T ∼ π ∣ s<sub>0</sub>=s, a<sub>0</sub>=a</span><span class="var-desc">trajectory distribution conditioned on starting state <em>s</em> and initial action <em>a</em>, then following <em>π</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub></span><span class="var-desc">reward at time <em>t</em>, r<sub>t</sub> = r(s<sub>t</sub>, a<sub>t</sub>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ ≤ 1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼[·]</span><span class="var-desc">expectation over trajectories conditioned as specified.</span></li>
+        </ul>
+        <p>Unlike <em>V<sup>π</sup>(s)</em> (A13.79), the Q‑function separates the initial action from the subsequent policy, which is essential for learning and control.</p>
+    </div>
+</div>
+
+
+
+
+
+<!-- A13.86 Relationship Between Value Functions -->
+<div class="section-block" id="a13-86">
+    <div class="section-heading"><span class="section-num-large">A13.86</span><h2 class="section-title-large">Relationship Between Value Functions</h2></div>
+    <div class="section-body">
+        <p>The <em>V</em>-function and <em>Q</em>-function for a given policy <em>π</em> are linked by two fundamental equations:</p>
+        <div class="equation-block multiline">
+            Q<sup>π</sup>(s, a) = r(s, a) + γ 𝔼<sub>s′ ∼ p(·∣s,a)</sub> V<sup>π</sup>(s′) (3.5)<br>
+            V<sup>π</sup>(s) = 𝔼<sub>a ∼ π(·∣s)</sub> Q<sup>π</sup>(s, a) (3.6)
+        </div>
+        <p><em>Proof.</em> Equation (3.5) decomposes the expected return after taking action <em>a</em> in state <em>s</em> into the immediate reward plus the discounted value of the next state, by the Markov property and the definition of <em>V<sup>π</sup></em>. Equation (3.6) follows directly from the definitions: <em>V<sup>π</sup>(s)</em> is the expectation of <em>Q<sup>π</sup>(s, a)</em> when the action is drawn from the policy <em>π(·∣s)</em>. ∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">V<sup>π</sup>(s)</span><span class="var-desc">state value function (A13.79).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sup>π</sup>(s, a)</span><span class="var-desc">state‑action value function (A13.85).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">expected immediate reward for state‑action pair.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">transition probability.</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>s′∼p</sub></span><span class="var-desc">expectation over next state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>a∼π</sub></span><span class="var-desc">expectation over actions drawn from the policy.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+<!-- A13.87 Bellman Expectation Equation for Q<sup>π</sup> -->
+<div class="section-block" id="a13-87">
+    <div class="section-heading"><span class="section-num-large">A13.87</span><h2 class="section-title-large">Bellman Expectation Equation for Q<sup>π</sup></h2></div>
+    <div class="section-body">
+        <p>The <strong>Bellman expectation equation</strong> for the Q‑function is:</p>
+        <div class="equation-block multiline">
+            Q<sup>π</sup>(s, a) = r(s, a) + γ 𝔼<sub>s′ ∼ p(·∣s,a)</sub> 𝔼<sub>a′ ∼ π(·∣s′)</sub> Q<sup>π</sup>(s′, a′) (3.7)
+        </div>
+        <p><em>Proof.</em> Starting from the definition of <em>Q<sup>π</sup>(s,a)</em> (A13.85), write the return as the immediate reward plus the discounted future:</p>
+        <div class="equation-block multiline">
+            Q<sup>π</sup>(s,a) = 𝔼[ r<sub>0</sub> + γ r<sub>1</sub> + γ<sup>2</sup> r<sub>2</sub> + … ∣ s<sub>0</sub>=s, a<sub>0</sub>=a ]<br>
+            = r(s,a) + γ 𝔼<sub>s′∼p(·∣s,a), a′∼π(·∣s′)</sub> 𝔼[ r<sub>1</sub> + γ r<sub>2</sub> + … ∣ s<sub>1</sub>=s′, a<sub>1</sub>=a′ ]<br>
+            = r(s,a) + γ 𝔼<sub>s′∼p(·∣s,a)</sub> 𝔼<sub>a′∼π(·∣s′)</sub> Q<sup>π</sup>(s′, a′).
+        </div>
+        <p>The inner expectation is exactly <em>Q<sup>π</sup>(s′,a′)</em> because it is the return from <em>t=1</em> onward given <em>s<sub>1</sub>=s′</em> and <em>a<sub>1</sub>=a′</em>, which by time‑homogeneity equals the definition. ∎</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q<sup>π</sup>(s, a)</span><span class="var-desc">state‑action value function under policy π (A13.85).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">expected immediate reward.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor, 0 ≤ γ ≤ 1.</span></li>
+            <li class="var-def-item"><span class="var-symbol">s′ ∼ p(·∣s,a)</span><span class="var-desc">next state drawn from the transition dynamics.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a′ ∼ π(·∣s′)</span><span class="var-desc">next action drawn from the policy at the new state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>s′</sub> 𝔼<sub>a′</sub></span><span class="var-desc">nested expectations over the next state and action.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.88 Bellman’s Principle of Optimality -->
+<div class="section-block" id="a13-88">
+    <div class="section-heading"><span class="section-num-large">A13.88</span><h2 class="section-title-large">Bellman’s Principle of Optimality</h2></div>
+    <div class="section-body">
+        <blockquote>
+            An optimal policy has the property that whatever the initial state and initial decision are, the remaining decisions must constitute an optimal policy with regard to the state resulting from the first decision.
+        </blockquote>
+        <p>Formally, if a policy <em>π<sup>*</sup></em> is optimal, then for every <em>s</em> and every reachable next state <em>s′</em>, the tail of the policy (from step 1 onward) must be optimal for the sub‑problem starting at <em>s′</em>.</p>
+        <p>This principle is the foundation of dynamic programming and leads directly to the Bellman optimality equations for <em>V<sup>*</sup></em> and <em>Q<sup>*</sup></em>.</p>
+    </div>
+</div>
+
+
+
+
+<!-- A13.89 Optimal Q‑Function -->
+<div class="section-block" id="a13-89">
+    <div class="section-heading"><span class="section-num-large">A13.89</span><h2 class="section-title-large">Optimal Q‑Function</h2></div>
+    <div class="section-body">
+        <p>For a given MDP, the <strong>optimal Q‑function</strong> (or optimal state‑action value function) is the maximum possible expected return achievable after taking a specific action <em>a</em> in state <em>s</em>:</p>
+        <div class="equation-block multiline">
+            Q<sup>*</sup>(s, a) ≐ max<sub>π</sub> Q<sup>π</sup>(s, a)
+        </div>
+        <p>Here the maximum is taken over all stationary policies. <em>Q<sup>*</sup></em> plays a central role in control: if it is known, an optimal policy can be obtained by acting greedily. However, the connection to <em>V<sup>*</sup></em> requires additional steps.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q<sup>*</sup>(s, a)</span><span class="var-desc">optimal state‑action value: the maximum expected return achievable from state <em>s</em> after taking action <em>a</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sup>π</sup>(s, a)</span><span class="var-desc">state‑action value function under a specific policy <em>π</em> (A13.85).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π</span><span class="var-desc">any stationary policy.</span></li>
+            <li class="var-def-item"><span class="var-symbol">max<sub>π</sub></span><span class="var-desc">supremum over all policies; in finite MDPs a maximum is attained.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.90 Claim 12 — Optimal Q‑Function Inequality -->
+<div class="section-block" id="a13-90">
+    <div class="section-heading"><span class="section-num-large">A13.90</span><h2 class="section-title-large">Claim  — Optimal Q‑Function Inequality</h2></div>
+    <div class="section-body">
+        <p><strong>Claim .</strong> For any state <em>s</em> and action <em>a</em>,</p>
+        <div class="equation-block multiline">
+            Q<sup>*</sup>(s, a) ≤ r(s, a) + γ 𝔼<sub>s′ ∼ p(·∣s,a)</sub> V<sup>*</sup>(s′).
+        </div>
+        <p>This inequality bounds the optimal value of a state‑action pair by the immediate reward plus the discounted expected optimal value of the next state. It does not yet establish equality because the maximum over policies for the tail may not be attained by a single policy that also attains the maximum for the first step. The full Bellman optimality equation (equality) requires additional arguments.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q<sup>*</sup>(s, a)</span><span class="var-desc">optimal state‑action value (A13.89).</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sup>*</sup>(s)</span><span class="var-desc">optimal state value (A13.84).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">expected immediate reward.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(·∣s, a)</span><span class="var-desc">transition kernel from (s, a).</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>s′</sub></span><span class="var-desc">expectation over the next state.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+<!-- A13.91 Claim 13 — Optimal V‑Function Inequality -->
+<div class="section-block" id="a13-91">
+    <div class="section-heading"><span class="section-num-large">A13.91</span><h2 class="section-title-large">Claim  — Optimal V‑Function Inequality</h2></div>
+    <div class="section-body">
+        <p><strong>Claim </strong> For any state <em>s</em>,</p>
+        <div class="equation-block multiline">
+            V<sup>*</sup>(s) ≤ max<sub>a</sub> Q<sup>*</sup>(s, a).
+        </div>
+        <p>The optimal value of a state is bounded above by the maximum over actions of the optimal Q‑value. This follows from the definition of <em>V<sup>*</sup></em> as the maximum expected return over all policies, while <em>Q<sup>*</sup>(s,a)</em> is the maximum expected return after a specific first action. Equality will be established once the Bellman optimality equation is proved.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">V<sup>*</sup>(s)</span><span class="var-desc">optimal state value (A13.84).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sup>*</sup>(s, a)</span><span class="var-desc">optimal state‑action value (A13.89).</span></li>
+            <li class="var-def-item"><span class="var-symbol">max<sub>a</sub></span><span class="var-desc">maximum over all actions a ∈ A.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.92 Greedy Policy with Respect to a Q‑Function -->
+<div class="section-block" id="a13-92">
+    <div class="section-heading"><span class="section-num-large">A13.92</span><h2 class="section-title-large">Greedy Policy with Respect to a Q‑Function</h2></div>
+    <div class="section-body">
+        <p>For a given (approximate) Q‑function <em>Q(s, a)</em>, the deterministic policy that selects the action with the highest estimated value in each state is called <strong>greedy</strong> with respect to <em>Q</em>:</p>
+        <div class="equation-block">
+            π(s) ≐ arg max<sub>a</sub> Q(s, a).
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q(s, a)</span><span class="var-desc">an approximation (or the true) state‑action value function.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π(s)</span><span class="var-desc">greedy policy; ties are broken arbitrarily (e.g., uniformly among maximisers).</span></li>
+            <li class="var-def-item"><span class="var-symbol">arg max<sub>a</sub></span><span class="var-desc">the action(s) that maximise the given expression.</span></li>
+        </ul>
+        <p>When <em>Q = Q<sup>*</sup></em>, the greedy policy is optimal.</p>
+    </div>
+</div>
+
+
+
+<!-- A13.93 Abandoning Stationarity -->
+<div class="section-block" id="a13-93">
+    <div class="section-heading"><span class="section-num-large">A13.93</span><h2 class="section-title-large">Abandoning Stationarity</h2></div>
+    <div class="section-body">
+        <p><strong>Abandoning stationarity</strong> means considering policies that depend on the time step or on the full interaction history, rather than limiting oneself to stationary policies <em>π(a|s)</em> that are functions of the current state only. Formally, a non‑stationary policy at time <em>t</em> may be written as <em>π<sub>t</sub>(a | s<sub>0</sub>, a<sub>0</sub>, …, s<sub>t</sub>)</em> or simply <em>π<sub>t</sub>(a|s)</em> if only the time index matters.</p>
+        <p>In an infinite‑horizon discounted MDP with a stationary environment, stationary policies are sufficient for optimality. However, abandoning stationarity can be beneficial in:</p>
+        <ul>
+            <li>Finite‑horizon problems, where the optimal policy naturally depends on the remaining number of steps.</li>
+            <li>Exploration strategies during learning (e.g., ε‑greedy with a time‑varying ε).</li>
+            <li>Cases with function approximation, where the policy network may implicitly encode a time‑varying representation.</li>
+            <li>Non‑stationary environments (where the transition or reward function changes over time) – here stationarity is impossible to maintain in the strict sense.</li>
+        </ul>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>t</sub></span><span class="var-desc">policy at time t, potentially dependent on history or time index.</span></li>
+            <li class="var-def-item"><span class="var-symbol">stationary policy</span><span class="var-desc">a policy π(a|s) that uses only the current state (A13.22).</span></li>
+            <li class="var-def-item"><span class="var-symbol">non‑stationary</span><span class="var-desc">any policy that does not satisfy the time‑invariance property.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+
         </main>
 
         <aside class="sidebar">
