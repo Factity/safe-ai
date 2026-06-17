@@ -510,13 +510,12 @@
     }
 
     /* ── SIDEBAR ── */
-    .sidebar {
-        padding-top: 3.5rem;
-        max-width: 100%;
-        /* ✅ Respect grid */
-        min-width: 0;
-        /* ✅ Allow shrinkage */
-    }
+  .sidebar {
+    overflow-y: auto;          /* enable vertical scrollbar when needed */
+    max-height: 100vh;         /* never taller than the viewport */
+    position: sticky;          /* keep it in view while the page scrolls */
+    top: 0;                    /* stick to the top */
+}
     .sb-section {
         margin-bottom: 2.6rem;
         max-width: 100%;
@@ -7251,19 +7250,268 @@
             <div class="sb-section">
                 <div class="sb-heading">On This Page</div>
                 <ul class="sb-nav-list">
-                    <li><a href="#a13-1"><span class="sb-nav-num">A13.1</span> Critique of Supervised Learning</a></li>
-                    <li><a href="#a13-2"><span class="sb-nav-num">A13.2</span> Origin of Reinforcement</a></li>
-                    <li><a href="#a13-3"><span class="sb-nav-num">A13.3</span> Agent</a></li>
-                    <li><a href="#a13-4"><span class="sb-nav-num">A13.4</span> Environment</a></li>
-                    <li><a href="#a13-5"><span class="sb-nav-num">A13.5</span> State</a></li>
-                    <li><a href="#a13-6"><span class="sb-nav-num">A13.6</span> Action</a></li>
-                    <li><a href="#a13-7"><span class="sb-nav-num">A13.7</span> Reward</a></li>
-                    <li><a href="#a13-8"><span class="sb-nav-num">A13.8</span> Return</a></li>
-                    <li><a href="#a13-9"><span class="sb-nav-num">A13.9</span> Goal</a></li>
-                    <li><a href="#a13-10"><span class="sb-nav-num">A13.10</span> Policy</a></li>
-                    <li><a href="#a13-11"><span class="sb-nav-num">A13.11</span> State‑value function</a></li>
-                    <li><a href="#a13-12"><span class="sb-nav-num">A13.12</span> Action‑value function</a></li>
-                    <li><a href="#a13-13"><span class="sb-nav-num">A13.13</span> Markov Decision Process</a></li>
+    
+<li><a href="#a13-1"><span class="sb-nav-num">A13.1</span> Critique of Supervised Learning</a></li>
+<li><a href="#a13-2"><span class="sb-nav-num">A13.2</span> Origin of Reinforcement</a></li>
+<li><a href="#a13-3"><span class="sb-nav-num">A13.3</span> Agent</a></li>
+<li><a href="#a13-4"><span class="sb-nav-num">A13.4</span> Environment</a></li>
+<li><a href="#a13-5"><span class="sb-nav-num">A13.5</span> State</a></li>
+<li><a href="#a13-6"><span class="sb-nav-num">A13.6</span> Action</a></li>
+<li><a href="#a13-7"><span class="sb-nav-num">A13.7</span> Reward</a></li>
+<li><a href="#a13-8"><span class="sb-nav-num">A13.8</span> Return</a></li>
+<li><a href="#a13-9"><span class="sb-nav-num">A13.9</span> Goal</a></li>
+<li><a href="#a13-10"><span class="sb-nav-num">A13.10</span> Policy</a></li>
+<li><a href="#a13-11"><span class="sb-nav-num">A13.11</span> State‑value function</a></li>
+<li><a href="#a13-12"><span class="sb-nav-num">A13.12</span> Action‑value function</a></li>
+<li><a href="#a13-13"><span class="sb-nav-num">A13.13</span> Markov Decision Process (MDP)</a></li>
+<li><a href="#a13-14"><span class="sb-nav-num">A13.14</span> Laplacian Determinism</a></li>
+<li><a href="#a13-15"><span class="sb-nav-num">A13.15</span> Time‑homogeneous (Stationary) Markov Chain</a></li>
+<li><a href="#a13-16"><span class="sb-nav-num">A13.16</span> Stationary MDP</a></li>
+<li><a href="#a13-17"><span class="sb-nav-num">A13.17</span> Environment (Controlled Markov Chain)</a></li>
+<li><a href="#a13-18"><span class="sb-nav-num">A13.18</span> Fully Observable Environment</a></li>
+<li><a href="#a13-19"><span class="sb-nav-num">A13.19</span> Action Spaces</a></li>
+<li><a href="#a13-20"><span class="sb-nav-num">A13.20</span> Trajectory</a></li>
+<li><a href="#a13-21"><span class="sb-nav-num">A13.21</span> Trajectory Distribution & Expectation</a></li>
+<li><a href="#a13-22"><span class="sb-nav-num">A13.22</span> Policy (Definition)</a></li>
+<li><a href="#a13-23"><span class="sb-nav-num">A13.23</span> Theorem  — Equivalent MDP Formulations</a></li>
+<li><a href="#a13-24"><span class="sb-nav-num">A13.24</span> Finite (Tabular) MDP</a></li>
+<li><a href="#a13-25"><span class="sb-nav-num">A13.25</span> Episodicity</a></li>
+<li><a href="#a13-26"><span class="sb-nav-num">A13.26</span> Episodic Environment</a></li>
+<li><a href="#a13-27"><span class="sb-nav-num">A13.27</span> Theorem  — Tree Structure of Episodic Environments</a></li>
+<li><a href="#a13-28"><span class="sb-nav-num">A13.28</span> Discounting</a></li>
+<li><a href="#a13-29"><span class="sb-nav-num">A13.29</span> Score (Performance) of a Policy</a></li>
+<li><a href="#a13-30"><span class="sb-nav-num">A13.30</span> Claim 1 — Score Is Bounded</a></li>
+<li><a href="#a13-31"><span class="sb-nav-num">A13.31</span> Note</a></li>
+<li><a href="#a13-32"><span class="sb-nav-num">A13.32</span> Transition</a></li>
+<li><a href="#a13-33"><span class="sb-nav-num">A13.33</span> Claim — Supervised Learning is a Special Case of RL</a></li>
+<li><a href="#a13-34"><span class="sb-nav-num">A13.34</span> Simulator (Access to Transition Function)</a></li>
+<li><a href="#a13-35"><span class="sb-nav-num">A13.35</span> Model‑Free Algorithm</a></li>
+<li><a href="#a13-36"><span class="sb-nav-num">A13.36</span> Off‑Policy & On‑Policy Algorithms</a></li>
+<li><a href="#a13-37"><span class="sb-nav-num">A13.37</span> Metaheuristics</a></li>
+<li><a href="#a13-38"><span class="sb-nav-num">A13.38</span> Value‑based Algorithms</a></li>
+<li><a href="#a13-39"><span class="sb-nav-num">A13.39</span> Policy Gradient Algorithms</a></li>
+<li><a href="#a13-40"><span class="sb-nav-num">A13.40</span> Monte‑Carlo Performance Estimate</a></li>
+<li><a href="#a13-41"><span class="sb-nav-num">A13.41</span> Wall‑Clock Time</a></li>
+<li><a href="#a13-42"><span class="sb-nav-num">A13.42</span> Sample Efficiency</a></li>
+<li><a href="#a13-43"><span class="sb-nav-num">A13.43</span> Note</a></li>
+<li><a href="#a13-44"><span class="sb-nav-num">A13.44</span> Local Optima Problem</a></li>
+<li><a href="#a13-45"><span class="sb-nav-num">A13.45</span> Sample Inefficiency Problem</a></li>
+<li><a href="#a13-46"><span class="sb-nav-num">A13.46</span> Exploration–Exploitation Trade‑off</a></li>
+<li><a href="#a13-47"><span class="sb-nav-num">A13.47</span> Credit Assignment Problem</a></li>
+<li><a href="#a13-48"><span class="sb-nav-num">A13.48</span> Reward Hypothesis</a></li>
+<li><a href="#a13-49"><span class="sb-nav-num">A13.49</span> Reward Shaping</a></li>
+<li><a href="#a13-50"><span class="sb-nav-num">A13.50</span> Individual (Particle) and Fitness</a></li>
+<li><a href="#a13-51"><span class="sb-nav-num">A13.51</span> Search Strategy</a></li>
+<li><a href="#a13-52"><span class="sb-nav-num">A13.52</span> Random Search</a></li>
+<li><a href="#a13-53"><span class="sb-nav-num">A13.53</span> Population</a></li>
+<li><a href="#a13-54"><span class="sb-nav-num">A13.54</span> Evaluation of the Population</a></li>
+<li><a href="#a13-55"><span class="sb-nav-num">A13.55</span> Selection Procedure</a></li>
+<li><a href="#a13-56"><span class="sb-nav-num">A13.56</span> Greedy Selection</a></li>
+<li><a href="#a13-57"><span class="sb-nav-num">A13.57</span> Note</a></li>
+<li><a href="#a13-58"><span class="sb-nav-num">A13.58</span> Mutation</a></li>
+<li><a href="#a13-59"><span class="sb-nav-num">A13.59</span> Simulated Annealing</a></li>
+<li><a href="#a13-60"><span class="sb-nav-num">A13.60</span> Metropolis–Hastings Algorithm</a></li>
+<li><a href="#a13-61"><span class="sb-nav-num">A13.61</span> Claim — Stationary Distribution of Simulated Annealing</a></li>
+<li><a href="#a13-62"><span class="sb-nav-num">A13.62</span> Evolutionary Algorithm</a></li>
+<li><a href="#a13-63"><span class="sb-nav-num">A13.63</span> Evolution Strategy (ES)</a></li>
+<li><a href="#a13-64"><span class="sb-nav-num">A13.64</span> Genetic Algorithm (GA)</a></li>
+<li><a href="#a13-65"><span class="sb-nav-num">A13.65</span> Evolutionary Strategy (Distribution)</a></li>
+<li><a href="#a13-66"><span class="sb-nav-num">A13.66</span> Estimation of a Rare Probability Event</a></li>
+<li><a href="#a13-67"><span class="sb-nav-num">A13.67</span> Algorithm: Cross‑Entropy Method for Rare‑Event Probability</a></li>
+<li><a href="#a13-68"><span class="sb-nav-num">A13.68</span> Cross‑Entropy Method for Stochastic Optimization</a></li>
+<li><a href="#a13-69"><span class="sb-nav-num">A13.69</span> Algorithm Cross‑Entropy Method for Optimization with a Zeroth‑Order Oracle</a></li>
+<li><a href="#a13-70"><span class="sb-nav-num">A13.70</span> Cross‑Entropy Method for Reinforcement Learning</a></li>
+<li><a href="#a13-71"><span class="sb-nav-num">A13.71</span> Natural Evolution Strategies</a></li>
+<li><a href="#a13-72"><span class="sb-nav-num">A13.72</span> Theorem  — Gradient of Expected Fitness</a></li>
+<li><a href="#a13-73"><span class="sb-nav-num">A13.73</span> Lemma — Zero-Mean Gaussian Perturbation</a></li>
+<li><a href="#a13-74"><span class="sb-nav-num">A13.74</span> Remark — Generality–Efficiency Tradeoff</a></li>
+<li><a href="#a13-75"><span class="sb-nav-num">A13.75</span> Remark — Glutton's Paradox</a></li>
+<li><a href="#a13-76"><span class="sb-nav-num">A13.76</span> Lemma — Markov Independence (Conditional Independence)</a></li>
+<li><a href="#a13-77"><span class="sb-nav-num">A13.77</span> Definition — Reward-to-Go</a></li>
+<li><a href="#a13-78"><span class="sb-nav-num">A13.78</span> Future Determinism by Current State</a></li>
+<li><a href="#a13-79"><span class="sb-nav-num">A13.79</span> V‑Function (State Value Function)</a></li>
+<li><a href="#a13-80"><span class="sb-nav-num">A13.80</span> Claims on the V‑Function</a></li>
+<li><a href="#a13-81"><span class="sb-nav-num">A13.81</span> Bellman Expectation Equation for Vπ</a></li>
+<li><a href="#a13-82"><span class="sb-nav-num">A13.82</span> Optimal Policy</a></li>
+<li><a href="#a13-83"><span class="sb-nav-num">A13.83</span> Non‑Equivalence of Optimality Definitions</a></li>
+<li><a href="#a13-84"><span class="sb-nav-num">A13.84</span> Optimal V‑Function</a></li>
+<li><a href="#a13-85"><span class="sb-nav-num">A13.85</span> Q‑Function (State‑Action Value Function)</a></li>
+<li><a href="#a13-86"><span class="sb-nav-num">A13.86</span> Relationship Between Value Functions</a></li>
+<li><a href="#a13-87"><span class="sb-nav-num">A13.87</span> Bellman Expectation Equation for Qπ</a></li>
+<li><a href="#a13-88"><span class="sb-nav-num">A13.88</span> Bellman’s Principle of Optimality</a></li>
+<li><a href="#a13-89"><span class="sb-nav-num">A13.89</span> Optimal Q‑Function</a></li>
+<li><a href="#a13-90"><span class="sb-nav-num">A13.90</span> Claim  — Optimal Q‑Function Inequality</a></li>
+<li><a href="#a13-91"><span class="sb-nav-num">A13.91</span> Claim  — Optimal V‑Function Inequality</a></li>
+<li><a href="#a13-92"><span class="sb-nav-num">A13.92</span> Greedy Policy with Respect to a Q‑Function</a></li>
+<li><a href="#a13-93"><span class="sb-nav-num">A13.93</span> Abandoning Stationarity</a></li>
+<li><a href="#a13-94"><span class="sb-nav-num">A13.94</span> Bellman Equations for Non‑Stationary Value Functions</a></li>
+<li><a href="#a13-95"><span class="sb-nav-num">A13.95</span> Optimal Non‑Stationary Value Functions</a></li>
+<li><a href="#a13-96"><span class="sb-nav-num">A13.96</span> Claim — Time Independence of Optimal Non‑Stationary Value Functions</a></li>
+<li><a href="#a13-97"><span class="sb-nav-num">A13.97</span> Bellman Optimality Criterion</a></li>
+<li><a href="#a13-98"><span class="sb-nav-num">A13.98</span> Claims on the Existence of Optimal Policies</a></li>
+<li><a href="#a13-99"><span class="sb-nav-num">A13.99</span> Advantage Function</a></li>
+<li><a href="#a13-100"><span class="sb-nav-num">A13.100</span> Claims on the Advantage Function</a></li>
+<li><a href="#a13-101"><span class="sb-nav-num">A13.101</span> Relative Performance Identity</a></li>
+<li><a href="#a13-102"><span class="sb-nav-num">A13.102</span> Policy Comparison Relations</a></li>
+<li><a href="#a13-103"><span class="sb-nav-num">A13.103</span> Policy Improvement</a></li>
+<li><a href="#a13-104"><span class="sb-nav-num">A13.104</span> Contraction Operator</a></li>
+<li><a href="#a13-105"><span class="sb-nav-num">A13.105</span> Fixed Point</a></li>
+<li><a href="#a13-106"><span class="sb-nav-num">A13.106</span> Method of Simple Iteration (Point Iteration)</a></li>
+<li><a href="#a13-107"><span class="sb-nav-num">A13.107</span> Banach Fixed‑Point Theorem</a></li>
+<li><a href="#a13-108"><span class="sb-nav-num">A13.108</span> Policy Evaluation</a></li>
+<li><a href="#a13-109"><span class="sb-nav-num">A13.109</span> Bellman Operator and Supremum Metric</a></li>
+<li><a href="#a13-110"><span class="sb-nav-num">A13.110</span> Bellman Operator is a Contraction</a></li>
+<li><a href="#a13-111"><span class="sb-nav-num">A13.111</span> Episodic Convergence of Simple Iteration</a></li>
+<li><a href="#a13-112"><span class="sb-nav-num">A13.112</span> Algorithm 6: Policy Evaluation</a></li>
+<li><a href="#a13-113"><span class="sb-nav-num">A13.113</span> Value Iteration</a></li>
+<li><a href="#a13-114"><span class="sb-nav-num">A13.114</span> Policy Iteration</a></li>
+<li><a href="#a13-115"><span class="sb-nav-num">A13.115</span> Theorem — N‑step Bellman Equation</a></li>
+<li><a href="#a13-116"><span class="sb-nav-num">A13.116</span> Tabular Algorithms</a></li>
+<li><a href="#a13-117"><span class="sb-nav-num">A13.117</span> Monte Carlo Algorithm</a></li>
+<li><a href="#a13-118"><span class="sb-nav-num">A13.118</span> Exponential Smoothing</a></li>
+<li><a href="#a13-119"><span class="sb-nav-num">A13.119</span> Robbins–Monro Conditions</a></li>
+<li><a href="#a13-120"><span class="sb-nav-num">A13.120</span> Stochastic Approximation</a></li>
+<li><a href="#a13-121"><span class="sb-nav-num">A13.121</span> Temporal Difference Learning</a></li>
+<li><a href="#a13-122"><span class="sb-nav-num">A13.122</span> Q‑Learning</a></li>
+<li><a href="#a13-123"><span class="sb-nav-num">A13.123</span> Theorem – Convergence of Q‑learning</a></li>
+<li><a href="#a13-124"><span class="sb-nav-num">A13.124</span> Risk of Pure Greedy Policy</a></li>
+<li><a href="#a13-125"><span class="sb-nav-num">A13.125</span> ε‑greedy and Boltzmann Strategies</a></li>
+<li><a href="#a13-126"><span class="sb-nav-num">A13.126</span> Replay Buffer (Experience Replay)</a></li>
+<li><a href="#a13-127"><span class="sb-nav-num">A13.127</span> Algorithm: Q‑learning with Experience Replay</a></li>
+<li><a href="#a13-128"><span class="sb-nav-num">A13.128</span> Q‑learning (Online)</a></li>
+<li><a href="#a13-129"><span class="sb-nav-num">A13.129</span> SARSA</a></li>
+<li><a href="#a13-130"><span class="sb-nav-num">A13.130</span> ε‑soft Policy</a></li>
+<li><a href="#a13-131"><span class="sb-nav-num">A13.131</span> Optimal ε‑soft Value Functions</a></li>
+<li><a href="#a13-132"><span class="sb-nav-num">A13.132</span> Algorithm : Expected‑SARSA</a></li>
+<li><a href="#a13-133"><span class="sb-nav-num">A13.133</span> Bias–Variance Dilemma</a></li>
+<li><a href="#a13-134"><span class="sb-nav-num">A13.134</span> Rollout and N‑Step Estimation Target</a></li>
+<li><a href="#a13-135"><span class="sb-nav-num">A13.135</span> N‑Step Temporal Difference Error</a></li>
+<li><a href="#a13-136"><span class="sb-nav-num">A13.136</span> Theorem  — N‑Step TD Error Telescoping Identity</a></li>
+<li><a href="#a13-137"><span class="sb-nav-num">A13.137</span> Eligibility Trace</a></li>
+<li><a href="#a13-138"><span class="sb-nav-num">A13.138</span> Equivalent Forms of the TD(λ) Error</a></li>
+<li><a href="#a13-139"><span class="sb-nav-num">A13.139</span> Algorithm : TD(λ)</a></li>
+<li><a href="#a13-140"><span class="sb-nav-num">A13.140</span> Retrace(λ)</a></li>
+<li><a href="#a13-141"><span class="sb-nav-num">A13.141</span> Retrace(λ) – Formal Update Rule</a></li>
+<li><a href="#a13-142"><span class="sb-nav-num">A13.142</span> Deep Q‑Learning</a></li>
+<li><a href="#a13-143"><span class="sb-nav-num">A13.143</span> Theorem  – Fitted Q‑Iteration under Ideal Conditions</a></li>
+<li><a href="#a13-144"><span class="sb-nav-num">A13.144</span> Sample Decorrelation</a></li>
+<li><a href="#a13-145"><span class="sb-nav-num">A13.145</span> Target Network</a></li>
+<li><a href="#a13-146"><span class="sb-nav-num">A13.146</span> Overestimation Bias</a></li>
+<li><a href="#a13-147"><span class="sb-nav-num">A13.147</span> Twin DQN</a></li>
+<li><a href="#a13-148"><span class="sb-nav-num">A13.148</span> Double DQN</a></li>
+<li><a href="#a13-149"><span class="sb-nav-num">A13.149</span> Dueling DQN</a></li>
+<li><a href="#a13-150"><span class="sb-nav-num">A13.150</span> Noisy Nets</a></li>
+<li><a href="#a13-151"><span class="sb-nav-num">A13.151</span> Prioritized Replay</a></li>
+<li><a href="#a13-152"><span class="sb-nav-num">A13.152</span> Multi‑step DQN</a></li>
+<li><a href="#a13-153"><span class="sb-nav-num">A13.153</span> Distributional RL</a></li>
+<li><a href="#a13-154"><span class="sb-nav-num">A13.154</span> Z‑function (Distributional State‑Action Value)</a></li>
+<li><a href="#a13-155"><span class="sb-nav-num">A13.155</span> Distributional Bellman Equation</a></li>
+<li><a href="#a13-156"><span class="sb-nav-num">A13.156</span> Distributional Value Iteration</a></li>
+<li><a href="#a13-157"><span class="sb-nav-num">A13.157</span> Algorithm  Categorical DQN (C51)</a></li>
+<li><a href="#a13-158"><span class="sb-nav-num">A13.158</span> Algorithm : Quantile Regression DQN (QR‑DQN)</a></li>
+<li><a href="#a13-159"><span class="sb-nav-num">A13.159</span> Implicit Quantile Networks</a></li>
+<li><a href="#a13-160"><span class="sb-nav-num">A13.160</span> Rainbow DQN</a></li>
+<li><a href="#a13-161"><span class="sb-nav-num">A13.161</span> Policy Gradient Theorem</a></li>
+<li><a href="#a13-162"><span class="sb-nav-num">A13.162</span> Principle of Causality</a></li>
+<li><a href="#a13-163"><span class="sb-nav-num">A13.163</span> REINFORCE</a></li>
+<li><a href="#a13-164"><span class="sb-nav-num">A13.164</span> State Visitation Frequency</a></li>
+<li><a href="#a13-165"><span class="sb-nav-num">A13.165</span> Decoupling External and Internal Stochasticity</a></li>
+<li><a href="#a13-166"><span class="sb-nav-num">A13.166</span> Connection with Policy Improvement</a></li>
+<li><a href="#a13-167"><span class="sb-nav-num">A13.167</span> Baseline</a></li>
+<li><a href="#a13-168"><span class="sb-nav-num">A13.168</span> Actor‑Critic Schemes</a></li>
+<li><a href="#a13-169"><span class="sb-nav-num">A13.169</span> Generalized Advantage Estimation (GAE)</a></li>
+<li><a href="#a13-170"><span class="sb-nav-num">A13.170</span> Training the Critic</a></li>
+<li><a href="#a13-171"><span class="sb-nav-num">A13.171</span> Advantage Actor‑Critic (A2C)</a></li>
+<li><a href="#a13-172"><span class="sb-nav-num">A13.172</span> Surrogate Function</a></li>
+<li><a href="#a13-173"><span class="sb-nav-num">A13.173</span> Trust Region Policy Optimization (TRPO)</a></li>
+<li><a href="#a13-174"><span class="sb-nav-num">A13.174</span> Proximal Policy Loss</a></li>
+<li><a href="#a13-175"><span class="sb-nav-num">A13.175</span> Clipped Value Loss</a></li>
+<li><a href="#a13-176"><span class="sb-nav-num">A13.176</span> Proximal Policy Optimization (PPO)</a></li>
+<li><a href="#a13-177"><span class="sb-nav-num">A13.177</span> Derivation from Deep Q‑learning</a></li>
+<li><a href="#a13-178"><span class="sb-nav-num">A13.178</span> Derivation from Policy Gradient</a></li>
+<li><a href="#a13-179"><span class="sb-nav-num">A13.179</span> Equivalence between Q‑learning and Policy Gradient Derivations</a></li>
+<li><a href="#a13-180"><span class="sb-nav-num">A13.180</span> Ornstein–Uhlenbeck Noise</a></li>
+<li><a href="#a13-181"><span class="sb-nav-num">A13.181</span> Deep Deterministic Policy Gradient (DDPG)</a></li>
+<li><a href="#a13-182"><span class="sb-nav-num">A13.182</span> Twin Delayed DDPG (TD3)</a></li>
+<li><a href="#a13-183"><span class="sb-nav-num">A13.183</span> Training Stochastic Policies</a></li>
+<li><a href="#a13-184"><span class="sb-nav-num">A13.184</span> Entropy of a Distribution</a></li>
+<li><a href="#a13-185"><span class="sb-nav-num">A13.185</span> Maximum Entropy RL</a></li>
+<li><a href="#a13-186"><span class="sb-nav-num">A13.186</span> Soft Relationship Equations</a></li>
+<li><a href="#a13-187"><span class="sb-nav-num">A13.187</span> Soft Bellman Equations</a></li>
+<li><a href="#a13-188"><span class="sb-nav-num">A13.188</span> Soft Policy Evaluation</a></li>
+<li><a href="#a13-189"><span class="sb-nav-num">A13.189</span> Soft Policy Improvement</a></li>
+<li><a href="#a13-190"><span class="sb-nav-num">A13.190</span> Soft Actor‑Critic (SAC)</a></li>
+<li><a href="#a13-191"><span class="sb-nav-num">A13.191</span> The Multi‑Armed Bandit Problem</a></li>
+<li><a href="#a13-192"><span class="sb-nav-num">A13.192</span> Regret</a></li>
+<li><a href="#a13-193"><span class="sb-nav-num">A13.193</span> Naïve Bandit</a></li>
+<li><a href="#a13-194"><span class="sb-nav-num">A13.194</span> The Lai–Robbins Theorem</a></li>
+<li><a href="#a13-195"><span class="sb-nav-num">A13.195</span> Upper Confidence Bound (UCB)</a></li>
+<li><a href="#a13-196"><span class="sb-nav-num">A13.196</span> Hoeffding's Inequality</a></li>
+<li><a href="#a13-197"><span class="sb-nav-num">A13.197</span> Thompson Sampling</a></li>
+<li><a href="#a13-198"><span class="sb-nav-num">A13.198</span> Beta‑Bernoulli Bandit with Thompson Sampling</a></li>
+<li><a href="#a13-199"><span class="sb-nav-num">A13.199</span> Generalization to Tabular MDPs</a></li>
+<li><a href="#a13-200"><span class="sb-nav-num">A13.200</span> Learnable Environment Models</a></li>
+<li><a href="#a13-201"><span class="sb-nav-num">A13.201</span> Plan</a></li>
+<li><a href="#a13-202"><span class="sb-nav-num">A13.202</span> Planning</a></li>
+<li><a href="#a13-203"><span class="sb-nav-num">A13.203</span> Suboptimality of Planning</a></li>
+<li><a href="#a13-204"><span class="sb-nav-num">A13.204</span> World Model</a></li>
+<li><a href="#a13-205"><span class="sb-nav-num">A13.205</span> General Scheme of the Model‑based Approach</a></li>
+<li><a href="#a13-206"><span class="sb-nav-num">A13.206</span> Forward Dynamics Model</a></li>
+<li><a href="#a13-207"><span class="sb-nav-num">A13.207</span> Dreaming</a></li>
+<li><a href="#a13-208"><span class="sb-nav-num">A13.208</span> Monte‑Carlo Tree Search (MCTS)</a></li>
+<li><a href="#a13-209"><span class="sb-nav-num">A13.209</span> Expansion Step in MCTS</a></li>
+<li><a href="#a13-210"><span class="sb-nav-num">A13.210</span> Simulation (Evaluation) Step in MCTS</a></li>
+<li><a href="#a13-211"><span class="sb-nav-num">A13.211</span> Update (Backpropagation) Step in MCTS</a></li>
+<li><a href="#a13-212"><span class="sb-nav-num">A13.212</span> MCTS Strategy (Variation)</a></li>
+<li><a href="#a13-213"><span class="sb-nav-num">A13.213</span> Distillation of MCTS</a></li>
+<li><a href="#a13-214"><span class="sb-nav-num">A13.214</span> AlphaZero Algorithm</a></li>
+<li><a href="#a13-215"><span class="sb-nav-num">A13.215</span> MuZero</a></li>
+<li><a href="#a13-216"><span class="sb-nav-num">A13.216</span> Planning for Continuous Control – Direct Differentiation</a></li>
+<li><a href="#a13-217"><span class="sb-nav-num">A13.217</span> Linear Quadratic Regulator (LQR)</a></li>
+<li><a href="#a13-218"><span class="sb-nav-num">A13.218</span> LQR – Quadratic Value Functions and Linear Policies</a></li>
+<li><a href="#a13-219"><span class="sb-nav-num">A13.219</span> Backward Pass in LQR</a></li>
+<li><a href="#a13-220"><span class="sb-nav-num">A13.220</span> Forward Pass in LQR</a></li>
+<li><a href="#a13-221"><span class="sb-nav-num">A13.221</span> Noisy Transition in LQR</a></li>
+<li><a href="#a13-222"><span class="sb-nav-num">A13.222</span> Iterative LQR (iLQR)</a></li>
+<li><a href="#a13-223"><span class="sb-nav-num">A13.223</span> Imitation Learning</a></li>
+<li><a href="#a13-224"><span class="sb-nav-num">A13.224</span> Behavioral Cloning</a></li>
+<li><a href="#a13-225"><span class="sb-nav-num">A13.225</span> Inverse Reinforcement Learning (IRL)</a></li>
+<li><a href="#a13-226"><span class="sb-nav-num">A13.226</span> Guided Cost Learning</a></li>
+<li><a href="#a13-227"><span class="sb-nav-num">A13.227</span> Guided Cost Learning – Gradient</a></li>
+<li><a href="#a13-228"><span class="sb-nav-num">A13.228</span> Generative Adversarial Imitation Learning (GAIL)</a></li>
+<li><a href="#a13-229"><span class="sb-nav-num">A13.229</span> Derivation of GAIL Objective from Regularized IRL</a></li>
+<li><a href="#a13-230"><span class="sb-nav-num">A13.230</span> Generative Adversarial Imitation from Observation (GAIfO)</a></li>
+<li><a href="#a13-231"><span class="sb-nav-num">A13.231</span> Intrinsic Motivation</a></li>
+<li><a href="#a13-232"><span class="sb-nav-num">A13.232</span> Search Problem and Auxiliary Task</a></li>
+<li><a href="#a13-233"><span class="sb-nav-num">A13.233</span> Procrastination Problem</a></li>
+<li><a href="#a13-234"><span class="sb-nav-num">A13.234</span> Exploration Bonuses</a></li>
+<li><a href="#a13-235"><span class="sb-nav-num">A13.235</span> Hash‑Based and Novelty Bonuses</a></li>
+<li><a href="#a13-236"><span class="sb-nav-num">A13.236</span> Random Network Distillation (RND)</a></li>
+<li><a href="#a13-237"><span class="sb-nav-num">A13.237</span> Curiosity</a></li>
+<li><a href="#a13-238"><span class="sb-nav-num">A13.238</span> Inverse Dynamics Model</a></li>
+<li><a href="#a13-239"><span class="sb-nav-num">A13.239</span> Intrinsic Curiosity Module (ICM)</a></li>
+<li><a href="#a13-240"><span class="sb-nav-num">A13.240</span> Controllable Noisy TV</a></li>
+<li><a href="#a13-241"><span class="sb-nav-num">A13.241</span> Multi‑tasking</a></li>
+<li><a href="#a13-242"><span class="sb-nav-num">A13.242</span> Universal Value Function and Universal Policy</a></li>
+<li><a href="#a13-243"><span class="sb-nav-num">A13.243</span> Meta‑controllers</a></li>
+<li><a href="#a13-244"><span class="sb-nav-num">A13.244</span> Trajectory Relabeling</a></li>
+<li><a href="#a13-245"><span class="sb-nav-num">A13.245</span> Hindsight Experience Replay (HER)</a></li>
+<li><a href="#a13-246"><span class="sb-nav-num">A13.246</span> Hindsight Relabeling</a></li>
+<li><a href="#a13-247"><span class="sb-nav-num">A13.247</span> Feudal RL</a></li>
+<li><a href="#a13-248"><span class="sb-nav-num">A13.248</span> Feudal Networks (FuN)</a></li>
+<li><a href="#a13-249"><span class="sb-nav-num">A13.249</span> HIRO (Hierarchical RL with Off‑Policy Correction)</a></li>
+<li><a href="#a13-250"><span class="sb-nav-num">A13.250</span> Partially Observable MDP (POMDP)</a></li>
+<li><a href="#a13-251"><span class="sb-nav-num">A13.251</span> Belief MDP</a></li>
+<li><a href="#a13-252"><span class="sb-nav-num">A13.252</span> Recurrent Networks in Policy Gradient</a></li>
+<li><a href="#a13-253"><span class="sb-nav-num">A13.253</span> R2D2 (Recurrent Replay Distributed DQN)</a></li>
+<li><a href="#a13-254"><span class="sb-nav-num">A13.254</span> Neural Episodic Control (NEC)</a></li>
+<li><a href="#a13-255"><span class="sb-nav-num">A13.255</span> Multi‑Agent Reinforcement Learning</a></li>
+<li><a href="#a13-256"><span class="sb-nav-num">A13.256</span> Connection with Game Theory</a></li>
+<li><a href="#a13-257"><span class="sb-nav-num">A13.257</span> Centralization of Training</a></li>
+<li><a href="#a13-258"><span class="sb-nav-num">A13.258</span> Self‑play in Antagonistic Games</a></li>
+<li><a href="#a13-259"><span class="sb-nav-num">A13.259</span> Multi‑Agent DDPG (MADDPG) in Mixed Games</a></li>
+<li><a href="#a13-260"><span class="sb-nav-num">A13.260</span> Communication Systems (DIAL)</a></li>
+
                 </ul>
             </div>
             <div class="sb-section">
