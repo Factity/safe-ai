@@ -5504,6 +5504,1744 @@
 </div>
 
 
+<!-- A13.194 The Multi‑Armed Bandit Problem -->
+<div class="section-block" id="a13-194">
+    <div class="section-heading"><span class="section-num-large">A13.194</span><h2 class="section-title-large">The Multi‑Armed Bandit Problem</h2></div>
+    <div class="section-body">
+        <p>The <strong>multi‑armed bandit (MAB)</strong> is a simplified reinforcement learning problem with a single state. At each time step <em>t = 1, …, T</em>, the agent chooses an arm (action) <em>a<sub>t</sub> ∈ {1, …, K}</em> and receives a random reward <em>r<sub>t</sub> ∼ p<sub>a<sub>t</sub></sub>(r)</em> drawn independently from an unknown probability distribution associated with that arm. The objective is to maximise the cumulative reward or, equivalently, to minimise the <strong>regret</strong> with respect to the optimal arm.</p>
+        
+        <p>Let <em>μ(a) = 𝔼[ r ∣ a ]</em> be the expected reward of arm <em>a</em>, and let <em>μ<sup>*</sup> = max<sub>a</sub> μ(a)</em>. The <strong>regret</strong> after <em>T</em> steps is</p>
+        <div class="equation-block multiline">
+            R(T) = T μ<sup>*</sup> − 𝔼[ ∑<sub>t=1</sub><sup>T</sup> r<sub>t</sub> ] = ∑<sub>a=1</sub><sup>K</sup> Δ(a) 𝔼[ N<sub>a</sub>(T) ],
+        </div>
+        <p>where <em>Δ(a) = μ<sup>*</sup> − μ(a)</em> is the sub‑optimality gap of arm <em>a</em> and <em>N<sub>a</sub>(T)</em> is the number of times arm <em>a</em> was pulled. The agent must balance <strong>exploration</strong> (trying new arms to learn their rewards) and <strong>exploitation</strong> (choosing the arm that currently appears best).</p>
+        <p>Fundamental algorithms include ε‑greedy, Upper Confidence Bound (UCB), and Thompson Sampling. The MAB formulation captures the exploration–exploitation dilemma in its purest form.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">K</span><span class="var-desc">number of arms (actions).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">time horizon (number of pulls).</span></li>
+            <li class="var-def-item"><span class="var-symbol">a<sub>t</sub></span><span class="var-desc">arm chosen at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub></span><span class="var-desc">reward observed at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p<sub>a</sub>(r)</span><span class="var-desc">unknown reward distribution of arm <em>a</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">μ(a)</span><span class="var-desc">expected reward of arm <em>a</em>, μ(a) = 𝔼[r|a].</span></li>
+            <li class="var-def-item"><span class="var-symbol">μ<sup>*</sup></span><span class="var-desc">maximal expected reward among all arms.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Δ(a)</span><span class="var-desc">sub‑optimality gap: μ<sup>*</sup> − μ(a).</span></li>
+            <li class="var-def-item"><span class="var-symbol">N<sub>a</sub>(T)</span><span class="var-desc">number of pulls of arm <em>a</em> up to time <em>T</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">R(T)</span><span class="var-desc">expected cumulative regret after <em>T</em> steps.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.195 Regret -->
+<div class="section-block" id="a13-195">
+    <div class="section-heading"><span class="section-num-large">A13.195</span><h2 class="section-title-large">Regret</h2></div>
+    <div class="section-body">
+        <p>The <strong>regret</strong> after <em>T</em> episodes is the total expected loss incurred by not always choosing the optimal arm. It is defined as</p>
+        <div class="equation-block multiline">
+            Regret<sub>T</sub> ≐ T V<sup>*</sup> − ∑<sub>k=0</sub><sup>T</sup> Q(a<sub>k</sub>),
+        </div>
+        <p>where the sum is taken over the actions actually selected.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Regret<sub>T</sub></span><span class="var-desc">cumulative regret after T episodes.</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">number of episodes (time horizon).</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sup>*</sup></span><span class="var-desc">maximum expected reward per step (value of the optimal arm).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q(a)</span><span class="var-desc">expected reward of arm <em>a</em> (Q‑function in the bandit context).</span></li>
+            <li class="var-def-item"><span class="var-symbol">a<sub>k</sub></span><span class="var-desc">action (arm) chosen at episode <em>k</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.196 Naïve Bandit -->
+<div class="section-block" id="a13-196">
+    <div class="section-heading"><span class="section-num-large">A13.196</span><h2 class="section-title-large">Naïve Bandit</h2></div>
+    <div class="section-body">
+        <p><strong>Naïve Bandit</strong> is an exploratory algorithm for the multi‑armed bandit that mixes random exploration with greedy exploitation using an <em>ε</em>-greedy strategy. It maintains a running average <em>Q<sub>k</sub>(a)</em> of the rewards observed for each arm <em>a</em> up to step <em>k</em>.</p>
+        <p><strong>Hyperparameters:</strong> <em>ε(k)</em> – exploration probability at step <em>k</em> (can be constant or decay).</p>
+        <p><strong>Initialize</strong> <em>Q<sub>0</sub>(a)</em> arbitrarily for all arms <em>a</em>; set visit counters <em>n<sub>0</sub>(a) = 0</em>.</p>
+        <p><strong>At each step <em>k</em>:</strong></p>
+        <ol>
+            <li>With probability <em>ε(k)</em>, select a random arm uniformly; otherwise choose the arm with the highest current Q‑value:
+                <div class="equation-block">
+                    a<sub>k</sub> = arg max<sub>a</sub> Q<sub>k</sub>(a).
+                </div>
+            </li>
+            <li>Increment the visit counter for the selected arm:
+                <div class="equation-block">
+                    n<sub>k</sub>(a) = n<sub>k−1</sub>(a) + 𝟙[ a<sub>k</sub> = a ].
+                </div>
+            </li>
+            <li>Observe reward <em>r<sub>k</sub></em> after playing arm <em>a<sub>k</sub></em>.</li>
+            <li>Update the running average for the selected arm using the incremental formula:
+                <div class="equation-block">
+                    Q<sub>k</sub>(a) = Q<sub>k−1</sub>(a) + 𝟙[ a<sub>k</sub> = a ] · (1 / n<sub>k</sub>(a)) · ( r<sub>k</sub> − Q<sub>k−1</sub>(a) ).
+                </div>
+            </li>
+        </ol>
+        <p>This algorithm ensures that every arm is tried infinitely often in the limit, allowing <em>Q<sub>k</sub>(a)</em> to converge to the true expected reward <em>μ(a)</em> if the exploration probabilities satisfy <em>∑ ε(k) = ∞</em> and <em>∑ ε(k)<sup>2</sup> &lt; ∞</em> (Robbins–Monro conditions, A13.121).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q<sub>k</sub>(a)</span><span class="var-desc">estimated expected reward of arm <em>a</em> after <em>k</em> steps.</span></li>
+            <li class="var-def-item"><span class="var-symbol">n<sub>k</sub>(a)</span><span class="var-desc">number of times arm <em>a</em> has been played up to step <em>k</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a<sub>k</sub></span><span class="var-desc">arm chosen at step <em>k</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>k</sub></span><span class="var-desc">reward received at step <em>k</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ε(k)</span><span class="var-desc">exploration probability at step <em>k</em> (e.g., constant or decayed).</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝟙[·]</span><span class="var-desc">indicator function (1 if true, else 0).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.197 The Lai–Robbins Theorem -->
+<div class="section-block" id="a13-197">
+    <div class="section-heading"><span class="section-num-large">A13.197</span><h2 class="section-title-large">The Lai–Robbins Theorem</h2></div>
+    <div class="section-body">
+        <p><strong>The Lai–Robbins Theorem</strong> provides a fundamental lower bound on the asymptotic regret for any consistent policy in the multi‑armed bandit problem. It states that the number of times any sub‑optimal arm <em>a</em> is pulled grows at least logarithmically with the time horizon <em>T</em>, and the constant is inversely proportional to the Kullback–Leibler divergence between the reward distribution of that arm and the optimal arm.</p>
+        
+        <p>Formally, for a policy that satisfies mild consistency conditions (e.g., uniformly good policies that achieve sub‑polynomial regret for all problem instances), the following lower bound holds:</p>
+        <div class="equation-block multiline">
+            lim inf<sub>T→∞</sub> <span class="frac">𝔼[ N<sub>a</sub>(T) ]</span><span class="frac">log T</span> ≥ <span class="frac">1</span><span class="frac">D<sub>KL</sub>( p<sub>a</sub> ∥ p<sub>a<sup>*</sup></sub> )</span>,
+        </div>
+        <p>where <em>p<sub>a</sub></em> and <em>p<sub>a<sup>*</sup></sub></em> are the reward distributions of arm <em>a</em> and the optimal arm <em>a<sup>*</sup></em>, and <em>D<sub>KL</sub></em> is the Kullback–Leibler divergence. Consequently, the cumulative regret <em>R(T)</em> cannot grow slower than</p>
+        <div class="equation-block multiline">
+            R(T) ≥ ( ∑<sub>a: Δ(a) &gt; 0</sub> <span class="frac">Δ(a)</span><span class="frac">D<sub>KL</sub>( p<sub>a</sub> ∥ p<sub>a<sup>*</sup></sub> )</span> ) log T + o(log T).
+        </div>
+        <p>This result establishes that the optimal asymptotic regret scaling is <em>O(log T)</em> and motivates the design of algorithms such as UCB1 and Thompson Sampling, which achieve matching upper bounds.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">time horizon (number of pulls).</span></li>
+            <li class="var-def-item"><span class="var-symbol">N<sub>a</sub>(T)</span><span class="var-desc">number of times arm <em>a</em> is pulled up to time <em>T</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a<sup>*</sup></span><span class="var-desc">optimal arm (the one with the highest expected reward).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Δ(a)</span><span class="var-desc">sub‑optimality gap of arm <em>a</em>: μ<sup>*</sup> − μ(a).</span></li>
+            <li class="var-def-item"><span class="var-symbol">p<sub>a</sub></span><span class="var-desc">probability density (or mass) function of the reward distribution of arm <em>a</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">D<sub>KL</sub>( p ∥ q )</span><span class="var-desc">Kullback–Leibler divergence between distributions p and q.</span></li>
+            <li class="var-def-item"><span class="var-symbol">R(T)</span><span class="var-desc">expected cumulative regret after T steps.</span></li>
+            <li class="var-def-item"><span class="var-symbol">o(log T)</span><span class="var-desc">terms that grow slower than log T asymptotically.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.198 Upper Confidence Bound (UCB) -->
+<div class="section-block" id="a13-198">
+    <div class="section-heading"><span class="section-num-large">A13.198</span><h2 class="section-title-large">Upper Confidence Bound (UCB)</h2></div>
+    <div class="section-body">
+        <p><strong>Upper Confidence Bound (UCB)</strong> algorithms for the multi‑armed bandit select arms by balancing exploitation of the empirically best arm and exploration driven by the uncertainty in the arm’s reward estimate. The most common variant, <strong>UCB1</strong>, at each step <em>k</em> chooses the arm that maximises an upper confidence bound constructed from the sample mean plus a bonus term that decreases with the number of times the arm was played and increases with the total number of steps:</p>
+        <div class="equation-block multiline">
+            a<sub>k</sub> = arg max<sub>a</sub> [ Q<sub>k</sub>(a) + <span class="frac">c</span><span class="frac"> </span> √( <span class="frac">ln k</span><span class="frac">n<sub>k</sub>(a)</span> ) ],
+        </div>
+        <p>where <em>Q<sub>k</sub>(a)</em> is the empirical mean reward of arm <em>a</em> after <em>k</em> total pulls, <em>n<sub>k</sub>(a)</em> is the number of times arm <em>a</em> was selected up to step <em>k</em>, and <em>c &gt; 0</em> is a constant that controls the exploration–exploitation trade‑off (usually <em>c = √2</em> for sub‑Gaussian rewards with variance 1).</p>
+        <p>UCB1 achieves logarithmic regret <em>O(log T)</em>, matching the lower bound of the Lai–Robbins theorem up to a constant factor for bounded rewards. Variants include UCB‑Tuned, UCB‑V (for variance estimates), and KL‑UCB (which uses KL divergence).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q<sub>k</sub>(a)</span><span class="var-desc">sample mean reward of arm <em>a</em> after <em>k</em> steps.</span></li>
+            <li class="var-def-item"><span class="var-symbol">n<sub>k</sub>(a)</span><span class="var-desc">number of pulls of arm <em>a</em> up to step <em>k</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">k</span><span class="var-desc">total number of pulls (time step).</span></li>
+            <li class="var-def-item"><span class="var-symbol">c</span><span class="var-desc">exploration constant; typical value <em>c = √2</em> for rewards in [0,1].</span></li>
+            <li class="var-def-item"><span class="var-symbol">√(ln k / n<sub>k</sub>(a))</span><span class="var-desc">confidence bound (uncertainty term) that shrinks as the arm is pulled more.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.199 Hoeffding's Inequality -->
+<div class="section-block" id="a13-199">
+    <div class="section-heading"><span class="section-num-large">A13.199</span><h2 class="section-title-large">Hoeffding's Inequality</h2></div>
+    <div class="section-body">
+        <p><strong>Hoeffding's inequality</strong> bounds the probability that the sample mean of independent bounded random variables deviates from its expected value. It is a fundamental tool for constructing confidence intervals in bandit and reinforcement learning algorithms.</p>
+        <p>Let <em>X<sub>1</sub>, …, X<sub>n</sub></em> be independent random variables such that <em>X<sub>i</sub> ∈ [a<sub>i</sub>, b<sub>i</sub>]</em> almost surely for all <em>i</em>. Define the sum <em>S<sub>n</sub> = ∑<sub>i=1</sub><sup>n</sup> X<sub>i</sub></em>. Then for any <em>t &gt; 0</em>,</p>
+        <div class="equation-block multiline">
+            Pr( S<sub>n</sub> − 𝔼[S<sub>n</sub>] ≥ t ) ≤ exp( − <span class="frac">2 t<sup>2</sup></span><span class="frac">∑<sub>i=1</sub><sup>n</sup> (b<sub>i</sub> − a<sub>i</sub>)<sup>2</sup></span> ),<br>
+            Pr( S<sub>n</sub> − 𝔼[S<sub>n</sub>] ≤ −t ) ≤ exp( − <span class="frac">2 t<sup>2</sup></span><span class="frac">∑<sub>i=1</sub><sup>n</sup> (b<sub>i</sub> − a<sub>i</sub>)<sup>2</sup></span> ).
+        </div>
+        <p>For the special case of i.i.d. random variables bounded in <em>[0,1]</em> and <em>t = ε n</em>, this gives the familiar bound for the sample mean <em>X̄<sub>n</sub></em>:</p>
+        <div class="equation-block">
+            Pr( X̄<sub>n</sub> − 𝔼[X] ≥ ε ) ≤ exp( −2 n ε<sup>2</sup> ).
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">X<sub>i</sub></span><span class="var-desc">independent bounded random variables.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a<sub>i</sub>, b<sub>i</sub></span><span class="var-desc">lower and upper bounds: a<sub>i</sub> ≤ X<sub>i</sub> ≤ b<sub>i</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">S<sub>n</sub></span><span class="var-desc">sum of the n random variables.</span></li>
+            <li class="var-def-item"><span class="var-symbol">t</span><span class="var-desc">deviation threshold (t &gt; 0).</span></li>
+            <li class="var-def-item"><span class="var-symbol">X̄<sub>n</sub></span><span class="var-desc">sample mean: S<sub>n</sub> / n.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.200 Thompson Sampling -->
+<div class="section-block" id="a13-200">
+    <div class="section-heading"><span class="section-num-large">A13.200</span><h2 class="section-title-large">Thompson Sampling</h2></div>
+    <div class="section-body">
+        <p><strong>Thompson Sampling</strong> is a Bayesian algorithm for the multi‑armed bandit problem. It maintains a posterior distribution over the expected reward of each arm and, at each step, samples a value from each arm's posterior. The arm with the highest sampled value is selected. After observing the reward, the posterior of the chosen arm is updated. This approach naturally balances exploration and exploitation and often achieves state‑of‑the‑art empirical performance, with regret bounds that match the Lai–Robbins lower bound.</p>
+        
+        <p><strong>Algorithm (Bernoulli rewards with Beta priors):</strong></p>
+        <ul>
+            <li><strong>Initialization:</strong> For each arm <em>a = 1, …, K</em>, set <em>α<sub>a</sub> = 1</em> and <em>β<sub>a</sub> = 1</em> (non‑informative Beta prior).</li>
+            <li><strong>At each step <em>k = 1, 2, …</em>:</strong>
+                <ol>
+                    <li>For each arm <em>a</em>, draw a sample <em>θ<sub>a</sub> ∼ Beta(α<sub>a</sub>, β<sub>a</sub>)</em>.</li>
+                    <li>Select the arm <em>a<sub>k</sub> = arg max<sub>a</sub> θ<sub>a</sub></em> (break ties arbitrarily).</li>
+                    <li>Play arm <em>a<sub>k</sub></em> and observe reward <em>r<sub>k</sub> ∈ {0, 1}</em>.</li>
+                    <li>Update the posterior parameters of the selected arm:
+                        <div class="equation-block">
+                            α<sub>a<sub>k</sub></sub> ← α<sub>a<sub>k</sub></sub> + r<sub>k</sub>,  β<sub>a<sub>k</sub></sub> ← β<sub>a<sub>k</sub></sub> + (1 − r<sub>k</sub>).
+                        </div>
+                    </li>
+                </ol>
+            </li>
+        </ul>
+        <p>For Gaussian rewards with known variance, a Gaussian prior is used instead. The principle of sampling from the posterior and choosing the best sample is general and can be applied to any parametric reward distribution with a conjugate prior.</p>
+        
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">K</span><span class="var-desc">number of arms.</span></li>
+            <li class="var-def-item"><span class="var-symbol">α<sub>a</sub>, β<sub>a</sub></span><span class="var-desc">parameters of the Beta posterior for arm <em>a</em> (pseudo‑counts of successes and failures).</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ<sub>a</sub></span><span class="var-desc">random sample from arm <em>a</em>'s posterior – interpreted as a plausible expected reward.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a<sub>k</sub></span><span class="var-desc">arm selected at step <em>k</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>k</sub></span><span class="var-desc">observed reward at step <em>k</em> (0 or 1 for Bernoulli, real for other distributions).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Beta(α, β)</span><span class="var-desc">Beta distribution with shape parameters <em>α</em> and <em>β</em>; mean = α/(α+β).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.201 Beta‑Bernoulli Bandit with Thompson Sampling -->
+<div class="section-block" id="a13-201">
+    <div class="section-heading"><span class="section-num-large">A13.201</span><h2 class="section-title-large">Beta‑Bernoulli Bandit with Thompson Sampling</h2></div>
+    <div class="section-body">
+        <p><strong>Beta‑Bernoulli Bandit with Thompson Sampling</strong> is the standard implementation of Thompson Sampling for multi‑armed bandits with binary (0/1) rewards. It maintains a Beta posterior distribution for each arm, samples an expected reward from each posterior, and plays the arm with the largest sampled value. The posterior is updated by incrementing a success count <em>α<sub>k</sub>(a)</em> when a reward of 1 is observed and a failure count <em>β<sub>k</sub>(a)</em> when a reward of 0 is observed.</p>
+
+        <p><strong>Hyperparameters:</strong> <em>α</em>, <em>β</em> — prior pseudo‑counts (e.g., <em>α = β = 1</em> for a uniform prior).</p>
+        <p><strong>Initialize</strong> counters <em>α<sub>0</sub>(a) := α</em> and <em>β<sub>0</sub>(a) := β</em> for all arms <em>a</em>.</p>
+
+        <p><strong>At each step <em>k</em>:</strong></p>
+        <ol>
+            <li>For each arm <em>a</em>, draw a sample from its current posterior distribution:
+                <div class="equation-block">
+                    θ<sub>a</sub> ∼ Beta( α<sub>k</sub>(a), β<sub>k</sub>(a) ).
+                </div>
+            </li>
+            <li>Select the arm with the highest sampled value:
+                <div class="equation-block">
+                    a<sub>k</sub> = arg max<sub>a</sub> θ<sub>a</sub>.
+                </div>
+            </li>
+            <li>Play arm <em>a<sub>k</sub></em> and observe a binary reward <em>r<sub>k</sub> ∈ {0, 1}</em>.</li>
+            <li>Update the success counter <em>α<sub>k</sub>(a)</em> for the chosen arm:
+                <div class="equation-block">
+                    α<sub>k</sub>(a) = α<sub>k−1</sub>(a) + 𝟙[ a<sub>k</sub> = a ] · 𝟙[ r<sub>k</sub> = 1 ].
+                </div>
+            </li>
+            <li>Update the failure counter <em>β<sub>k</sub>(a)</em> for the chosen arm:
+                <div class="equation-block">
+                    β<sub>k</sub>(a) = β<sub>k−1</sub>(a) + 𝟙[ a<sub>k</sub> = a ] · 𝟙[ r<sub>k</sub> = 0 ].
+                </div>
+            </li>
+        </ol>
+        <p>The algorithm requires no tuning of exploration rates; the Bayesian sampling automatically balances exploration and exploitation. It achieves expected regret that matches the Lai–Robbins lower bound under Bernoulli rewards.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">α<sub>k</sub>(a)</span><span class="var-desc">posterior pseudo‑count of successes (reward 1) for arm <em>a</em> up to step <em>k</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">β<sub>k</sub>(a)</span><span class="var-desc">posterior pseudo‑count of failures (reward 0) for arm <em>a</em> up to step <em>k</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ<sub>a</sub></span><span class="var-desc">random sample from arm <em>a</em>'s Beta posterior; represents a plausible expected reward.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a<sub>k</sub></span><span class="var-desc">arm selected at step <em>k</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>k</sub></span><span class="var-desc">binary reward observed at step <em>k</em> (0 or 1).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Beta(α, β)</span><span class="var-desc">Beta distribution with shape parameters <em>α</em> and <em>β</em>; mean = α/(α+β).</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝟙[·]</span><span class="var-desc">indicator function (1 if condition true, else 0).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.202 Generalization to Tabular MDPs -->
+<div class="section-block" id="a13-202">
+    <div class="section-heading"><span class="section-num-large">A13.202</span><h2 class="section-title-large">Generalization to Tabular MDPs</h2></div>
+    <div class="section-body">
+        <p>The principles of exploration and regret minimisation developed for the multi‑armed bandit (A13.194) extend naturally to <strong>tabular Markov Decision Processes</strong> (finite <em>S</em> and <em>A</em>). In this setting, each state–action pair <em>(s, a)</em> can be viewed as a distinct bandit, but the learner must also account for the sequential structure: the action chosen influences not only the immediate reward but also the future states and rewards via the transition kernel.</p>
+        
+        <p><strong>Regret in the MDP setting</strong> is typically defined as the expected difference between the cumulative reward of the optimal stationary policy and the cumulative reward of the learning algorithm over a horizon of <em>T</em> steps:</p>
+        <div class="equation-block">
+            Regret<sub>T</sub> = T V<sup>*</sup>(s<sub>0</sub>) − 𝔼[ ∑<sub>t=0</sub><sup>T−1</sup> r<sub>t</sub> ],
+        </div>
+        <p>where <em>s<sub>0</sub></em> is the initial state.</p>
+
+        <p>Algorithms such as <strong>UCRL2</strong> (Upper Confidence Reinforcement Learning) extend the optimism‑in‑the‑face‑of‑uncertainty principle. They maintain empirical estimates of the reward and transition probabilities from visit counts:</p>
+        <div class="equation-block multiline">
+            r̂(s, a) = <span class="frac">∑<sub>τ</sub> r<sub>τ</sub> 𝟙[ (s<sub>τ</sub>, a<sub>τ</sub>) = (s, a) ]</span><span class="frac">N(s, a) ∨ 1</span>,<br>
+            p̂(s′ ∣ s, a) = <span class="frac">N(s, a, s′)</span><span class="frac">N(s, a) ∨ 1</span>,
+        </div>
+        <p>and construct confidence intervals around these estimates using concentration inequalities (e.g., Hoeffding or empirical Bernstein). An optimistic MDP is built by solving for the optimal value function within the plausible set of models, and the greedy policy of this optimistic MDP is executed. For a communicating MDP with diameter <em>D</em>, UCRL2 achieves a regret bound of <em>Õ( D S √(A T) )</em>, establishing that optimal regret scaling is possible in tabular MDPs.</p>
+
+        <p>Other approaches, such as <strong>R‑max</strong>, treat state‑action pairs as unknown until they have been visited sufficiently many times, then use a fixed model for planning. Both families illustrate how bandit‑style exploration bonuses (based on visit counts) can be lifted to the full reinforcement learning problem.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">S, A</span><span class="var-desc">finite state and action spaces.</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">time horizon.</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sup>*</sup>(s)</span><span class="var-desc">optimal state value function.</span></li>
+            <li class="var-def-item"><span class="var-symbol">N(s, a)</span><span class="var-desc">number of visits to (s, a).</span></li>
+            <li class="var-def-item"><span class="var-symbol">N(s, a, s′)</span><span class="var-desc">number of transitions from (s, a) to s′.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r̂, p̂</span><span class="var-desc">empirical reward and transition estimates.</span></li>
+            <li class="var-def-item"><span class="var-symbol">D</span><span class="var-desc">diameter of the MDP (maximum expected time to transition from any state to any other under some policy).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.203 Learnable Environment Models -->
+<div class="section-block" id="a13-203">
+    <div class="section-heading"><span class="section-num-large">A13.203</span><h2 class="section-title-large">Learnable Environment Models</h2></div>
+    <div class="section-body">
+        <p>A <strong>learnable environment model</strong> is an approximate representation of the MDP dynamics, typically consisting of an estimated transition function <em>p̂(s′ ∣ s, a)</em> and an estimated reward function <em>r̂(s, a)</em> (or <em>r̂(s, a, s′)</em>), that is constructed from the agent’s interaction experience. In model‑based reinforcement learning, the agent learns this model from collected data and then uses it for planning or policy improvement, thereby improving sample efficiency by transferring experience across states and actions.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">p̂(s′ ∣ s, a)</span><span class="var-desc">learned transition probability (or a generative model) from state <em>s</em> to <em>s′</em> under action <em>a</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r̂(s, a)</span><span class="var-desc">learned expected immediate reward for state‑action pair <em>(s, a)</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Model‑based RL</span><span class="var-desc">algorithms that explicitly learn and use an environment model (e.g., Dyna‑Q, PETS, MBPO).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.204 Plan -->
+<div class="section-block" id="a13-204">
+    <div class="section-heading"><span class="section-num-large">A13.204</span><h2 class="section-title-large">Plan</h2></div>
+    <div class="section-body">
+        <p>For a given initial state <em>s<sub>0</sub></em>, a <strong>plan</strong> is an ordered sequence of actions <em>a<sub>0</sub>, a<sub>1</sub>, a<sub>2</sub>, …</em> to be executed in the environment. The sequence may be finite or infinite, and it is typically designed to achieve a long‑term objective without requiring further observation of the state. Plans are fundamental in model‑based RL and planning algorithms, distinguishing them from reactive policies that condition each action on the current state.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">s<sub>0</sub></span><span class="var-desc">initial state from which the plan begins.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a<sub>t</sub></span><span class="var-desc">action to be executed at time step <em>t</em> (fixed in advance).</span></li>
+            <li class="var-def-item"><span class="var-symbol">plan</span><span class="var-desc">sequence of actions, possibly open‑loop, not conditioned on future states.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.205 Planning -->
+<div class="section-block" id="a13-205">
+    <div class="section-heading"><span class="section-num-large">A13.205</span><h2 class="section-title-large">Planning</h2></div>
+    <div class="section-body">
+        <p><strong>Planning</strong> is the problem of finding a sequence of actions (a plan) that maximises the expected return when the environment dynamics <em>p(s′ ∣ s, a)</em> and the reward function are fully known. The decision is made purely through mental simulation, without any additional interaction with the real environment. Formally,</p>
+        <div class="equation-block multiline">
+            arg max<sub>a<sub>0</sub>, a<sub>1</sub>, a<sub>2</sub>, …</sub> 𝔼<sub>T ∣ s<sub>0</sub>, a<sub>0</sub>, a<sub>1</sub>, a<sub>2</sub>, …</sub>[ R(T) ].
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">s<sub>0</sub></span><span class="var-desc">initial state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a<sub>t</sub></span><span class="var-desc">action at time step <em>t</em> (part of the open‑loop plan).</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">known transition probability.</span></li>
+            <li class="var-def-item"><span class="var-symbol">R(T)</span><span class="var-desc">return (cumulative discounted reward) of trajectory <em>T</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>T ∣ s<sub>0</sub>, a<sub>0</sub>, …</sub></span><span class="var-desc">expectation over trajectories conditioned on the plan and known dynamics.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.206 Suboptimality of Planning -->
+<div class="section-block" id="a13-206">
+    <div class="section-heading"><span class="section-num-large">A13.206</span><h2 class="section-title-large">Suboptimality of Planning</h2></div>
+    <div class="section-body">
+        <p><strong>Suboptimality of planning</strong> refers to the inherent limitation of open‑loop action sequences (plans) in stochastic environments. Because a plan fixes the entire sequence of actions in advance, it cannot adapt to the actual states encountered during execution. In contrast, a closed‑loop policy <em>π(a|s)</em> conditions each action on the current state, thereby exploiting the information gained from stochastic transitions. Consequently, for a stochastic MDP, the optimal expected return achievable by a plan is generally strictly lower than the optimal expected return achievable by a policy. This gap motivates the use of state‑dependent policies in reinforcement learning rather than relying solely on planning.</p>
+    </div>
+</div>
+
+<!-- A13.207 World Model -->
+<div class="section-block" id="a13-207">
+    <div class="section-heading"><span class="section-num-large">A13.207</span><h2 class="section-title-large">World Model</h2></div>
+    <div class="section-body">
+        <p>A <strong>world model</strong> is any model that, explicitly or implicitly, learns a model of the environment dynamics.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">world model</span><span class="var-desc">a learned representation of the transition function <em>p(s′ ∣ s, a)</em> and/or reward function, used to simulate future states and rewards without real environment interaction.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.208 General Scheme of the Model‑based Approach -->
+<div class="section-block" id="a13-208">
+    <div class="section-heading"><span class="section-num-large">A13.208</span><h2 class="section-title-large">General Scheme of the Model‑based Approach</h2></div>
+    <div class="section-body">
+        <p>The <strong>model‑based reinforcement learning</strong> loop alternates between collecting real environment data using the current policy, training a world model (dynamics and possibly reward function) on the accumulated dataset, and then using a planner to improve the policy by simulating inside the learned model.</p>
+
+        <p><strong>Hyperparameters:</strong> choice of Planner, choice of World Model architecture.</p>
+        <p><strong>Initialize:</strong></p>
+        <ul>
+            <li>policy <em>π<sub>0</sub>(a ∣ s)</em> (e.g., random).</li>
+            <li>world model (e.g., neural network) with random parameters.</li>
+            <li>dataset <em>D</em> as an empty set.</li>
+        </ul>
+        <p><strong>At the <em>k</em>-th step:</strong></p>
+        <ol>
+            <li><strong>Data collection:</strong> interact with the real environment using the current policy <em>π<sub>k</sub></em>, and add the observed transitions <em>(s, a, r, s′)</em> to the dataset <em>D</em>.</li>
+            <li><strong>Model training:</strong> perform additional training of the world model on the collected dataset <em>D</em> (e.g., by minimizing a prediction loss).</li>
+            <li><strong>Policy update:</strong> obtain an improved policy <em>π<sub>k+1</sub></em> from the planner, using the current world model for simulation (e.g., by planning or by generating simulated rollouts to train a model‑free algorithm).</li>
+        </ol>
+        <p>The process is repeated; the world model becomes more accurate as more data is gathered, and the planner generates better policies. Famous instantiations include Dyna‑Q, PETS, and MBPO.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>k</sub></span><span class="var-desc">policy at iteration <em>k</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">world model</span><span class="var-desc">learned approximation of the environment dynamics <em>p̂(s′ ∣ s, a)</em> and/or reward function (A13.207).</span></li>
+            <li class="var-def-item"><span class="var-symbol">planner</span><span class="var-desc">algorithm that produces a policy given a world model (e.g., MPC, value iteration on the learned model).</span></li>
+            <li class="var-def-item"><span class="var-symbol">D</span><span class="var-desc">dataset of transitions collected from the real environment.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.209 Forward Dynamics Model -->
+<div class="section-block" id="a13-209">
+    <div class="section-heading"><span class="section-num-large">A13.209</span><h2 class="section-title-large">Forward Dynamics Model</h2></div>
+    <div class="section-body">
+        <p>A <strong>forward dynamics model</strong> is a learned approximation of the environment's transition function. Given a state <em>s</em> and an action <em>a</em>, it predicts the next state <em>s′</em> (and possibly the reward <em>r</em>). It can be deterministic,</p>
+        <div class="equation-block">
+            ŝ′ = f(s, a),
+        </div>
+        <p>or stochastic, where it outputs a distribution over next states,</p>
+        <div class="equation-block">
+            s′ ∼ p̂(· ∣ s, a).
+        </div>
+        <p>Such models are trained via supervised learning on transitions <em>(s, a, r, s′)</em> collected from the environment and are core components of model‑based reinforcement learning.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">f</span><span class="var-desc">deterministic dynamics predictor.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p̂(s′ ∣ s, a)</span><span class="var-desc">learned probabilistic transition function.</span></li>
+            <li class="var-def-item"><span class="var-symbol">s, a</span><span class="var-desc">current state and action.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ŝ′, s′</span><span class="var-desc">predicted or sampled next state.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.210 Dreaming -->
+<div class="section-block" id="a13-210">
+    <div class="section-heading"><span class="section-num-large">A13.210</span><h2 class="section-title-large">Dreaming</h2></div>
+    <div class="section-body">
+        <p><strong>Dreaming</strong> is the process of training an agent on simulated experience generated by a learned approximation of the environment dynamics <em>p<sub>θ</sub>(s′, r ∣ s, a)</em>. The agent uses this imagined data to improve its policy or value function without additional real‑world interaction, often interleaved with real data collection.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">p<sub>θ</sub>(s′, r ∣ s, a)</span><span class="var-desc">learned world model parameterised by <em>θ</em>; predicts next state and reward from current state and action.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ</span><span class="var-desc">parameters of the world model, trained on real environment data.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.211 Monte‑Carlo Tree Search (MCTS) -->
+<div class="section-block" id="a13-211">
+    <div class="section-heading"><span class="section-num-large">A13.211</span><h2 class="section-title-large">Monte‑Carlo Tree Search (MCTS)</h2></div>
+    <div class="section-body">
+        <p><strong>Monte‑Carlo Tree Search (MCTS)</strong> is a heuristic search algorithm that builds a search tree by incrementally expanding and evaluating states through random simulations. It is particularly effective in large state spaces where exact dynamic programming is infeasible, such as in the game of Go.</p>
+        <p>The algorithm iterates four phases from the current root state:</p>
+        <ol>
+            <li><strong>Selection:</strong> Starting at the root, recursively select a child node according to a tree policy (typically the Upper Confidence Bound for Trees, UCT) until a non‑terminal leaf node is reached:
+                <div class="equation-block">
+                    a<sup>*</sup> = arg max<sub>a</sub> [ Q(s, a) + c √( <span class="frac">ln N(s)</span><span class="frac">N(s, a)</span> ) ].
+                </div>
+            </li>
+            <li><strong>Expansion:</strong> Unless the state is terminal, add one or more child nodes corresponding to available actions (often a single unexplored action).</li>
+            <li><strong>Simulation (Rollout):</strong> From the new node, simulate a complete episode using a fast default policy (rollout policy) until termination, obtaining a cumulative return.</li>
+            <li><strong>Backpropagation:</strong> Propagate the simulation result back up the tree, updating the visit counts <em>N(s, a), N(s)</em> and the average return <em>Q(s, a)</em> for each node along the path.</li>
+        </ol>
+        <p>After a computational budget (number of iterations or time) is exhausted, the action with the highest average return or the most visits at the root is selected for execution. MCTS is a central component of the AlphaGo/AlphaZero family of algorithms.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Q(s, a)</span><span class="var-desc">mean return of taking action <em>a</em> in state <em>s</em> (estimated from simulations).</span></li>
+            <li class="var-def-item"><span class="var-symbol">N(s)</span><span class="var-desc">number of times state <em>s</em> has been visited.</span></li>
+            <li class="var-def-item"><span class="var-symbol">N(s, a)</span><span class="var-desc">number of times action <em>a</em> was selected in state <em>s</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">c</span><span class="var-desc">exploration constant controlling the exploration–exploitation trade‑off (typically √2).</span></li>
+            <li class="var-def-item"><span class="var-symbol">rollout policy</span><span class="var-desc">a fast, often stochastic, policy used to generate sequences of actions until a terminal state during simulation.</span></li>
+            <li class="var-def-item"><span class="var-symbol">backpropagation</span><span class="var-desc">process of updating the statistics of all visited nodes with the outcome of the simulation.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.212 Expansion Step in MCTS -->
+<div class="section-block" id="a13-212">
+    <div class="section-heading"><span class="section-num-large">A13.212</span><h2 class="section-title-large">Expansion Step in MCTS</h2></div>
+    <div class="section-body">
+        <p>In the <strong>expansion step</strong> of Monte‑Carlo Tree Search, at the leaf node chosen at the previous stage (selection), we create for each action <em>a ∈ A</em> a new leaf corresponding to the choice of that action: in this way, we expand the tree along the chosen branch “one step forward”.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">leaf node</span><span class="var-desc">the state node reached by the selection policy that has not yet been fully expanded.</span></li>
+            <li class="var-def-item"><span class="var-symbol">A</span><span class="var-desc">finite set of actions available at the leaf state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">new leaf</span><span class="var-desc">a child node representing the state after taking a specific action (often unvisited with initial statistics).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.213 Simulation (Evaluation) Step in MCTS -->
+<div class="section-block" id="a13-213">
+    <div class="section-heading"><span class="section-num-large">A13.213</span><h2 class="section-title-large">Simulation (Evaluation) Step in MCTS</h2></div>
+    <div class="section-body">
+        <p>The <strong>simulation</strong> (or <strong>evaluation</strong>) step of Monte‑Carlo Tree Search consists of constructing a heuristic estimate of the reward‑to‑go (the expected cumulative return) for each new leaf node created during the expansion phase. This estimate can be obtained by rolling out a fast default policy until a terminal state and averaging the observed return, or by querying a learned value network <em>V(s)</em>. The resulting value is then used in the backpropagation phase to update the statistics of the nodes along the traversed path.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">leaf node</span><span class="var-desc">a newly expanded state node with no recorded visit statistics yet.</span></li>
+            <li class="var-def-item"><span class="var-symbol">reward‑to‑go</span><span class="var-desc">the future cumulative discounted reward expected from that leaf state onward under some rollout policy or value estimator.</span></li>
+            <li class="var-def-item"><span class="var-symbol">default (rollout) policy</span><span class="var-desc">a fast, possibly random, policy used to generate complete episodes from the leaf state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">V(s)</span><span class="var-desc">a learned state‑value function that directly estimates the return from state <em>s</em> (used as a substitute for rollouts in many modern implementations).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.214 Update (Backpropagation) Step in MCTS -->
+<div class="section-block" id="a13-214">
+    <div class="section-heading"><span class="section-num-large">A13.214</span><h2 class="section-title-large">Update (Backpropagation) Step in MCTS</h2></div>
+    <div class="section-body">
+        <p>The <strong>update</strong> (or <strong>backpropagation</strong>) step of Monte‑Carlo Tree Search consists of updating the counters and value estimates for all nodes along the path that was traversed during the selection and expansion phases. The Monte‑Carlo estimate obtained at the simulation phase (the return from the leaf) is propagated upward: for each state–action edge on the path, the visit count <em>N(s, a)</em> is incremented by 1, and the cumulative return sum is increased by the observed return, so that the average <em>Q(s, a)</em> can be updated as the running mean. The parent state visit counts <em>N(s)</em> are also incremented accordingly.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">N(s, a)</span><span class="var-desc">number of times action <em>a</em> has been selected in state <em>s</em> during the search (incremented).</span></li>
+            <li class="var-def-item"><span class="var-symbol">N(s)</span><span class="var-desc">total number of visits to state <em>s</em> (sum of child visit counts).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q(s, a)</span><span class="var-desc">estimated mean return of choosing action <em>a</em> in state <em>s</em>, updated via incremental averaging with the new simulation result.</span></li>
+            <li class="var-def-item"><span class="var-symbol">backpropagation path</span><span class="var-desc">the sequence of state‑action edges from the root to the newly evaluated leaf node.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.215 MCTS Strategy (Variation) -->
+<div class="section-block" id="a13-215">
+    <div class="section-heading"><span class="section-num-large">A13.215</span><h2 class="section-title-large">MCTS Strategy (Variation)</h2></div>
+    <div class="section-body">
+        <p>This variant of <strong>Monte‑Carlo Tree Search</strong> performs <em>K</em> iterations of selection, expansion, simulation, and backpropagation to build a search tree from the current real state <em>s<sub>0</sub></em>. It maintains per‑arc visit counts <em>n(ℵ, a)</em> and average returns <em>Q(ℵ, a)</em>. After <em>K</em> iterations, a stochastic policy is derived from the root visit counts, often using a temperature <em>T</em> to control the sharpness of the distribution.</p>
+
+        <p><strong>Input:</strong></p>
+        <ul>
+            <li><em>s<sub>0</sub></em> – current state of the real environment.</li>
+            <li><em>p(s′, r ∣ s, a)</em> – simulator (known dynamics and reward).</li>
+            <li><em>C</em> – UCT exploration constant (bandit hyperparameter).</li>
+            <li><em>ℵ<sub>0</sub></em> – root node of the current tree, storing per‑action counters <em>n(ℵ, a)</em> and value estimates <em>Q(ℵ, a)</em>.</li>
+            <li><em>K</em> – number of search iterations.</li>
+            <li><em>T</em> – temperature parameter for the output policy.</li>
+        </ul>
+
+        <p><strong>Algorithm:</strong></p>
+        <ol>
+            <li><strong>Initialize</strong> the root node <em>ℵ<sub>0</sub></em>; all counters <em>n(ℵ, a)</em> and values <em>Q(ℵ, a)</em> are zero (or appropriate prior).</li>
+            <li><strong>For</strong> <em>k = 1, …, K</em> <strong>do</strong>
+                <ol type="a">
+                    <li>Set current node <em>ℵ = ℵ<sub>0</sub></em> and current state <em>s = s<sub>0</sub></em>.</li>
+                    <li>Initialize trajectory <em>T</em> as a list containing only <em>s<sub>0</sub></em>.</li>
+                    <li><strong>While</strong> <em>ℵ</em> is not a leaf (has previously expanded children):
+                        <ul>
+                            <li>Compute total visits at node <em>ℵ</em>: <em>n(ℵ) = ∑<sub>a</sub> n(ℵ, a)</em>.</li>
+                            <li>Select action <em>a</em> using UCT:
+                                <div class="equation-block">
+                                    a = arg max<sub>a</sub> [ Q(ℵ, a) + C √( <span class="frac">ln n(ℵ)</span><span class="frac">n(ℵ, a)</span> ) ].
+                                </div>
+                            </li>
+                            <li>Sample <em>s′, r ∼ p(s′, r ∣ s, a)</em> from the simulator.</li>
+                            <li>Append <em>(a, r, s′)</em> to trajectory <em>T</em>.</li>
+                            <li>Move to child: <em>ℵ ← child(ℵ, a)</em>, <em>s ← s′</em>.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Expansion:</strong> for each action <em>a ∈ A</em>:
+                        <ul>
+                            <li>Create a new leaf node <em>ℵ̂</em> as a child of <em>ℵ</em> via action <em>a</em>.</li>
+                            <li>Simulate a rollout using a random policy <em>π<sub>random</sub></em> from state <em>s</em> after action <em>a</em>: <em>T<sub>a</sub> ∼ π<sub>random</sub> ∣ s, a</em>.</li>
+                            <li>Initialize counters: <em>n(ℵ̂, a) = 1</em>, <em>Q(ℵ̂, a) = R(T<sub>a</sub>)</em> (the return of the rollout).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Backpropagation:</strong> for each visited arc <em>(ℵ, a)</em> along the path (including the newly created leaf and its parent arc):
+                        <ul>
+                            <li>Compute the total return <em>V̂</em> from this arc onward. After reaching the leaf, the future reward is estimated as the average of the rollout returns from the new leaves: <em>(1/|A|) ∑<sub>a</sub> R(T<sub>a</sub>)</em>. The return <em>V̂</em> is the sum of rewards collected in <em>T</em> after this arc plus the discounted leaf estimate.</li>
+                            <li>Update the Q‑value using incremental averaging:
+                                <div class="equation-block">
+                                    Q(ℵ, a) ← Q(ℵ, a) + <span class="frac">1</span><span class="frac">n(ℵ, a)</span> ( V̂ − Q(ℵ, a) ).
+                                </div>
+                            </li>
+                            <li>Increment the visit count: <em>n(ℵ, a) ← n(ℵ, a) + 1</em>.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </li>
+            <li><strong>Output:</strong> a policy for the real environment at state <em>s<sub>0</sub></em>, proportional to the (possibly tempered) visit counts at the root:
+                <div class="equation-block">
+                    π(a ∣ s<sub>0</sub>) ∝ n(ℵ<sub>0</sub>, a)<sup>1/T</sup> &ensp; (or <em>n(ℵ<sub>0</sub>, a)<sup>T</sup></em> depending on convention; typically a larger <em>T</em> makes the distribution more uniform).
+                </div>
+            </li>
+        </ol>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">ℵ</span><span class="var-desc">a node in the search tree representing a state (or state‑action pair).</span></li>
+            <li class="var-def-item"><span class="var-symbol">ℵ<sub>0</sub></span><span class="var-desc">root node corresponding to the current real state <em>s<sub>0</sub></em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">n(ℵ)</span><span class="var-desc">total number of visits to node <em>ℵ</em> (sum of <em>n(ℵ, a)</em>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">n(ℵ, a)</span><span class="var-desc">number of times action <em>a</em> was selected in the state represented by node <em>ℵ</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q(ℵ, a)</span><span class="var-desc">estimated mean return (Q‑value) for taking action <em>a</em> from the state of node <em>ℵ</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">C</span><span class="var-desc">UCT exploration constant controlling the balance between exploration and exploitation.</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">temperature parameter for the output policy; <em>T → 0</em> gives a greedy policy, <em>T → ∞</em> a uniform one.</span></li>
+            <li class="var-def-item"><span class="var-symbol">K</span><span class="var-desc">number of search iterations (rollouts) per move.</span></li>
+            <li class="var-def-item"><span class="var-symbol">T<sub>a</sub></span><span class="var-desc">simulated trajectory starting with action <em>a</em> under the random rollout policy.</span></li>
+            <li class="var-def-item"><span class="var-symbol">R(·)</span><span class="var-desc">cumulative discounted return of a trajectory.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>random</sub></span><span class="var-desc">a fast, possibly uniform random, default policy used for rollouts.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.216 Distillation of MCTS -->
+<div class="section-block" id="a13-216">
+    <div class="section-heading"><span class="section-num-large">A13.216</span><h2 class="section-title-large">Distillation of MCTS</h2></div>
+    <div class="section-body">
+        <p><strong>Distillation of MCTS</strong> is the process of training a fast parametric policy <em>π<sub>θ</sub>(a|s)</em> (typically a neural network) to imitate the decision‑making of a computationally intensive Monte‑Carlo Tree Search. The MCTS is executed many times from a variety of states, and its output distribution over actions (often derived from the root visit counts with temperature <em>τ</em>) serves as a target for supervised learning. The cross‑entropy loss minimises the difference between the distilled policy and the MCTS policy, condensing the search effort into a single feed‑forward network that can be evaluated efficiently at deployment time.</p>
+        
+        <div class="equation-block multiline">
+            L(θ) = − 𝔼<sub>s</sub>[ ∑<sub>a</sub> π<sub>MCTS</sub>(a ∣ s) log π<sub>θ</sub>(a ∣ s) ],
+        </div>
+        <p>where <em>π<sub>MCTS</sub>(a|s) ∝ N(s, a)<sup>1/τ</sup></em> is derived from the visit counts at the root node of the search tree. This technique is a crucial component of the AlphaGo Zero and AlphaZero frameworks, enabling strong performance without relying on rollouts during actual play.</p>
+        
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>MCTS</sub>(a ∣ s)</span><span class="var-desc">target policy obtained from MCTS, proportional to (possibly tempered) root visit counts.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub>(a ∣ s)</span><span class="var-desc">distilled parametric policy (e.g., a neural network) trained to approximate π<sub>MCTS</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ</span><span class="var-desc">parameters of the distilled policy network.</span></li>
+            <li class="var-def-item"><span class="var-symbol">τ</span><span class="var-desc">temperature used to flatten or sharpen the visit‑count distribution before distillation.</span></li>
+            <li class="var-def-item"><span class="var-symbol">L(θ)</span><span class="var-desc">cross‑entropy loss function for distillation.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.217 AlphaZero Algorithm -->
+<div class="section-block" id="a13-217">
+    <div class="section-heading"><span class="section-num-large">A13.217</span><h2 class="section-title-large">AlphaZero Algorithm</h2></div>
+    <div class="section-body">
+        <p><strong>AlphaZero</strong> is a model‑based reinforcement learning algorithm that masters two‑player zero‑sum games with perfect information, such as chess, Go, and shogi. It maintains a deep neural network <em>f<sub>θ</sub></em> with two heads: a policy <em>π<sub>θ</sub>(a ∣ s)</em> and a value <em>v<sub>θ</sub>(s)</em>. At each move, the network is used inside a Monte‑Carlo Tree Search (MCTS) to guide simulations and evaluate states without any rollout policy. After the game finishes, the network is trained to predict both the MCTS‑computed policy (distillation) and the final game outcome (value learning). The process runs on self‑play and iteratively improves performance.<sup>7</sup></p>
+
+        <p><strong>Algorithm (AlphaZero, one iteration of self‑play and training):</strong></p>
+        <ul>
+            <li><strong>Hyperparameters:</strong> number of MCTS simulations <em>N<sub>sim</sub></em>, number of self‑play games <em>N<sub>games</sub></em>, replay buffer capacity, training epochs, mini‑batch size <em>B</em>, learning rate <em>η</em>, momentum, weight decay, temperature <em>τ</em> for exploration.</li>
+        </ul>
+        <p><strong>Initialization:</strong> neural network <em>f<sub>θ</sub></em> with random parameters <em>θ</em>; empty replay buffer <em>D</em>.</p>
+        <p><strong>For each iteration:</strong></p>
+        <ol>
+            <li><strong>Self‑play:</strong>
+                <ul>
+                    <li>For each of <em>N<sub>games</sub></em> games, play a complete game between the current player (using the latest <em>f<sub>θ</sub></em>) and either a previous version or itself (both sides use the same network).</li>
+                    <li>At each position <em>s</em>, run MCTS for <em>N<sub>sim</sub></em> simulations using the network to produce prior probabilities <em>π<sub>θ</sub>(a∣s)</em> and state evaluations <em>v<sub>θ</sub>(s)</em> at the leaf nodes.</li>
+                    <li>MCTS returns a vector of action probabilities <em>p<sub>MCTS</sub>(a∣s)</em> derived from the root visit counts with temperature <em>τ</em>; an action is sampled from this distribution and executed.</li>
+                    <li>Store the triplet <em>(s, p<sub>MCTS</sub>, z)</em> in the replay buffer <em>D</em>, where <em>z ∈ {−1, +1}</em> is the final game outcome from the perspective of the current player.</li>
+                </ul>
+            </li>
+            <li><strong>Training:</strong>
+                <ul>
+                    <li>Sample mini‑batches of <em>B</em> positions from the buffer.</li>
+                    <li>Compute the combined loss:
+                        <div class="equation-block multiline">
+                            L(θ) = − p<sub>MCTS</sub> · log π<sub>θ</sub>(a∣s) − ( z − v<sub>θ</sub>(s) )<sup>2</sup> + c ∥θ∥<sup>2</sup>,
+                        </div>
+                        which is the cross‑entropy policy distillation loss plus the mean squared value error, with L2 weight regularization.
+                    </li>
+                    <li>Update the network parameters <em>θ</em> by mini‑batch gradient descent on <em>L(θ)</em>.</li>
+                </ul>
+            </li>
+            <li><strong>Update:</strong> After a fixed number of training steps, the current network becomes the opponent for future self‑play iterations, and the loop repeats.</li>
+        </ol>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">f<sub>θ</sub></span><span class="var-desc">deep neural network with parameters <em>θ</em>, outputting policy logits π<sub>θ</sub>(a∣s) and scalar value v<sub>θ</sub>(s).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub>(a ∣ s)</span><span class="var-desc">policy head: probability distribution over legal actions in state <em>s</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">v<sub>θ</sub>(s)</span><span class="var-desc">value head: predicted game outcome from state <em>s</em> (range usually [−1, 1]).</span></li>
+            <li class="var-def-item"><span class="var-symbol">p<sub>MCTS</sub>(a ∣ s)</span><span class="var-desc">improved policy from MCTS, target for policy distillation.</span></li>
+            <li class="var-def-item"><span class="var-symbol">z</span><span class="var-desc">final game result (e.g., +1 for win, −1 for loss, or 0 for draw).</span></li>
+            <li class="var-def-item"><span class="var-symbol">N<sub>sim</sub></span><span class="var-desc">number of MCTS simulations per move.</span></li>
+            <li class="var-def-item"><span class="var-symbol">τ</span><span class="var-desc">temperature controlling the sharpness of MCTS policy (annealed over moves).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.218 MuZero -->
+<div class="section-block" id="a13-218">
+    <div class="section-heading"><span class="section-num-large">A13.218</span><h2 class="section-title-large">MuZero</h2></div>
+    <div class="section-body">
+        <p><strong>MuZero</strong> is a model‑based reinforcement learning algorithm that learns a model of the environment dynamics solely from observations, without access to a perfect simulator or knowledge of the game rules. It extends the AlphaZero framework by predicting, for a given state <em>s</em> and action <em>a</em>, three quantities: a policy <em>π(a ∣ s)</em>, a value <em>v(s)</em>, and a latent representation and dynamics that are used for planning via Monte‑Carlo Tree Search (MCTS).</p>
+        <p>The core of MuZero consists of three learned functions:</p>
+        <ul>
+            <li><strong>Representation function</strong> <em>h<sub>θ</sub>(s) = s<sup>0</sup></em> — maps raw observations into a latent state.</li>
+            <li><strong>Dynamics function</strong> <em>g<sub>θ</sub>(s<sup>k</sup>, a<sup>k</sup>) = (s<sup>k+1</sup>, r<sup>k</sup>)</em> — predicts the next latent state and immediate reward from a latent state and action.</li>
+            <li><strong>Prediction function</strong> <em>f<sub>θ</sub>(s<sup>k</sup>) = (π<sup>k</sup>, v<sup>k</sup>)</em> — predicts the policy and value for a latent state.</li>
+        </ul>
+        <p>During MCTS, the learned dynamics and prediction are rolled forward inside the search tree, generating imaginary trajectories. The search produces an improved policy target <em>p<sub>MCTS</sub></em> and a value target <em>z</em> (from the final game outcome or n‑step bootstrapped value). The loss is a combination of policy cross‑entropy, value mean squared error, and reward prediction error, summed over multiple unrolled steps:</p>
+        <div class="equation-block multiline">
+            L(θ) = ∑<sub>k=0</sub><sup>K</sup> [ − p<sup>MCTS</sup><sub>k</sub> · log π<sup>k</sup> + ( z<sub>k</sub> − v<sup>k</sup> )<sup>2</sup> + ( r<sub>k</sub> − u<sub>k</sub> )<sup>2</sup> ] + c ∥θ∥<sup>2</sup>,
+        </div>
+        <p>where <em>r<sub>k</sub></em> is the actually observed (or bootstrapped) reward. MuZero achieves state‑of‑the‑art results in Atari games and board games, learning the environment dynamics implicitly without explicit reconstruction of observations.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">h<sub>θ</sub></span><span class="var-desc">representation function mapping observation <em>s</em> to latent state <em>s<sup>0</sup></em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">g<sub>θ</sub></span><span class="var-desc">dynamics function: (s<sup>k+1</sup>, r<sup>k</sup>) = g<sub>θ</sub>(s<sup>k</sup>, a<sup>k</sup>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">f<sub>θ</sub></span><span class="var-desc">prediction function: (π<sup>k</sup>, v<sup>k</sup>) = f<sub>θ</sub>(s<sup>k</sup>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">K</span><span class="var-desc">number of unrolled dynamics steps used for training.</span></li>
+            <li class="var-def-item"><span class="var-symbol">p<sup>MCTS</sup><sub>k</sub></span><span class="var-desc">improved policy target from MCTS at step <em>k</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">z<sub>k</sub></span><span class="var-desc">value target (n‑step return or final outcome).</span></li>
+            <li class="var-def-item"><span class="var-symbol">u<sub>k</sub></span><span class="var-desc">observed reward at step <em>k</em> (from real or reanalyzed data).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.219 Planning for Continuous Control – Direct Differentiation -->
+<div class="section-block" id="a13-219">
+    <div class="section-heading"><span class="section-num-large">A13.219</span><h2 class="section-title-large">Planning for Continuous Control – Direct Differentiation</h2></div>
+    <div class="section-body">
+        <p>In model‑based reinforcement learning with continuous actions, <strong>direct differentiation</strong> refers to the technique of computing the gradient of the expected return with respect to the policy parameters by backpropagating through the differentiable dynamics model. A learned (or given) forward model <em>f(s, a)</em> predicts the next state, and a reward function <em>r(s, a)</em> provides immediate rewards. The policy <em>π<sub>θ</sub>(a|s)</em> is unrolled for <em>H</em> steps using the model, forming a differentiable computational graph. The gradient <em>∇<sub>θ</sub> J(θ)</em> is then obtained by automatic differentiation through the entire trajectory, treating the model as a fixed differentiable block.</p>
+        
+        <div class="equation-block multiline">
+            J(θ) = 𝔼<sub>s<sub>0</sub></sub>[ ∑<sub>t=0</sub><sup>H−1</sup> γ<sup>t</sup> r(s<sub>t</sub>, a<sub>t</sub>) ]<br>
+            with &ensp; s<sub>t+1</sub> = f(s<sub>t</sub>, a<sub>t</sub>),  a<sub>t</sub> ∼ π<sub>θ</sub>(·∣s<sub>t</sub>).
+        </div>
+        <p>The gradient <em>∇<sub>θ</sub> J(θ)</em> is computed by summing the contributions through time, using the chain rule through the model, policy sampling (often via the reparameterization trick), and reward functions. This approach is employed in algorithms such as PILCO (for Gaussian process models) and Dreamer (for learned latent dynamics). The key advantage is that it avoids the compounding error of sampling‑based planning; the disadvantage is the requirement of a differentiable model and the high variance of gradients in long horizons.</p>
+        
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub>(a∣s)</span><span class="var-desc">parameterised stochastic policy (e.g., Gaussian with mean and variance).</span></li>
+            <li class="var-def-item"><span class="var-symbol">f(s, a)</span><span class="var-desc">differentiable forward dynamics model (e.g., neural network).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">reward function (known or learned).</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor.</span></li>
+            <li class="var-def-item"><span class="var-symbol">H</span><span class="var-desc">planning horizon (number of unrolled steps).</span></li>
+            <li class="var-def-item"><span class="var-symbol">∇<sub>θ</sub> J(θ)</span><span class="var-desc">policy gradient obtained via backpropagation through time (BPTT) through the model.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.220 Linear Quadratic Regulator (LQR) -->
+<div class="section-block" id="a13-220">
+    <div class="section-heading"><span class="section-num-large">A13.220</span><h2 class="section-title-large">Linear Quadratic Regulator (LQR)</h2></div>
+    <div class="section-body">
+        <p><strong>Linear Quadratic Regulator (LQR)</strong> is a classical optimal control method for linear dynamical systems with a quadratic cost function. In its standard discrete‑time, infinite‑horizon formulation, the dynamics and cost are given by</p>
+        <div class="equation-block multiline">
+            x<sub>t+1</sub> = A x<sub>t</sub> + B u<sub>t</sub>,<br>
+            J(u) = ∑<sub>t=0</sub><sup>∞</sup> ( x<sub>t</sub><sup>T</sup> Q x<sub>t</sub> + u<sub>t</sub><sup>T</sup> R u<sub>t</sub> ),
+        </div>
+        <p>where <em>x<sub>t</sub> ∈ ℝ<sup>n</sup></em> is the state, <em>u<sub>t</sub> ∈ ℝ<sup>m</sup></em> is the control (action), <em>Q ≽ 0</em> and <em>R ≻ 0</em> are weight matrices, and <em>(A, B)</em> is assumed stabilisable. The objective is to minimise the total cost. The optimal policy is a linear feedback law</p>
+        <div class="equation-block multiline">
+            u<sub>t</sub> = −K x<sub>t</sub>,
+        </div>
+        <p>where the constant gain matrix <em>K</em> is obtained by solving the discrete algebraic Riccati equation (DARE)</p>
+        <div class="equation-block multiline">
+            P = A<sup>T</sup> P A − A<sup>T</sup> P B (R + B<sup>T</sup> P B)<sup>−1</sup> B<sup>T</sup> P A + Q,<br>
+            K = (R + B<sup>T</sup> P B)<sup>−1</sup> B<sup>T</sup> P A.
+        </div>
+        <p>LQR assumes a known model and is a cornerstone of model‑based control, often used as a local approximation in iterative algorithms like iLQR for nonlinear systems.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">x<sub>t</sub>, u<sub>t</sub></span><span class="var-desc">state and control (action) vectors at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">A, B</span><span class="var-desc">dynamics matrices: <em>n×n</em> and <em>n×m</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q, R</span><span class="var-desc">positive semidefinite state cost matrix (<em>n×n</em>) and positive definite control cost matrix (<em>m×m</em>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">P</span><span class="var-desc">solution of the discrete algebraic Riccati equation (cost‑to‑go matrix).</span></li>
+            <li class="var-def-item"><span class="var-symbol">K</span><span class="var-desc">optimal linear feedback gain matrix.</span></li>
+            <li class="var-def-item"><span class="var-symbol">J(u)</span><span class="var-desc">cumulative quadratic cost to be minimised.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.221 LQR – Quadratic Value Functions and Linear Policies -->
+<div class="section-block" id="a13-221">
+    <div class="section-heading"><span class="section-num-large">A13.221</span><h2 class="section-title-large">LQR – Quadratic Value Functions and Linear Policies</h2></div>
+    <div class="section-body">
+        <p>In the finite‑horizon Linear Quadratic Regulator (LQR) with dynamics <em>x<sub>t+1</sub> = A x<sub>t</sub> + B u<sub>t</sub></em> and cost <em>∑ (x<sub>t</sub><sup>T</sup> Q x<sub>t</sub> + u<sub>t</sub><sup>T</sup> R u<sub>t</sub>)</em>, the optimal action‑value function <em>Q<sub>t</sub><sup>*</sup>(x, u)</em> at each time step is a quadratic form in the state‑action pair, and the optimal policy is linear in the state.</p>
+        
+        <p><strong>Property (by backward induction):</strong></p>
+        <ul>
+            <li><strong>Optimal action at the last time moment <em>T</em>:</strong> <em>u<sub>T</sub><sup>*</sup> = −K<sub>T</sub> x<sub>T</sub></em> is a linear function of the state <em>x<sub>T</sub></em>.</li>
+            <li><strong>Optimal state‑action value functions:</strong> For every <em>t</em>, the optimal <em>Q<sub>t</sub><sup>*</sup>(x, u)</em> is a quadratic form in the stacked vector <em>[x; u]</em>.</li>
+            <li><strong>Optimal actions:</strong> For every <em>t</em>, the optimal action <em>u<sub>t</sub><sup>*</sup></em> is a linear function of the current state: <em>u<sub>t</sub><sup>*</sup> = −K<sub>t</sub> x<sub>t</sub></em>.</li>
+        </ul>
+        
+        <p><em>Proof sketch (backward induction).</em> At the final time step <em>T</em>, the cost‑to‑go is zero (or given by a terminal cost matrix <em>Q<sub>f</sub></em>). The Q‑function at time <em>T</em> is <em>Q<sub>T</sub><sup>*</sup>(x,u) = x<sup>T</sup> Q x + u<sup>T</sup> R u</em>, which is quadratic in <em>[x; u]</em>. Minimising with respect to <em>u</em> yields the linear policy <em>u<sup>*</sup> = −R<sup>−1</sup> B<sup>T</sup> (…)</em>, which becomes linear after substituting the Riccati equation.</p>
+        <p>Assume that at time <em>t+1</em> the value function <em>V<sub>t+1</sub><sup>*</sup>(x) = x<sup>T</sup> P<sub>t+1</sub> x</em> (quadratic). Then the state‑action value at time <em>t</em> is</p>
+        <div class="equation-block multiline">
+            Q<sub>t</sub><sup>*</sup>(x,u) = x<sup>T</sup> Q x + u<sup>T</sup> R u + (A x + B u)<sup>T</sup> P<sub>t+1</sub> (A x + B u).
+        </div>
+        <p>Expanding this expression gives a quadratic form in <em>[x; u]</em>. Taking the derivative with respect to <em>u</em> and setting to zero gives a linear relation <em>u<sup>*</sup> = −K<sub>t</sub> x</em>, and substituting back yields a quadratic state‑value function <em>V<sub>t</sub><sup>*</sup>(x)</em>, completing the induction. ∎</p>
+        
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">x<sub>t</sub>, u<sub>t</sub></span><span class="var-desc">state and control (action) vectors at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sub>t</sub><sup>*</sup>(x,u)</span><span class="var-desc">optimal action‑value function at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sub>t</sub><sup>*</sup>(x)</span><span class="var-desc">optimal state‑value function at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">K<sub>t</sub></span><span class="var-desc">optimal feedback gain matrix at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">P<sub>t</sub></span><span class="var-desc">cost‑to‑go matrix (Riccati matrix) at time <em>t</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.222 Backward Pass in LQR -->
+<div class="section-block" id="a13-222">
+    <div class="section-heading"><span class="section-num-large">A13.222</span><h2 class="section-title-large">Backward Pass in LQR</h2></div>
+    <div class="section-body">
+        <p>The <strong>backward pass in LQR</strong> solves the finite‑horizon linear‑quadratic optimal control problem by dynamic programming. Given a time‑varying linear dynamics model and a quadratic cost, it recursively computes the optimal action‑value function <em>Q<sub>t</sub></em>, the optimal linear policy <em>π<sub>t</sub>(s) = K<sub>t</sub> s + k<sub>t</sub></em>, and the value function <em>V<sub>t</sub></em> from the terminal time horizon down to the initial step.</p>
+
+        <p><strong>Input:</strong></p>
+        <ul>
+            <li>Dynamics: for each <em>t</em>, linear approximation given by matrix <em>F<sub>t</sub></em> and vector <em>f<sub>t</sub></em>, so that <em>s<sub>t+1</sub> ≈ F<sub>t</sub> s<sub>t</sub> + f<sub>t</sub> a<sub>t</sub></em> (here <em>a<sub>t</sub></em> is the action; depending on convention, the term may be <em>F<sub>t</sub> s<sub>t</sub> + B<sub>t</sub> a<sub>t</sub></em>, but the notation uses <em>F<sub>t+1</sub>, f<sub>t+1</sub></em> as the linear parameters of the dynamics at the next step).</li>
+            <li>Reward (cost) function: at time <em>t</em>, quadratic approximation given by matrix <em>R<sub>t</sub></em> and vector <em>r<sub>t</sub></em> such that the instantaneous cost is <em>c(s,a) = s<sup>T</sup> R<sub>t,ss</sub> s + a<sup>T</sup> R<sub>t,aa</sub> a + 2 s<sup>T</sup> R<sub>t,sa</sub> a + …</em>. The notation <em>R<sub>t</sub></em> and <em>r<sub>t</sub></em> summarises the quadratic and linear coefficients.</li>
+        </ul>
+
+        <p><strong>Algorithm:</strong></p>
+        <ol>
+            <li><strong>Initialize</strong> the terminal value function: <em>V<sub>T+1</sub> = 0<sub>|S|×|S|</sub></em>, <em>v<sub>T+1</sub> = 0<sub>|S|</sub></em>.</li>
+            <li><strong>For</strong> <em>t = T</em> down to <em>1</em>:
+                <ol type="a">
+                    <li>Compute the quadratic coefficients of the Q‑function at time <em>t</em> by combining the instantaneous cost and the future value:
+                        <div class="equation-block multiline">
+                            Q<sub>t</sub> = R<sub>t</sub> + F<sub>t+1</sub><sup>T</sup> V<sub>t+1</sub> F<sub>t+1</sub>,<br>
+                            q<sub>t</sub> = r<sub>t</sub> + F<sub>t+1</sub><sup>T</sup> V<sub>t+1</sub> f<sub>t+1</sub> + F<sub>t+1</sub><sup>T</sup> v<sub>t+1</sub>.
+                        </div>
+                        (Here <em>Q<sub>t</sub></em> is a matrix representing the quadratic part of <em>Q<sub>t</sub>(s,a)</em>, and <em>q<sub>t</sub></em> the linear part.)
+                    </li>
+                    <li>Extract the sub‑blocks of <em>Q<sub>t</sub></em> and <em>q<sub>t</sub></em> related to actions and states: <em>Q<sub>t,aa</sub></em>, <em>Q<sub>t,as</sub></em>, <em>Q<sub>t,sa</sub></em>, <em>Q<sub>t,ss</sub></em>, <em>q<sub>t,a</sub></em>, etc. Compute the optimal linear policy coefficients:
+                        <div class="equation-block multiline">
+                            K<sub>t</sub> = − Q<sub>t,aa</sub><sup>−1</sup> Q<sub>t,as</sub>,<br>
+                            k<sub>t</sub> = − Q<sub>t,aa</sub><sup>−1</sup> q<sub>t,a</sub>.
+                        </div>
+                        The optimal action at time <em>t</em> is <em>a<sub>t</sub><sup>*</sup> = K<sub>t</sub> s + k<sub>t</sub></em>.
+                    </li>
+                    <li>Compute the updated value function <em>V<sub>t</sub></em> and <em>v<sub>t</sub></em> by substituting the optimal policy back into the Q‑function:
+                        <div class="equation-block multiline">
+                            V<sub>t</sub> = Q<sub>t,ss</sub> + K<sub>t</sub><sup>T</sup> Q<sub>t,aa</sub> K<sub>t</sub> + K<sub>t</sub><sup>T</sup> Q<sub>t,as</sub> + Q<sub>t,sa</sub> K<sub>t</sub>,<br>
+                            v<sub>t</sub> = q<sub>t,s</sub> + Q<sub>t,sa</sub> k<sub>t</sub> + K<sub>t</sub><sup>T</sup> q<sub>t,a</sub> + K<sub>t</sub><sup>T</sup> Q<sub>t,aa</sub> k<sub>t</sub>.
+                        </div>
+                        (Some terms may be simplified; the provided expressions are as in the input.)
+                    </li>
+                </ol>
+            </li>
+            <li><strong>Output:</strong> the sequence of optimal linear policies <em>π<sub>t</sub>(s) = K<sub>t</sub> s + k<sub>t</sub></em> for <em>t = 1, …, T</em>, and the optimal value function <em>V<sub>1</sub>, v<sub>1</sub></em>.</li>
+        </ol>
+
+        <p>The backward pass is the core of the iterative Linear‑Quadratic Regulator (iLQR) algorithm when applied to locally linear approximations of nonlinear dynamics and quadratic approximations of the cost around a nominal trajectory.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">F<sub>t</sub>, f<sub>t</sub></span><span class="var-desc">linear dynamics parameters: state transition matrix and affine term at time <em>t</em> (or for step <em>t</em>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">R<sub>t</sub>, r<sub>t</sub></span><span class="var-desc">quadratic cost matrix and linear cost vector at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sub>t</sub>, q<sub>t</sub></span><span class="var-desc">quadratic and linear coefficients of the state‑action value function at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">K<sub>t</sub>, k<sub>t</sub></span><span class="var-desc">optimal policy coefficients: gain matrix and affine term (<em>a<sub>t</sub><sup>*</sup> = K<sub>t</sub> s + k<sub>t</sub></em>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">V<sub>t</sub>, v<sub>t</sub></span><span class="var-desc">value function coefficients: quadratic matrix and linear vector for state value at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">time horizon (number of steps).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.223 Forward Pass in LQR -->
+<div class="section-block" id="a13-223">
+    <div class="section-heading"><span class="section-num-large">A13.223</span><h2 class="section-title-large">Forward Pass in LQR</h2></div>
+    <div class="section-body">
+        <p>The <strong>forward pass in LQR</strong> takes the sequence of optimal linear policies computed during the backward pass (A13.222) and applies them to the actual (or simulated) environment to produce a trajectory (plan) of states and actions. This rollout simulates the system under the optimal feedback law.</p>
+
+        <p><strong>Input:</strong></p>
+        <ul>
+            <li><em>K<sub>t</sub></em>, <em>k<sub>t</sub></em> — policy parameters from the backward pass (<em>t = 1, …, T</em>).</li>
+            <li><em>f</em> — dynamics function (exact or approximated) such that <em>s<sub>t+1</sub> = f(s<sub>t</sub>, a<sub>t</sub>)</em>.</li>
+            <li>Initial state <em>s<sub>1</sub></em>.</li>
+        </ul>
+
+        <p><strong>Algorithm:</strong></p>
+        <ol>
+            <li><strong>For</strong> <em>t = 1, 2, …, T</em>:
+                <ol type="a">
+                    <li>Compute the action according to the optimal policy:
+                        <div class="equation-block">
+                            a<sub>t</sub> = K<sub>t</sub> s<sub>t</sub> + k<sub>t</sub>.
+                        </div>
+                    </li>
+                    <li>Apply the action to obtain the next state:
+                        <div class="equation-block">
+                            s<sub>t+1</sub> = f( s<sub>t</sub>, a<sub>t</sub> ).
+                        </div>
+                    </li>
+                </ol>
+            </li>
+            <li><strong>Output:</strong> the sequence of actions <em>a<sub>1</sub>, a<sub>2</sub>, …, a<sub>T</sub></em> (the plan) and the corresponding states <em>s<sub>1</sub>, …, s<sub>T+1</sub></em>.</li>
+        </ol>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">s<sub>t</sub></span><span class="var-desc">state at time <em>t</em> (vector).</span></li>
+            <li class="var-def-item"><span class="var-symbol">a<sub>t</sub></span><span class="var-desc">optimal action at time <em>t</em> (vector).</span></li>
+            <li class="var-def-item"><span class="var-symbol">K<sub>t</sub></span><span class="var-desc">feedback gain matrix at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">k<sub>t</sub></span><span class="var-desc">affine term (open‑loop component) of the optimal policy.</span></li>
+            <li class="var-def-item"><span class="var-symbol">f</span><span class="var-desc">deterministic dynamics function (possibly nonlinear, but the policy is linear).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">time horizon.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.224 Noisy Transition in LQR -->
+<div class="section-block" id="a13-224">
+    <div class="section-heading"><span class="section-num-large">A13.224</span><h2 class="section-title-large">Noisy Transition in LQR</h2></div>
+    <div class="section-body">
+        <p><strong>Claim.</strong> Under the standard assumption that the noise in the transition is additive, zero‑mean, and independent of the state and action (assumption (7.9)), the optimal linear‑quadratic regulator (LQR) scheme remains unchanged from the deterministic case. The backward pass that computes the optimal policy <em>K<sub>t</sub>, k<sub>t</sub></em> is identical, and the optimal action <em>a<sub>t</sub><sup>*</sup> = K<sub>t</sub> s<sub>t</sub> + k<sub>t</sub></em> is still linear in the current state.</p>
+        
+        <p><em>Reason.</em> Let the noisy dynamics be <em>s<sub>t+1</sub> = f(s<sub>t</sub>, a<sub>t</sub>) + ε<sub>t</sub></em>, with <em>𝔼[ε<sub>t</sub>] = 0</em> and <em>ε<sub>t</sub></em> independent of the history. The expected quadratic cost becomes</p>
+        <div class="equation-block multiline">
+            J = 𝔼[ ∑<sub>t</sub> ( s<sub>t</sub><sup>T</sup> Q s<sub>t</sub> + a<sub>t</sub><sup>T</sup> R a<sub>t</sub> ) ].
+        </div>
+        <p>Because of the linear‑quadratic structure and the independence of the noise, the optimal value function remains quadratic, <em>V<sub>t</sub><sup>*</sup>(s) = s<sup>T</sup> P<sub>t</sub> s + constant</em>. The additive constant is irrelevant for the minimisation over actions, and the Riccati equation for <em>P<sub>t</sub></em> is unchanged. Consequently, the feedback gain <em>K<sub>t</sub></em> and the affine term <em>k<sub>t</sub></em> derived in the backward pass (A13.222) are exactly the same as in the noiseless case. The noise only increases the total expected cost by a constant that does not depend on the policy.</p>
+        
+        <p>Thus, the LQR algorithm (both backward and forward passes) applies without modification to systems with additive process noise, a property known as <strong>certainty equivalence</strong> for linear systems with quadratic costs.</p>
+        
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">ε<sub>t</sub></span><span class="var-desc">zero‑mean random noise vector added to the dynamics at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">P<sub>t</sub></span><span class="var-desc">cost‑to‑go matrix (solution of Riccati equation), unchanged by noise.</span></li>
+            <li class="var-def-item"><span class="var-symbol">constant</span><span class="var-desc">added cost due to noise variance, independent of actions.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.225 Iterative LQR (iLQR) -->
+<div class="section-block" id="a13-225">
+    <div class="section-heading"><span class="section-num-large">A13.225</span><h2 class="section-title-large">Iterative LQR (iLQR)</h2></div>
+    <div class="section-body">
+        <p><strong>Iterative LQR (iLQR)</strong> extends the linear quadratic regulator to general nonlinear dynamics and non‑quadratic cost functions. It iteratively linearizes the dynamics and quadratically approximates the cost around a nominal trajectory, solves the resulting LQR subproblem to obtain a locally optimal linear policy, and then applies a line search along the generated trajectory to guarantee improvement.</p>
+        
+        <p><strong>Typical algorithm (iLQR):</strong></p>
+        <ol>
+            <li>Initialize a nominal trajectory of states and actions <em>(s̄<sub>1</sub>, ā<sub>1</sub>, …, s̄<sub>T</sub>, ā<sub>T</sub>)</em> (e.g., via random or a previous plan).</li>
+            <li><strong>Repeat:</strong>
+                <ol type="a">
+                    <li><strong>Linearize dynamics</strong> along the nominal: for each <em>t</em>, compute Jacobians <em>F<sub>t</sub> = ∇<sub>s</sub> f(s̄<sub>t</sub>, ā<sub>t</sub>)</em>, <em>B<sub>t</sub> = ∇<sub>a</sub> f(s̄<sub>t</sub>, ā<sub>t</sub>)</em> (or in previous notation, <em>F<sub>t+1</sub>, f<sub>t+1</sub></em> representing <em>s<sub>t+1</sub> ≈ F<sub>t</sub> s<sub>t</sub> + B<sub>t</sub> a<sub>t</sub> + …</em>).</li>
+                    <li><strong>Approximate cost</strong> quadratically: expand the instantaneous cost <em>c(s,a)</em> to second order around the nominal, yielding matrices <em>Q<sub>t,ss</sub>, Q<sub>t,aa</sub>, Q<sub>t,sa</sub></em> and vectors <em>q<sub>t,s</sub>, q<sub>t,a</sub></em>.</li>
+                    <li><strong>Run the LQR backward pass</strong> (A13.222) with these linearized dynamics and quadratic costs to obtain a sequence of optimal policy gains <em>K<sub>t</sub></em> and affine terms <em>k<sub>t</sub></em>.</li>
+                    <li><strong>Forward pass with line search:</strong> Starting from the initial state <em>s<sub>1</sub></em>, simulate the new policy <em>a<sub>t</sub> = ā<sub>t</sub> + K<sub>t</sub> (s<sub>t</sub> − s̄<sub>t</sub>) + α k<sub>t</sub></em> for a sequence of step sizes <em>α ∈ (0,1]</em>. Choose the largest <em>α</em> that decreases the total cost (or satisfies a sufficient decrease condition).</li>
+                    <li>If cost improves, update the nominal trajectory to the new one and continue; else stop or reduce <em>α</em> further.</li>
+                </ol>
+            </li>
+        </ol>
+        <p>iLQR is widely used in trajectory optimization and model‑based reinforcement learning for continuous control, as it efficiently handles complex dynamics while providing local convergence guarantees.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">s̄<sub>t</sub>, ā<sub>t</sub></span><span class="var-desc">nominal state and action at time <em>t</em> around which linearization is performed.</span></li>
+            <li class="var-def-item"><span class="var-symbol">F<sub>t</sub>, B<sub>t</sub></span><span class="var-desc">Jacobians of the dynamics with respect to state and action at the nominal point.</span></li>
+            <li class="var-def-item"><span class="var-symbol">K<sub>t</sub>, k<sub>t</sub></span><span class="var-desc">optimal feedback gain and affine term from the LQR backward pass.</span></li>
+            <li class="var-def-item"><span class="var-symbol">α</span><span class="var-desc">step size used in the forward pass line search (0 &lt; α ≤ 1).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.226 Imitation Learning -->
+<div class="section-block" id="a13-226">
+    <div class="section-heading"><span class="section-num-large">A13.226</span><h2 class="section-title-large">Imitation Learning</h2></div>
+    <div class="section-body">
+        <p><strong>Imitation learning</strong> (or learning from demonstration) is a paradigm where an agent learns a policy by mimicking a set of expert demonstrations rather than by maximising a reward signal through trial and error. The goal is to reproduce the expert's behaviour, often measured by the divergence between the learned policy and the expert policy or by the expected return relative to the expert.</p>
+        <p>Two major families of algorithms exist:</p>
+        <ul>
+            <li><strong>Behavioural cloning (BC):</strong> treats the problem as supervised learning over state‑action pairs from the expert, minimising a loss such as cross‑entropy for discrete actions or mean squared error for continuous actions. BC can suffer from compounding errors (distributional shift) because the agent may encounter states not present in the expert dataset.</li>
+            <li><strong>Inverse reinforcement learning (IRL) and apprenticeship learning:</strong> infer a reward function under which the expert is optimal, then use RL to train a policy on that recovered reward. Modern approaches include adversarial imitation learning (e.g., GAIL), which frames the problem as a distribution matching game between the agent's and expert's state‑action occupancy measures, trained with a discriminator.</li>
+        </ul>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>E</sub></span><span class="var-desc">expert policy (unknown, only demonstrations are available).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub></span><span class="var-desc">learned policy (parameterised by θ).</span></li>
+            <li class="var-def-item"><span class="var-symbol">D = { (s<sub>i</sub>, a<sub>i</sub>) }</span><span class="var-desc">dataset of expert state‑action pairs.</span></li>
+            <li class="var-def-item"><span class="var-symbol">BC loss</span><span class="var-desc">supervised loss (e.g., −log π<sub>θ</sub>(a<sub>i</sub>|s<sub>i</sub>)).</span></li>
+            <li class="var-def-item"><span class="var-symbol">IRL</span><span class="var-desc">inverse reinforcement learning, recovers reward r(s,a) from demonstrations.</span></li>
+            <li class="var-def-item"><span class="var-symbol">GAIL</span><span class="var-desc">generative adversarial imitation learning, a popular adversarial method.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.227 Behavioral Cloning -->
+<div class="section-block" id="a13-227">
+    <div class="section-heading"><span class="section-num-large">A13.227</span><h2 class="section-title-large">Behavioral Cloning</h2></div>
+    <div class="section-body">
+        <p><strong>Behavioral cloning (BC)</strong> is an imitation learning technique that reduces policy learning to supervised learning. Given a dataset of expert demonstrations consisting of state‑action pairs <em>D = { (s<sub>i</sub>, a<sub>i</sub>) }</em>, a parameterised policy <em>π<sub>θ</sub></em> is trained to minimise a loss function that measures the discrepancy between the expert's actions and the policy's predictions. For continuous actions, the mean squared error is common; for discrete actions, the cross‑entropy loss is typical:</p>
+        <div class="equation-block multiline">
+            L(θ) = − 𝔼<sub>(s,a) ∼ D</sub>[ log π<sub>θ</sub>(a ∣ s) ].
+        </div>
+        <p>BC is straightforward and often effective when the expert dataset is large and covers the state distribution well. However, it can suffer from compounding errors when the agent deviates from the expert's trajectory distribution during deployment.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">D</span><span class="var-desc">dataset of expert state‑action pairs: {(s<sub>i</sub>, a<sub>i</sub>)}.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub>(a ∣ s)</span><span class="var-desc">learned policy parameterised by θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">L(θ)</span><span class="var-desc">loss function (e.g., negative log‑likelihood for discrete actions).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.228 Inverse Reinforcement Learning (IRL) -->
+<div class="section-block" id="a13-228">
+    <div class="section-heading"><span class="section-num-large">A13.228</span><h2 class="section-title-large">Inverse Reinforcement Learning (IRL)</h2></div>
+    <div class="section-body">
+        <p>The <strong>inverse reinforcement learning (inverse RL, IRL)</strong> problem consists of recovering, from a set of trajectories <em>T</em> generated by an optimal agent, the reward function <em>r(s, a)</em> that the agent is maximising. Instead of finding the optimal policy for a given reward, IRL aims to infer the underlying objective that explains the observed behaviour.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">set of trajectories (sequences of states, actions, and optionally rewards) demonstrated by the expert.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">unknown reward function to be recovered; often assumed to be a linear combination of features or a neural network.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.229 Guided Cost Learning -->
+<div class="section-block" id="a13-229">
+    <div class="section-heading"><span class="section-num-large">A13.229</span><h2 class="section-title-large">Guided Cost Learning</h2></div>
+    <div class="section-body">
+        <p><strong>Guided Cost Learning</strong> is an inverse reinforcement learning algorithm that jointly learns a parametric reward function <em>r<sub>ψ</sub>(s,a)</em> and a policy <em>π<sub>θ</sub>(a|s)</em> optimized for that reward. It alternates between updating the reward to make expert demonstrations appear high‑reward relative to the current policy’s trajectories, and updating the policy to match the reward distribution, using importance sampling to correct for distribution shift.</p>
+        <p>The reward parameters <em>ψ</em> are trained by maximizing the log‑likelihood of expert trajectories under a maximum entropy model, or equivalently by minimizing the loss</p>
+        <div class="equation-block multiline">
+            L(ψ) = − 𝔼<sub>τ ∼ D<sub>expert</sub></sub>[ Σ<sub>t</sub> r<sub>ψ</sub>(s<sub>t</sub>, a<sub>t</sub>) ] + log Z<sub>ψ</sub>,
+        </div>
+        <p>where <em>Z<sub>ψ</sub> = ∫ exp( Σ<sub>t</sub> r<sub>ψ</sub>(s<sub>t</sub>, a<sub>t</sub>) ) dτ</em> is the partition function. The gradient is estimated as</p>
+        <div class="equation-block multiline">
+            ∇<sub>ψ</sub> L(ψ) = 𝔼<sub>τ ∼ D<sub>expert</sub></sub>[ Σ<sub>t</sub> ∇<sub>ψ</sub> r<sub>ψ</sub>(s<sub>t</sub>, a<sub>t</sub>) ] − 𝔼<sub>τ ∼ π<sub>θ</sub></sub>[ Σ<sub>t</sub> ∇<sub>ψ</sub> r<sub>ψ</sub>(s<sub>t</sub>, a<sub>t</sub>) ],
+        </div>
+        <p>with the policy <em>π<sub>θ</sub></em> trained via reinforcement learning on the current reward. Importance weights are often used to re‑weight samples from older policies, hence the term “guided”.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">r<sub>ψ</sub>(s, a)</span><span class="var-desc">parameterised reward function with parameters ψ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub>(a ∣ s)</span><span class="var-desc">policy parameterised by θ, optimised with respect to r<sub>ψ</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">D<sub>expert</sub></span><span class="var-desc">set of expert demonstration trajectories.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Z<sub>ψ</sub></span><span class="var-desc">partition function (intractable integral over all trajectories).</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝔼<sub>τ ∼ π<sub>θ</sub></sub></span><span class="var-desc">expectation over trajectories generated by the current policy.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.230 Guided Cost Learning – Gradient -->
+<div class="section-block" id="a13-230">
+    <div class="section-heading"><span class="section-num-large">A13.230</span><h2 class="section-title-large">Guided Cost Learning – Gradient</h2></div>
+    <div class="section-body">
+        <p>In Guided Cost Learning, the likelihood of the expert's trajectories under a maximum‑entropy model is maximised to recover the reward function. The gradient of the log‑likelihood with respect to the reward parameters <em>ψ</em> takes the simple form of a contrast between the expert and the learned policy:</p>
+        <div class="equation-block multiline">
+            ∇<sub>ψ</sub> L(ψ) = 𝔼<sub>T ∼ π<sub>E</sub></sub>[ ∇<sub>ψ</sub> R<sub>ψ</sub>(T) ] − 𝔼<sub>T ∼ π<sub>θ</sub></sub>[ ∇<sub>ψ</sub> R<sub>ψ</sub>(T) ].
+        </div>
+        <p>Here <em>π<sub>E</sub></em> denotes the expert policy from which demonstrations are drawn, <em>π<sub>θ</sub></em> is the current policy trained to maximize the reward <em>R<sub>ψ</sub></em>, and <em>R<sub>ψ</sub>(T)</em> is the total cumulative (undiscounted or entropy‑regularised) reward of a trajectory. The gradient increases the reward of expert trajectories and decreases the reward of the agent's own trajectories, thereby steering the policy toward expert behaviour.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">L(ψ)</span><span class="var-desc">log‑likelihood of expert demonstrations under the maximum‑entropy model.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ψ</span><span class="var-desc">parameters of the reward function <em>r<sub>ψ</sub>(s, a)</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>E</sub></span><span class="var-desc">expert policy (demonstrations).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub></span><span class="var-desc">learned policy parameterised by <em>θ</em>, optimal under the current reward <em>r<sub>ψ</sub></em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">R<sub>ψ</sub>(T)</span><span class="var-desc">total return of trajectory <em>T</em> under the reward function <em>r<sub>ψ</sub></em> (often sum of rewards).</span></li>
+            <li class="var-def-item"><span class="var-symbol">∇<sub>ψ</sub> R<sub>ψ</sub>(T)</span><span class="var-desc">gradient of the trajectory return with respect to the reward parameters.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.231 Generative Adversarial Imitation Learning (GAIL) -->
+<div class="section-block" id="a13-231">
+    <div class="section-heading"><span class="section-num-large">A13.231</span><h2 class="section-title-large">Generative Adversarial Imitation Learning (GAIL)</h2></div>
+    <div class="section-body">
+        <p><strong>Generative Adversarial Imitation Learning (GAIL)</strong> is an adversarial framework for imitation learning. It trains a policy <em>π<sub>θ</sub></em> (the generator) to mimic expert demonstrations by competing against a discriminator <em>D<sub>ω</sub>(s, a)</em> that learns to distinguish between expert state‑action pairs and those generated by the policy. The policy is optimized using on‑policy reinforcement learning with a reward signal derived from the discriminator, while the discriminator is trained to classify the origin of a sample. This formulation avoids the compounding error of behavioral cloning and does not require explicit reward engineering.</p>
+        
+        <p>The optimization problem is a minimax game:</p>
+        <div class="equation-block multiline">
+            min<sub>θ</sub> max<sub>ω</sub> &ensp; 𝔼<sub>(s,a) ∼ π<sub>E</sub></sub>[ log D<sub>ω</sub>(s, a) ] + 𝔼<sub>(s,a) ∼ π<sub>θ</sub></sub>[ log(1 − D<sub>ω</sub>(s, a)) ] − λ H(π<sub>θ</sub>),
+        </div>
+        <p>where <em>π<sub>E</sub></em> is the expert policy (from demonstrations), <em>D<sub>ω</sub>(s, a) ∈ (0,1)</em> is the discriminator output, <em>H(π<sub>θ</sub>)</em> is an optional policy entropy term, and <em>λ</em> is a hyperparameter. The policy is typically updated via trust‑region methods (e.g., TRPO) using a surrogate reward <em>r<sub>t</sub> = −log(1 − D<sub>ω</sub>(s<sub>t</sub>, a<sub>t</sub>))</em> (or <em>log D<sub>ω</sub></em> for some variants). Under mild assumptions, GAIL recovers the expert's occupancy measure and achieves superior sample efficiency compared to behavior cloning.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub></span><span class="var-desc">learned policy (generator) with parameters θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>E</sub></span><span class="var-desc">expert policy providing demonstration trajectories.</span></li>
+            <li class="var-def-item"><span class="var-symbol">D<sub>ω</sub>(s, a)</span><span class="var-desc">discriminator with parameters ω; estimates the probability that <em>(s,a)</em> comes from the expert.</span></li>
+            <li class="var-def-item"><span class="var-symbol">λ</span><span class="var-desc">entropy regularization coefficient (optional).</span></li>
+            <li class="var-def-item"><span class="var-symbol">H(π<sub>θ</sub>)</span><span class="var-desc">policy entropy, encourages exploration.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.232 Derivation of GAIL Objective from Regularized IRL -->
+<div class="section-block" id="a13-232">
+    <div class="section-heading"><span class="section-num-large">A13.232</span><h2 class="section-title-large">Derivation of GAIL Objective from Regularized IRL</h2></div>
+    <div class="section-body">
+        <p><strong>Claim.</strong> Consider the inverse reinforcement learning problem with entropy‑regularized policy and the particular reward regularizer</p>
+        <div class="equation-block">
+            ψ(r) = 𝔼<sub>ρ<sub>π<sup>*</sup></sub></sub>[ log(1 − e<sup>−r(s,a)</sup>) ],
+        </div>
+        <p>where the penalty is taken to be infinite if <em>r(s,a) ≤ 0</em>. Then the IRL objective (8.15)</p>
+        <div class="equation-block">
+            max<sub>r</sub> ( min<sub>π</sub> 𝔼<sub>ρ<sub>π</sub></sub>[−r(s,a)] − H(π) ) + 𝔼<sub>ρ<sub>π<sup>*</sup></sub></sub>[ r(s,a) ] − ψ(r)
+        </div>
+        <p>simplifies to the adversarial minimax problem</p>
+        <div class="equation-block multiline">
+            min<sub>D</sub> max<sub>π</sub> − 𝔼<sub>ρ<sub>π<sup>*</sup></sub></sub>[ log(1 − D(s,a)) ] − 𝔼<sub>ρ<sub>π</sub></sub>[ log D(s,a) ] + H̃(ρ<sub>π</sub>),
+        </div>
+        <p>where <em>D(s,a) ∈ (0,1)</em> is a discriminator that distinguishes between expert and policy state‑action pairs.</p>
+
+        <p><em>Proof.</em> Let <em>ρ<sub>π</sub>(s,a)</em> be the discounted state‑action occupancy measure of policy <em>π</em>. The maximum‑entropy IRL objective is</p>
+        <div class="equation-block multiline">
+            L(r) = − min<sub>π</sub> ( 𝔼<sub>ρ<sub>π</sub></sub>[−r(s,a)] − H(π) ) + 𝔼<sub>ρ<sub>π<sup>*</sup></sub></sub>[ r(s,a) ] − ψ(r).
+        </div>
+        <p>For a fixed reward, the inner minimization over <em>π</em> is the entropy‑regularized RL problem, whose optimal state‑action occupancy satisfies</p>
+        <div class="equation-block">
+            ρ<sub>π<sub>r</sub></sub>(s,a) = <span class="frac">exp( r(s,a) )</span><span class="frac">Z(r)</span>,
+        </div>
+        <p>up to a normalizing partition function <em>Z(r)</em> that depends on the transition dynamics. However, for a general occupancy, the solution yields the optimal reward as a function of the occupancy: <em>r<sub>ρ</sub>(s,a) = log ρ(s,a) + C</em>, where <em>C</em> is a constant (or state‑dependent but not relevant). However, the regularizer <em>ψ</em> allows a closed‑form solution.</p>
+
+        <p>We can instead proceed by pointwise optimization over <em>r(s,a)</em>. The objective <em>L(r)</em>, using the fact that the minimum over <em>π</em> is achieved by the policy whose occupancy satisfies <em>r(s,a) = log ρ(s,a) − log(…)</em>, but a more direct approach is to consider the dual formulation. By the Fenchel conjugate, the regularizer <em>ψ(r)</em> is chosen such that the overall objective transforms. As shown in Finn et al. (2016) and Ho & Ermon (2016), with <em>ψ(r) = 𝔼<sub>ρ<sub>π<sup>*</sup></sub></sub>[ g(r) ]</em> where <em>g(r) = log(1 − e<sup>−r</sup>)</em> for <em>r&gt;0</em> and <em>∞</em> otherwise, the conjugate of <em>g(r)</em> is <em>g<sup>*</sup>(t) = −t log t − (1−t) log(1−t)</em> for <em>t ∈ (0,1)</em>.</p>
+
+        <p>We can rewrite the IRL objective as a saddle point. Let us define the discriminator output <em>D(s,a) = e<sup>r(s,a)</sup> / (1 + e<sup>r(s,a)</sup>)</em>, or equivalently <em>r(s,a) = log D(s,a) − log(1 − D(s,a))</em>. The regularizer then becomes</p>
+        <div class="equation-block multiline">
+            ψ(r) = 𝔼<sub>ρ<sub>π<sup>*</sup></sub></sub>[ log(1 − e<sup>−r</sup>) ] = 𝔼<sub>ρ<sub>π<sup>*</sup></sub></sub>[ log(1 − D(s,a)) ].
+        </div>
+        <p>Substituting into the objective and adding the entropy of the occupancy (or policy entropy) yields the expression</p>
+        <div class="equation-block multiline">
+            − 𝔼<sub>ρ<sub>π<sup>*</sup></sub></sub>[ log(1 − D) ] − 𝔼<sub>ρ<sub>π</sub></sub>[ log D ] + H̃(ρ<sub>π</sub>).
+        </div>
+        <p>The term <em>H̃(ρ<sub>π</sub>)</em> is related to the entropy of the policy (or the causal entropy). The resulting optimization is a min over discriminator <em>D</em> and a max over policy <em>π</em>, which is the Generative Adversarial Imitation Learning (GAIL) objective. ∎</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">ψ(r)</span><span class="var-desc">regularizer penalizing reward functions that are too large or negative.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ρ<sub>π<sup>*</sup></sub></span><span class="var-desc">expert state‑action occupancy measure (distribution induced by the expert policy).</span></li>
+            <li class="var-def-item"><span class="var-symbol">ρ<sub>π</sub></span><span class="var-desc">state‑action occupancy measure of the learned policy π.</span></li>
+            <li class="var-def-item"><span class="var-symbol">D(s, a)</span><span class="var-desc">discriminator output: probability that (s,a) comes from expert.</span></li>
+            <li class="var-def-item"><span class="var-symbol">H̃(ρ<sub>π</sub>)</span><span class="var-desc">entropy term (causal entropy) of the occupancy, corresponding to policy entropy.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.233 Generative Adversarial Imitation from Observation (GAIfO) -->
+<div class="section-block" id="a13-233">
+    <div class="section-heading"><span class="section-num-large">A13.233</span><h2 class="section-title-large">Generative Adversarial Imitation from Observation (GAIfO)</h2></div>
+    <div class="section-body">
+        <p><strong>Generative Adversarial Imitation from Observation (GAIfO)</strong> extends adversarial imitation learning to settings where the expert’s actions are unavailable; only sequences of observed states (without actions) are provided. The algorithm learns a policy by matching the distribution of state transitions produced by the agent to that of the expert, using a discriminator that distinguishes between expert state transitions <em>(s, s′)</em> and policy-generated transitions. The policy is trained to fool this discriminator, analogous to GAIL but using state‑only information.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub></span><span class="var-desc">learned policy parameterised by θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">D<sub>ω</sub>(s, s′)</span><span class="var-desc">discriminator with parameters ω, classifying whether a state transition <em>(s,s′)</em> comes from expert or agent.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Expert data</span><span class="var-desc">set of expert state trajectories (no actions).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.234 Intrinsic Motivation -->
+<div class="section-block" id="a13-234">
+    <div class="section-heading"><span class="section-num-large">A13.234</span><h2 class="section-title-large">Intrinsic Motivation</h2></div>
+    <div class="section-body">
+        <p><strong>Intrinsic motivation</strong> in reinforcement learning refers to a family of techniques that generate internal reward signals to encourage exploration, novelty seeking, or skill acquisition, independent of the extrinsic task reward. A common example is the curiosity‑driven exploration bonus, where the intrinsic reward is proportional to the prediction error of a learned dynamics model.</p>
+        <div class="equation-block multiline">
+            r<sub>t</sub><sup>int</sup> = ‖ f̂(s<sub>t+1</sub>) − s<sub>t+1</sub> ‖<sup>2</sup>,
+        </div>
+        <p>where <em>f̂</em> is a learned forward model. The total reward is then <em>r<sub>t</sub> = r<sub>t</sub><sup>ext</sup> + β r<sub>t</sub><sup>int</sup></em>, with <em>β</em> controlling the exploration–exploitation trade‑off.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub><sup>int</sup></span><span class="var-desc">intrinsic reward at time t.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub><sup>ext</sup></span><span class="var-desc">extrinsic (task) reward.</span></li>
+            <li class="var-def-item"><span class="var-symbol">β</span><span class="var-desc">weighting coefficient balancing intrinsic and extrinsic rewards.</span></li>
+            <li class="var-def-item"><span class="var-symbol">f̂</span><span class="var-desc">learned dynamics model predicting next state features.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.236 Search Problem and Auxiliary Task -->
+<div class="section-block" id="a13-236">
+    <div class="section-heading"><span class="section-num-large">A13.236</span><h2 class="section-title-large">Search Problem and Auxiliary Task</h2></div>
+    <div class="section-body">
+        <p>A <strong>search problem</strong> is a special case of an MDP where the reward function is defined solely by reaching a set of terminal states. Formally,</p>
+        <div class="equation-block multiline">
+            r(s, a) = 
+            <span style="display:inline-block; vertical-align:middle;">
+                <span style="display:block; padding:0 0.1em;">+1</span>
+                <span style="display:block; padding:0 0.1em;">const</span>
+            </span>
+            <span style="display:inline-block; vertical-align:middle; margin-left:0.5em;">
+                <span style="display:block;">if s ∈ S<sup>+</sup>,</span>
+                <span style="display:block;">otherwise (s ∉ S<sup>+</sup>),</span>
+            </span>
+        </div>
+        <p>where <em>S<sup>+</sup></em> is a designated set of terminal (goal) states, and <em>const ≤ 0</em> is a penalty for each non‑terminal step, encouraging the agent to find a path to a goal as quickly as possible.</p>
+
+        <p>For a given environment <em>(S, A, P)</em>, an <strong>auxiliary task</strong> is a reinforcement learning problem defined on the same transition dynamics but with an <strong>intrinsic reward function</strong> <em>r<sup>intr</sup>(s, a)</em> that is defined by the agent itself. That is, an auxiliary task corresponds to the MDP</p>
+        <div class="equation-block">
+            (S, A, P, r<sup>intr</sup>),
+        </div>
+        <p>where <em>r<sup>intr</sup></em> is an <strong>intrinsic motivation</strong> signal, designed by the agent (or the algorithm) to encourage exploration, curiosity, or the acquisition of useful representations, independent of the external task reward.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">S<sup>+</sup></span><span class="var-desc">set of terminal (goal) states in a search problem; arriving there yields +1 reward.</span></li>
+            <li class="var-def-item"><span class="var-symbol">const</span><span class="var-desc">constant penalty (≤ 0) for each step that does not reach a goal; represents the cost of time.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r(s, a)</span><span class="var-desc">reward function for the search problem (sparse, goal‑dependent).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sup>intr</sup>(s, a)</span><span class="var-desc">intrinsic reward function, defined by the agent, used to form an auxiliary task.</span></li>
+            <li class="var-def-item"><span class="var-symbol">(S, A, P, r<sup>intr</sup>)</span><span class="var-desc">auxiliary MDP that shares the environment dynamics but uses the intrinsic reward.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.237 Procrastination Problem -->
+<div class="section-block" id="a13-237">
+    <div class="section-heading"><span class="section-num-large">A13.237</span><h2 class="section-title-large">Procrastination Problem</h2></div>
+    <div class="section-body">
+        <p>The <strong>procrastination problem</strong> in reinforcement learning with intrinsic motivation occurs when, in some region of the environment, the intrinsic reward produces a high (and non‑decaying) signal that overpowers the agent’s extrinsic reward or other intrinsic objectives, causing the agent to remain in that region instead of making progress on the actual task.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">intrinsic reward</span><span class="var-desc">internally generated reward signal meant to encourage exploration or curiosity (A13.234).</span></li>
+            <li class="var-def-item"><span class="var-symbol">extrinsic reward</span><span class="var-desc">task‑defined reward from the environment.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.238 Exploration Bonuses -->
+<div class="section-block" id="a13-238">
+    <div class="section-heading"><span class="section-num-large">A13.238</span><h2 class="section-title-large">Exploration Bonuses</h2></div>
+    <div class="section-body">
+        <p><strong>Exploration bonuses</strong> are supplementary rewards added to the environment’s true reward to encourage the agent to visit unfamiliar states. A classic form is the count‑based bonus, which gives a higher reward to states that have been visited less frequently. The total reward at time <em>t</em> becomes</p>
+        <div class="equation-block multiline">
+            r<sub>t</sub><sup>+</sup> = r<sub>t</sub> + β / √( N(s<sub>t</sub>) )  (or similar decreasing function of visit count),
+        </div>
+        <p>where <em>r<sub>t</sub></em> is the extrinsic reward, <em>N(s)</em> is the number of visits to state <em>s</em>, and <em>β</em> is a weighting coefficient. In high‑dimensional spaces, pseudo‑counts derived from density models are used.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub><sup>+</sup></span><span class="var-desc">augmented reward (extrinsic + exploration bonus).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub></span><span class="var-desc">extrinsic reward from the environment.</span></li>
+            <li class="var-def-item"><span class="var-symbol">N(s)</span><span class="var-desc">visit count (or pseudo‑count) for state <em>s</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">β</span><span class="var-desc">weight of the exploration bonus.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.239 Hash‑Based and Novelty Bonuses -->
+<div class="section-block" id="a13-239">
+    <div class="section-heading"><span class="section-num-large">A13.239</span><h2 class="section-title-large">Hash‑Based and Novelty Bonuses</h2></div>
+    <div class="section-body">
+        <p>Two common intrinsic reward schemes that use a state‑visitation oracle or hash to encourage exploration are:</p>
+        <ul>
+            <li>
+                <strong>Non‑stationary hash‑based bonus:</strong> Let <em>h(s) : S → {0, 1, …, N}</em> be a hash function (oracle) mapping states to a finite set of bins, and let <em>n(i)</em> be the number of times a state with hash <em>i</em> has been encountered over the whole training. The intrinsic reward is then
+                <div class="equation-block">
+                    r<sup>intr</sup>(s, a) = <span class="frac">1</span><span class="frac">√( n( h(s) ) )</span>.
+                </div>
+                As a state is visited more often, its bonus decreases, driving the agent to visit less‑frequented hash bins.
+            </li>
+            <li>
+                <strong>Novelty (first‑visit) bonus:</strong> The agent receives a reward of <em>+1</em> the first time it enters a state, and zero thereafter:
+                <div class="equation-block">
+                    r<sup>intr</sup>(s<sub>t</sub>, a<sub>t</sub>) = 𝟙[ ∀ t′ &lt; t : s<sub>t</sub> ≠ s<sub>t′</sub> ],
+                </div>
+                where <em>𝟙[·]</em> is the indicator function. This gives a pure incentive to discover new states.
+            </li>
+        </ul>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">h(s)</span><span class="var-desc">hash function mapping a state to an integer bin (oracle).</span></li>
+            <li class="var-def-item"><span class="var-symbol">n(i)</span><span class="var-desc">global counter of visits to all states with hash value <em>i</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sup>intr</sup>(s, a)</span><span class="var-desc">intrinsic reward added to the extrinsic reward to guide exploration.</span></li>
+            <li class="var-def-item"><span class="var-symbol">𝟙[·]</span><span class="var-desc">indicator function (1 if condition is true, else 0).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.240 Random Network Distillation (RND) -->
+<div class="section-block" id="a13-240">
+    <div class="section-heading"><span class="section-num-large">A13.240</span><h2 class="section-title-large">Random Network Distillation (RND)</h2></div>
+    <div class="section-body">
+        <p><strong>Random Network Distillation (RND)</strong> is an exploration method that generates an intrinsic reward based on the novelty of a state. It uses two neural networks: a <strong>target network</strong> <em>f<sub>θ̄</sub> : S → ℝ<sup>k</sup></em> with fixed, randomly initialized parameters, and a <strong>predictor network</strong> <em>f̂<sub>θ</sub> : S → ℝ<sup>k</sup></em> trained to predict the output of the target network on the states visited by the agent. The intrinsic reward for visiting state <em>s<sub>t</sub></em> is the prediction error:</p>
+        <div class="equation-block multiline">
+            r<sub>t</sub><sup>intr</sup> = ‖ f̂<sub>θ</sub>(s<sub>t</sub>) − f<sub>θ̄</sub>(s<sub>t</sub>) ‖<sup>2</sup>.
+        </div>
+        <p>The target network acts as a fixed random distillation column; states that are similar to those frequently seen will have a low error (the predictor has learned them), while novel states yield a large error and thus higher intrinsic reward. The total reward is <em>r<sub>t</sub><sup>total</sup> = r<sub>t</sub><sup>ext</sup> + β r<sub>t</sub><sup>intr</sup></em>, where <em>β</em> controls the exploration–exploitation balance.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">f<sub>θ̄</sub></span><span class="var-desc">fixed randomly‑initialized target network (never trained).</span></li>
+            <li class="var-def-item"><span class="var-symbol">f̂<sub>θ</sub></span><span class="var-desc">predictor network trained to mimic f<sub>θ̄</sub> on observed states.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub><sup>intr</sup></span><span class="var-desc">intrinsic reward; high when the predictor fails to match the target (novel state).</span></li>
+            <li class="var-def-item"><span class="var-symbol">β</span><span class="var-desc">weighting coefficient for the intrinsic reward.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.241 Curiosity -->
+<div class="section-block" id="a13-241">
+    <div class="section-heading"><span class="section-num-large">A13.241</span><h2 class="section-title-large">Curiosity</h2></div>
+    <div class="section-body">
+        <p><strong>Curiosity</strong> is a form of intrinsic motivation where the agent generates an internal reward signal proportional to the error in predicting the consequences of its actions. A common formulation uses a learned forward dynamics model <em>f̂(s<sub>t</sub>, a<sub>t</sub>)</em> that predicts a feature representation of the next state <em>ϕ(s<sub>t+1</sub>)</em>. The intrinsic curiosity reward at time <em>t</em> is then the prediction error:</p>
+        <div class="equation-block multiline">
+            r<sub>t</sub><sup>intr</sup> = ‖ f̂( s<sub>t</sub>, a<sub>t</sub> ) − ϕ( s<sub>t+1</sub> ) ‖<sup>2</sup>.
+        </div>
+        <p>The feature mapping <em>ϕ</em> is often learned via an inverse dynamics model or self‑supervised learning to filter out uncontrollable aspects of the environment. Curiosity encourages the agent to seek states where its predictive model is still inaccurate, i.e., unfamiliar regions of the environment.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">f̂(s, a)</span><span class="var-desc">learned forward dynamics predictor (predicts next‑state features).</span></li>
+            <li class="var-def-item"><span class="var-symbol">ϕ(s)</span><span class="var-desc">feature representation of a state (e.g., output of a neural network encoder).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub><sup>intr</sup></span><span class="var-desc">intrinsic curiosity reward; high prediction error implies novelty.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.242 Inverse Dynamics Model -->
+<div class="section-block" id="a13-242">
+    <div class="section-heading"><span class="section-num-large">A13.242</span><h2 class="section-title-large">Inverse Dynamics Model</h2></div>
+    <div class="section-body">
+        <p>An <strong>inverse dynamics model</strong> is a learned function that, given two consecutive states <em>s</em> and <em>s′</em>, predicts the action <em>a</em> that was taken to transition from <em>s</em> to <em>s′</em>. It is commonly used in curiosity‑driven exploration (A13.241) to extract a feature representation <em>ϕ(s)</em> that focuses on controllable elements of the environment.</p>
+        <div class="equation-block">
+            â = g<sub>ψ</sub>( s, s′ ),
+        </div>
+        <p>where <em>g<sub>ψ</sub></em> is a parametric model (typically a neural network) trained by minimizing the cross‑entropy (for discrete actions) or mean squared error (for continuous actions) between the true action and the predicted action. By jointly training the feature encoder <em>ϕ</em> and the inverse model, the representation tends to ignore aspects of the state that the agent cannot influence, making the forward dynamics prediction more robust and the curiosity reward more meaningful.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">g<sub>ψ</sub></span><span class="var-desc">inverse dynamics network with parameters ψ; outputs a predicted action â given states s and s′.</span></li>
+            <li class="var-def-item"><span class="var-symbol">s, s′</span><span class="var-desc">consecutive states (before and after the action).</span></li>
+            <li class="var-def-item"><span class="var-symbol">a</span><span class="var-desc">true action that caused the transition from s to s′.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ϕ(s)</span><span class="var-desc">feature representation of state s, often shared with forward dynamics and trained via the inverse model.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.243 Intrinsic Curiosity Module (ICM) -->
+<div class="section-block" id="a13-243">
+    <div class="section-heading"><span class="section-num-large">A13.243</span><h2 class="section-title-large">Intrinsic Curiosity Module (ICM)</h2></div>
+    <div class="section-body">
+        <p>The <strong>Intrinsic Curiosity Module (ICM)</strong> generates an intrinsic reward signal to encourage exploration. It combines an inverse dynamics model (A13.242) that predicts the action <em>a<sub>t</sub></em> from the state transition <em>(s<sub>t</sub>, s<sub>t+1</sub>)</em>, and a forward dynamics model that predicts a feature representation of the next state <em>ϕ̂(s<sub>t+1</sub>)</em> from the current state features <em>ϕ(s<sub>t</sub>)</em> and the action. The feature representation <em>ϕ</em> is trained via the inverse model to focus on controllable aspects of the environment. The intrinsic reward is the squared error between the predicted and the actual next‑state features:</p>
+        <div class="equation-block multiline">
+            r<sub>t</sub><sup>intr</sup> = ‖ ϕ̂(s<sub>t+1</sub>) − ϕ(s<sub>t+1</sub>) ‖<sup>2</sup>.
+        </div>
+        <p>States that surprise the forward model yield a high reward, pushing the agent to explore unfamiliar regions where its predictive model is inaccurate.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">ϕ(s)</span><span class="var-desc">feature representation of state <em>s</em>, learned by training the inverse dynamics model.</span></li>
+            <li class="var-def-item"><span class="var-symbol">g<sub>ψ</sub>(s, s′)</span><span class="var-desc">inverse dynamics model predicting the action <em>a</em> given consecutive states (A13.242).</span></li>
+            <li class="var-def-item"><span class="var-symbol">f̂<sub>θ</sub>(ϕ(s), a)</span><span class="var-desc">forward dynamics predictor: estimates <em>ϕ(s′)</em> from the current state features and action.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub><sup>intr</sup></span><span class="var-desc">intrinsic curiosity reward; high prediction error indicates a novel or poorly‑understood state.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.244 Controllable Noisy TV -->
+<div class="section-block" id="a13-244">
+    <div class="section-heading"><span class="section-num-large">A13.244</span><h2 class="section-title-large">Controllable Noisy TV</h2></div>
+    <div class="section-body">
+        <p>The <strong>controllable noisy TV</strong> is a thought experiment that illustrates a failure mode of curiosity‑driven exploration based on prediction error. In this scenario, the agent can control a television that displays random noise. Although the noise is completely unpredictable and cannot be influenced by the agent’s actions in any meaningful way, a naive curiosity module (e.g., ICM, A13.243) assigns a persistently high intrinsic reward because the prediction error remains large. As a result, the agent can become stuck observing the TV indefinitely, collecting intrinsic reward without making progress on the actual task. This demonstrates the need for exploration signals that distinguish between stochastic but uncontrollable dynamics and genuinely novel, learnable aspects of the environment.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">noisy TV</span><span class="var-desc">an environment element that emits unpredictable observations regardless of the agent’s actions.</span></li>
+            <li class="var-def-item"><span class="var-symbol">prediction error</span><span class="var-desc">the intrinsic reward produced by a forward model; high for random noise.</span></li>
+            <li class="var-def-item"><span class="var-symbol">procrastination</span><span class="var-desc">the agent’s tendency to exploit the noisy TV for intrinsic reward instead of exploring the real task (see A13.237).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.245 Multi‑tasking -->
+<div class="section-block" id="a13-245">
+    <div class="section-heading"><span class="section-num-large">A13.245</span><h2 class="section-title-large">Multi‑tasking</h2></div>
+    <div class="section-body">
+        <p><strong>Multi‑tasking</strong> in reinforcement learning refers to training a single agent to perform well on multiple related tasks simultaneously. The tasks typically share the same state and action spaces but may differ in their transition dynamics or reward functions. The policy is often conditioned on a task identifier <em>i</em>, i.e. <em>π<sub>θ</sub>(a ∣ s, i)</em>, and the objective is to maximise the average expected return across all tasks. This approach leverages common structure to improve sample efficiency and can lead to generalisation to unseen tasks.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">i</span><span class="var-desc">task identifier (e.g., an integer index, a goal descriptor, or a one‑hot vector).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub>(a ∣ s, i)</span><span class="var-desc">task‑conditioned policy with shared parameters θ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">R<sub>i</sub>(s, a)</span><span class="var-desc">reward function specific to task <em>i</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.246 Universal Value Function and Universal Policy -->
+<div class="section-block" id="a13-246">
+    <div class="section-heading"><span class="section-num-large">A13.246</span><h2 class="section-title-large">Universal Value Function and Universal Policy</h2></div>
+    <div class="section-body">
+        <p>A <strong>universal value function</strong> is a model that approximates the value function for a set of subtasks (goals) simultaneously, typically conditioned on a goal descriptor <em>g</em>. It generalises the standard value function by taking the goal as an additional input:</p>
+        <div class="equation-block">
+            V(s, g) ≈ V<sub>g</sub><sup>π</sup>(s).
+        </div>
+        <p>Analogously, a <strong>universal policy</strong> is a policy conditioned on both the state and a goal descriptor, allowing the same policy to act optimally for many different goals:</p>
+        <div class="equation-block">
+            π(a ∣ s, g).
+        </div>
+        <p>These concepts are central to multi‑task and goal‑conditioned reinforcement learning, enabling transfer and generalisation across tasks.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">g</span><span class="var-desc">goal descriptor (e.g., a target state, a task identifier, or a feature vector) specifying the subtask.</span></li>
+            <li class="var-def-item"><span class="var-symbol">V(s, g)</span><span class="var-desc">universal value function: the expected return from state <em>s</em> when pursuing goal <em>g</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π(a ∣ s, g)</span><span class="var-desc">universal policy: probability of selecting action <em>a</em> in state <em>s</em> for goal <em>g</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.247 Meta‑controllers -->
+<div class="section-block" id="a13-247">
+    <div class="section-heading"><span class="section-num-large">A13.247</span><h2 class="section-title-large">Meta‑controllers</h2></div>
+    <div class="section-body">
+        <p>A <strong>meta‑controller</strong> (or high‑level controller) is a higher‑level policy in a hierarchical reinforcement learning framework. It operates at a slower time scale than a low‑level controller and selects abstract subgoals <em>g ∈ G</em>, which are then communicated to a lower‑level policy that executes primitive actions to achieve the subgoal. The meta‑controller is rewarded based on the environment's original reward, with subgoals often terminating after a fixed number of steps or when a subgoal is reached.</p>
+        <p>Formally, the meta‑controller is a policy <em>π<sub>high</sub>(g ∣ s)</em> that maps the current state to a probability distribution over subgoals. It works in tandem with a universal lower‑level policy <em>π<sub>low</sub>(a ∣ s, g)</em> (A13.246). This two‑level structure is characteristic of algorithms such as <strong>h-DQN</strong> and <strong>Feudal Networks</strong>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>high</sub>(g ∣ s)</span><span class="var-desc">meta‑controller policy: selects a subgoal <em>g</em> given current state <em>s</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">g ∈ G</span><span class="var-desc">subgoal in a (typically discrete) set of achievable subgoals.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>low</sub>(a ∣ s, g)</span><span class="var-desc">low‑level policy (controller) that acts to reach subgoal <em>g</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">hierarchical RL</span><span class="var-desc">paradigm where multiple policies operate at different temporal scales.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.248 Trajectory Relabeling -->
+<div class="section-block" id="a13-248">
+    <div class="section-heading"><span class="section-num-large">A13.248</span><h2 class="section-title-large">Trajectory Relabeling</h2></div>
+    <div class="section-body">
+        <p><strong>Trajectory relabeling</strong> is a technique in goal‑conditioned reinforcement learning where a trajectory generated while pursuing an original goal <em>g</em> is later reinterpreted as if it had been generated for a different goal <em>g′</em> that was actually achieved during the episode. By replacing the original goal with the achieved one and recomputing the rewards accordingly, failed trajectories can be turned into successful ones, dramatically improving sample efficiency in sparse‑reward settings.</p>
+        <p>Formally, given a trajectory <em>τ = (s<sub>0</sub>, a<sub>0</sub>, r<sub>0</sub>, …, s<sub>T</sub>)</em> originally intended for goal <em>g</em>, one selects a new goal <em>g′</em> (often one of the states actually visited, e.g., <em>s<sub>T</sub></em>) and replaces each reward <em>r<sub>t</sub></em> with a recomputed reward based on <em>g′</em>:</p>
+        <div class="equation-block multiline">
+            r<sub>t</sub><sup>′</sup> = r<sub>g′</sub>(s<sub>t</sub>, a<sub>t</sub>),
+        </div>
+        <p>where <em>r<sub>g′</sub></em> is the reward function for goal <em>g′</em> (e.g., a sparse +1 for reaching <em>g′</em>). The relabeled transition <em>(s<sub>t</sub>, a<sub>t</sub>, r<sub>t</sub><sup>′</sup>, s<sub>t+1</sub>, g′)</em> is then stored in the replay buffer and used for training. This is the core idea behind algorithms such as <strong>Hindsight Experience Replay (HER)</strong>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">τ</span><span class="var-desc">original trajectory collected under goal <em>g</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">g</span><span class="var-desc">original (intended) goal descriptor.</span></li>
+            <li class="var-def-item"><span class="var-symbol">g′</span><span class="var-desc">new goal descriptor, typically an actually achieved state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>g′</sub></span><span class="var-desc">reward function parameterised by goal <em>g′</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub><sup>′</sup></span><span class="var-desc">relabeled reward at time <em>t</em> using the new goal <em>g′</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.249 Hindsight Experience Replay (HER) -->
+<div class="section-block" id="a13-249">
+    <div class="section-heading"><span class="section-num-large">A13.249</span><h2 class="section-title-large">Hindsight Experience Replay (HER)</h2></div>
+    <div class="section-body">
+        <p><strong>Hindsight Experience Replay (HER)</strong> is a sample‑efficient algorithm for off‑policy goal‑conditioned reinforcement learning in sparse‑reward environments. It tackles the challenge of rarely achieving goals by storing transitions in a replay buffer not only with the original intended goal, but also with a set of additional goals that were actually achieved during the episode. This effectively turns failed episodes into successful ones, accelerating learning.</p>
+
+        <p><strong>Algorithm (typical usage with DDPG or DQN):</strong></p>
+        <ul>
+            <li><strong>Hyperparameters:</strong> <em>k</em> – number of additional goals to sample per episode, replay buffer <em>D</em>, standard off‑policy RL parameters.</li>
+            <li><strong>Input:</strong> a goal‑conditioned policy <em>π<sub>θ</sub>(a ∣ s, g)</em> and an off‑policy RL algorithm (e.g., DDPG).</li>
+        </ul>
+        <p><strong>For each episode:</strong></p>
+        <ol>
+            <li>Sample a goal <em>g</em> from the task distribution.</li>
+            <li>Run the policy <em>π<sub>θ</sub>(· ∣ s, g)</em> in the environment, obtaining a trajectory <em>τ = (s<sub>0</sub>, a<sub>0</sub>, r<sub>0</sub>, …, s<sub>T</sub>)</em>.</li>
+            <li>Store every transition <em>(s<sub>t</sub>, a<sub>t</sub>, r<sub>t</sub>, s<sub>t+1</sub>, g)</em> in the replay buffer <em>D</em> (original goal).</li>
+            <li>Select a set of additional goals <em>G′</em> that were actually achieved in the trajectory (e.g., the state at the final time step, or a random subset of visited states).</li>
+            <li>For each additional goal <em>g′ ∈ G′</em>:
+                <ul>
+                    <li>Recompute the rewards for every time step: <em>r<sub>t</sub><sup>′</sup> = r<sub>g′</sub>(s<sub>t</sub>, a<sub>t</sub>)</em>, where <em>r<sub>g′</sub></em> is the reward function for goal <em>g′</em>.</li>
+                    <li>Store the relabeled transition <em>(s<sub>t</sub>, a<sub>t</sub>, r<sub>t</sub><sup>′</sup>, s<sub>t+1</sub>, g′)</em> in <em>D</em>.</li>
+                </ul>
+            </li>
+            <li>Update the policy and value function using mini‑batches sampled uniformly from <em>D</em> (including both original and relabeled transitions).</li>
+        </ol>
+        <p>HER makes learning from sparse binary rewards feasible by guaranteeing that every episode contains some transitions with a positive reward (since the final state is always a "successful" goal). It is particularly effective in robotic manipulation and goal‑reaching tasks.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">g</span><span class="var-desc">original goal descriptor (e.g., desired position).</span></li>
+            <li class="var-def-item"><span class="var-symbol">g′</span><span class="var-desc">relabeled goal, usually a state actually reached during the episode.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub><sup>′</sup></span><span class="var-desc">relabeled reward based on the new goal <em>g′</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub>(a ∣ s, g)</span><span class="var-desc">goal‑conditioned policy.</span></li>
+            <li class="var-def-item"><span class="var-symbol">D</span><span class="var-desc">replay buffer containing both original and relabeled transitions.</span></li>
+            <li class="var-def-item"><span class="var-symbol">k</span><span class="var-desc">number of relabeled goals per episode.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.250 Hindsight Relabeling -->
+<div class="section-block" id="a13-250">
+    <div class="section-heading"><span class="section-num-large">A13.250</span><h2 class="section-title-large">Hindsight Relabeling</h2></div>
+    <div class="section-body">
+        <p><strong>Hindsight relabeling</strong> is a data augmentation technique for goal‑conditioned reinforcement learning. For any trajectory collected while pursuing an original goal <em>g</em>, it retrospectively assigns a new goal <em>g′</em> that was actually achieved (e.g., the state at the end of the episode) and recomputes the rewards under this new goal. This turns unsuccessful episodes into successful ones for some goal, thereby creating a more balanced training set with positive rewards even in sparse reward settings. The technique is the core innovation of Hindsight Experience Replay (HER) and has been applied to off‑policy RL algorithms such as DQN and DDPG.</p>
+        
+        <p><strong>Algorithm (relabeling procedure for one episode):</strong></p>
+        <p><strong>Input:</strong> a trajectory <em>τ = (s<sub>0</sub>, a<sub>0</sub>, r<sub>0</sub>, …, s<sub>T</sub>)</em> originally collected for goal <em>g</em>, a set of alternative goals <em>G′</em> (e.g., <em>{s<sub>T</sub>}</em> or random visited states).</p>
+        <ol>
+            <li>Store the original transitions <em>(s<sub>t</sub>, a<sub>t</sub>, r<sub>t</sub>, s<sub>t+1</sub>, g)</em> in the replay buffer.</li>
+            <li>For each alternative goal <em>g′ ∈ G′</em>:
+                <ul>
+                    <li>For each time step <em>t = 0, …, T−1</em>:
+                        <div class="equation-block">
+                            r<sub>t</sub><sup>′</sup> = r<sub>g′</sub>(s<sub>t</sub>, a<sub>t</sub>),
+                        </div>
+                        where <em>r<sub>g′</sub></em> is the binary or reward function for goal <em>g′</em> (e.g., <em>r<sub>g′</sub>(s,a) = 1</em> if <em>s′</em> reaches <em>g′</em>, else 0).
+                    </li>
+                    <li>Store the relabeled transition <em>(s<sub>t</sub>, a<sub>t</sub>, r<sub>t</sub><sup>′</sup>, s<sub>t+1</sub>, g′)</em> in the replay buffer.</li>
+                </ul>
+            </li>
+        </ol>
+        <p>The buffer is then used to train the goal‑conditioned policy and value function as usual.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">g</span><span class="var-desc">original intended goal.</span></li>
+            <li class="var-def-item"><span class="var-symbol">g′</span><span class="var-desc">hindsight goal; an actually achieved state (or other alternative).</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>g′</sub></span><span class="var-desc">reward function parameterised by goal <em>g′</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">r<sub>t</sub><sup>′</sup></span><span class="var-desc">relabeled reward at time <em>t</em> for the new goal.</span></li>
+            <li class="var-def-item"><span class="var-symbol">τ</span><span class="var-desc">collected trajectory.</span></li>
+            <li class="var-def-item"><span class="var-symbol">G′</span><span class="var-desc">set of hindsight goals chosen from the trajectory (e.g., future states, final state).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.251 Feudal RL -->
+<div class="section-block" id="a13-251">
+    <div class="section-heading"><span class="section-num-large">A13.251</span><h2 class="section-title-large">Feudal RL</h2></div>
+    <div class="section-body">
+        <p><strong>Feudal Reinforcement Learning</strong> is a hierarchical reinforcement learning architecture that decomposes the decision‑making process into a high‑level <strong>Manager</strong> and a low‑level <strong>Worker</strong>. The Manager operates at a slow temporal abstraction and sets latent goals <em>g<sub>t</sub></em> for the Worker. The Worker is trained to achieve these goals via an intrinsic reward that measures the alignment of its actions with the direction indicated by the Manager. Both levels learn simultaneously, but with separate update rules, enabling efficient long‑term credit assignment and transfer of sub‑skills.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Manager</span><span class="var-desc">high‑level policy that outputs a latent goal <em>g<sub>t</sub></em> at a slower timescale.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Worker</span><span class="var-desc">low‑level policy that receives the current state and the Manager's goal, and selects primitive actions.</span></li>
+            <li class="var-def-item"><span class="var-symbol">g<sub>t</sub></span><span class="var-desc">latent goal (e.g., a direction in a learned feature space) communicated from Manager to Worker.</span></li>
+            <li class="var-def-item"><span class="var-symbol">intrinsic reward</span><span class="var-desc">reward for the Worker, typically based on the cosine similarity between a state transition feature and the Manager's goal.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.252 Feudal Networks (FuN) -->
+<div class="section-block" id="a13-252">
+    <div class="section-heading"><span class="section-num-large">A13.252</span><h2 class="section-title-large">Feudal Networks (FuN)</h2></div>
+    <div class="section-body">
+        <p><strong>Feudal Networks (FuN)</strong> is a specific implementation of the Feudal RL architecture that uses neural networks to learn a hierarchical policy. The <strong>Manager</strong> (high‑level) operates at a coarser temporal scale and outputs a latent goal <em>g<sub>t</sub> ∈ ℝ<sup>d</sup></em> that encodes a desired direction in a learned feature space. The <strong>Worker</strong> (low‑level) produces primitive actions and is intrinsically rewarded for moving the environment's state representation in the direction specified by the Manager.</p>
+        
+        <p>The Manager's goal is updated every <em>c</em> steps via a recurrent network; the Worker receives the goal and the state, and uses a transition policy gradient to maximize the cosine similarity between the state transition (in feature space) and the goal. The overall architecture is trained end‑to‑end with separate loss functions for the Manager (using the environment's extrinsic reward) and the Worker (using the intrinsic directional reward).</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">g<sub>t</sub></span><span class="var-desc">latent goal vector output by the Manager at time <em>t</em> (direction in a learned latent space).</span></li>
+            <li class="var-def-item"><span class="var-symbol">s<sub>t</sub></span><span class="var-desc">environment state (or its encoded feature) at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ϕ(s)</span><span class="var-desc">learned feature embedding of state <em>s</em> (shared between Manager and Worker).</span></li>
+            <li class="var-def-item"><span class="var-symbol">c</span><span class="var-desc">temporal abstraction period: the Manager updates its goal every <em>c</em> steps.</span></li>
+            <li class="var-def-item"><span class="var-symbol">intrinsic reward</span><span class="var-desc">for the Worker: typically the cosine similarity between (ϕ(s<sub>t+c</sub>) − ϕ(s<sub>t</sub>)) and g<sub>t</sub>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.253 HIRO (Hierarchical RL with Off‑Policy Correction) -->
+<div class="section-block" id="a13-253">
+    <div class="section-heading"><span class="section-num-large">A13.253</span><h2 class="section-title-large">HIRO (Hierarchical RL with Off‑Policy Correction)</h2></div>
+    <div class="section-body">
+        <p><strong>HIRO</strong> is a hierarchical off‑policy reinforcement learning algorithm that uses a two‑level policy: a high‑level controller (meta‑controller) that selects goals <em>g<sub>t</sub></em> every <em>c</em> steps, and a low‑level controller that acts at every step to reach the current goal. To combat the non‑stationarity caused by the changing low‑level policy when training the high‑level policy off‑policy, HIRO introduces an <strong>off‑policy correction</strong> mechanism. When a past transition is sampled from the replay buffer, the original high‑level action (goal) is replaced by the goal that would most likely have induced the same low‑level behaviour, i.e., the goal that maximises the log‑probability of the actually observed sequence of low‑level actions.</p>
+        
+        <p>Formally, for a stored trajectory segment of length <em>c</em> with states <em>s<sub>t:t+c</sub></em> and actions <em>a<sub>t:t+c</sub></em>, the relabeled goal is</p>
+        <div class="equation-block multiline">
+            g̃ = arg max<sub>g</sub> ∑<sub>i=0</sub><sup>c−1</sup> log π<sub>low</sub>( a<sub>t+i</sub> ∣ s<sub>t+i</sub>, g ),
+        </div>
+        <p>where <em>π<sub>low</sub></em> is the current low‑level policy. The high‑level transition is then stored as <em>(s<sub>t</sub>, g̃, Σ<sub>i</sub> r<sub>t+i</sub>, s<sub>t+c</sub>)</em> and used to train the high‑level policy with standard off‑policy methods (e.g., DDPG). The low‑level policy is trained on the original data, using a goal‑conditioned reward (e.g., the negative Euclidean distance to the goal).</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">c</span><span class="var-desc">temporal abstraction interval: the high‑level policy updates the goal every <em>c</em> steps.</span></li>
+            <li class="var-def-item"><span class="var-symbol">g<sub>t</sub></span><span class="var-desc">goal (subgoal) output by the high‑level policy at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">g̃</span><span class="var-desc">relabeled goal obtained by maximising the low‑level policy's log‑probability of the observed action sequence.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>low</sub>(a ∣ s, g)</span><span class="var-desc">low‑level goal‑conditioned policy.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>high</sub>(g ∣ s)</span><span class="var-desc">high‑level policy (meta‑controller).</span></li>
+            <li class="var-def-item"><span class="var-symbol">off‑policy correction</span><span class="var-desc">relabeling the high‑level goal in past experience to mitigate non‑stationarity when training off‑policy.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.254 Partially Observable MDP (POMDP) -->
+<div class="section-block" id="a13-254">
+    <div class="section-heading"><span class="section-num-large">A13.254</span><h2 class="section-title-large">Partially Observable MDP (POMDP)</h2></div>
+    <div class="section-body">
+        <p>A <strong>Partially Observable Markov Decision Process (POMDP)</strong> generalizes the MDP to settings where the agent cannot directly observe the full environment state. It is defined by the tuple</p>
+        <div class="equation-block multiline">
+            (S, A, O, P, R, Z, γ),
+        </div>
+        <p>where</p>
+        <ul>
+            <li><em>S</em>, <em>A</em>, <em>P</em>, <em>R</em>, <em>γ</em> are the state space, action space, transition function, reward function, and discount factor as in a standard MDP.</li>
+            <li><em>O</em> is a finite set of observations.</li>
+            <li><em>Z : S × A → Δ(O)</em> is the <strong>observation function</strong>. After the environment transitions to state <em>s′ ∼ p(·∣s,a)</em>, the agent receives an observation <em>o ∈ O</em> with probability <em>Z(o ∣ s′, a)</em> (some definitions also condition on the previous state <em>s</em>).</li>
+        </ul>
+        
+        <p>Because the agent never sees the true state, it must maintain a <strong>belief state</strong> <em>b ∈ Δ(S)</em>, a probability distribution over possible states. The belief is updated recursively using Bayes' rule after each action and observation. The resulting <strong>belief MDP</strong> is a fully observable MDP over the continuous belief space, preserving the Markov property and allowing the application of standard planning algorithms (at increased computational cost).</p>
+        
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">S</span><span class="var-desc">state space (hidden from the agent).</span></li>
+            <li class="var-def-item"><span class="var-symbol">A</span><span class="var-desc">action space.</span></li>
+            <li class="var-def-item"><span class="var-symbol">O</span><span class="var-desc">observation space.</span></li>
+            <li class="var-def-item"><span class="var-symbol">P(s′ ∣ s, a)</span><span class="var-desc">transition probability.</span></li>
+            <li class="var-def-item"><span class="var-symbol">R(s, a)</span><span class="var-desc">expected immediate reward (may also depend on s′).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Z(o ∣ s′, a)</span><span class="var-desc">probability of observing <em>o</em> after reaching state <em>s′</em> via action <em>a</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor.</span></li>
+            <li class="var-def-item"><span class="var-symbol">b(s)</span><span class="var-desc">belief state: the agent's posterior probability that the environment is in state <em>s</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.255 Belief MDP -->
+<div class="section-block" id="a13-255">
+    <div class="section-heading"><span class="section-num-large">A13.255</span><h2 class="section-title-large">Belief MDP</h2></div>
+    <div class="section-body">
+        <p>A <strong>Belief MDP</strong> is a fully observable Markov decision process defined over the <strong>belief state</strong> space of a POMDP (A13.254). It captures the exact same decision problem but with the agent maintaining a probability distribution over the hidden states. The belief state <em>b ∈ Δ(S)</em> is a sufficient statistic for the history of actions and observations.</p>
+        
+        <p>The belief is updated recursively via Bayes' rule after taking action <em>a</em> and receiving observation <em>o</em>:</p>
+        <div class="equation-block multiline">
+            b′(s′) = η · Z(o ∣ s′, a) · ∑<sub>s ∈ S</sub> p(s′ ∣ s, a) · b(s),
+        </div>
+        <p>where <em>η</em> is a normalisation constant ensuring <em>b′</em> sums to 1.</p>
+        
+        <p>Formally, the belief MDP is the tuple <em>(B, A, τ, ρ, γ)</em> where</p>
+        <ul>
+            <li><em>B = Δ(S)</em> is the continuous space of probability distributions over the original states.</li>
+            <li><em>τ(b′ ∣ b, a, o)</em> is the deterministic belief transition function derived from the belief update (or stochastic if the observation <em>o</em> is marginalised).</li>
+            <li><em>ρ(b, a) = 𝔼<sub>s∼b</sub>[ R(s, a) ]</em> is the expected immediate reward.</li>
+            <li><em>γ</em> is the discount factor (unchanged from the POMDP).</li>
+        </ul>
+        <p>Because the belief MDP is fully observable, conventional MDP algorithms (e.g., value iteration) can be applied, but the continuous state space makes exact solutions computationally expensive in all but the smallest POMDPs.</p>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">b(s)</span><span class="var-desc">belief state: probability that the true state is <em>s</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">b′(s′)</span><span class="var-desc">updated belief after executing action <em>a</em> and observing <em>o</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Z(o ∣ s′, a)</span><span class="var-desc">observation probability (from POMDP definition).</span></li>
+            <li class="var-def-item"><span class="var-symbol">p(s′ ∣ s, a)</span><span class="var-desc">transition probability of the original MDP.</span></li>
+            <li class="var-def-item"><span class="var-symbol">η</span><span class="var-desc">normalisation factor (1 / P(o ∣ b, a)).</span></li>
+            <li class="var-def-item"><span class="var-symbol">B</span><span class="var-desc">belief space: the (continuous) set of all probability distributions over <em>S</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">τ</span><span class="var-desc">belief transition dynamics (deterministic given action and observation).</span></li>
+            <li class="var-def-item"><span class="var-symbol">ρ(b, a)</span><span class="var-desc">expected reward for taking action <em>a</em> in belief <em>b</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.256 Recurrent Networks in Policy Gradient -->
+<div class="section-block" id="a13-256">
+    <div class="section-heading"><span class="section-num-large">A13.256</span><h2 class="section-title-large">Recurrent Networks in Policy Gradient</h2></div>
+    <div class="section-body">
+        <p>In partially observable environments, a <strong>recurrent neural network (RNN)</strong> is used to approximate a history‑dependent policy <em>π<sub>θ</sub>(a<sub>t</sub> ∣ o<sub>≤t</sub>, a<sub>&lt;t</sub>)</em> by maintaining a latent state <em>h<sub>t</sub></em> that summarises the past. The policy and the hidden state are defined as</p>
+        <div class="equation-block multiline">
+            h<sub>t</sub> = f<sub>θ</sub>( o<sub>t</sub>, h<sub>t−1</sub> ),  a<sub>t</sub> ∼ π<sub>θ</sub>( · ∣ o<sub>t</sub>, h<sub>t−1</sub> ),
+        </div>
+        <p>where <em>f<sub>θ</sub></em> is the recurrent layer (e.g., LSTM or GRU) sharing parameters <em>θ</em> with the policy head. The policy gradient theorem generalises naturally; the gradient is estimated by backpropagation through time (BPTT) over truncated sequences, and the hidden state is treated as part of the internal state, not reset between consecutive updates unless explicitly required. This approach allows the agent to implicitly perform inference and memory, enabling end‑to‑end learning of reactive and memory‑based behaviours in POMDPs (A13.254).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">o<sub>t</sub></span><span class="var-desc">observation at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">h<sub>t</sub></span><span class="var-desc">hidden state of the recurrent network (memory).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub>(a ∣ o, h)</span><span class="var-desc">policy conditioned on the current observation and the previous hidden state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">f<sub>θ</sub></span><span class="var-desc">recurrent function updating the hidden state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">BPTT</span><span class="var-desc">backpropagation through time; algorithm to compute gradients over sequences.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.257 R2D2 (Recurrent Replay Distributed DQN) -->
+<div class="section-block" id="a13-257">
+    <div class="section-heading"><span class="section-num-large">A13.257</span><h2 class="section-title-large">R2D2 (Recurrent Replay Distributed DQN)</h2></div>
+    <div class="section-body">
+        <p><strong>R2D2 (Recurrent Replay Distributed DQN)</strong> is an off‑policy reinforcement learning agent designed for partially observable environments. It replaces the feed‑forward Q‑network of DQN with a recurrent neural network (typically an LSTM) that takes the current observation <em>o<sub>t</sub></em> and the previous recurrent state <em>h<sub>t−1</sub></em> to produce the current action‑value estimates <em>Q(o<sub>≤t</sub>, a<sub>t</sub>)</em> and the new hidden state <em>h<sub>t</sub></em>. Training is performed off‑policy using stored sequences from a large distributed replay buffer, with two crucial techniques:</p>
+        <ul>
+            <li><strong>Stored sequences:</strong> Transitions are stored as fixed‑length overlapping sequences <em>(o<sub>t</sub>, a<sub>t</sub>, r<sub>t</sub>, …)</em> of length <em>L</em>, along with the initial recurrent state.</li>
+            <li><strong>Burn‑in:</strong> A short prefix of the sequence (e.g., <em>B</em> steps) is used to warm up the hidden state from the stored initial recurrent state before the actual training window of length <em>T</em>. During burn‑in, no loss is applied; only the internal state is updated.</li>
+        </ul>
+        <p>The TD error is computed only on the training portion of the sequence, using the standard n‑step Q‑learning target with the target network. The recurrent network allows the agent to learn to integrate observations over time, compensating for partial observability without requiring a predefined belief space. R2D2 demonstrated state‑of‑the‑art results on the Atari-57 benchmark and challenging memory tasks.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">o<sub>t</sub></span><span class="var-desc">observation (partial state) at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">h<sub>t</sub></span><span class="var-desc">recurrent hidden state at time <em>t</em> (LSTM output).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q(o<sub>≤t</sub>, a; h<sub>t−1</sub>)</span><span class="var-desc">action‑value estimate output by the recurrent network given observation history and previous hidden state.</span></li>
+            <li class="var-def-item"><span class="var-symbol">L</span><span class="var-desc">total length of stored sequence (e.g., 80).</span></li>
+            <li class="var-def-item"><span class="var-symbol">B</span><span class="var-desc">burn‑in length (number of initial steps used only to unroll the hidden state, without learning).</span></li>
+            <li class="var-def-item"><span class="var-symbol">T</span><span class="var-desc">training window length (e.g., 40) where loss is applied.</span></li>
+            <li class="var-def-item"><span class="var-symbol">θ<sup>−</sup></span><span class="var-desc">target network parameters (periodically updated).</span></li>
+            <li class="var-def-item"><span class="var-symbol">n‑step return</span><span class="var-desc">multi‑step Q‑learning target used for training.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.258 Neural Episodic Control (NEC) -->
+<div class="section-block" id="a13-258">
+    <div class="section-heading"><span class="section-num-large">A13.258</span><h2 class="section-title-large">Neural Episodic Control (NEC)</h2></div>
+    <div class="section-body">
+        <p><strong>Neural Episodic Control (NEC)</strong> is a model‑free reinforcement learning algorithm that augments a parametric deep Q‑network with a non‑parametric episodic memory. It stores past experiences in a <strong>Differentiable Neural Dictionary (DND)</strong>, a key–value memory where keys are learned state embeddings and values are corresponding returns. For a query state, the memory is retrieved via an attention mechanism using a kernel function (e.g., Gaussian), and the retrieved value is combined with the network's estimate to form the final Q‑value.</p>
+        
+        <p>The DND stores, for each action, a set of key–value pairs <em>{ (k<sub>i</sub>, v<sub>i</sub>) }</em>. When a new state <em>s</em> is encountered, its embedding <em>q = f<sub>θ</sub>(s)</em> is computed by a neural network. The episodic read‑out for action <em>a</em> is a weighted sum of stored values:</p>
+        <div class="equation-block multiline">
+            Q<sub>ep</sub>(s, a) = ∑<sub>i</sub> w<sub>i</sub> v<sub>i</sub>,  w<sub>i</sub> ∝ K( q, k<sub>i</sub> ),
+        </div>
+        <p>where <em>K</em> is a kernel function (e.g., the Laplace kernel <em>exp(−∥q − k<sub>i</sub>∥)</em>). The parametric component <em>Q<sub>θ</sub>(s, a)</em> is a standard neural network. The final Q‑value is a linear combination <em>Q(s, a) = Q<sub>θ</sub>(s, a) + Q<sub>ep</sub>(s, a)</em> (or sometimes the maximum). The network parameters <em>θ</em> are trained by minimising the Bellman error. The DND is populated during training by storing the embedding of experienced states as keys and the n‑step return as values, occasionally updating values with better estimates (e.g., Bellman target).</p>
+        
+        <p>NEC provides rapid learning by leveraging exact recall of high‑value states, and the differentiable memory allows gradient‑based training of the embedding function. It was notably demonstrated on Atari games, where it achieved high sample efficiency compared to standard DQN variants.</p>
+        
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">f<sub>θ</sub>(s)</span><span class="var-desc">state embedding network; maps a state <em>s</em> to a key vector <em>q</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">DND</span><span class="var-desc">Differentiable Neural Dictionary; episodic memory storing key‑value pairs per action.</span></li>
+            <li class="var-def-item"><span class="var-symbol">k<sub>i</sub></span><span class="var-desc">the <em>i</em>-th key in the DND (an embedding of a past state).</span></li>
+            <li class="var-def-item"><span class="var-symbol">v<sub>i</sub></span><span class="var-desc">value stored with key <em>k<sub>i</sub></em> (e.g., n‑step return or updated target).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sub>ep</sub>(s, a)</span><span class="var-desc">episodic read‑out for action <em>a</em>: weighted sum of values based on kernel similarity.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sub>θ</sub>(s, a)</span><span class="var-desc">parametric Q‑network with parameters <em>θ</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">K(q, k)</span><span class="var-desc">kernel function measuring similarity between query and key (e.g., Gaussian, Laplace).</span></li>
+            <li class="var-def-item"><span class="var-symbol">w<sub>i</sub></span><span class="var-desc">normalised weight assigned to memory item <em>i</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">n‑step return</span><span class="var-desc">cumulative discounted reward over <em>n</em> steps, stored as memory value.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.259 Multi‑Agent Reinforcement Learning -->
+<div class="section-block" id="a13-259">
+    <div class="section-heading"><span class="section-num-large">A13.259</span><h2 class="section-title-large">Multi‑Agent Reinforcement Learning</h2></div>
+    <div class="section-body">
+        <p><strong>Multi‑Agent Reinforcement Learning (MARL)</strong> extends RL to systems where multiple agents interact within a shared environment. Formally, a <strong>Markov (or Stochastic) Game</strong> generalises the MDP: a tuple <em>(N, S, A, P, R, γ)</em> where <em>N</em> is the number of agents, <em>S</em> is the state space, <em>A = A<sub>1</sub> × … × A<sub>N</sub></em> is the joint action space, <em>P(s′ ∣ s, a)</em> is the transition probability given joint action <em>a = (a<sub>1</sub>, …, a<sub>N</sub>)</em>, <em>R<sub>i</sub>(s, a)</em> is agent <em>i</em>'s reward function, and <em>γ</em> is the discount factor. Each agent <em>i</em> aims to maximise its own expected return <em>J<sub>i</sub>(π<sub>i</sub>, π<sub>−i</sub>)</em> under the influence of other agents' policies.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">number of agents.</span></li>
+            <li class="var-def-item"><span class="var-symbol">A<sub>i</sub></span><span class="var-desc">action space of agent <em>i</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a = (a<sub>1</sub>, …, a<sub>N</sub>)</span><span class="var-desc">joint action vector.</span></li>
+            <li class="var-def-item"><span class="var-symbol">R<sub>i</sub>(s, a)</span><span class="var-desc">reward function for agent <em>i</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>i</sub></span><span class="var-desc">policy of agent <em>i</em> (possibly dependent on other agents' behaviour).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.260 Connection with Game Theory -->
+<div class="section-block" id="a13-260">
+    <div class="section-heading"><span class="section-num-large">A13.260</span><h2 class="section-title-large">Connection with Game Theory</h2></div>
+    <div class="section-body">
+        <p>Multi‑agent RL is deeply intertwined with <strong>game theory</strong>, the mathematical study of strategic interactions among rational decision‑makers. The Markov game framework directly inherits concepts such as <strong>Nash equilibrium</strong>: a tuple of policies <em>(π<sub>1</sub><sup>*</sup>, …, π<sub>N</sub><sup>*</sup>)</em> where no agent can unilaterally improve its expected return. Formally, for all agents <em>i</em> and all alternative policies <em>π<sub>i</sub></em>,</p>
+        <div class="equation-block multiline">
+            J<sub>i</sub>( π<sub>i</sub><sup>*</sup>, π<sub>−i</sub><sup>*</sup> ) ≥ J<sub>i</sub>( π<sub>i</sub>, π<sub>−i</sub><sup>*</sup> ).
+        </div>
+        <p>Other game‑theoretic solution concepts include <strong>Pareto optimality</strong> (for cooperative teams), <strong>Stackelberg equilibrium</strong> (leader‑follower), and <strong>correlated equilibrium</strong>. Algorithms for MARL often aim to converge to a Nash equilibrium in self‑play, while others explicitly model opponents. The field is divided into <strong>cooperative</strong>, <strong>competitive</strong>, and <strong>mixed</strong> settings depending on whether agents share, oppose, or have individual rewards.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>i</sub><sup>*</sup></span><span class="var-desc">optimal (equilibrium) policy for agent <em>i</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>−i</sub></span><span class="var-desc">joint policy of all agents except <em>i</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Nash equilibrium</span><span class="var-desc">a strategy profile where no agent can benefit by unilaterally deviating.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Pareto optimality</span><span class="var-desc">a joint outcome where no agent can be made better off without making another worse off (relevant in cooperative MARL).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.261 Centralization of Training -->
+<div class="section-block" id="a13-261">
+    <div class="section-heading"><span class="section-num-large">A13.261</span><h2 class="section-title-large">Centralization of Training</h2></div>
+    <div class="section-body">
+        <p>In <strong>centralised training with decentralised execution (CTDE)</strong>, agents are trained with access to global information (e.g., full state, joint actions, and rewards of all agents), but at test time each agent acts using only its own local observations. This paradigm is a cornerstone of many cooperative multi‑agent reinforcement learning algorithms, as it allows learning coordinated policies while respecting partial observability during execution.</p>
+        <p>Formally, during training an agent's policy or value function may condition on the true state <em>s</em> and the joint observation‑action history, but the execution policy uses only the agent's own history:</p>
+        <div class="equation-block multiline">
+            π<sub>i</sub>(a<sub>i</sub> ∣ τ<sub>i</sub>),  τ<sub>i</sub> = (o<sub>i,0</sub>, a<sub>i,0</sub>, …, o<sub>i,t</sub>),
+        </div>
+        <p>while the critic (or training signal) may use <em>s</em> or all agents' histories to compute a more accurate gradient. Algorithms like <strong>QMIX</strong>, <strong>MADDPG</strong>, and <strong>COMA</strong> adopt this scheme.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">s</span><span class="var-desc">global state (unavailable to the agent during execution, but available during training).</span></li>
+            <li class="var-def-item"><span class="var-symbol">o<sub>i,t</sub></span><span class="var-desc">local observation of agent <em>i</em> at time <em>t</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">τ<sub>i</sub></span><span class="var-desc">action‑observation history of agent <em>i</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>i</sub>(a<sub>i</sub> ∣ τ<sub>i</sub>)</span><span class="var-desc">decentralised policy (used at both training and test time for action selection).</span></li>
+            <li class="var-def-item"><span class="var-symbol">Centralised critic</span><span class="var-desc">a value function that takes global state and joint actions as input, used only during training.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.262 Self‑play in Antagonistic Games -->
+<div class="section-block" id="a13-262">
+    <div class="section-heading"><span class="section-num-large">A13.262</span><h2 class="section-title-large">Self‑play in Antagonistic Games</h2></div>
+    <div class="section-body">
+        <p><strong>Self‑play</strong> is a training paradigm for multi‑agent competitive (antagonistic) games where a single agent is pitted against copies of itself (or previous versions). The agent learns by repeatedly playing games from both sides, generating experience that covers a wide range of strategies. The objective is to find a policy that is robust against a near‑optimal opponent, often converging to a Nash equilibrium in symmetric zero‑sum games.</p>
+        <p>Formally, at iteration <em>k</em>, the agent's policy <em>π<sub>k</sub></em> is trained to maximise its expected return against a mixture of past policies <em>{π<sub>1</sub>, …, π<sub>k−1</sub>}</em> (or directly against <em>π<sub>k</sub></em> itself). The training data are generated by pairing the current policy against itself or an older snapshot. This technique underpins landmark successes such as AlphaGo Zero and OpenAI Five.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">π<sub>k</sub></span><span class="var-desc">policy at iteration <em>k</em> (may be a separate network or a single network for both players).</span></li>
+            <li class="var-def-item"><span class="var-symbol">opponent</span><span class="var-desc">a copy of the agent, often a previous version or the same version, providing adaptive difficulty.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Nash equilibrium</span><span class="var-desc">theoretical solution concept targeted by self‑play in two‑player zero‑sum games.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A13.263 Multi‑Agent DDPG (MADDPG) in Mixed Games -->
+<div class="section-block" id="a13-263">
+    <div class="section-heading"><span class="section-num-large">A13.263</span><h2 class="section-title-large">Multi‑Agent DDPG (MADDPG) in Mixed Games</h2></div>
+    <div class="section-body">
+        <p><strong>Multi‑Agent Deep Deterministic Policy Gradient (MADDPG)</strong> extends DDPG to multi‑agent environments where each agent <em>i</em> has its own deterministic policy <em>μ<sub>θ<sub>i</sub></sub>(o<sub>i</sub>)</em>. The training follows the <strong>centralised training with decentralised execution</strong> paradigm: during training, each agent’s critic <em>Q<sub>θ<sub>i</sub></sub>(x, a<sub>1</sub>, …, a<sub>N</sub>)</em> has access to the global state (or joint observations) and the joint actions of all agents; during execution, the actor uses only its local observation <em>o<sub>i</sub></em>. This allows the agents to learn coordinated strategies while acting in a fully decentralised manner at test time. MADDPG is applicable to mixed games (cooperative–competitive, general‑sum Markov games).</p>
+
+        <p><strong>Algorithm (MADDPG for <em>N</em> agents):</strong></p>
+        <ul>
+            <li><strong>Hyperparameters:</strong> discount <em>γ</em>, soft update <em>τ</em>, mini‑batch size <em>B</em>, replay buffer <em>D</em> (shared or per‑agent).</li>
+            <li><strong>Initialization:</strong> for each agent <em>i</em>, actor <em>μ<sub>θ<sub>i</sub></sub></em>, critic <em>Q<sub>θ<sub>i</sub></sub></em>, target networks <em>μ<sub>θ<sub>i</sub><sup>−</sup></sub></em>, <em>Q<sub>θ<sub>i</sub><sup>−</sup></sub></em> with copied parameters. Replay buffer <em>D</em> empty.</li>
+        </ul>
+        <p><strong>For each step <em>t</em>:</strong></p>
+        <ol>
+            <li>Each agent <em>i</em> observes its local observation <em>o<sub>i</sub></em> and selects action <em>a<sub>i</sub> = μ<sub>θ<sub>i</sub></sub>(o<sub>i</sub>) + ε<sub>i</sub></em> (exploration noise).</li>
+            <li>Execute joint action <em>a = (a<sub>1</sub>, …, a<sub>N</sub>)</em>; observe next observations <em>o′<sub>i</sub></em>, rewards <em>r<sub>i</sub></em>, and global state <em>s′</em>. Store <em>(x, a, r, x′)</em> in <em>D</em>, where <em>x = (o<sub>1</sub>, …, o<sub>N</sub>)</em> (or global state <em>s</em>).</li>
+            <li>Sample mini‑batch of <em>B</em> transitions from <em>D</em>. For each transition:
+                <ul>
+                    <li>For each agent <em>i</em>, compute target action for next state: <em>a′<sub>j</sub> = μ<sub>θ<sub>j</sub><sup>−</sup></sub>(o′<sub>j</sub>)</em> for all <em>j</em>.</li>
+                    <li>Compute target Q‑value for agent <em>i</em>:
+                        <div class="equation-block">
+                            y<sub>i</sub> = r<sub>i</sub> + γ Q<sub>θ<sub>i</sub><sup>−</sup></sub>( x′, a′<sub>1</sub>, …, a′<sub>N</sub> ).
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>Update each critic <em>Q<sub>θ<sub>i</sub></sub></em> by minimising the loss:
+                <div class="equation-block">
+                    L(θ<sub>i</sub>) = (1/B) ∑ ( Q<sub>θ<sub>i</sub></sub>( x, a<sub>1</sub>, …, a<sub>N</sub> ) − y<sub>i</sub> )<sup>2</sup>.
+                </div>
+            </li>
+            <li>Update each actor <em>μ<sub>θ<sub>i</sub></sub></em> using the sampled policy gradient:
+                <div class="equation-block multiline">
+                    ∇<sub>θ<sub>i</sub></sub> J ≈ (1/B) ∑ ∇<sub>a<sub>i</sub></sub> Q<sub>θ<sub>i</sub></sub>( x, a<sub>1</sub>, …, a<sub>N</sub> ) |<sub>a<sub>i</sub> = μ<sub>θ<sub>i</sub></sub>(o<sub>i</sub>)</sub> ∇<sub>θ<sub>i</sub></sub> μ<sub>θ<sub>i</sub></sub>(o<sub>i</sub>).
+                </div>
+            </li>
+            <li>Soft‑update all target networks:
+                <div class="equation-block">
+                    θ<sub>i</sub><sup>−</sup> ← τ θ<sub>i</sub> + (1 − τ) θ<sub>i</sub><sup>−</sup>,  μ‑parameters similarly.
+                </div>
+            </li>
+        </ol>
+
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">N</span><span class="var-desc">number of agents.</span></li>
+            <li class="var-def-item"><span class="var-symbol">o<sub>i</sub></span><span class="var-desc">local observation of agent <em>i</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">μ<sub>θ<sub>i</sub></sub>(o<sub>i</sub>)</span><span class="var-desc">deterministic policy (actor) for agent <em>i</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Q<sub>θ<sub>i</sub></sub>(x, a)</span><span class="var-desc">centralised critic for agent <em>i</em>, taking joint observations/state <em>x</em> and joint action <em>a</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">x = (o<sub>1</sub>, …, o<sub>N</sub>) or s</span><span class="var-desc">global information available to critics during training.</span></li>
+            <li class="var-def-item"><span class="var-symbol">a = (a<sub>1</sub>, …, a<sub>N</sub>)</span><span class="var-desc">joint action vector.</span></li>
+            <li class="var-def-item"><span class="var-symbol">γ</span><span class="var-desc">discount factor.</span></li>
+            <li class="var-def-item"><span class="var-symbol">τ</span><span class="var-desc">soft update coefficient for target networks.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ε<sub>i</sub></span><span class="var-desc">exploration noise added to actor output (e.g., Ornstein–Uhlenbeck or Gaussian).</span></li>
+            <li class="var-def-item"><span class="var-symbol">D</span><span class="var-desc">replay buffer storing experience tuples <em>(x, a, r, x′)</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A13.264 Communication Systems (DIAL) -->
+<div class="section-block" id="a13-264">
+    <div class="section-heading"><span class="section-num-large">A13.264</span><h2 class="section-title-large">Communication Systems (DIAL)</h2></div>
+    <div class="section-body">
+        <p><strong>Differentiable Inter‑Agent Learning (DIAL)</strong> is a multi‑agent reinforcement learning algorithm that enables agents to learn a discrete communication protocol through the backpropagation of gradients. During training, agents send continuous-valued messages, which are discretised by noise or a straight‑through estimator to compute gradients, allowing end‑to‑end learning of what, when, and to whom to communicate. At test time, agents use discrete messages, achieving effective communication in cooperative partially observable environments.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">m<sub>t</sub><sup>i→j</sup></span><span class="var-desc">continuous message sent from agent <em>i</em> to agent <em>j</em> at time <em>t</em> during training (discretised later).</span></li>
+            <li class="var-def-item"><span class="var-symbol">π<sub>θ</sub>(a<sub>i</sub> ∣ o<sub>i</sub>, m<sub>in</sub>)</span><span class="var-desc">policy conditioned on local observation and incoming messages.</span></li>
+            <li class="var-def-item"><span class="var-symbol">straight‑through estimator</span><span class="var-desc">technique to backpropagate through the discretisation step.</span></li>
+        </ul>
+    </div>
+</div>
+
+
 
 
 
