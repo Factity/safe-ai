@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Evolutionary Adaptive Dynamics — Complete Mathematical Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet"/>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$','$'],['\\(','\\)']],
+    displayMath: [['$$','$$'],['\\[','\\]']],
+    tags: 'ams',
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+/* ── Design tokens ── */
+:root {
+  --bg:      #0D1117;
+  --bg2:     #111827;
+  --bg3:     #1F2937;
+  --border:  #2D3748;
+  --text:    #E2E8F0;
+  --muted:   #94A3B8;
+  --agg:     #FF6B6B;
+  --intel:   #C77DFF;
+  --coord:   #4ECDC4;
+  --selfp:   #95D44A;
+  --ess:     #FFD700;
+  --res:     #95D44A;
+  --pred:    #FF6B6B;
+  --prey:    #7EC8E3;
+  --accent:  #C77DFF;
+  --mut:     #FF9F40;
+  --branch:  #4ECDC4;
+  --r: 2px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem 6rem;
+}
+
+/* ── Typography ── */
+h1 { font-family: 'Fraunces', serif; font-size: 3.2rem; font-weight: 600;
+     line-height: 1.1; color: var(--ess); margin-bottom: .4rem; }
+h2 { font-family: 'Fraunces', serif; font-size: 1.9rem; font-weight: 600;
+     margin: 3.5rem 0 1rem; }
+h3 { font-size: 1.15rem; font-weight: 600; margin: 2rem 0 .6rem; color: var(--accent); }
+h4 { font-size: 1rem; font-weight: 600; margin: 1.4rem 0 .4rem; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; }
+p  { margin-bottom: .9rem; }
+code { font-family: 'JetBrains Mono', monospace; font-size: .88em;
+       background: var(--bg3); border-radius: 3px; padding: .1em .4em; color: var(--coord); }
+
+/* ── Navigation ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(13,17,23,.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: .6rem 0;
+  margin: 0 -1.5rem 2rem;
+  padding-left: 1.5rem; padding-right: 1.5rem;
+}
+nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: .4rem .8rem; }
+nav a { color: var(--muted); text-decoration: none; font-size: .82rem;
+        font-weight: 500; letter-spacing: .04em; text-transform: uppercase;
+        transition: color .2s; }
+nav a:hover { color: var(--ess); }
+
+/* ── Hero ── */
+.hero { padding: 4rem 0 2.5rem; border-bottom: 1px solid var(--border); }
+.hero-sub { color: var(--muted); font-size: 1.05rem; max-width: 680px; margin-top: .6rem; }
+.trait-pills { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.4rem 0; }
+.pill {
+  padding: .25rem .75rem; border-radius: 999px; font-size: .82rem; font-weight: 600;
+  letter-spacing: .04em; border: 1.5px solid; display: inline-block;
+}
+
+/* ── Sections ── */
+.section { padding: 2.5rem 0; border-bottom: 1px solid var(--border); }
+
+/* ── Equation blocks ── */
+.eq-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 1.1rem 1.4rem;
+  margin: 1.2rem 0;
+  overflow-x: auto;
+}
+.eq-block.agg   { border-color: var(--agg);   }
+.eq-block.intel { border-color: var(--intel);  }
+.eq-block.coord { border-color: var(--coord);  }
+.eq-block.selfp { border-color: var(--selfp);  }
+.eq-block.ess   { border-color: var(--ess);    }
+.eq-block.mut   { border-color: var(--mut);    }
+.eq-block.res   { border-color: var(--res);    }
+.eq-block.pred  { border-color: var(--pred);   }
+
+/* ── Symbol tables ── */
+.sym-table { width: 100%; border-collapse: collapse; margin: .8rem 0 1.4rem; font-size: .9rem; }
+.sym-table th { text-align: left; padding: .35rem .6rem; font-size: .75rem;
+                text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
+                border-bottom: 1px solid var(--border); }
+.sym-table td { padding: .4rem .6rem; border-bottom: 1px solid var(--bg3); vertical-align: top; }
+.sym-table tr:last-child td { border-bottom: none; }
+.sym-table td:first-child { font-family: 'JetBrains Mono', monospace; color: var(--ess); white-space: nowrap; }
+.sym-table td:nth-child(2) { color: var(--accent); font-weight: 500; }
+
+/* ── Step cards ── */
+.steps { display: flex; flex-direction: column; gap: 1rem; margin: 1rem 0; }
+.step {
+  display: grid; grid-template-columns: 2.4rem 1fr;
+  gap: .75rem; align-items: start;
+}
+.step-num {
+  width: 2.2rem; height: 2.2rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .9rem; flex-shrink: 0;
+}
+.step-body { padding-top: .2rem; }
+.step-body p { margin-bottom: .4rem; }
+
+/* ── Callout boxes ── */
+.callout {
+  border-radius: 6px; padding: 1rem 1.2rem; margin: 1.2rem 0;
+  font-size: .93rem;
+}
+.callout.insight { background: rgba(199,125,255,.10); border: 1px solid rgba(199,125,255,.25); }
+.callout.warn    { background: rgba(255,107,107,.10); border: 1px solid rgba(255,107,107,.25); }
+.callout.tip     { background: rgba(78,205,196,.10);  border: 1px solid rgba(78,205,196,.25); }
+.callout.gold    { background: rgba(255,215,0,.08);   border: 1px solid rgba(255,215,0,.25); }
+.callout-title   { font-weight: 700; margin-bottom: .35rem; }
+
+/* ── Principle columns ── */
+.principles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin: 1.2rem 0; }
+.principle-card {
+  background: var(--bg2); border-radius: 8px; padding: 1.2rem;
+  border-top: 3px solid;
+}
+
+/* ── Scene index ── */
+.scene-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .8rem; margin: 1rem 0; }
+.scene-card {
+  background: var(--bg2); border-radius: 6px; padding: .9rem 1.1rem;
+  border-left: 3px solid var(--accent); font-size: .88rem;
+}
+.scene-card strong { display: block; color: var(--text); margin-bottom: .2rem; }
+.scene-card span   { color: var(--muted); }
+
+/* ── Footer ── */
+footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+         color: var(--muted); font-size: .82rem; }
+
+@media (max-width: 700px) {
+  h1 { font-size: 2rem; }
+  .principles-grid { grid-template-columns: 1fr; }
+  .scene-list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══════════════════════════════════════════════════════════════ -->
+<nav>
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#traits">Traits</a></li>
+    <li><a href="#ecology">Ecology</a></li>
+    <li><a href="#fitness">Fitness</a></li>
+    <li><a href="#gradients">Gradients</a></li>
+    <li><a href="#canonical">Canonical Eq.</a></li>
+    <li><a href="#full-system">Full ODEs</a></li>
+    <li><a href="#principles">Principles</a></li>
+    <li><a href="#phenomena">Phenomena</a></li>
+    <li><a href="#scenes">Scenes</a></li>
+    <li><a href="#params">Parameters</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════════════════ -->
+<div class="hero">
+  <h1>Evolutionary Adaptive Dynamics</h1>
+  <p class="hero-sub">
+    A complete, step-by-step mathematical reference for a four-trait prey–resource–predator
+    model linking ecology, evolutionary game theory, and the four great principles of
+    Darwinian evolution.
+  </p>
+  <div class="trait-pills">
+    <span class="pill" style="color:var(--agg);  border-color:var(--agg);">a — Aggression</span>
+    <span class="pill" style="color:var(--intel);border-color:var(--intel);">s — Intelligence / Stealth</span>
+    <span class="pill" style="color:var(--coord);border-color:var(--coord);">o — Coordination / Cooperation</span>
+    <span class="pill" style="color:var(--selfp);border-color:var(--selfp);">h — Self-Preservation / Herding</span>
+  </div>
+  <div class="trait-pills">
+    <span class="pill" style="color:var(--pred); border-color:var(--pred);">① Survival of the Fittest</span>
+    <span class="pill" style="color:var(--res);  border-color:var(--res);">② Resource Acquisition</span>
+    <span class="pill" style="color:var(--selfp);border-color:var(--selfp);">③ Self-Preservation</span>
+    <span class="pill" style="color:var(--intel);border-color:var(--intel);">④ Descent with Modification</span>
+  </div>
+</div>
+
+<!-- ═══ SECTION 1 — OVERVIEW ══════════════════════════════════════════════ -->
+<div class="section" id="overview">
+<h2 style="color:var(--ess)">1. Model Overview</h2>
+
+<p>
+  The model considers a <strong>prey population</strong> embedded in a three-species
+  community: a renewable <strong>resource R</strong> that prey consume, and a
+  <strong>predator P</strong> that consumes prey. Prey carry four heritable, continuously
+  varying traits:
+</p>
+
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>Biological meaning</th></tr></thead>
+  <tbody>
+    <tr><td>a ≥ 0</td><td>Aggression</td><td>Foraging effort and competitive intensity. Higher <em>a</em> → more resource extraction but higher metabolic cost and diminishing returns.</td></tr>
+    <tr><td>s ≥ 0</td><td>Intelligence / Stealth</td><td>Cognitive investment in predator evasion and crypsis. Higher <em>s</em> → lower predation rate, but costly to maintain.</td></tr>
+    <tr><td>o ≥ 0</td><td>Coordination / Cooperation</td><td>Group-foraging efficiency. Higher <em>o</em> multiplies the effective acquisition rate of aggression and creates synergies with <em>a</em>.</td></tr>
+    <tr><td>h ≥ 0</td><td>Self-Preservation / Herding</td><td>Collective antipredator behaviour. Higher <em>h</em> further reduces predator encounter rate alongside stealth.</td></tr>
+  </tbody>
+</table>
+
+<p>
+  The mathematical framework is <strong>Adaptive Dynamics</strong>
+  (Dieckmann &amp; Law 1996; Geritz et al. 1998). The key idea: assume the resident
+  population is at ecological equilibrium, then ask how a rare mutant with slightly
+  different traits fares. The direction of evolutionary change is given by the
+  <em>selection gradient</em>; the rate is governed by population size and mutation.
+</p>
+
+<div class="callout gold">
+  <div class="callout-title">Why four traits?</div>
+  A single-trait model captures only one evolutionary axis. Four traits allow us to
+  study <em>trade-offs</em> (aggression vs. stealth), <em>synergies</em>
+  (aggression × coordination), and realistic ecological complexity
+  (stealth × herding both reduce predation).
+</div>
+</div>
+
+<!-- ═══ SECTION 2 — THE FOUR TRAITS ══════════════════════════════════════ -->
+<div class="section" id="traits">
+<h2 style="color:var(--accent)">2. The Four Adaptive Traits — Detailed Derivation</h2>
+
+<!-- ── 2.1 Aggression ── -->
+<h3 style="color:var(--agg)">2.1 Aggression — <em>a</em></h3>
+
+<p>
+  Aggression quantifies the <em>foraging effort</em> a prey individual invests
+  per unit time. High aggression yields more food but (i) is physiologically expensive
+  and (ii) faces <strong>diminishing returns</strong> as search area saturates.
+</p>
+
+<h4>Acquisition rate function</h4>
+<div class="eq-block agg">
+$$e(a) = \frac{e_{\max} \, a}{1 + \gamma \, a}$$
+</div>
+
+<p>This is a <strong>Holling Type II (Michaelis–Menten) saturation</strong>. Each symbol:</p>
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>Typical range</th><th>Effect of increasing</th></tr></thead>
+  <tbody>
+    <tr><td>$e(a)$</td><td>Effective acquisition rate</td><td>0 – 2</td><td>—</td></tr>
+    <tr><td>$e_{\max}$</td><td>Maximum acquisition rate per unit aggression</td><td>0.5 – 3.0</td><td>Scales the whole curve upward</td></tr>
+    <tr><td>$a$</td><td>Aggression trait value</td><td>0 – 10</td><td>Raises <em>e</em> but with diminishing returns</td></tr>
+    <tr><td>$\gamma$</td><td>Handling-time / saturation coefficient</td><td>0.05 – 1.0</td><td>Faster saturation → lower returns at high <em>a</em></td></tr>
+  </tbody>
+</table>
+
+<div class="steps">
+  <div class="step">
+    <div class="step-num" style="background:rgba(255,107,107,.20);color:var(--agg)">1</div>
+    <div class="step-body">
+      <strong>Why linear at low $a$?</strong> When $a \to 0$, the denominator $\to 1$,
+      so $e \approx e_{\max} a$ — a purely linear relationship between effort and yield.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(255,107,107,.20);color:var(--agg)">2</div>
+    <div class="step-body">
+      <strong>Why does it saturate?</strong> As $a$ grows, the denominator $1+\gamma a$
+      grows proportionally, so $e \to e_{\max}/\gamma$ — a hard ceiling. The prey can
+      only eat so fast no matter how aggressive it becomes.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(255,107,107,.20);color:var(--agg)">3</div>
+    <div class="step-body">
+      <strong>How does coordination boost this?</strong> When we add cooperation $o$,
+      the function becomes $e(a,o)=\frac{e_{\max}a}{1+\gamma a}(1+\alpha_o o)$.
+      The factor $(1+\alpha_o o)$ is a <em>linear multiplier</em>: coordinated groups
+      find patches more efficiently, stretching the Holling curve upward.
+    </div>
+  </div>
+</div>
+
+<h4>Metabolic cost of aggression</h4>
+<p>
+  Inside the total cost function $C$, aggression incurs a <strong>quadratic cost</strong>
+  $c_a a^2$. Quadratic costs are standard in evolutionary game theory: they capture
+  increasing marginal costs (e.g., muscle mass, territorial conflicts). There is also
+  a <strong>cross-term</strong> $c_{sa} \cdot s \cdot a$: a more intelligent animal
+  can convert aggression into food more carefully, but both traits together still cost
+  more than either alone.
+</p>
+
+<div class="eq-block agg">
+$$\text{Aggression cost contribution: } c_a a^2 + c_{sa} s a + c_{oa} o a$$
+</div>
+
+<h4>Selection gradient for $a$</h4>
+<p>The selection gradient $S_a = \partial w / \partial a$ (evaluated at ecological equilibrium):</p>
+<div class="eq-block agg">
+$$S_a = R^* \cdot \frac{e_{\max}(1 + \alpha_o o)}{(1 + \gamma a)^2} - (2 c_a a + c_{sa} s + c_{oa} o)$$
+</div>
+
+<p>Reading this equation term by term:</p>
+<table class="sym-table">
+  <thead><tr><th>Term</th><th>Source</th><th>Sign</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td>$R^* \cdot \frac{e_{\max}(1+\alpha_o o)}{(1+\gamma a)^2}$</td><td>$\partial e/\partial a \cdot R^*$</td><td>+</td><td>Marginal benefit: each extra unit of aggression extracts this much more resource from the current resource level $R^*$.</td></tr>
+    <tr><td>$\frac{e_{\max}}{(1+\gamma a)^2}$</td><td>Derivative of Holling II</td><td>+</td><td>Diminishes as $a$ grows (denominator grows quadratically): benefit falls with aggression.</td></tr>
+    <tr><td>$2 c_a a$</td><td>$\partial(c_a a^2)/\partial a$</td><td>−</td><td>Marginal metabolic cost of aggression, linear in $a$.</td></tr>
+    <tr><td>$c_{sa} s$</td><td>Cross-cost gradient</td><td>−</td><td>Intelligence penalises aggression: if you're stealthy, being noisy/aggressive undermines you.</td></tr>
+    <tr><td>$c_{oa} o$</td><td>Coordination cross-cost</td><td>−</td><td>Cooperative investment partially substitutes for individual aggression.</td></tr>
+  </tbody>
+</table>
+<p>
+  Selection pushes $a$ upward when $S_a > 0$ and downward when $S_a < 0$.
+  The <strong>ESS</strong> is where $S_a = 0$: the marginal benefit of aggression
+  exactly balances its marginal cost.
+</p>
+
+<!-- ── 2.2 Intelligence ── -->
+<h3 style="color:var(--intel)">2.2 Intelligence / Stealth — <em>s</em></h3>
+
+<p>
+  Stealth/intelligence captures all cognitive and behavioural adaptations that
+  reduce encounter probability with predators: cryptic coloration, vigilance,
+  unpredictable movement, memorising predator territories, etc.
+</p>
+
+<h4>Predation rate function</h4>
+<div class="eq-block intel">
+$$d(s, h) = \frac{d_0}{1 + \beta_s s + \beta_h h}$$
+</div>
+
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td>$d(s,h)$</td><td>Per-capita predation/encounter rate</td><td>Decreasing in both $s$ and $h$</td></tr>
+    <tr><td>$d_0$</td><td>Baseline predation rate (naïve prey)</td><td>Higher → more dangerous environment</td></tr>
+    <tr><td>$\beta_s$</td><td>Stealth effectiveness coefficient</td><td>How much each unit of $s$ reduces $d$</td></tr>
+    <tr><td>$\beta_h$</td><td>Herding effectiveness coefficient</td><td>How much each unit of $h$ reduces $d$</td></tr>
+    <tr><td>$s$</td><td>Intelligence/stealth trait</td><td>Additive in denominator with $h$</td></tr>
+    <tr><td>$h$</td><td>Herding trait (see §2.4)</td><td>Synergistic with stealth</td></tr>
+  </tbody>
+</table>
+
+<div class="steps">
+  <div class="step">
+    <div class="step-num" style="background:rgba(199,125,255,.20);color:var(--intel)">1</div>
+    <div class="step-body">
+      <strong>Why $1/(1+\beta_s s)$ and not $e^{-\beta_s s}$?</strong>
+      The hyperbolic form is mechanistically justified by a simple queuing model:
+      the predator spends time handling each encounter. As prey become harder to detect
+      ($s$ grows), the predator's effective search rate falls hyperbolically.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(199,125,255,.20);color:var(--intel)">2</div>
+    <div class="step-body">
+      <strong>Why is stealth additive with herding?</strong> Both mechanisms reduce
+      detectability through different channels — individual vs. group — so they add
+      in the denominator (each independently reduces the numerator's effect).
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(199,125,255,.20);color:var(--intel)">3</div>
+    <div class="step-body">
+      <strong>Effect on predator equilibrium $P^*$:</strong> Since $P^*$ depends on
+      $d(s,h)$ (see §3), higher $s$ reduces $d$, which reduces $P^*$ — fewer
+      predators are sustained. This is the indirect fitness benefit of stealth.
+    </div>
+  </div>
+</div>
+
+<h4>Selection gradient for $s$</h4>
+<div class="eq-block intel">
+$$S_s = -P^* \cdot \frac{\partial d}{\partial s} - (2 c_s s + c_{sa} a + c_{sh} h)$$
+$$= \frac{\beta_s d_0}{(1 + \beta_s s + \beta_h h)^2} \cdot P^* - (2 c_s s + c_{sa} a + c_{sh} h)$$
+</div>
+
+<p>Step-by-step derivation:</p>
+<div class="steps">
+  <div class="step">
+    <div class="step-num" style="background:rgba(199,125,255,.20);color:var(--intel)">1</div>
+    <div class="step-body">
+      Fitness $w = e R^* - C - m_0 - d(s,h) P^*$.
+      The only term containing $s$ via $d$ is $-d(s,h) P^*$, so:
+      $\partial w / \partial s = -P^* \cdot \partial d/\partial s - \partial C/\partial s$.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(199,125,255,.20);color:var(--intel)">2</div>
+    <div class="step-body">
+      $\partial d/\partial s = -d_0 \beta_s / (1+\beta_s s+\beta_h h)^2$.
+      Negative! So $-P^* \cdot \partial d/\partial s$ is <em>positive</em>:
+      increasing stealth reduces predation, which <em>increases</em> fitness.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(199,125,255,.20);color:var(--intel)">3</div>
+    <div class="step-body">
+      $\partial C / \partial s = 2 c_s s + c_{sa} a + c_{sh} h$.
+      These are the direct metabolic and cross-trait costs of stealth.
+    </div>
+  </div>
+</div>
+
+<!-- ── 2.3 Coordination ── -->
+<h3 style="color:var(--coord)">2.3 Coordination / Cooperation — <em>o</em></h3>
+
+<p>
+  Coordination captures <strong>collective foraging efficiency</strong>:
+  group hunting, sentinel systems, communal knowledge of food patches.
+  Unlike aggression (which is individually competitive), coordination is
+  a <em>group-level</em> trait that benefits all group members.
+</p>
+
+<h4>How coordination enters fitness</h4>
+<div class="eq-block coord">
+$$e(a, o) = \frac{e_{\max} \, a}{1 + \gamma a} \cdot (1 + \alpha_o \, o)$$
+</div>
+
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>Effect of increasing</th></tr></thead>
+  <tbody>
+    <tr><td>$\alpha_o$</td><td>Cooperation multiplier coefficient</td><td>Controls how strongly $o$ boosts acquisition: $\alpha_o = 0$ → no cooperation effect; $\alpha_o$ large → strong synergy</td></tr>
+    <tr><td>$(1+\alpha_o o)$</td><td>Cooperation multiplier</td><td>Always $\geq 1$: coordination can only help, not hurt, acquisition</td></tr>
+    <tr><td>$c_{oa}$</td><td>Cooperation–aggression cross-cost</td><td>Prevents simultaneous maximisation of both; cooperative individuals can afford slightly lower aggression</td></tr>
+  </tbody>
+</table>
+
+<h4>Selection gradient for $o$</h4>
+<div class="eq-block coord">
+$$S_o = R^* \cdot \frac{e_{\max} \, \alpha_o \, a}{1 + \gamma a} - (2 c_o o + c_{oa} a)$$
+</div>
+
+<p>Reading the gradient:</p>
+<table class="sym-table">
+  <thead><tr><th>Term</th><th>Sign</th><th>Interpretation</th></tr></thead>
+  <tbody>
+    <tr><td>$R^* \cdot \frac{e_{\max}\alpha_o a}{1+\gamma a}$</td><td>+</td><td>Marginal benefit: more coordination extracts more resource per unit aggression, scaled by current resource $R^*$. Without aggression ($a=0$) cooperation yields nothing.</td></tr>
+    <tr><td>$2c_o o$</td><td>−</td><td>Direct cost of coordination — maintaining social bonds, communication, etc.</td></tr>
+    <tr><td>$c_{oa} a$</td><td>−</td><td>Cross-cost: cooperative and aggressive behaviours partially substitute for each other.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout tip">
+  <div class="callout-title">Key insight: Cooperation requires aggression</div>
+  If $a = 0$, then $S_o = -2c_o o - 0 \leq 0$: cooperation is always selected against
+  in the absence of aggression. Cooperation only evolves when the product
+  $e_{\max} \alpha_o a / (1+\gamma a) \cdot R^*$ exceeds its costs. This is why
+  aggression and coordination co-evolve.
+</div>
+
+<!-- ── 2.4 Self-Preservation ── -->
+<h3 style="color:var(--selfp)">2.4 Self-Preservation / Herding — <em>h</em></h3>
+
+<p>
+  Herding captures <strong>group antipredator behaviours</strong>: flocking,
+  schooling, alarm calls, mobbing, confusion effects on predators. It works
+  <em>synergistically</em> with stealth: a stealthy herd is harder to detect
+  than a conspicuous herd.
+</p>
+
+<h4>How herding enters fitness</h4>
+<p>Herding enters through the same predation-rate function as stealth:</p>
+<div class="eq-block selfp">
+$$d(s, h) = \frac{d_0}{1 + \beta_s s + \beta_h h}$$
+</div>
+
+<p>The cross-cost $c_{sh} \cdot s \cdot h$ in $C$ penalises having both high stealth
+<em>and</em> high herding — a "jack of all trades" penalty — pushing specialisation.</p>
+
+<h4>Selection gradient for $h$</h4>
+<div class="eq-block selfp">
+$$S_h = \frac{\beta_h d_0}{(1 + \beta_s s + \beta_h h)^2} \cdot P^* - (2 c_h h + c_{sh} s)$$
+</div>
+
+<p>This is structurally identical to $S_s$ with $\beta_h$ replacing $\beta_s$
+and $c_{sh}$ replacing $c_{sa}$. The interpretation is symmetric: the benefit
+of herding is proportional to how many predators are actually out there ($P^*$)
+and how effective herding is ($\beta_h$), decaying as the animal already herds
+a lot ($(1+\beta_h h)^2$ in the denominator).</p>
+
+<div class="callout insight">
+  <div class="callout-title">Stealth vs. Herding trade-off</div>
+  The cross-cost $c_{sh}$ creates a <em>trade-off</em>: being stealthy (individual)
+  and herding (group) require conflicting behaviours. A solitary cryptic animal
+  doesn't herd; a conspicuous herd animal doesn't bother with individual camouflage.
+  This drives the evolutionary branching seen in Scene 13.
+</div>
+</div>
+
+<!-- ═══ SECTION 3 — ECOLOGICAL EQUILIBRIA ════════════════════════════════ -->
+<div class="section" id="ecology">
+<h2 style="color:var(--prey)">3. Ecological Equilibria</h2>
+
+<p>
+  At any instant during evolution, we assume the ecological dynamics
+  (birth, death, predation, resource renewal) are <strong>much faster</strong>
+  than evolutionary change. Therefore, at each trait vector
+  $\mathbf{x} = (a, s, o, h)$, we can solve for the ecological steady state.
+</p>
+
+<h3>The three-species ODE system</h3>
+<div class="eq-block">
+$$\dot{R} = r_R R\!\left(1 - \frac{R}{K_R}\right) - e(a,o)\, N \, R$$
+$$\dot{N} = \left[e(a,o)\, R - C(a,s,o,h) - m_0 - d(s,h)\, P\right] N$$
+$$\dot{P} = \left[c_{\text{eff}}\, d(s,h)\, N - m_P\right] P$$
+</div>
+
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>Interpretation</th></tr></thead>
+  <tbody>
+    <tr><td>$R$</td><td>Resource density</td><td>Grass, leaves, insects — whatever prey eat</td></tr>
+    <tr><td>$N$</td><td>Prey (consumer) density</td><td>The evolving population</td></tr>
+    <tr><td>$P$</td><td>Predator density</td><td>Sets mortality pressure on prey</td></tr>
+    <tr><td>$r_R$</td><td>Resource intrinsic growth rate</td><td>How fast resource replenishes</td></tr>
+    <tr><td>$K_R$</td><td>Resource carrying capacity</td><td>Maximum sustainable resource density</td></tr>
+    <tr><td>$c_{\text{eff}}$</td><td>Predator conversion efficiency</td><td>Fraction of prey biomass converted to predator offspring</td></tr>
+    <tr><td>$m_P$</td><td>Predator mortality rate</td><td>How fast predators die without prey</td></tr>
+    <tr><td>$m_0$</td><td>Baseline prey mortality</td><td>Non-predation death rate</td></tr>
+    <tr><td>$C(a,s,o,h)$</td><td>Total fitness cost</td><td>Metabolic cost of all four traits (see §4)</td></tr>
+  </tbody>
+</table>
+
+<h3>Deriving $R^*$ step by step</h3>
+<div class="steps">
+  <div class="step">
+    <div class="step-num" style="background:rgba(149,212,74,.15);color:var(--res)">1</div>
+    <div class="step-body">
+      Set $\dot{P} = 0$: $c_{\text{eff}} d(s,h) N - m_P = 0$.
+      This gives $N^* = m_P / (c_{\text{eff}} d(s,h))$. But we want $R^*$ first.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(149,212,74,.15);color:var(--res)">2</div>
+    <div class="step-body">
+      At the predator's zero-growth isocline ($\dot{P}=0$), prey density is pinned:
+      $N^* = m_P/(c_\text{eff} d)$. This is trait-dependent because $d = d(s,h)$.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(149,212,74,.15);color:var(--res)">3</div>
+    <div class="step-body">
+      Set $\dot{R} = 0$: $r_R(1-R/K_R) - e(a,o) N = 0$.
+      Substituting $N = N^*$ and solving for $R$:
+    </div>
+  </div>
+</div>
+
+<div class="eq-block res">
+$$R^* = K_R \left(1 - \frac{e(a,o)\, N^*}{r_R}\right) = \frac{m_P}{c_\text{eff}\, d(s,h)}$$
+</div>
+
+<p>
+  Wait — the two expressions above are only equal at equilibrium. In practice we
+  define $R^*$ from the predator isocline (third equation) and clamp it to $[0, K_R]$:
+</p>
+<div class="eq-block res">
+$$\boxed{R^* = \min\!\left(\frac{m_P}{c_\text{eff}\, d(s,h)},\; K_R\right)}$$
+</div>
+
+<h3>Deriving $N^*$ step by step</h3>
+<div class="steps">
+  <div class="step">
+    <div class="step-num" style="background:rgba(126,200,227,.15);color:var(--prey)">1</div>
+    <div class="step-body">
+      Set $\dot{R} = 0$: Resource grows logistically but is depleted by prey at rate
+      $e(a,o) N$. At steady state: $r_R(1-R^*/K_R) = e(a,o) N^*$.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(126,200,227,.15);color:var(--prey)">2</div>
+    <div class="step-body">
+      Solve for $N^*$:
+    </div>
+  </div>
+</div>
+<div class="eq-block res">
+$$\boxed{N^* = \frac{r_R}{e(a,o)}\left(1 - \frac{R^*}{K_R}\right)}$$
+</div>
+
+<h3>Deriving $P^*$ step by step</h3>
+<div class="steps">
+  <div class="step">
+    <div class="step-num" style="background:rgba(255,107,107,.15);color:var(--pred)">1</div>
+    <div class="step-body">
+      Set $\dot{N} = 0$: The prey's per-capita growth rate must be zero:
+      $e(a,o) R^* - C(a,s,o,h) - m_0 - d(s,h) P^* = 0$.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(255,107,107,.15);color:var(--pred)">2</div>
+    <div class="step-body">
+      Solve for $P^*$:
+    </div>
+  </div>
+</div>
+<div class="eq-block pred">
+$$\boxed{P^* = \frac{e(a,o)\,R^* - C(a,s,o,h) - m_0}{d(s,h)}}$$
+</div>
+
+<p>
+  If the numerator is negative (prey can't sustain themselves given costs and resource),
+  then $P^* = 0$ — predators go extinct and prey still die of starvation or direct cost.
+</p>
+
+<div class="callout insight">
+  <div class="callout-title">Eco–Evo feedback loop</div>
+  Notice that $R^*$, $N^*$, $P^*$ all depend on the trait vector $(a,s,o,h)$.
+  As traits evolve, the ecological equilibrium shifts. The new equilibrium
+  then changes the selection pressures. This circular dependency is what
+  creates <strong>eco-evolutionary dynamics</strong> and, in some parameter
+  regimes, permanent oscillations (Scene 14).
+</div>
+</div>
+
+<!-- ═══ SECTION 4 — FITNESS FUNCTION ═════════════════════════════════════ -->
+<div class="section" id="fitness">
+<h2 style="color:var(--ess)">4. The Fitness Payoff Function</h2>
+
+<p>
+  The per-capita growth rate of a rare mutant with traits $(a', s', o', h')$
+  invading a resident population at ecological equilibrium $(R^*, N^*, P^*)$ is:
+</p>
+<div class="eq-block ess">
+$$w(a', s', o', h' \mid \mathbf{x}) = e(a',o')\,R^* - C(a',s',o',h') - m_0 - d(s',h')\,P^*$$
+</div>
+
+<p>
+  If $w > 0$, the mutant grows; if $w < 0$, it declines. The <strong>invasion fitness</strong>
+  tells us which mutant strategies can spread. Each term:
+</p>
+
+<table class="sym-table">
+  <thead><tr><th>Term</th><th>Sign</th><th>Biological meaning</th></tr></thead>
+  <tbody>
+    <tr><td>$e(a',o') R^*$</td><td>+</td><td><strong>Resource income:</strong> energy gained from consuming resource at density $R^*$, scaled by acquisition rate.</td></tr>
+    <tr><td>$C(a',s',o',h')$</td><td>−</td><td><strong>Metabolic costs:</strong> all four traits cost energy to express and maintain (see below).</td></tr>
+    <tr><td>$m_0$</td><td>−</td><td><strong>Baseline mortality:</strong> unavoidable death rate (old age, disease, accidents).</td></tr>
+    <tr><td>$d(s',h') P^*$</td><td>−</td><td><strong>Predation mortality:</strong> rate of being killed by the $P^*$ resident predators.</td></tr>
+  </tbody>
+</table>
+
+<h3>The total cost function $C$</h3>
+<div class="eq-block">
+$$C(a,s,o,h) = c_a a^2 + c_s s^2 + c_o o^2 + c_h h^2 + c_{sa} s a + c_{oa} o a + c_{sh} s h$$
+</div>
+
+<p>Each term explained:</p>
+<table class="sym-table">
+  <thead><tr><th>Term</th><th>Parameters</th><th>Biological meaning</th></tr></thead>
+  <tbody>
+    <tr><td>$c_a a^2$</td><td>$c_a > 0$</td><td>Quadratic cost of aggression — muscle mass, risk of injury in fights, territorial patrol.</td></tr>
+    <tr><td>$c_s s^2$</td><td>$c_s > 0$</td><td>Brain/cognitive investment cost — neural tissue is metabolically expensive.</td></tr>
+    <tr><td>$c_o o^2$</td><td>$c_o > 0$</td><td>Cost of coordination — communication, social maintenance, altruistic signals.</td></tr>
+    <tr><td>$c_h h^2$</td><td>$c_h > 0$</td><td>Herding cost — vigilance time, crowding, competition within the group.</td></tr>
+    <tr><td>$c_{sa} s a$</td><td>$c_{sa} > 0$</td><td>Intelligence–aggression trade-off: cautious brains can't sustain high aggression simultaneously.</td></tr>
+    <tr><td>$c_{oa} o a$</td><td>$c_{oa} > 0$</td><td>Cooperation–aggression trade-off: cooperative signalling conflicts with solitary aggressive foraging.</td></tr>
+    <tr><td>$c_{sh} s h$</td><td>$c_{sh} > 0$</td><td>Stealth–herding trade-off: individual cryptsis incompatible with conspicuous group behaviour.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <div class="callout-title">Why quadratic and not linear?</div>
+  A linear cost $c_a a$ would create a simple threshold (either maximum trait or minimum).
+  Quadratic costs $c_a a^2$ produce <em>interior optima</em>: there is a finite ESS
+  value $a^* > 0$ where the marginal benefit equals the marginal cost.
+  This is the standard approach in evolutionary quantitative genetics and ESS theory.
+</div>
+</div>
+
+<!-- ═══ SECTION 5 — SELECTION GRADIENTS ══════════════════════════════════ -->
+<div class="section" id="gradients">
+<h2 style="color:var(--coord)">5. Selection Gradients — The Engine of Evolution</h2>
+
+<p>
+  The <strong>selection gradient</strong> $S_{x_i}$ for trait $x_i$ measures the
+  direction and strength of selection: how much does fitness increase if a rare mutant
+  has slightly more of trait $x_i$?
+</p>
+
+<div class="eq-block coord">
+$$\mathbf{S}(\mathbf{x}) = \nabla_{\mathbf{x}} w\big|_{\mathbf{x}'=\mathbf{x}}
+= \begin{pmatrix} S_a \\ S_s \\ S_o \\ S_h \end{pmatrix}
+= \begin{pmatrix}
+  \partial w/\partial a' \big|_{a'=a} \\[4pt]
+  \partial w/\partial s' \big|_{s'=s} \\[4pt]
+  \partial w/\partial o' \big|_{o'=o} \\[4pt]
+  \partial w/\partial h' \big|_{h'=h}
+\end{pmatrix}$$
+</div>
+
+<p>
+  Evaluating at $\mathbf{x}' = \mathbf{x}$ (resident = mutant) is the key step in
+  adaptive dynamics: we compute the selection pressure at the <em>current</em> trait value.
+</p>
+
+<h3>All four gradients collected</h3>
+
+<div class="eq-block agg">
+<strong>Aggression:</strong>
+$$S_a = R^* \cdot \frac{e_{\max}(1+\alpha_o o)}{(1+\gamma a)^2} - (2c_a a + c_{sa} s + c_{oa} o)$$
+</div>
+
+<div class="eq-block intel">
+<strong>Intelligence / Stealth:</strong>
+$$S_s = \frac{\beta_s d_0}{(1+\beta_s s+\beta_h h)^2} \cdot P^* - (2c_s s + c_{sa} a + c_{sh} h)$$
+</div>
+
+<div class="eq-block coord">
+<strong>Coordination / Cooperation:</strong>
+$$S_o = R^* \cdot \frac{e_{\max}\,\alpha_o\, a}{1+\gamma a} - (2c_o o + c_{oa} a)$$
+</div>
+
+<div class="eq-block selfp">
+<strong>Self-Preservation / Herding:</strong>
+$$S_h = \frac{\beta_h d_0}{(1+\beta_s s+\beta_h h)^2} \cdot P^* - (2c_h h + c_{sh} s)$$
+</div>
+
+<h3>ESS condition</h3>
+<div class="eq-block ess">
+$$\mathbf{S}(\mathbf{x}^*) = \mathbf{0}
+\quad\Longleftrightarrow\quad
+\text{Evolutionarily Stable Strategy}$$
+</div>
+
+<p>
+  At the ESS, <em>all four</em> marginal benefits equal marginal costs simultaneously.
+  Finding $\mathbf{x}^*$ analytically is generally impossible; the simulation
+  integrates the canonical equation to find it numerically.
+</p>
+
+<h3>Stability: ESS vs. branching point</h3>
+<p>
+  The <em>sign</em> of the second derivative $\partial^2 w / \partial a'^2|_{a'=a^*}$
+  determines whether the ESS is stable or a branching point:
+</p>
+<table class="sym-table">
+  <thead><tr><th>Condition</th><th>Type</th><th>Outcome</th></tr></thead>
+  <tbody>
+    <tr><td>$\partial^2 w / \partial x_i'^2 < 0$</td><td>Fitness maximum</td><td>True ESS — no mutant can invade.</td></tr>
+    <tr><td>$\partial^2 w / \partial x_i'^2 > 0$</td><td>Fitness minimum</td><td>Branching point — the population splits into two diverging morphs.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══ SECTION 6 — CANONICAL EQUATION ═══════════════════════════════════ -->
+<div class="section" id="canonical">
+<h2 style="color:var(--ess)">6. The Canonical Equation of Adaptive Dynamics</h2>
+
+<p>
+  The canonical equation (Dieckmann &amp; Law 1996) describes how the
+  mean trait vector $\mathbf{x}(t)$ of the resident population changes over
+  evolutionary time:
+</p>
+
+<div class="eq-block ess">
+$$\boxed{
+\frac{d\mathbf{x}}{dt} = \frac{\mu}{2}\,N^*(\mathbf{x})\;\mathbf{M}(\mathbf{x})\;\mathbf{S}(\mathbf{x})
+}$$
+</div>
+
+<h3>Derivation from first principles</h3>
+<div class="steps">
+  <div class="step">
+    <div class="step-num" style="background:rgba(255,215,0,.15);color:var(--ess)">1</div>
+    <div class="step-body">
+      <strong>Mutation step.</strong> Each birth produces a mutant with probability $\mu$
+      per locus. The expected number of mutants born per unit time is $\mu N^*$
+      (population size times mutation rate).
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(255,215,0,.15);color:var(--ess)">2</div>
+    <div class="step-body">
+      <strong>Mutation distribution.</strong> Mutant traits are drawn from a multivariate
+      normal distribution centred on the resident traits, with covariance matrix $\mathbf{M}$.
+      The diagonal entries $M_{ii}$ are the per-locus variances; off-diagonals $M_{ij}$
+      are genetic covariances between traits (pleiotropy, linkage disequilibrium).
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(255,215,0,.15);color:var(--ess)">3</div>
+    <div class="step-body">
+      <strong>Invasion success.</strong> A mutant with trait deviation $\delta \mathbf{x}$
+      from the resident has invasion fitness
+      $w(\mathbf{x}+\delta\mathbf{x}) \approx w(\mathbf{x}) + \mathbf{S}(\mathbf{x})^\top \delta\mathbf{x}$.
+      For small deviations, the invasion probability is proportional to
+      $\mathbf{S}(\mathbf{x})^\top \delta\mathbf{x}$ when positive.
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:rgba(255,215,0,.15);color:var(--ess)">4</div>
+    <div class="step-body">
+      <strong>Trait substitution rate.</strong> Multiplying mutation rate by mutation
+      variance by selection gradient and integrating over the mutation distribution
+      gives the expected trait change per unit evolutionary time:
+      $d\mathbf{x}/dt = \tfrac{\mu}{2} N^* \mathbf{M} \mathbf{S}(\mathbf{x})$.
+      The factor $1/2$ comes from the probability of fixation of a beneficial mutant in
+      a large population ($\approx$ selective advantage / 2).
+    </div>
+  </div>
+</div>
+
+<h3>Symbol-by-symbol breakdown</h3>
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>Role</th></tr></thead>
+  <tbody>
+    <tr><td>$d\mathbf{x}/dt$</td><td>Evolutionary rate of change</td><td>How fast traits evolve over time (left-hand side).</td></tr>
+    <tr><td>$\mu$</td><td>Mutation rate</td><td>Fraction of births that produce mutants. Low $\mu$ → slow evolution; high $\mu$ → rapid trait change.</td></tr>
+    <tr><td>$N^*(\mathbf{x})$</td><td>Resident population size at eco-equilibrium</td><td>More individuals → more mutations → faster evolution. Couples ecology to evolution.</td></tr>
+    <tr><td>$\frac{1}{2}$</td><td>Fixation probability coefficient</td><td>From the diffusion approximation of population genetics: the probability that a mutant with small advantage $s > 0$ fixes is $\approx s/2$ in a large population.</td></tr>
+    <tr><td>$\mathbf{M}$</td><td>Additive genetic (co)variance matrix (4×4)</td><td>How much genetic variation exists for each trait and their genetic covariances. Determines how fast and in which correlated directions traits can evolve.</td></tr>
+    <tr><td>$\mathbf{S}(\mathbf{x})$</td><td>Selection gradient vector</td><td>Direction of fitness increase in trait space. The vector field driving evolutionary dynamics.</td></tr>
+  </tbody>
+</table>
+
+<h3>The mutation matrix $\mathbf{M}$ in detail</h3>
+<div class="eq-block">
+$$\mathbf{M} = \begin{pmatrix}
+M_{aa} & M_{as} & M_{ao} & M_{ah} \\
+M_{as} & M_{ss} & M_{so} & M_{sh} \\
+M_{ao} & M_{so} & M_{oo} & M_{oh} \\
+M_{ah} & M_{sh} & M_{oh} & M_{hh}
+\end{pmatrix}$$
+</div>
+
+<table class="sym-table">
+  <thead><tr><th>Entry</th><th>Name</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td>$M_{aa}, M_{ss}, M_{oo}, M_{hh}$</td><td>Diagonal: per-trait variances</td><td>Each trait's independent evolutionary speed. Set to ~1 as baseline.</td></tr>
+    <tr><td>$M_{as}$</td><td>Aggression–intelligence covariance</td><td>Positive: bold animals tend to be smart (correlated evolution). Affects evolutionary direction in $(a,s)$ plane.</td></tr>
+    <tr><td>$M_{ao}$</td><td>Aggression–cooperation covariance</td><td>Positive: aggressive cooperators as a syndrome. Drives joint evolution.</td></tr>
+    <tr><td>$M_{sh}$</td><td>Stealth–herding covariance</td><td>Positive: defensive syndrome (both reduce predation). Accelerates self-preservation axis.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout gold">
+  <div class="callout-title">Descent with Modification encoded here</div>
+  The term $\tfrac{\mu}{2} N^* \mathbf{M}$ is precisely Darwin's "descent with
+  modification": $\mu$ is the modification rate, $\mathbf{M}$ encodes heritable
+  variation, and $N^*$ scales with population size (the "descent" — more descendants
+  = more mutations to select from).
+</div>
+</div>
+
+<!-- ═══ NEW SECTION: FULL COUPLED ODE SYSTEM ═══════════════════════════ -->
+<div class="section" id="full-system">
+<h2 style="color:var(--mut)">7. Full Coupled Eco‑Evolutionary System of ODEs</h2>
+
+<p>
+  The simulation actually integrates the <strong>ecological dynamics</strong> and the
+  <strong>evolutionary dynamics</strong> simultaneously, generating the 7‑dimensional
+  system that governs both population sizes and trait means over time.  
+  Under the assumption of separation of timescales (ecology fast, evolution slow),
+  the ecological variables are replaced by their quasi‑steady‑state values $R^*, N^*, P^*$
+  inside the canonical equation.  
+  The complete set of ODEs, as numerically integrated, is:
+</p>
+
+<div class="eq-block mut">
+<strong>Ecological subsystem (3 ODEs)</strong>
+$$
+\begin{aligned}
+\frac{dR}{dt} &= r_R\,R\left(1 - \frac{R}{K_R}\right) \;-\; e(a,o)\,N\,R \\[6pt]
+\frac{dN}{dt} &= \Bigl[\,e(a,o)\,R \;-\; C(a,s,o,h) \;-\; m_0 \;-\; d(s,h)\,P \Bigr] N \\[6pt]
+\frac{dP}{dt} &= \Bigl[\,c_{\text{eff}}\,d(s,h)\,N \;-\; m_P \Bigr] P
+\end{aligned}
+$$
+</div>
+
+<div class="eq-block ess">
+<strong>Evolutionary subsystem (4 ODEs — Canonical Equation)</strong>
+$$
+\begin{aligned}
+\frac{da}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{aa}S_a + M_{as}S_s + M_{ao}S_o + M_{ah}S_h\Bigr) \\[4pt]
+\frac{ds}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{as}S_a + M_{ss}S_s + M_{so}S_o + M_{sh}S_h\Bigr) \\[4pt]
+\frac{do}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{ao}S_a + M_{so}S_s + M_{oo}S_o + M_{oh}S_h\Bigr) \\[4pt]
+\frac{dh}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{ah}S_a + M_{sh}S_s + M_{oh}S_o + M_{hh}S_h\Bigr)
+\end{aligned}
+$$
+</div>
+
+<p>
+  Here $N^*$ is the prey equilibrium computed from the current trait values
+  (see §3). The selection gradients $S_a, S_s, S_o, S_h$ are evaluated at the
+  current trait vector $\mathbf{x} = (a,s,o,h)$ as derived in §5. The matrix
+  $\mathbf{M}$ contains the additive genetic variances and covariances.
+</p>
+
+<h3>Initial conditions and integration</h3>
+<p>
+  Typical initial trait values are set near a plausible ancestral state,
+  e.g. $a=0.5,\; s=0.2,\; o=0.0,\; h=0.0$. The ecological densities start
+  from their corresponding steady‑state values $(R^*, N^*, P^*)$ computed
+  from those traits. The system is then integrated forward in evolutionary time
+  (often millions of years) using a stiff ODE solver such as
+  <code>scipy.integrate.solve_ivp</code> with the <code>Radau</code> or <code>BDF</code> method.
+</p>
+
+<div class="callout tip">
+  <div class="callout-title">Why two separate timescales?</div>
+  Ecological dynamics (population growth and decline) operate on much shorter
+  timescales (days to years) than evolutionary change (thousands to millions of
+  years). By assuming that $R, N, P$ reach their equilibrium $(R^*, N^*, P^*)$
+  instantaneously on the evolutionary clock, we replace the ecological ODEs with
+  algebraic constraints. This yields the quasi‑steady‑state approximation used
+  in the canonical equation.
+</div>
+</div>
+
+<!-- ═══ SECTION 7 — PRINCIPLES (now §8) ══════════════════════════════════ -->
+<div class="section" id="principles">
+<h2 style="color:var(--mut)">8. The Four Darwinian Principles — Mathematical Expression</h2>
+
+<div class="principles-grid">
+  <div class="principle-card" style="border-color:var(--pred)">
+    <h3 style="color:var(--pred); margin-top:0">① Survival of the Fittest</h3>
+    <p>
+      <strong>Mathematical expression:</strong> The selection gradient
+      $\mathbf{S}(\mathbf{x}) = \nabla_\mathbf{x} w$ points toward higher fitness.
+      Individuals with traits closer to the ESS $\mathbf{x}^*$ have $w > 0$ and
+      increase in frequency; those further away have $w < 0$ and decline.
+    </p>
+    <div class="eq-block pred">
+      $$w > 0 \Leftrightarrow \text{mutant spreads}$$
+      $$w < 0 \Leftrightarrow \text{mutant lost}$$
+    </div>
+    <p>
+      In the simulation: starting from any initial traits, all four traits are driven
+      toward a fitness maximum. Scenes 02 and 12 show this explicitly for all traits
+      and for the ESS phenomenon respectively.
+    </p>
+    <p>
+      <strong>Key parameters:</strong> $c_a, c_s, c_o, c_h$ (costs) must be large enough
+      to create an interior ESS. If costs are too small, traits run away to infinity
+      (extinction; see §8.4).
+    </p>
+  </div>
+
+  <div class="principle-card" style="border-color:var(--res)">
+    <h3 style="color:var(--res); margin-top:0">② Resource Acquisition</h3>
+    <p>
+      <strong>Mathematical expression:</strong> The positive terms in fitness —
+      $e(a,o) R^*$ — reward traits that acquire resources efficiently. Selection
+      maximises this term subject to costs.
+    </p>
+    <div class="eq-block res">
+      $$S_a > 0 \Leftrightarrow R^* \frac{e_{\max}}{(1+\gamma a)^2} > \text{marginal cost}$$
+    </div>
+    <p>
+      Coordination amplifies acquisition via the $(1+\alpha_o o)$ multiplier.
+      The resource equilibrium $R^* = m_P/(c_\text{eff} d)$ is itself trait-dependent:
+      more effective predator avoidance (higher $s, h$) raises $R^*$, indirectly
+      boosting acquisition fitness. Scene 03 isolates this principle.
+    </p>
+  </div>
+
+  <div class="principle-card" style="border-color:var(--selfp)">
+    <h3 style="color:var(--selfp); margin-top:0">③ Self-Preservation</h3>
+    <p>
+      <strong>Mathematical expression:</strong> The negative term $-d(s,h) P^*$ in
+      fitness penalises being caught. Traits $s$ and $h$ reduce $d$, directly
+      improving survival. Selection maximises survival probability.
+    </p>
+    <div class="eq-block selfp">
+      $$S_s = P^* \frac{\beta_s d_0}{(1+\beta_s s+\beta_h h)^2} - \text{cost} > 0$$
+    </div>
+    <p>
+      Self-preservation traits are only selected when predators are present ($P^* > 0$).
+      If predators go extinct, the benefit terms vanish and only the metabolic costs
+      remain — the trait is then selected <em>against</em>. Scene 04 demonstrates this.
+    </p>
+  </div>
+
+  <div class="principle-card" style="border-color:var(--intel)">
+    <h3 style="color:var(--intel); margin-top:0">④ Descent with Modification</h3>
+    <p>
+      <strong>Mathematical expression:</strong> The canonical equation itself is
+      Darwin's "descent with modification" written in mathematics:
+    </p>
+    <div class="eq-block intel">
+      $$\frac{d\mathbf{x}}{dt} = \underbrace{\frac{\mu}{2}}_{\text{modification}} \underbrace{N^*}_{\text{descent}} \mathbf{M}\,\mathbf{S}(\mathbf{x})$$
+    </div>
+    <p>
+      $\mu$ is the mutation rate (modification);
+      $N^*$ is population size (more descendants = more mutations);
+      $\mathbf{M}$ encodes heritable variation;
+      $\mathbf{S}$ is selection. All four components are necessary for evolution.
+      Scene 05 shows three independent lineages tracing different paths through
+      the same trait space — same mechanism, different histories.
+    </p>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SECTION 8 — PHENOMENA ════════════════════════════════════════════ -->
+<div class="section" id="phenomena">
+<h2 style="color:var(--branch)">9. The Four Evolutionary Phenomena</h2>
+
+<h3 style="color:var(--ess)">9.1 ESS Convergence</h3>
+<p>
+  When costs are moderate and the fitness landscape is strictly concave around
+  $\mathbf{x}^*$, all selection gradients converge to zero simultaneously.
+  The Jacobian condition for convergence stability is:
+</p>
+<div class="eq-block ess">
+$$\text{Jacobian of }\mathbf{S}\text{ has all eigenvalues} < 0
+\quad\Longrightarrow\quad \mathbf{x}^* \text{ is convergence stable}$$
+</div>
+<p>
+  Intuition: from any starting point, the selection gradient $\mathbf{S}$ acts
+  like a restoring force pulling toward $\mathbf{x}^*$. The four traits simultaneously
+  find their individual optima while ecological equilibria $R^*, N^*, P^*$ settle.
+  Once at the ESS, no single-trait mutant can invade.
+</p>
+
+<h3 style="color:var(--branch)">9.2 Evolutionary Branching</h3>
+<p>
+  When the cross-costs $c_{sa}, c_{oa}, c_{sh}$ are large, the fitness landscape
+  has a <strong>saddle</strong> or <strong>minimum</strong> along one axis.
+  The population first converges to the saddle (a "branching point"), then
+  disruptive selection pulls it in two directions simultaneously:
+</p>
+<div class="eq-block">
+$$\frac{\partial^2 w}{\partial a'^2}\Bigg|_{a'=a^*} > 0
+\quad\Longrightarrow\quad \text{branching point (disruptive selection)}$$
+</div>
+<p>
+  In the simulation, this is modelled by running two trajectories from the same
+  starting point with slightly different genetic covariance matrices
+  ($M_{as} > 0$ vs. $M_{as} < 0$), mimicking two phenotypically differentiated
+  sub-populations diverging from the branching point.
+  This models proto-speciation and polymorphism maintenance.
+</p>
+
+<h3 style="color:var(--mut)">9.3 Eco-Evolutionary Cycles</h3>
+<p>
+  When ecological timescales overlap with evolutionary timescales
+  (high resource growth $r_R$, low predator threshold $m_P$),
+  the feedback loop between trait change and ecological equilibrium
+  produces sustained oscillations:
+</p>
+<div class="eq-block mut">
+$$\text{Imaginary eigenvalues of Jacobian}
+\quad\Longrightarrow\quad \text{limit cycle (oscillations)}$$
+</div>
+<p>
+  Mechanistically: high aggression $a$ depletes $R^*$, which selects for lower $a$,
+  which allows $R^*$ to recover, which selects for higher $a$ again. The cycle
+  persists indefinitely — this is the "Red Queen" dynamic: traits chase ecological
+  pressures in perpetual motion.
+</p>
+
+<h3 style="color:var(--pred)">9.4 Trait Runaway &amp; Extinction</h3>
+<p>
+  With very small costs ($c_a, c_s, c_o, c_h \to 0$), the fitness function has
+  no interior maximum. Selection gradients remain positive indefinitely, pushing
+  all traits toward infinity. But as traits grow, $N^*$ eventually collapses
+  because $C \to \infty$ faster than $e R^*$ grows:
+</p>
+<div class="eq-block pred">
+$$P^* = \frac{eR^* - C - m_0}{d} \to 0 \text{ then } N^* \to 0
+\quad\Longrightarrow\quad \text{evolutionary suicide}$$
+</div>
+<p>
+  The prey population evolves itself into extinction. This is a model for
+  "runaway selection" (e.g., peacock tails) taken to its catastrophic conclusion
+  when no ecological constraint caps trait evolution.
+</p>
+</div>
+
+<!-- ═══ SECTION 9 — SCENE INDEX ═══════════════════════════════════════════ -->
+<div class="section" id="scenes">
+<h2>10. Manim Scene Index</h2>
+<p>Run each scene with: <code>python -m manim -pql evolutionary_dynamics.py &lt;SceneName&gt;</code></p>
+
+<div class="scene-list">
+  <div class="scene-card" style="border-color:var(--ess)">
+    <strong>Scene00_TitleCard</strong>
+    <span>Opening title with creatures and overview of all 8 topics</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--accent)">
+    <strong>Scene01_TraitsIntroduction</strong>
+    <span>Visual card definitions for all four traits a, s, o, h</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--pred)">
+    <strong>Scene02_SurvivalOfFittest</strong>
+    <span>Trait trajectories + selection gradient Sₐ → 0 under strong selection</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--res)">
+    <strong>Scene03_ResourceAcquisition</strong>
+    <span>Acquisition traits a & o, ecological response R* & N*, e(a) saturation curve</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--selfp)">
+    <strong>Scene04_SelfPreservation</strong>
+    <span>Stealth & herding traits, P* & encounter rate d(s,h), prey-hiding animation</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--intel)">
+    <strong>Scene05_DescentWithModification</strong>
+    <span>Three independent lineages tracing different evolutionary paths in trait space</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--agg)">
+    <strong>Scene06_AggressionTrait</strong>
+    <span>e(a), cost C(a), fitness w(a), and Sₐ as a function of a alone</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--intel)">
+    <strong>Scene07_IntelligenceTrait</strong>
+    <span>d(s), P*, Sₛ as function of s; fading prey stealth animation</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--coord)">
+    <strong>Scene08_CoordinationTrait</strong>
+    <span>e(a,o) boost, N*, Sₒ vs o; cooperative foraging ring animation</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--selfp)">
+    <strong>Scene09_SelfPreservationTrait</strong>
+    <span>d(s,h) with herding, P*, Sₕ vs h; herd formation animation</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--ess)">
+    <strong>Scene10_AllTraitsTogether</strong>
+    <span>All 4 traits + all 3 eco equilibria in dual time-series panels</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--mut)">
+    <strong>Scene11_PrinciplesTogether</strong>
+    <span>4 mini plots — one per Darwinian principle — side by side</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--ess)">
+    <strong>Scene12_ESSConvergence</strong>
+    <span>Convergence to ESS: trait time-series + (a,s) phase portrait with ESS★</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--branch)">
+    <strong>Scene13_EvolutionaryBranching</strong>
+    <span>Two morphs diverging from branching point + W-shaped fitness landscape</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--mut)">
+    <strong>Scene14_EcoEvoCycles</strong>
+    <span>Trait oscillations + (a,s) limit cycle with animated prey on cycle</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--pred)">
+    <strong>Scene15_TraitRunaway</strong>
+    <span>Runaway traits + ecological collapse + shrinking-to-extinction animation</span>
+  </div>
+  <div class="scene-card" style="border-color:var(--ess)">
+    <strong>Scene16_GrandSynthesis</strong>
+    <span>Complete equation stack: all 7 equations with labels and creature icons</span>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SECTION 10 — PARAMETERS ══════════════════════════════════════════ -->
+<div class="section" id="params">
+<h2>11. Parameter Reference</h2>
+
+<h3>Ecological parameters</h3>
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Units / notes</th></tr></thead>
+  <tbody>
+    <tr><td>$r_R$</td><td>Resource intrinsic growth rate</td><td>2.0</td><td>Per time. Higher → faster resource recovery.</td></tr>
+    <tr><td>$K_R$</td><td>Resource carrying capacity</td><td>10.0</td><td>Density units. Sets upper limit on R*.</td></tr>
+    <tr><td>$c_\text{eff}$</td><td>Predator conversion efficiency</td><td>0.5</td><td>Dimensionless [0,1]. Higher → more predators per prey.</td></tr>
+    <tr><td>$m_P$</td><td>Predator mortality rate</td><td>0.25</td><td>Per time. Higher → fewer predators, less selection on s,h.</td></tr>
+    <tr><td>$m_0$</td><td>Baseline prey mortality</td><td>0.05</td><td>Per time. Unavoidable death rate.</td></tr>
+  </tbody>
+</table>
+
+<h3>Acquisition parameters</h3>
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td>$e_\text{max}$</td><td>Maximum acquisition per unit aggression</td><td>1.5</td><td>↑ → higher ESS aggression $a^*$</td></tr>
+    <tr><td>$\gamma$</td><td>Aggression saturation coefficient</td><td>0.3</td><td>↑ → faster saturation of $e(a)$, lower ESS $a^*$</td></tr>
+    <tr><td>$\alpha_o$</td><td>Cooperation multiplier</td><td>0.5</td><td>↑ → stronger cooperation-aggression synergy, higher $o^*$</td></tr>
+  </tbody>
+</table>
+
+<h3>Predation parameters</h3>
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td>$d_0$</td><td>Baseline predation rate</td><td>0.80</td><td>↑ → stronger selection for $s$ and $h$</td></tr>
+    <tr><td>$\beta_s$</td><td>Stealth effectiveness</td><td>0.70</td><td>↑ → higher ESS stealth $s^*$</td></tr>
+    <tr><td>$\beta_h$</td><td>Herding effectiveness</td><td>0.70</td><td>↑ → higher ESS herding $h^*$</td></tr>
+  </tbody>
+</table>
+
+<h3>Cost parameters</h3>
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect of ↑</th></tr></thead>
+  <tbody>
+    <tr><td>$c_a$</td><td>Quadratic aggression cost</td><td>0.10</td><td>Lower ESS $a^*$; too small → runaway</td></tr>
+    <tr><td>$c_s$</td><td>Quadratic stealth cost</td><td>0.10</td><td>Lower ESS $s^*$</td></tr>
+    <tr><td>$c_o$</td><td>Quadratic coordination cost</td><td>0.08</td><td>Lower ESS $o^*$</td></tr>
+    <tr><td>$c_h$</td><td>Quadratic herding cost</td><td>0.08</td><td>Lower ESS $h^*$</td></tr>
+    <tr><td>$c_{sa}$</td><td>Stealth–aggression cross-cost</td><td>0.08</td><td>↑ → trade-off; large → branching</td></tr>
+    <tr><td>$c_{oa}$</td><td>Cooperation–aggression cross-cost</td><td>0.08</td><td>↑ → reduces joint $a,o$ evolution</td></tr>
+    <tr><td>$c_{sh}$</td><td>Stealth–herding cross-cost</td><td>0.06</td><td>↑ → stealth/herding specialisation</td></tr>
+  </tbody>
+</table>
+
+<h3>Evolutionary parameters</h3>
+<table class="sym-table">
+  <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td>$\mu$</td><td>Mutation rate</td><td>0.018</td><td>↑ → faster evolution; $\mu \to 0$ → stasis</td></tr>
+    <tr><td>$M_{aa}, M_{ss}, M_{oo}, M_{hh}$</td><td>Per-trait genetic variances</td><td>1.0</td><td>Independent evolutionary speed of each trait</td></tr>
+    <tr><td>$M_{as}$</td><td>a–s genetic covariance</td><td>0.10</td><td>Positive → bold-smart syndrome; negative → bold-stupid</td></tr>
+    <tr><td>$M_{ao}$</td><td>a–o genetic covariance</td><td>0.08</td><td>Positive → aggressive cooperators</td></tr>
+    <tr><td>$M_{sh}$</td><td>s–h genetic covariance</td><td>0.10</td><td>Positive → defensive syndrome (stealth + herding co-evolve)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════════ -->
+<footer>
+  <p>
+    <strong>Mathematical framework:</strong>
+    Dieckmann U. &amp; Law R. (1996) "The dynamical theory of coevolution",
+    <em>J. Math. Biol.</em> 34:579–612.
+    Geritz S.A.H. et al. (1998) "Evolutionarily singular strategies and the adaptive
+    growth and branching of the evolutionary tree", <em>Evol. Ecol.</em> 12:35–57.
+  </p>
+  <p>
+    <strong>Rendered with:</strong> MathJax 3 · Google Fonts (Space Grotesk, Fraunces, JetBrains Mono)
+  </p>
+  <p style="margin-top:.5rem; color: #4B5563;">
+    All equations derived analytically from the fitness payoff $w(a,s,o,h)$ by
+    partial differentiation and evaluated at ecological equilibrium.
+    Numerical integration uses <code>scipy.integrate.odeint</code> with
+    <code>rtol=1e-6, atol=1e-8</code>.
+  </p>
+</footer>
+
+</body>
+</html>
