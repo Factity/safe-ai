@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Linear Algebra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ── THEME TOKENS ── */
+        [data-theme="light"] {
+            --paper: #f7f4ec;
+            --paper2: #eae6db;
+            --paper3: #dedad0;
+            --ink: #080706;
+            --ink2: #1c1a14;
+            --ink3: #3e3830;
+            --ink4: #736c62;
+            --ink5: #b0a99f;
+            --rule: rgba(8, 7, 6, 0.20);
+            --rule2: rgba(8, 7, 6, 0.11);
+            --rule3: rgba(8, 7, 6, 0.06);
+            --crimson: #5c0a0a;
+            --crimson2: #7a1010;
+            --crimson-lo: rgba(92, 10, 10, 0.07);
+            --hover-lo: rgba(8, 7, 6, 0.05);
+            --gold: #513d08;
+            --gold-lo: rgba(81, 61, 8, 0.09);
+            --teal: #0a2d3d;
+            --fm-bg: #080705;
+            --fm-rule: #5c0a0a;
+            --fm-accent: #a02020;
+            --fm-text: #ffffff;
+            --fm-muted: rgba(255, 255, 255, 0.45);
+            --fm-border: rgba(255, 255, 255, 0.11);
+            --toggle-bg: rgba(255, 255, 255, 0.10);
+            --toggle-ico: rgba(255, 255, 255, 0.60);
+            --section-bg: rgba(8, 7, 6, 0.04);
+            --section-border: rgba(8, 7, 6, 0.16);
+            --section-num: rgba(92, 10, 10, 0.60);
+            --callout-bg: rgba(92, 10, 10, 0.04);
+            --callout-border: rgba(92, 10, 10, 0.22);
+            --eq-bg: rgba(8, 7, 6, 0.025);
+            --eq-border: rgba(8, 7, 6, 0.13);
+            --tag-available-bg: rgba(92, 10, 10, 0.09);
+            --tag-available-border: rgba(92, 10, 10, 0.26);
+            --tag-available-color: #5c0a0a;
+            --tag-draft-bg: rgba(81, 61, 8, 0.09);
+            --tag-draft-border: rgba(81, 61, 8, 0.24);
+            --tag-draft-color: #513d08;
+        }
+
+        [data-theme="dark"] {
+            --paper: #0c0b08;
+            --paper2: #141310;
+            --paper3: #1d1c18;
+            --ink: #f2ede2;
+            --ink2: #d8d2c4;
+            --ink3: #b0a898;
+            --ink4: #766e62;
+            --ink5: #3a3730;
+            --rule: rgba(242, 237, 226, 0.18);
+            --rule2: rgba(242, 237, 226, 0.10);
+            --rule3: rgba(242, 237, 226, 0.05);
+            --crimson: #e07070;
+            --crimson2: #f08080;
+            --crimson-lo: rgba(224, 112, 112, 0.12);
+            --hover-lo: rgba(242, 237, 226, 0.05);
+            --gold: #d4aa55;
+            --gold-lo: rgba(212, 170, 85, 0.11);
+            --teal: #5ab0cc;
+            --fm-bg: #080706;
+            --fm-rule: #8b2020;
+            --fm-accent: #e07070;
+            --fm-text: #f2ede2;
+            --fm-muted: rgba(242, 237, 226, 0.42);
+            --fm-border: rgba(242, 237, 226, 0.10);
+            --toggle-bg: rgba(242, 237, 226, 0.10);
+            --toggle-ico: rgba(242, 237, 226, 0.60);
+            --section-bg: rgba(242, 237, 226, 0.04);
+            --section-border: rgba(242, 237, 226, 0.12);
+            --section-num: rgba(224, 112, 112, 0.65);
+            --callout-bg: rgba(224, 112, 112, 0.06);
+            --callout-border: rgba(224, 112, 112, 0.25);
+            --eq-bg: rgba(242, 237, 226, 0.025);
+            --eq-border: rgba(242, 237, 226, 0.11);
+            --tag-available-bg: rgba(224, 112, 112, 0.12);
+            --tag-available-border: rgba(224, 112, 112, 0.30);
+            --tag-available-color: #e07070;
+            --tag-draft-bg: rgba(212, 170, 85, 0.11);
+            --tag-draft-border: rgba(212, 170, 85, 0.28);
+            --tag-draft-color: #d4aa55;
+        }
+
+        /* ── RESET ── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background 0.22s ease, color 0.22s ease;
+            max-width: 100vw;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--paper2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--ink5);
+        }
+
+        /* ── FRONTMATTER ── */
+        .frontmatter {
+            background: var(--fm-bg);
+            color: var(--fm-text);
+            position: relative;
+            overflow: hidden;
+            max-width: 100vw;
+        }
+        .frontmatter::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 6px,
+                    rgba(255, 255, 255, 0.012) 6px,
+                    rgba(255, 255, 255, 0.012) 7px);
+            pointer-events: none;
+        }
+        .fm-rule-top {
+            height: 3px;
+            background: var(--fm-rule);
+        }
+        .fm-series-bar {
+            border-bottom: 1px solid var(--fm-border);
+            padding: .55rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .65rem;
+            font-weight: 600;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.58);
+            flex-wrap: wrap;
+            gap: .4rem;
+        }
+        .fm-body {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 3.5rem 3rem 3rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 3rem;
+            align-items: end;
+            position: relative;
+        }
+        .fm-eyebrow {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .26em;
+            text-transform: uppercase;
+            color: var(--fm-accent);
+            margin-bottom: 1.1rem;
+        }
+        .fm-title {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: clamp(2.4rem, 5vw, 3.8rem);
+            font-weight: 500;
+            font-style: italic;
+            line-height: 1.04;
+            letter-spacing: -.015em;
+            color: var(--fm-text);
+            margin-bottom: .85rem;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+        .fm-title em {
+            font-style: normal;
+            font-weight: 400;
+            color: var(--fm-muted);
+        }
+        .fm-subtitle {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .9rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, .62);
+            line-height: 1.75;
+            max-width: 58ch;
+        }
+        .fm-meta {
+            display: flex;
+            flex-direction: column;
+            gap: .85rem;
+            font-family: 'Source Code Pro', monospace;
+            font-size: .62rem;
+            min-width: 200px;
+            border-left: 1px solid var(--fm-border);
+            padding-left: 2rem;
+        }
+        .fm-meta-row {
+            display: flex;
+            flex-direction: column;
+            gap: .15rem;
+        }
+        .fm-meta-label {
+            color: rgba(255, 255, 255, .40);
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            font-size: .52rem;
+        }
+        .fm-meta-value {
+            color: rgba(255, 255, 255, .90);
+            overflow-wrap: break-word;
+        }
+        .fm-rule-bot {
+            height: 1px;
+            background: var(--fm-border);
+            margin: 0 3rem;
+        }
+        .fm-folio-bar {
+            padding: .55rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Source Code Pro', monospace;
+            font-size: .58rem;
+            color: rgba(255, 255, 255, .38);
+            letter-spacing: .08em;
+            flex-wrap: wrap;
+            gap: .4rem;
+        }
+
+        /* ── THEME TOGGLE ── */
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: .9rem 3rem 0 0;
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            z-index: 10;
+        }
+        .toggle-label {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .6rem;
+            font-weight: 600;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--fm-muted);
+            user-select: none;
+        }
+        .toggle-btn {
+            width: 40px;
+            height: 20px;
+            background: var(--toggle-bg);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: background .2s;
+            flex-shrink: 0;
+        }
+        .toggle-btn::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            transition: transform .22s cubic-bezier(.4, 0, .2, 1);
+        }
+        [data-theme="dark"] .toggle-btn::after {
+            transform: translateX(20px);
+        }
+        [data-theme="dark"] .toggle-btn {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* ── PAGE BODY ── */
+        .page {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 3rem 6rem;
+            display: grid;
+            grid-template-columns: 1fr 268px;
+            gap: 5rem;
+            align-items: start;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .content {
+            padding-top: 3.5rem;
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            margin-bottom: 2rem;
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .62rem;
+            font-weight: 600;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--ink4);
+            flex-wrap: wrap;
+            overflow-wrap: break-word;
+        }
+        .breadcrumb a {
+            color: var(--crimson);
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            color: var(--crimson2);
+            text-decoration: underline;
+        }
+        .breadcrumb .sep {
+            color: var(--ink5);
+            font-weight: 400;
+        }
+        .breadcrumb .current {
+            color: var(--ink2);
+        }
+
+        .section-block {
+            margin-bottom: 3rem;
+            scroll-margin-top: 2rem;
+            max-width: 100%;
+        }
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: .55rem;
+            border-bottom: 1px solid var(--rule);
+            flex-wrap: wrap;
+        }
+        .section-num-large {
+            font-family: 'Source Code Pro', monospace;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--crimson);
+            letter-spacing: .04em;
+            flex-shrink: 0;
+            min-width: 3.6rem;
+        }
+        .section-title-large {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--ink);
+            line-height: 1.2;
+            overflow-wrap: break-word;
+        }
+        .section-body {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .88rem;
+            font-weight: 400;
+            color: var(--ink2);
+            line-height: 1.85;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+        .section-body p {
+            margin-bottom: 1rem;
+        }
+        .section-body strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+        .section-body ol,
+        .section-body ul {
+            margin: .6rem 0 1.2rem 1.5rem;
+        }
+        .section-body ol li,
+        .section-body ul li {
+            margin-bottom: .35rem;
+            padding-left: .3rem;
+        }
+
+        .intro-note {
+            background: var(--callout-bg);
+            border-left: 3px solid var(--callout-border);
+            padding: 1.1rem 1.4rem;
+            margin-bottom: 2.6rem;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .84rem;
+            color: var(--ink2);
+            line-height: 1.8;
+            border-radius: 0 6px 6px 0;
+            overflow-wrap: break-word;
+        }
+        .intro-note strong {
+            color: var(--crimson);
+            font-weight: 600;
+        }
+
+        .equation-block {
+            background: var(--eq-bg);
+            border: 1px solid var(--eq-border);
+            border-radius: 5px;
+            padding: 1.1rem 1.3rem;
+            margin: 1rem 0 1.2rem;
+            font-family: 'STIX Two Math', 'Latin Modern Math', 'Cambria Math', serif;
+            font-size: .94rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--ink);
+            overflow-x: auto;
+            overflow-y: hidden;
+            line-height: 1.95;
+            letter-spacing: .02em;
+            white-space: nowrap;
+            max-width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+        .equation-block.multiline {
+            white-space: normal;
+            line-height: 2.2;
+            overflow-x: visible;
+            word-break: break-word;
+        }
+
+        .var-def-list {
+            list-style: none;
+            margin: .6rem 0 1.4rem;
+            border-top: 1px solid var(--rule3);
+            max-width: 100%;
+        }
+        .var-def-item {
+            display: flex;
+            gap: .75rem;
+            padding: .38rem 0;
+            border-bottom: 1px solid var(--rule3);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .78rem;
+            font-weight: 400;
+            color: var(--ink3);
+            line-height: 1.55;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+        .var-symbol {
+            font-family: 'STIX Two Math', 'Latin Modern Math', 'Cambria Math', serif;
+            font-weight: 500;
+            font-style: italic;
+            color: var(--crimson);
+            min-width: 4.6rem;
+            flex-shrink: 0;
+            font-size: .82rem;
+            letter-spacing: .03em;
+            text-align: right;
+            overflow-wrap: break-word;
+        }
+        .var-desc {
+            flex: 1;
+            color: var(--ink2);
+            min-width: 0;
+            overflow-wrap: break-word;
+        }
+
+        .conceptual-note {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .72rem;
+            font-weight: 400;
+            color: var(--ink4);
+            font-style: italic;
+            margin-top: .5rem;
+            padding: .4rem .6rem;
+            background: var(--section-bg);
+            border-radius: 3px;
+            display: inline-block;
+            max-width: 100%;
+            overflow-wrap: break-word;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            padding-top: 3.5rem;
+            overflow-y: auto;
+            max-height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+        .sb-section {
+            margin-bottom: 2.6rem;
+            max-width: 100%;
+        }
+        .sb-heading {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin-bottom: .9rem;
+            padding-bottom: .4rem;
+            border-bottom: 1px solid var(--rule);
+            overflow-wrap: break-word;
+        }
+        .sb-body {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .82rem;
+            color: var(--ink3);
+            line-height: 1.75;
+            overflow-wrap: break-word;
+        }
+        .sb-body p {
+            margin-bottom: .65rem;
+        }
+        .sb-body strong {
+            color: var(--ink2);
+            font-weight: 600;
+        }
+        .sb-nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            max-width: 100%;
+        }
+        .sb-nav-list li {
+            border-bottom: 1px solid var(--rule3);
+        }
+        .sb-nav-list a {
+            display: block;
+            padding: .55rem 0;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .78rem;
+            font-weight: 400;
+            color: var(--ink3);
+            text-decoration: none;
+            transition: color .16s;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+        .sb-nav-list a:hover {
+            color: var(--crimson);
+        }
+        .sb-nav-num {
+            font-family: 'Source Code Pro', monospace;
+            font-size: .6rem;
+            color: var(--crimson);
+            margin-right: .4rem;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--paper2);
+            border-top: 2px solid var(--ink);
+            max-width: 100vw;
+        }
+        .ft-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+        .ft-title {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--ink2);
+            overflow-wrap: break-word;
+        }
+        .ft-right {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .68rem;
+            color: var(--ink4);
+            letter-spacing: .04em;
+            overflow-wrap: break-word;
+        }
+
+        /* ── HAMBURGER MENU ── */
+        #hamburger-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #333;
+            color: white;
+            border: none;
+            font-size: 24px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 280px;
+            max-width: 80vw;
+            background: #f5f5f5;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+        }
+        [data-theme="dark"] #mobile-nav {
+            background: #1a1a16;
+            color: #f2ede2;
+        }
+        [data-theme="dark"] #mobile-nav a {
+            color: #e07070;
+        }
+        #mobile-nav.open {
+            transform: translateX(0);
+        }
+        #mobile-nav h3 {
+            margin-top: 0;
+            color: #333;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .75rem;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        [data-theme="dark"] #mobile-nav h3 {
+            color: #f2ede2;
+        }
+        #mobile-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #mobile-nav li {
+            margin: 5px 0;
+        }
+        #mobile-nav a {
+            text-decoration: none;
+            color: #5c0a0a;
+            font-size: 15px;
+            font-family: 'Source Sans 3', sans-serif;
+            display: block;
+            padding: .35rem 0;
+        }
+        #mobile-nav a:hover {
+            text-decoration: underline;
+        }
+        #nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+        }
+
+        @media (max-width: 768px) {
+            #hamburger-btn {
+                display: block;
+            }
+            #mobile-nav {
+                display: block;
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:820px) {
+            .page {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .sidebar {
+                border-top: 2px solid var(--ink);
+                padding-top: 2.5rem;
+                max-width: 100%;
+                max-height: none;
+                position: static;
+            }
+            .var-symbol {
+                min-width: 3.8rem;
+                font-size: .74rem;
+            }
+            .equation-block {
+                font-size: .84rem;
+                padding: .95rem 1rem;
+            }
+            .sb-nav-list a {
+                font-size: .82rem;
+                padding: .6rem 0;
+            }
+        }
+        @media(max-width:680px) {
+            .page {
+                padding: 0 1.5rem 4rem;
+            }
+            .fm-body {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 2.5rem 1.5rem 2rem;
+            }
+            .fm-meta {
+                border-left: none;
+                border-top: 1px solid var(--fm-border);
+                padding-left: 0;
+                padding-top: 1.25rem;
+                min-width: 0;
+            }
+            .fm-rule-bot {
+                margin: 0 1.5rem;
+            }
+            .fm-folio-bar {
+                padding: .55rem 1.5rem;
+            }
+            .fm-series-bar {
+                padding: .55rem 1.5rem;
+                font-size: .58rem;
+                letter-spacing: .14em;
+            }
+            .ft-inner {
+                padding: 1.2rem 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: .4rem;
+            }
+            .theme-toggle {
+                padding: .7rem 1.5rem 0 0;
+            }
+            .section-num-large {
+                min-width: 2.8rem;
+                font-size: .9rem;
+            }
+            .section-title-large {
+                font-size: 1.3rem;
+            }
+            .equation-block {
+                font-size: .78rem;
+                padding: .8rem .75rem;
+            }
+            .equation-block.multiline {
+                white-space: normal;
+            }
+            .var-symbol {
+                min-width: 3.2rem;
+                font-size: .7rem;
+                text-align: left;
+            }
+            .var-def-item {
+                gap: .4rem;
+            }
+            .sb-nav-list a {
+                font-size: .8rem;
+                padding: .55rem 0;
+                line-height: 1.5;
+            }
+            .sb-heading {
+                font-size: .58rem;
+                letter-spacing: .16em;
+            }
+            .breadcrumb {
+                font-size: .58rem;
+                letter-spacing: .08em;
+                gap: .35rem;
+            }
+        }
+        @media(max-width:400px) {
+            .page {
+                padding: 0 1rem 3rem;
+            }
+            .fm-body {
+                padding: 2rem 1rem 1.5rem;
+            }
+            .fm-rule-bot {
+                margin: 0 1rem;
+            }
+            .fm-folio-bar {
+                padding: .45rem 1rem;
+            }
+            .fm-series-bar {
+                padding: .45rem 1rem;
+                font-size: .52rem;
+                letter-spacing: .1em;
+            }
+            .theme-toggle {
+                padding: .5rem 1rem 0 0;
+            }
+            .ft-inner {
+                padding: 1rem 1rem;
+            }
+            .section-num-large {
+                min-width: 2.2rem;
+                font-size: .78rem;
+            }
+            .section-title-large {
+                font-size: 1.15rem;
+            }
+            .equation-block {
+                font-size: .72rem;
+                padding: .65rem .6rem;
+                border-radius: 3px;
+            }
+            .var-symbol {
+                min-width: 2.6rem;
+                font-size: .66rem;
+                text-align: left;
+            }
+            .var-desc {
+                font-size: .72rem;
+            }
+            .sb-nav-list a {
+                font-size: .76rem;
+                padding: .5rem 0;
+            }
+            .breadcrumb {
+                font-size: .54rem;
+                letter-spacing: .04em;
+            }
+            .intro-note {
+                padding: .85rem 1rem;
+                font-size: .76rem;
+            }
+        }
+        @media(prefers-reduced-motion:reduce) {
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── FRONTMATTER / TITLE PAGE ── -->
+    <div class="frontmatter">
+        <div class="fm-rule-top"></div>
+        <div class="fm-series-bar">
+            <span>Mathematics Reference Series</span>
+            <span>Foundations for Machine Learning</span>
+        </div>
+        <div class="fm-body">
+            <div class="fm-left">
+                <div class="fm-eyebrow">Reference</div>
+                <h1 class="fm-title">Introduction to<br><em>Linear Algebra</em></h1>
+                <p class="fm-subtitle">A structured mathematical reference covering vector spaces, linear transformations, matrices, eigenvalues, and the foundational theorems that underpin modern computational science — presented through definitions, theorems, and proofs.</p>
+            </div>
+            <div class="fm-meta">
+                <div class="fm-meta-row">
+                    <span class="fm-meta-label">Status</span>
+                    <span class="fm-meta-value">Open Reference</span>
+                </div>
+                <div class="fm-meta-row">
+                    <span class="fm-meta-label">Sections</span>
+                    <span class="fm-meta-value">19 Sections</span>
+                </div>
+                <div class="fm-meta-row">
+                    <span class="fm-meta-label">Numbering</span>
+                    <span class="fm-meta-value">A1.1 — A1.19</span>
+                </div>
+                <div class="fm-meta-row">
+                    <span class="fm-meta-label">Domain</span>
+                    <span class="fm-meta-value">Linear Algebra · Vector Spaces</span>
+                </div>
+                <div class="fm-meta-row">
+                    <span class="fm-meta-label">Prerequisites</span>
+                    <span class="fm-meta-value">High School Algebra</span>
+                </div>
+            </div>
+            <div class="theme-toggle" aria-label="Toggle colour theme">
+                <span class="toggle-label" id="toggle-label-text">Light</span>
+                <button class="toggle-btn" id="themeToggle" aria-label="Switch to dark mode" role="switch" aria-checked="false"></button>
+            </div>
+        </div>
+        <div class="fm-rule-bot"></div>
+        <div class="fm-folio-bar">
+            <span>Linear Algebra</span>
+            <span>Definitions · Theorems · Proofs — Reference</span>
+        </div>
+    </div>
+
+    <!-- ── PAGE BODY ── -->
+    <div class="page">
+
+        <!-- MAIN CONTENT -->
+        <main class="content">
+
+            <div class="breadcrumb">
+                <a href="#">Mathematics</a>
+                <span class="sep">›</span>
+                <a href="#">Linear Algebra</a>
+                <span class="sep">›</span>
+                <span class="current">Vector Spaces &amp; Linear Transformations</span>
+            </div>
+
+            <div class="intro-note">
+                <strong>Linear algebra</strong> is the study of vector spaces and linear transformations between them. It provides the mathematical language for geometry, physics, optimization, and nearly all of modern machine learning — from linear regression to deep neural networks. This reference builds from first principles: we begin with the axioms of a vector space and proceed through subspaces, bases, linear transformations, determinants, and eigenvalues, with each claim stated as a formal <strong>definition</strong>, <strong>theorem</strong>, or <strong>lemma</strong> accompanied by its proof.
+            </div>
+
+            <!-- A1.1 Power Set -->
+<div class="section-block" id="a1-1">
+    <div class="section-heading"><span class="section-num-large">A1.1</span><h2 class="section-title-large">Power Set</h2></div>
+    <div class="section-body">
+        <p>For any set <em>A</em>, the <strong>power set</strong> of <em>A</em>, denoted <em>P</em>(<em>A</em>), is the set whose elements are all subsets of <em>A</em>. Formally,</p>
+        <div class="equation-block multiline">
+            P(A) = { B ∣ B ⊆ A }.
+        </div>
+        <p>If <em>A</em> has <em>n</em> elements, then <em>P(A)</em> has <em>2<sup>n</sup></em> elements.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">P(A)</span><span class="var-desc">the power set of <em>A</em> — the collection of all subsets of <em>A</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.2 Set of Functions -->
+<div class="section-block" id="a1-2">
+    <div class="section-heading"><span class="section-num-large">A1.2</span><h2 class="section-title-large">Set of Functions</h2></div>
+    <div class="section-body">
+        <p>If <em>A</em> and <em>B</em> are two sets, the notation <em>B<sup>A</sup></em> refers to the set of all functions from <em>A</em> to <em>B</em>:</p>
+        <div class="equation-block multiline">
+            B<sup>A</sup> = { f : A → B }.
+        </div>
+        <p>Each function <em>f ∈ B<sup>A</sup></em> assigns to every element of <em>A</em> exactly one element of <em>B</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">B<sup>A</sup></span><span class="var-desc">the set of all functions <em>f : A → B</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.3 Real‑Valued Function Space -->
+<div class="section-block" id="a1-3">
+    <div class="section-heading"><span class="section-num-large">A1.3</span><h2 class="section-title-large">Real‑Valued Function Space</h2></div>
+    <div class="section-body">
+        <p>When the codomain is the field of real numbers <em>ℝ</em>, the set <em>ℝ<sup>A</sup></em> is the space of all real‑valued functions on <em>A</em>. This set becomes a <strong>vector space</strong> with pointwise addition and scalar multiplication:</p>
+        <div class="equation-block multiline">
+            (f + g)(x) = f(x) + g(x),  (α f)(x) = α · f(x)
+        </div>
+        <p>for all <em>f, g ∈ ℝ<sup>A</sup></em>, <em>α ∈ ℝ</em>, and <em>x ∈ A</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">ℝ<sup>A</sup></span><span class="var-desc">the vector space of real‑valued functions on <em>A</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.4 Cardinality -->
+<div class="section-block" id="a1-4">
+    <div class="section-heading"><span class="section-num-large">A1.4</span><h2 class="section-title-large">Cardinality of a Finite Set</h2></div>
+    <div class="section-body">
+        <p>For a finite set <em>A</em>, the <strong>cardinality</strong> <em>|A|</em> is the number of elements in <em>A</em>. If <em>A</em> is finite, then <em>ℝ<sup>A</sup></em> can be identified with the familiar coordinate space <em>ℝ<sup>|A|</sup></em> by enumerating the elements of <em>A</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">|A|</span><span class="var-desc">cardinality (number of elements) of the finite set <em>A</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ℝ<sup>|A|</sup></span><span class="var-desc">the standard coordinate space of dimension |A|, isomorphic to ℝ<sup>A</sup> when <em>A</em> is finite.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.5 Indicator Function -->
+<div class="section-block" id="a1-5">
+    <div class="section-heading"><span class="section-num-large">A1.5</span><h2 class="section-title-large">Indicator Function</h2></div>
+    <div class="section-body">
+        <p>For a subset <em>C ⊆ A</em>, the <strong>indicator function</strong> of <em>C</em> is the function <em>1<sub>C</sub> : A → {0,1}</em> defined by</p>
+        <div class="equation-block multiline">
+            1<sub>C</sub>(x) = { 1 if x ∈ C,<br>     0 if x ∉ C. }
+        </div>
+        <p>The notation <em>1<sub>x∈C</sub></em> is sometimes used as a compact equivalent of <em>1<sub>C</sub>(x)</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">1<sub>C</sub></span><span class="var-desc">indicator function of the set <em>C</em>; maps any <em>x</em> to 1 if <em>x ∈ C</em>, else 0.</span></li>
+            <li class="var-def-item"><span class="var-symbol">1<sub>x∈C</sub></span><span class="var-desc">alternative compact notation for <em>1<sub>C</sub>(x)</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.6 Euclidean Space and Coordinates -->
+<div class="section-block" id="a1-6">
+    <div class="section-heading"><span class="section-num-large">A1.6</span><h2 class="section-title-large">Euclidean Space and Coordinate Notation</h2></div>
+    <div class="section-body">
+        <p>The <em>d</em>-dimensional <strong>Euclidean space</strong> <em>ℝ<sup>d</sup></em> consists of all ordered <em>d</em>-tuples of real numbers. Its elements (called <strong>vectors</strong>) are usually written as column vectors with coordinates indexed by parenthesized exponents:</p>
+        <div class="equation-block multiline">
+            x = (x<sup>(1)</sup>, x<sup>(2)</sup>, …, x<sup>(d)</sup>)<sup>T</sup>.
+        </div>
+        <p>The parentheses around the index distinguish a coordinate from a power. Thus <em>x<sup>(i)</sup></em> denotes the <em>i</em>-th coordinate, not the <em>i</em>-th power of <em>x</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">ℝ<sup>d</sup></span><span class="var-desc">the <em>d</em>-dimensional Euclidean space.</span></li>
+            <li class="var-def-item"><span class="var-symbol">x<sup>(i)</sup></span><span class="var-desc">the <em>i</em>-th coordinate of vector <em>x</em>, <em>i = 1,…, d</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.7 Points, Vectors, and Affine Space -->
+<div class="section-block" id="a1-7">
+    <div class="section-heading"><span class="section-num-large">A1.7</span><h2 class="section-title-large">Points, Vectors, and the Affine Viewpoint</h2></div>
+    <div class="section-body">
+        <p>Geometrically, <em>ℝ<sup>d</sup></em> can be seen in two ways:</p>
+        <ul>
+            <li>As an <strong>affine space</strong>: its elements are <em>points</em> — fixed locations.</li>
+            <li>As a <strong>vector space</strong>: its elements are <em>vectors</em> — directions and magnitudes that can be added and scaled.</li>
+        </ul>
+        <p>After choosing the origin <em>0<sub>d</sub></em>, every point can be identified with the vector from the origin to that point. In this text we will not distinguish notationally between points and vectors; both are treated as elements of the vector space <em>ℝ<sup>d</sup></em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">affine space</span><span class="var-desc">a set of points; a point is a position.</span></li>
+            <li class="var-def-item"><span class="var-symbol">vector space</span><span class="var-desc">a set of vectors; a vector is a translation (direction + magnitude).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.8 Zero Vector, Ones Vector, Identity Matrix -->
+<div class="section-block" id="a1-8">
+    <div class="section-heading"><span class="section-num-large">A1.8</span><h2 class="section-title-large">Zero Vector, Ones Vector, and Identity Matrix</h2></div>
+    <div class="section-body">
+        <p>Three fundamental objects are given special notation:</p>
+        <ul>
+            <li><strong>Zero vector</strong> <em>0<sub>d</sub></em>: the vector in <em>ℝ<sup>d</sup></em> with all coordinates 0.</li>
+            <li><strong>Ones vector</strong> <em>1<sub>d</sub></em>: the vector in <em>ℝ<sup>d</sup></em> with all coordinates 1.</li>
+            <li><strong>Identity matrix</strong> <em>I<sub>d</sub></em>: the <em>d × d</em> matrix with 1 on the main diagonal and 0 elsewhere.</li>
+        </ul>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">0<sub>d</sub></span><span class="var-desc">the <em>d</em>-dimensional zero vector.</span></li>
+            <li class="var-def-item"><span class="var-symbol">1<sub>d</sub></span><span class="var-desc">the <em>d</em>-dimensional ones vector.</span></li>
+            <li class="var-def-item"><span class="var-symbol">I<sub>d</sub></span><span class="var-desc">the <em>d × d</em> identity matrix.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.9 Canonical Basis -->
+<div class="section-block" id="a1-9">
+    <div class="section-heading"><span class="section-num-large">A1.9</span><h2 class="section-title-large">Canonical Basis</h2></div>
+    <div class="section-body">
+        <p>The columns of the identity matrix <em>I<sub>d</sub></em> form the <strong>canonical basis</strong> (or standard basis) of <em>ℝ<sup>d</sup></em>. They are denoted <em>e<sub>1</sub>, e<sub>2</sub>, …, e<sub>d</sub></em>, where <em>e<sub>i</sub></em> has a 1 in the <em>i</em>-th coordinate and zeros elsewhere:</p>
+        <div class="equation-block">
+            e<sub>i</sub> = (0, …, 0, 1, 0, …, 0)<sup>T</sup> (1 at position <em>i</em>).
+        </div>
+        <p>Every <em>x ∈ ℝ<sup>d</sup></em> can be uniquely expressed as <em>x = ∑<sub>i=1</sub><sup>d</sup> x<sup>(i)</sup> e<sub>i</sub></em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">e<sub>i</sub></span><span class="var-desc">the <em>i</em>-th standard basis vector, <em>i = 1,…, d</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.10 Euclidean Norm -->
+<div class="section-block" id="a1-10">
+    <div class="section-heading"><span class="section-num-large">A1.10</span><h2 class="section-title-large">Euclidean Norm (ℓ<sup>2</sup> Norm)</h2></div>
+    <div class="section-body">
+        <p>The <strong>Euclidean norm</strong> (or <strong>ℓ<sup>2</sup> norm</strong>) of a vector <em>x ∈ ℝ<sup>d</sup></em> is denoted <em>|x|</em> and defined by</p>
+        <div class="equation-block">
+            |x| = √( (x<sup>(1)</sup>)<sup>2</sup> + (x<sup>(2)</sup>)<sup>2</sup> + ⋯ + (x<sup>(d)</sup>)<sup>2</sup> ).
+        </div>
+        <p>It satisfies the axioms of a norm: positive definiteness, homogeneity, and the triangle inequality. The notation <em>∥x∥<sub>2</sub></em> is also used.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">|x|</span><span class="var-desc">the Euclidean (ℓ<sup>2</sup>) norm of <em>x</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">∥x∥<sub>2</sub></span><span class="var-desc">alternative notation for the Euclidean norm.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.11 ℓp Norm for p ≥ 1 -->
+<div class="section-block" id="a1-11">
+    <div class="section-heading"><span class="section-num-large">A1.11</span><h2 class="section-title-large">ℓ<sup>p</sup> Norm for <em>p ≥ 1</em></h2></div>
+    <div class="section-body">
+        <p>For any real number <em>p ≥ 1</em>, the <strong>ℓ<sup>p</sup> norm</strong> of <em>x ∈ ℝ<sup>d</sup></em> is defined by</p>
+        <div class="equation-block multiline">
+            ∥x∥<sub>p</sub> = ( |x<sup>(1)</sup>|<sup>p</sup> + |x<sup>(2)</sup>|<sup>p</sup> + ⋯ + |x<sup>(d)</sup>|<sup>p</sup> )<sup>1/p</sup>.  (1.1)
+        </div>
+        <p>For every <em>p ≥ 1</em>, <em>∥·∥<sub>p</sub></em> satisfies the triangle inequality (Minkowski’s inequality) and therefore is a genuine norm. Important special cases:</p>
+        <ul>
+            <li><em>p = 1</em>: Manhattan (or ℓ<sup>1</sup>) norm.</li>
+            <li><em>p = 2</em>: Euclidean norm (<em>|x|</em>).</li>
+            <li><em>p → ∞</em>: maximum norm (the largest absolute coordinate).</li>
+        </ul>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">∥x∥<sub>p</sub></span><span class="var-desc">the ℓ<sup>p</sup> norm of <em>x</em>, <em>p ≥ 1</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.12 ℓp for 0 < p < 1 and the ℓ0 “Norm” -->
+<div class="section-block" id="a1-12">
+    <div class="section-heading"><span class="section-num-large">A1.12</span><h2 class="section-title-large">ℓ<sup>p</sup> for <em>0 < p < 1</em> and the ℓ<sup>0</sup> “Norm”</h2></div>
+    <div class="section-body">
+        <p>For <em>0 < p < 1</em> the formula (1.1) remains well‑defined, but it <strong>does not</strong> define a norm: the triangle inequality fails. Despite this, the family is used in the study of sparsity because the limit</p>
+        <div class="equation-block">
+            ∥x∥<sub>0</sub> ≝ lim<sub>p→0</sub> ∥x∥<sub>p</sub><sup>p</sup> = lim<sub>p→0</sub> ∑<sub>i=1</sub><sup>d</sup> |x<sup>(i)</sup>|<sup>p</sup>
+        </div>
+        <p>counts exactly the number of non‑zero coordinates of <em>x</em>. This quantity is called the <strong>ℓ<sup>0</sup> “norm”</strong> (though it is not a norm). It is the natural measure of sparsity.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">∥x∥<sub>p</sub> (0 < p < 1)</span><span class="var-desc">a non‑norm quantity; fails the triangle inequality.</span></li>
+            <li class="var-def-item"><span class="var-symbol">∥x∥<sub>0</sub></span><span class="var-desc">the number of non‑zero entries of <em>x</em>; the ℓ<sup>0</sup> “norm”.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.13 Norm Notation Conventions -->
+<div class="section-block" id="a1-13">
+    <div class="section-heading"><span class="section-num-large">A1.13</span><h2 class="section-title-large">Norm Notation Conventions</h2></div>
+    <div class="section-body">
+        <p>Throughout the text we follow these conventions:</p>
+        <ul>
+            <li><strong>Single bars</strong> <em>|·|</em> are used for norms of <strong>finite‑dimensional vectors</strong> (typically the Euclidean norm).</li>
+            <li><strong>Double bars</strong> <em>∥·∥</em> are reserved for norms of <strong>infinite‑dimensional objects</strong>, such as functions in Hilbert spaces.</li>
+            <li>The notation <em>|A|</em> with a set <em>A</em> denotes the <strong>cardinality</strong> of <em>A</em>; the meaning (vector norm vs. set size) is always clear from context.</li>
+        </ul>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">|·|</span><span class="var-desc">norm on a finite‑dimensional space.</span></li>
+            <li class="var-def-item"><span class="var-symbol">∥·∥</span><span class="var-desc">norm on an infinite‑dimensional space.</span></li>
+            <li class="var-def-item"><span class="var-symbol">|A|</span><span class="var-desc">cardinality of the set <em>A</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A1.14 Matrix Spaces -->
+<div class="section-block" id="a1-14">
+    <div class="section-heading"><span class="section-num-large">A1.14</span><h2 class="section-title-large">Matrix Spaces</h2></div>
+    <div class="section-body">
+        <p>The set of all <em>m × d</em> real matrices (i.e., matrices with <em>m</em> rows and <em>d</em> columns, all entries real) is denoted <em>M<sub>m,d</sub>(ℝ)</em>, or simply <em>M<sub>m,d</sub></em>. When <em>m = d</em> we also write <em>M<sub>d</sub></em> for the space of square matrices of size <em>d × d</em>.</p>
+        <p>The subset of <em>d × d</em> matrices that are <strong>invertible</strong> (i.e., have a two‑sided multiplicative inverse) is the <strong>general linear group</strong>, denoted <em>GL<sub>d</sub>(ℝ)</em>:</p>
+        <div class="equation-block multiline">
+            GL<sub>d</sub>(ℝ) = { A ∈ M<sub>d</sub> ∣ there exists A<sup>−1</sup> ∈ M<sub>d</sub> with A A<sup>−1</sup> = A<sup>−1</sup> A = I<sub>d</sub> }.
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">M<sub>m,d</sub>(ℝ)</span><span class="var-desc">the set of all real <em>m × d</em> matrices; often just <em>M<sub>m,d</sub></em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">M<sub>d</sub></span><span class="var-desc">shorthand for <em>M<sub>d,d</sub></em>, the set of <em>d × d</em> square matrices.</span></li>
+            <li class="var-def-item"><span class="var-symbol">GL<sub>d</sub>(ℝ)</span><span class="var-desc">the general linear group: the set of invertible <em>d × d</em> real matrices.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.15 Matrix from Column Vectors -->
+<div class="section-block" id="a1-15">
+    <div class="section-heading"><span class="section-num-large">A1.15</span><h2 class="section-title-large">Matrix Construction from Column Vectors</h2></div>
+    <div class="section-body">
+        <p>Given <em>m</em> column vectors <em>x<sub>1</sub>, …, x<sub>m</sub> ∈ ℝ<sup>d</sup></em>, the notation <em>[x<sub>1</sub>, …, x<sub>m</sub>]</em> stands for the <em>d × m</em> matrix whose <em>j</em>-th column is <em>x<sub>j</sub></em>. Thus the <em>d × d</em> identity matrix can be written as</p>
+        <div class="equation-block">
+            I<sub>d</sub> = [e<sub>1</sub>, e<sub>2</sub>, …, e<sub>d</sub>],
+        </div>
+        <p>where <em>e<sub>1</sub>, …, e<sub>d</sub></em> are the canonical basis vectors.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">[x<sub>1</sub>, …, x<sub>m</sub>]</span><span class="var-desc">the <em>d × m</em> matrix formed by horizontally stacking the column vectors <em>x<sub>1</sub>, …, x<sub>m</sub></em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.16 Matrix Entries, Rows, and Columns -->
+<div class="section-block" id="a1-16">
+    <div class="section-heading"><span class="section-num-large">A1.16</span><h2 class="section-title-large">Matrix Entries, Rows, and Columns Notation</h2></div>
+    <div class="section-body">
+        <p>For a matrix <em>A ∈ M<sub>m,d</sub>(ℝ)</em>, the entry in row <em>i</em> and column <em>j</em> is denoted either <em>A(i, j)</em> or <em>A<sup>(i)</sup><sub>j</sub></em>. The whole <em>i</em>-th row (as a row vector) is denoted <em>A<sup>(i)</sup></em>, and the <em>j</em>-th column (as a column vector) is denoted <em>A<sub>j</sub></em>. Thus</p>
+        <div class="equation-block multiline">
+            A = (A<sub>1</sub> A<sub>2</sub> ⋯ A<sub>d</sub>) = (A<sup>(1)</sup>; A<sup>(2)</sup>; …; A<sup>(m)</sup>).
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">A(i, j)</span><span class="var-desc">the entry of <em>A</em> in row <em>i</em>, column <em>j</em> (first index = row).</span></li>
+            <li class="var-def-item"><span class="var-symbol">A<sup>(i)</sup><sub>j</sub></span><span class="var-desc">alternative notation for the same entry; superscript in parentheses = row.</span></li>
+            <li class="var-def-item"><span class="var-symbol">A<sup>(i)</sup></span><span class="var-desc">the <em>i</em>-th row of <em>A</em> (a row vector).</span></li>
+            <li class="var-def-item"><span class="var-symbol">A<sub>j</sub></span><span class="var-desc">the <em>j</em>-th column of <em>A</em> (a column vector).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.17 Operator Norm -->
+<div class="section-block" id="a1-17">
+    <div class="section-heading"><span class="section-num-large">A1.17</span><h2 class="section-title-large">Operator Norm of a Matrix</h2></div>
+    <div class="section-body">
+        <p>For a matrix <em>A ∈ M<sub>m,d</sub></em>, its <strong>operator norm</strong> (induced by the Euclidean vector norm) is defined by</p>
+        <div class="equation-block">
+            |A|<sub>op</sub> = max{ |Ax| : x ∈ ℝ<sup>d</sup>, |x| = 1 }.
+        </div>
+        <p>It measures the maximum factor by which <em>A</em> can stretch a unit vector. Equivalently, <em>|A|<sub>op</sub></em> is the largest singular value of <em>A</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">|A|<sub>op</sub></span><span class="var-desc">the operator norm of <em>A</em> (induced by the Euclidean norm).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.18 Symmetric and Positive (Semi-)Definite Matrices -->
+<div class="section-block" id="a1-18">
+    <div class="section-heading"><span class="section-num-large">A1.18</span><h2 class="section-title-large">Symmetric, PSD, and PD Matrices</h2></div>
+    <div class="section-body">
+        <p>The set of <em>d × d</em> real <strong>symmetric</strong> matrices (satisfying <em>A<sup>T</sup> = A</em>) is denoted <em>S<sup>d</sup></em>. Two important subsets are defined by the sign of the quadratic form <em>x<sup>T</sup> A x</em>:</p>
+        <ul>
+            <li><strong>Positive semi‑definite (PSD)</strong> matrices: <em>S<sub>+</sub><sup>d</sup> = { A ∈ S<sup>d</sup> ∣ x<sup>T</sup> A x ≥ 0 for all x ∈ ℝ<sup>d</sup> }</em>.</li>
+            <li><strong>Positive definite (PD)</strong> matrices: <em>S<sub>++</sub><sup>d</sup> = { A ∈ S<sup>d</sup> ∣ x<sup>T</sup> A x > 0 for all non‑zero x ∈ ℝ<sup>d</sup> }</em>.</li>
+        </ul>
+        <p>Every <em>A ∈ S<sub>++</sub><sup>d</sup></em> is invertible, but the converse is false.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">S<sup>d</sup></span><span class="var-desc">the set of <em>d × d</em> real symmetric matrices.</span></li>
+            <li class="var-def-item"><span class="var-symbol">S<sub>+</sub><sup>d</sup></span><span class="var-desc">the set of positive semi‑definite <em>d × d</em> matrices.</span></li>
+            <li class="var-def-item"><span class="var-symbol">S<sub>++</sub><sup>d</sup></span><span class="var-desc">the set of positive definite <em>d × d</em> matrices.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.19 Orthogonal and Rotation Matrices -->
+<div class="section-block" id="a1-19">
+    <div class="section-heading"><span class="section-num-large">A1.19</span><h2 class="section-title-large">Orthogonal and Rotation Matrices</h2></div>
+    <div class="section-body">
+        <p>For <em>m ≤ d</em>, the set <em>O<sub>m,d</sub></em> consists of all <em>m × d</em> real matrices <em>A</em> whose rows are orthonormal, i.e.,</p>
+        <div class="equation-block">
+            A A<sup>T</sup> = I<sub>m</sub>.
+        </div>
+        <p>When <em>m = d</em>, we write <em>O<sub>d</sub></em> for the set of <strong>orthogonal matrices</strong> (square matrices with orthonormal rows and columns). A matrix <em>A ∈ O<sub>d</sub></em> satisfies <em>A<sup>T</sup> = A<sup>−1</sup></em> and has determinant ±1.</p>
+        <p>The <strong>special orthogonal group</strong> <em>SO<sub>d</sub></em> is the subset of <em>O<sub>d</sub></em> consisting of orthogonal matrices with determinant exactly 1; these are precisely the <strong>rotation matrices</strong> in <em>ℝ<sup>d</sup></em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">O<sub>m,d</sub> (m ≤ d)</span><span class="var-desc">set of <em>m × d</em> matrices with orthonormal rows (A A<sup>T</sup> = I<sub>m</sub>).</span></li>
+            <li class="var-def-item"><span class="var-symbol">O<sub>d</sub></span><span class="var-desc">the orthogonal group: <em>d × d</em> matrices with A<sup>T</sup> A = I<sub>d</sub>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">SO<sub>d</sub></span><span class="var-desc">the special orthogonal group: { A ∈ O<sub>d</sub> ∣ det(A) = 1 }, i.e., rotation matrices.</span></li>
+        </ul>
+    </div>
+</div>
+<!-- A1.20 Multilinear Map -->
+<div class="section-block" id="a1-20">
+    <div class="section-heading"><span class="section-num-large">A1.20</span><h2 class="section-title-large">Multilinear Map</h2></div>
+    <div class="section-body">
+        <p>A <strong>k‑linear map</strong> is a function <em>a : (ℝ<sup>d</sup>)<sup>k</sup> → ℝ<sup>q</sup></em> that is linear in each of its <em>k</em> arguments. That is, for every index <em>i = 1,…,k</em> and for all vectors <em>x<sub>1</sub>, …, x<sub>i−1</sub>, x<sub>i+1</sub>, …, x<sub>k</sub></em> held fixed, the map</p>
+        <div class="equation-block">
+            x<sub>i</sub> ↦ a(x<sub>1</sub>, …, x<sub>i−1</sub>, x<sub>i</sub>, x<sub>i+1</sub>, …, x<sub>k</sub>)
+        </div>
+        <p>is linear from <em>ℝ<sup>d</sup></em> to <em>ℝ<sup>q</sup></em>. Thus for scalars <em>α, β</em> and vectors <em>u, v ∈ ℝ<sup>d</sup></em>,</p>
+        <div class="equation-block multiline">
+            a(…, α u + β v, …) = α a(…, u, …) + β a(…, v, …).
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">a</span><span class="var-desc">a k‑linear map from (ℝ<sup>d</sup>)<sup>k</sup> to ℝ<sup>q</sup>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">k</span><span class="var-desc">the number of arguments (arity) of the multilinear map.</span></li>
+            <li class="var-def-item"><span class="var-symbol">q</span><span class="var-desc">dimension of the target space.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.21 Symmetric Multilinear Map -->
+<div class="section-block" id="a1-21">
+    <div class="section-heading"><span class="section-num-large">A1.21</span><h2 class="section-title-large">Symmetric Multilinear Map</h2></div>
+    <div class="section-body">
+        <p>A k‑linear map <em>a</em> is called <strong>symmetric</strong> if its value remains unchanged after any permutation of its arguments. Formally, for any permutation <em>σ</em> of <em>{1,…,k}</em>,</p>
+        <div class="equation-block">
+            a(x<sub>σ(1)</sub>, …, x<sub>σ(k)</sub>) = a(x<sub>1</sub>, …, x<sub>k</sub>).
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">σ</span><span class="var-desc">a permutation of the indices {1,…,k}.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.22 Bilinear Form -->
+<div class="section-block" id="a1-22">
+    <div class="section-heading"><span class="section-num-large">A1.22</span><h2 class="section-title-large">Bilinear Form</h2></div>
+    <div class="section-body">
+        <p>When <em>k = 2</em> (two arguments) and <em>q = 1</em> (scalar‑valued), a 2‑linear map is called a <strong>bilinear form</strong>. It is a function <em>a : ℝ<sup>d</sup> × ℝ<sup>d</sup> → ℝ</em> that is linear in each argument separately.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">bilinear form</span><span class="var-desc">a 2‑linear map with target space ℝ (q=1).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.23 Norm of a k‑Linear Map -->
+<div class="section-block" id="a1-23">
+    <div class="section-heading"><span class="section-num-large">A1.23</span><h2 class="section-title-large">Norm of a k‑Linear Map</h2></div>
+    <div class="section-body">
+        <p>The <strong>norm</strong> of a k‑linear map <em>a : (ℝ<sup>d</sup>)<sup>k</sup> → ℝ<sup>q</sup></em> is defined by</p>
+        <div class="equation-block">
+            |a| = max{ |a(x<sub>1</sub>, …, x<sub>k</sub>)| : |x<sub>j</sub>| ≤ 1, j = 1,…,k }.
+        </div>
+        <p>With this definition, the following inequality holds for all <em>x<sub>1</sub>, …, x<sub>k</sub> ∈ ℝ<sup>d</sup></em>:</p>
+        <div class="equation-block multiline">
+            |a(x<sub>1</sub>, …, x<sub>k</sub>)| ≤ |a| ∏<sub>j=1</sub><sup>k</sup> |x<sub>j</sub>|.
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">|a|</span><span class="var-desc">the norm of the k‑linear map <em>a</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">∏<sub>j=1</sub><sup>k</sup> |x<sub>j</sub>|</span><span class="var-desc">product of the Euclidean norms of the k arguments.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.24 Positive (Semi‑)Definite Bilinear Form -->
+<div class="section-block" id="a1-24">
+    <div class="section-heading"><span class="section-num-large">A1.24</span><h2 class="section-title-large">Positive Semidefinite / Definite Bilinear Form</h2></div>
+    <div class="section-body">
+        <p>A symmetric bilinear form <em>a : ℝ<sup>d</sup> × ℝ<sup>d</sup> → ℝ</em> is called</p>
+        <ul>
+            <li><strong>positive semidefinite</strong> if <em>a(x, x) ≥ 0</em> for all <em>x ∈ ℝ<sup>d</sup></em>;</li>
+            <li><strong>positive definite</strong> if it is positive semidefinite and, additionally, <em>a(x, x) = 0</em> if and only if <em>x = 0</em>.</li>
+        </ul>
+        <p>Analogous definitions hold for negative semidefinite and negative definite forms (by reversing the inequalities).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">a(x, x)</span><span class="var-desc">the quadratic form induced by <em>a</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.25 Matrix Representation of Symmetric Bilinear Forms -->
+<div class="section-block" id="a1-25">
+    <div class="section-heading"><span class="section-num-large">A1.25</span><h2 class="section-title-large">Matrix Representation of Symmetric Bilinear Forms</h2></div>
+    <div class="section-body">
+        <p>Every symmetric bilinear form <em>a : ℝ<sup>d</sup> × ℝ<sup>d</sup> → ℝ</em> can be expressed in terms of a symmetric matrix <em>A ∈ S<sup>d</sup></em> as</p>
+        <div class="equation-block">
+            a(x, y) = x<sup>T</sup> A y.
+        </div>
+        <p>Moreover, <em>a</em> is positive semidefinite (resp. positive definite) if and only if the representing matrix <em>A</em> is positive semidefinite (resp. positive definite).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">A ∈ S<sup>d</sup></span><span class="var-desc">the symmetric matrix representing the bilinear form <em>a</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.26 Matrix Ordering Notation -->
+<div class="section-block" id="a1-26">
+    <div class="section-heading"><span class="section-num-large">A1.26</span><h2 class="section-title-large">Matrix Ordering Notation</h2></div>
+    <div class="section-body">
+        <p>For symmetric matrices <em>A, B ∈ S<sup>d</sup></em>, we write</p>
+        <ul>
+            <li><em>A ≻ 0</em> (or <em>A ≻ 0<sub>d×d</sub></em>) to indicate that <em>A</em> is <strong>positive definite</strong>;</li>
+            <li><em>A ⪰ 0</em> to indicate that <em>A</em> is <strong>positive semidefinite</strong>.</li>
+        </ul>
+        <p>Similarly, <em>A ≻ B</em> means <em>A − B ≻ 0</em>, and <em>A ⪰ B</em> means <em>A − B ⪰ 0</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">A ≻ 0</span><span class="var-desc"><em>A</em> is positive definite.</span></li>
+            <li class="var-def-item"><span class="var-symbol">A ⪰ 0</span><span class="var-desc"><em>A</em> is positive semidefinite.</span></li>
+            <li class="var-def-item"><span class="var-symbol">A ≻ B</span><span class="var-desc">equivalently, <em>A − B ≻ 0</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">A ⪰ B</span><span class="var-desc">equivalently, <em>A − B ⪰ 0</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.27 Norm of a Bilinear Form vs Operator Norm -->
+<div class="section-block" id="a1-27">
+    <div class="section-heading"><span class="section-num-large">A1.27</span><h2 class="section-title-large">Norm of a Bilinear Form vs Operator Norm of its Matrix</h2></div>
+    <div class="section-body">
+        <p>If a symmetric bilinear form is given by <em>a(x, y) = x<sup>T</sup> A y</em> with <em>A ∈ S<sup>d</sup></em>, then the norm of the bilinear form (as defined for k‑linear maps with <em>k = 2, q = 1</em>) coincides with the operator norm of the matrix <em>A</em>:</p>
+        <div class="equation-block">
+            |a| = |A|<sub>op</sub>.
+        </div>
+        <p>Thus the bilinear form norm inherits all properties of the operator norm on matrices.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">|a|</span><span class="var-desc">norm of the bilinear form <em>a</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">|A|<sub>op</sub></span><span class="var-desc">operator norm of the matrix <em>A</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.28 Open Ball -->
+<div class="section-block" id="a1-28">
+    <div class="section-heading"><span class="section-num-large">A1.28</span><h2 class="section-title-large">Open Ball</h2></div>
+    <div class="section-body">
+        <p>For a centre <em>x ∈ ℝ<sup>d</sup></em> and a radius <em>r > 0</em>, the <strong>open ball</strong> of radius <em>r</em> around <em>x</em> is the set</p>
+        <div class="equation-block">
+            B(x, r) = { y ∈ ℝ<sup>d</sup> : |y − x| < r }.
+        </div>
+        <p>It consists of all points whose Euclidean distance from <em>x</em> is strictly less than <em>r</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">B(x, r)</span><span class="var-desc">the open ball of centre <em>x</em> and radius <em>r</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">|y − x|</span><span class="var-desc">Euclidean distance between <em>y</em> and <em>x</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.29 Closed Ball -->
+<div class="section-block" id="a1-29">
+    <div class="section-heading"><span class="section-num-large">A1.29</span><h2 class="section-title-large">Closed Ball</h2></div>
+    <div class="section-body">
+        <p>The <strong>closed ball</strong> with centre <em>x ∈ ℝ<sup>d</sup></em> and radius <em>r > 0</em> is denoted <em>B̄(x, r)</em> (or sometimes <em>B̅(x, r)</em>) and defined by</p>
+        <div class="equation-block">
+            B̄(x, r) = { y ∈ ℝ<sup>d</sup> : |y − x| ≤ r }.
+        </div>
+        <p>It contains all points whose distance from <em>x</em> is at most <em>r</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">B̄(x, r)</span><span class="var-desc">the closed ball of centre <em>x</em> and radius <em>r</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.30 Open Set -->
+<div class="section-block" id="a1-30">
+    <div class="section-heading"><span class="section-num-large">A1.30</span><h2 class="section-title-large">Open Set</h2></div>
+    <div class="section-body">
+        <p>A subset <em>U ⊆ ℝ<sup>d</sup></em> is called <strong>open</strong> if for every <em>x ∈ U</em> there exists a radius <em>r > 0</em> such that the whole open ball <em>B(x, r)</em> is contained in <em>U</em>:</p>
+        <div class="equation-block">
+            ∀ x ∈ U, ∃ r > 0, B(x, r) ⊆ U.
+        </div>
+        <p>In other words, around every point of an open set you can fit a small ball that stays entirely inside the set.</p>
+    </div>
+</div>
+
+<!-- A1.31 Closed Set and Complement -->
+<div class="section-block" id="a1-31">
+    <div class="section-heading"><span class="section-num-large">A1.31</span><h2 class="section-title-large">Closed Set and Complement</h2></div>
+    <div class="section-body">
+        <p>A subset <em>Γ ⊆ ℝ<sup>d</sup></em> is <strong>closed</strong> if its complement</p>
+        <div class="equation-block">
+            Γ<sup>c</sup> = { x ∈ ℝ<sup>d</sup> : x ∉ Γ }
+        </div>
+        <p>is open. Equivalently, <em>Γ</em> is closed if it contains all its limit points (see closure).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Γ<sup>c</sup></span><span class="var-desc">the complement of set <em>Γ</em> in ℝ<sup>d</sup>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.32 Interior of a Set -->
+<div class="section-block" id="a1-32">
+    <div class="section-heading"><span class="section-num-large">A1.32</span><h2 class="section-title-large">Interior of a Set</h2></div>
+    <div class="section-body">
+        <p>The <strong>interior</strong> of a set <em>A ⊆ ℝ<sup>d</sup></em>, denoted <em>Å</em> or <em>int(A)</em>, is the largest open set contained in <em>A</em>. Equivalently, a point <em>x</em> belongs to <em>Å</em> if and only if there exists <em>r > 0</em> such that the open ball <em>B(x, r)</em> is entirely inside <em>A</em>:</p>
+        <div class="equation-block">
+            x ∈ Å ⇔ ∃ r > 0, B(x, r) ⊆ A.
+        </div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Å, int(A)</span><span class="var-desc">the topological interior of <em>A</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.33 Closure of a Set -->
+<div class="section-block" id="a1-33">
+    <div class="section-heading"><span class="section-num-large">A1.33</span><h2 class="section-title-large">Closure of a Set</h2></div>
+    <div class="section-body">
+        <p>The <strong>closure</strong> of a set <em>A ⊆ ℝ<sup>d</sup></em>, denoted <em>Ā</em> or <em>cl(A)</em>, is the smallest closed set that contains <em>A</em>. A point <em>x</em> belongs to the closure if and only if every open ball around <em>x</em> intersects <em>A</em>:</p>
+        <div class="equation-block">
+            x ∈ Ā ⇔ ∀ r > 0, B(x, r) ∩ A ≠ ∅.
+        </div>
+        <p>Equivalently, <em>x ∈ Ā</em> if and only if there exists a sequence <em>(x<sub>k</sub>)</em> of points in <em>A</em> that converges to <em>x</em> (i.e., <em>|x<sub>k</sub> − x| → 0</em> as <em>k → ∞</em>).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Ā, cl(A)</span><span class="var-desc">the topological closure of <em>A</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">B(x, r)</span><span class="var-desc">open ball of radius <em>r</em> around <em>x</em> (A1.28).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.34 Compact Set in ℝd -->
+<div class="section-block" id="a1-34">
+    <div class="section-heading"><span class="section-num-large">A1.34</span><h2 class="section-title-large">Compact Set in ℝ<sup>d</sup></h2></div>
+    <div class="section-body">
+        <p>A set <em>Γ ⊆ ℝ<sup>d</sup></em> is called <strong>compact</strong> if it satisfies either of the following equivalent properties:</p>
+        <ul>
+            <li><strong>Sequential compactness:</strong> every sequence <em>(x<sub>k</sub>)</em> of points in <em>Γ</em> contains a subsequence that converges to some point in <em>Γ</em>.</li>
+            <li><strong>Open‑cover compactness:</strong> whenever <em>Γ</em> is covered by a collection of open sets, there exists a finite subcollection that still covers <em>Γ</em>.</li>
+        </ul>
+        <p>For subsets of <em>ℝ<sup>d</sup></em> (with the usual Euclidean distance), a set is compact if and only if it is both <strong>closed</strong> and <strong>bounded</strong>. This fact is known as the <strong>Heine–Borel theorem</strong>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Γ</span><span class="var-desc">a subset of ℝ<sup>d</sup>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">(x<sub>k</sub>)</span><span class="var-desc">a sequence of points in Γ.</span></li>
+            <li class="var-def-item"><span class="var-symbol">subsequence</span><span class="var-desc">a sequence obtained by dropping some terms of the original sequence.</span></li>
+            <li class="var-def-item"><span class="var-symbol">converges</span><span class="var-desc">approaches a limit in ℝ<sup>d</sup> (distance tends to 0).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.35 Metric Space -->
+<div class="section-block" id="a1-35">
+    <div class="section-heading"><span class="section-num-large">A1.35</span><h2 class="section-title-large">Metric Space</h2></div>
+    <div class="section-body">
+        <p>A <strong>metric space</strong> is a set <em>B</em> together with a <strong>distance function</strong> (or <strong>metric</strong>) <em>ρ : B × B → [0, +∞)</em> that satisfies the following three axioms for all <em>x, y, z ∈ B</em>:</p>
+        <div class="equation-block multiline">
+            ρ(x, y) = 0  ⇔  x = y,                (1.2a)<br>
+            ρ(x, y) = ρ(y, x),                   (1.2b)<br>
+            ρ(x, z) ≤ ρ(x, y) + ρ(y, z).              (1.2c)
+        </div>
+        <p>Axiom (1.2c) is called the <strong>triangle inequality</strong>. The standard distance on <em>ℝ<sup>d</sup></em> is given by the Euclidean norm of the difference: <em>ρ(x, y) = |x − y|</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">B</span><span class="var-desc">the underlying set of the metric space.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ρ</span><span class="var-desc">the distance function (metric) on B.</span></li>
+            <li class="var-def-item"><span class="var-symbol">ρ(x, y)</span><span class="var-desc">distance between x and y (non‑negative real number).</span></li>
+            <li class="var-def-item"><span class="var-symbol">triangle inequality</span><span class="var-desc">ρ(x, z) ≤ ρ(x, y) + ρ(y, z).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.36 Open Sets, Closed Sets, and Convergence in Metric Spaces -->
+<div class="section-block" id="a1-36">
+    <div class="section-heading"><span class="section-num-large">A1.36</span><h2 class="section-title-large">Open Sets, Closed Sets, and Convergence in Metric Spaces</h2></div>
+    <div class="section-body">
+        <p>In a metric space <em>(B, ρ)</em>, the definitions of open and closed sets are the same as in <em>ℝ<sup>d</sup></em>, with the distance <em>ρ</em> replacing the Euclidean norm <em>|x − y|</em>.</p>
+        <p>A subset <em>U ⊆ B</em> is <strong>open</strong> if for every <em>x ∈ U</em> there exists <em>r > 0</em> such that the open ball <em>B<sub>ρ</sub>(x, r) = { y ∈ B : ρ(x, y) < r }</em> is contained in <em>U</em>. A subset is <strong>closed</strong> if its complement in <em>B</em> is open.</p>
+        <p>A sequence <em>(x<sub>n</sub>)</em> in <em>B</em> <strong>converges</strong> to a point <em>x ∈ B</em>, written <em>x<sub>n</sub> → x</em>, if</p>
+        <div class="equation-block">
+            ρ(x<sub>n</sub>, x) → 0 as n → ∞.
+        </div>
+        <p>In other words, the distance between the sequence elements and the limit eventually becomes arbitrarily small.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">B<sub>ρ</sub>(x, r)</span><span class="var-desc">open ball in metric space (B, ρ) of radius r around x.</span></li>
+            <li class="var-def-item"><span class="var-symbol">(x<sub>n</sub>)</span><span class="var-desc">a sequence in B.</span></li>
+            <li class="var-def-item"><span class="var-symbol">x<sub>n</sub> → x</span><span class="var-desc">the sequence converges to x (ρ(x<sub>n</sub>, x) → 0).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A1.37 Compact Sets in Metric Spaces -->
+<div class="section-block" id="a1-37">
+    <div class="section-heading"><span class="section-num-large">A1.37</span><h2 class="section-title-large">Compact Sets in General Metric Spaces</h2></div>
+    <div class="section-body">
+        <p>In an arbitrary metric space, a subset <em>K ⊆ B</em> is called <strong>compact</strong> if it satisfies the same sequential or open‑cover definitions as in <em>ℝ<sup>d</sup></em>:</p>
+        <ul>
+            <li>Every sequence in <em>K</em> has a subsequence converging to a point in <em>K</em> (<strong>sequentially compact</strong>).</li>
+            <li>Every open cover of <em>K</em> admits a finite subcover (<strong>compact</strong> by open covers).</li>
+        </ul>
+        <p>In a general metric space these two notions are equivalent. However, unlike <em>ℝ<sup>d</sup></em>, a set that is closed and bounded is <strong>not</strong> necessarily compact; the Heine–Borel theorem holds only in certain spaces (e.g., <em>ℝ<sup>d</sup></em> with the usual metric).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">K</span><span class="var-desc">a subset of a metric space B.</span></li>
+            <li class="var-def-item"><span class="var-symbol">compact (in metric space)</span><span class="var-desc">sequentially compact or open‑cover compact (equivalent in metric spaces).</span></li>
+        </ul>
+    </div>
+</div>
+
+        </main>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sb-section">
+                <div class="sb-heading">About This Reference</div>
+                <div class="sb-body">
+                    <p><strong>Introduction to Linear Algebra</strong> is a concise mathematical reference covering the foundational concepts of vector spaces, linear transformations, matrices, determinants, and eigenvalues.</p>
+                    <p>Each section is presented as a formal <strong>definition</strong>, <strong>theorem</strong>, or <strong>lemma</strong>, with proofs where appropriate. The numbering follows the appendix convention (A1.1–A1.19).</p>
+                    <p>Intended as a companion reference for machine learning practitioners and students of mathematics.</p>
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-heading">Quick Navigation</div>
+                <ul class="sb-nav-list">
+                    <li><a href="#a1-1"><span class="sb-nav-num">A1.1</span>Vector Space</a></li>
+                    <li><a href="#a1-2"><span class="sb-nav-num">A1.2</span>Subspace</a></li>
+                    <li><a href="#a1-3"><span class="sb-nav-num">A1.3</span>Intersection of Subspaces</a></li>
+                    <li><a href="#a1-4"><span class="sb-nav-num">A1.4</span>Linear Combination &amp; Span</a></li>
+                    <li><a href="#a1-5"><span class="sb-nav-num">A1.5</span>Linear Independence</a></li>
+                    <li><a href="#a1-6"><span class="sb-nav-num">A1.6</span>Linear Dependence Lemma</a></li>
+                    <li><a href="#a1-7"><span class="sb-nav-num">A1.7</span>Basis</a></li>
+                    <li><a href="#a1-8"><span class="sb-nav-num">A1.8</span>Existence of a Basis</a></li>
+                    <li><a href="#a1-9"><span class="sb-nav-num">A1.9</span>All Bases Have the Same Size</a></li>
+                    <li><a href="#a1-10"><span class="sb-nav-num">A1.10</span>Dimension</a></li>
+                    <li><a href="#a1-11"><span class="sb-nav-num">A1.11</span>Linear Transformation</a></li>
+                    <li><a href="#a1-12"><span class="sb-nav-num">A1.12</span>Kernel and Image</a></li>
+                    <li><a href="#a1-13"><span class="sb-nav-num">A1.13</span>Rank–Nullity Theorem</a></li>
+                    <li><a href="#a1-14"><span class="sb-nav-num">A1.14</span>Matrix Representation</a></li>
+                    <li><a href="#a1-15"><span class="sb-nav-num">A1.15</span>Composition &amp; Matrix Multiplication</a></li>
+                    <li><a href="#a1-16"><span class="sb-nav-num">A1.16</span>Determinant</a></li>
+                    <li><a href="#a1-17"><span class="sb-nav-num">A1.17</span>Properties of Determinants</a></li>
+                    <li><a href="#a1-18"><span class="sb-nav-num">A1.18</span>Eigenvalues &amp; Eigenvectors</a></li>
+                    <li><a href="#a1-19"><span class="sb-nav-num">A1.19</span>Diagonalization</a></li>
+                </ul>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-heading">Notation</div>
+                <div class="sb-body">
+                    <p><strong>𝔽</strong> — an arbitrary field (typically ℝ or ℂ).</p>
+                    <p><strong>V, W, U</strong> — vector spaces over 𝔽.</p>
+                    <p><strong>ℒ(V, W)</strong> — the space of linear transformations from V to W.</p>
+                    <p><strong>ker T</strong> — kernel (null space) of T.</p>
+                    <p><strong>im T</strong> — image (range) of T.</p>
+                    <p><strong>span(S)</strong> — the set of all finite linear combinations of vectors from S.</p>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer>
+        <div class="ft-inner">
+            <span class="ft-title">Linear Algebra Reference &nbsp;·&nbsp; Foundations for Machine Learning</span>
+            <span class="ft-right">Mathematics Reference Series &nbsp;·&nbsp; Open Reference</span>
+        </div>
+    </footer>
+
+    <!-- ── HAMBURGER BUTTON ── -->
+    <button id="hamburger-btn" aria-label="Open navigation menu">☰</button>
+
+    <!-- ── MOBILE NAV OVERLAY ── -->
+    <div id="nav-overlay"></div>
+
+    <!-- ── MOBILE NAVIGATION ── -->
+    <nav id="mobile-nav">
+        <h3>Navigation</h3>
+        <ul>
+            <li><a href="#a1-1">A1.1 — Vector Space</a></li>
+            <li><a href="#a1-2">A1.2 — Subspace</a></li>
+            <li><a href="#a1-3">A1.3 — Intersection of Subspaces</a></li>
+            <li><a href="#a1-4">A1.4 — Linear Combination &amp; Span</a></li>
+            <li><a href="#a1-5">A1.5 — Linear Independence</a></li>
+            <li><a href="#a1-6">A1.6 — Linear Dependence Lemma</a></li>
+            <li><a href="#a1-7">A1.7 — Basis</a></li>
+            <li><a href="#a1-8">A1.8 — Existence of a Basis</a></li>
+            <li><a href="#a1-9">A1.9 — All Bases Have the Same Size</a></li>
+            <li><a href="#a1-10">A1.10 — Dimension</a></li>
+            <li><a href="#a1-11">A1.11 — Linear Transformation</a></li>
+            <li><a href="#a1-12">A1.12 — Kernel and Image</a></li>
+            <li><a href="#a1-13">A1.13 — Rank–Nullity Theorem</a></li>
+            <li><a href="#a1-14">A1.14 — Matrix Representation</a></li>
+            <li><a href="#a1-15">A1.15 — Composition &amp; Matrix Multiplication</a></li>
+            <li><a href="#a1-16">A1.16 — Determinant</a></li>
+            <li><a href="#a1-17">A1.17 — Properties of Determinants</a></li>
+            <li><a href="#a1-18">A1.18 — Eigenvalues &amp; Eigenvectors</a></li>
+            <li><a href="#a1-19">A1.19 — Diagonalization</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        const lbl = document.getElementById('toggle-label-text');
+
+        const saved = localStorage.getItem('la-theme');
+        if (saved) { html.setAttribute('data-theme', saved);
+            syncUI(); }
+
+        btn.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('la-theme', next);
+            syncUI();
+        });
+
+        function syncUI() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            lbl.textContent = isDark ? 'Dark' : 'Light';
+            btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
+        }
+
+        // ── MOBILE NAV ──
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileNav = document.getElementById('mobile-nav');
+        const navOverlay = document.getElementById('nav-overlay');
+
+        function openNav() {
+            mobileNav.classList.add('open');
+            navOverlay.style.display = 'block';
+            hamburgerBtn.style.display = 'none';
+        }
+
+        function closeNav() {
+            mobileNav.classList.remove('open');
+            navOverlay.style.display = 'none';
+            hamburgerBtn.style.display = 'block';
+        }
+
+        hamburgerBtn.addEventListener('click', openNav);
+        navOverlay.addEventListener('click', closeNav);
+
+        const mobileNavLinks = mobileNav.querySelectorAll('a');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                closeNav();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Calculus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        [data-theme="light"] {
+            --paper: #f7f4ec;
+            --paper2: #eae6db;
+            --paper3: #dedad0;
+            --ink: #080706;
+            --ink2: #1c1a14;
+            --ink3: #3e3830;
+            --ink4: #736c62;
+            --ink5: #b0a99f;
+            --rule: rgba(8, 7, 6, 0.20);
+            --rule2: rgba(8, 7, 6, 0.11);
+            --rule3: rgba(8, 7, 6, 0.06);
+            --crimson: #5c0a0a;
+            --crimson2: #7a1010;
+            --crimson-lo: rgba(92, 10, 10, 0.07);
+            --hover-lo: rgba(8, 7, 6, 0.05);
+            --gold: #513d08;
+            --gold-lo: rgba(81, 61, 8, 0.09);
+            --teal: #0a2d3d;
+            --fm-bg: #080705;
+            --fm-rule: #5c0a0a;
+            --fm-accent: #a02020;
+            --fm-text: #ffffff;
+            --fm-muted: rgba(255, 255, 255, 0.45);
+            --fm-border: rgba(255, 255, 255, 0.11);
+            --toggle-bg: rgba(255, 255, 255, 0.10);
+            --toggle-ico: rgba(255, 255, 255, 0.60);
+            --section-bg: rgba(8, 7, 6, 0.04);
+            --section-border: rgba(8, 7, 6, 0.16);
+            --section-num: rgba(92, 10, 10, 0.60);
+            --callout-bg: rgba(92, 10, 10, 0.04);
+            --callout-border: rgba(92, 10, 10, 0.22);
+            --eq-bg: rgba(8, 7, 6, 0.025);
+            --eq-border: rgba(8, 7, 6, 0.13);
+            --tag-available-bg: rgba(92, 10, 10, 0.09);
+            --tag-available-border: rgba(92, 10, 10, 0.26);
+            --tag-available-color: #5c0a0a;
+            --tag-draft-bg: rgba(81, 61, 8, 0.09);
+            --tag-draft-border: rgba(81, 61, 8, 0.24);
+            --tag-draft-color: #513d08;
+        }
+        [data-theme="dark"] {
+            --paper: #0c0b08;
+            --paper2: #141310;
+            --paper3: #1d1c18;
+            --ink: #f2ede2;
+            --ink2: #d8d2c4;
+            --ink3: #b0a898;
+            --ink4: #766e62;
+            --ink5: #3a3730;
+            --rule: rgba(242, 237, 226, 0.18);
+            --rule2: rgba(242, 237, 226, 0.10);
+            --rule3: rgba(242, 237, 226, 0.05);
+            --crimson: #e07070;
+            --crimson2: #f08080;
+            --crimson-lo: rgba(224, 112, 112, 0.12);
+            --hover-lo: rgba(242, 237, 226, 0.05);
+            --gold: #d4aa55;
+            --gold-lo: rgba(212, 170, 85, 0.11);
+            --teal: #5ab0cc;
+            --fm-bg: #080706;
+            --fm-rule: #8b2020;
+            --fm-accent: #e07070;
+            --fm-text: #f2ede2;
+            --fm-muted: rgba(242, 237, 226, 0.42);
+            --fm-border: rgba(242, 237, 226, 0.10);
+            --toggle-bg: rgba(242, 237, 226, 0.10);
+            --toggle-ico: rgba(242, 237, 226, 0.60);
+            --section-bg: rgba(242, 237, 226, 0.04);
+            --section-border: rgba(242, 237, 226, 0.12);
+            --section-num: rgba(224, 112, 112, 0.65);
+            --callout-bg: rgba(224, 112, 112, 0.06);
+            --callout-border: rgba(224, 112, 112, 0.25);
+            --eq-bg: rgba(242, 237, 226, 0.025);
+            --eq-border: rgba(242, 237, 226, 0.11);
+            --tag-available-bg: rgba(224, 112, 112, 0.12);
+            --tag-available-border: rgba(224, 112, 112, 0.30);
+            --tag-available-color: #e07070;
+            --tag-draft-bg: rgba(212, 170, 85, 0.11);
+            --tag-draft-border: rgba(212, 170, 85, 0.28);
+            --tag-draft-color: #d4aa55;
+        }
+        *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;font-size:16px}
+        body{background:var(--paper);color:var(--ink);font-family:'EB Garamond',Georgia,'Times New Roman',serif;overflow-x:hidden;line-height:1.6;transition:background .22s ease,color .22s ease;max-width:100vw}
+        ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--paper2)}::-webkit-scrollbar-thumb{background:var(--ink5)}
+        .frontmatter{background:var(--fm-bg);color:var(--fm-text);position:relative;overflow:hidden;max-width:100vw}
+        .frontmatter::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 6px,rgba(255,255,255,0.012) 6px,rgba(255,255,255,0.012) 7px);pointer-events:none}
+        .fm-rule-top{height:3px;background:var(--fm-rule)}
+        .fm-series-bar{border-bottom:1px solid var(--fm-border);padding:.55rem 3rem;display:flex;justify-content:space-between;align-items:center;font-family:'Source Sans 3',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.58);flex-wrap:wrap;gap:.4rem}
+        .fm-body{max-width:1080px;margin:0 auto;padding:3.5rem 3rem 3rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:end;position:relative}
+        .fm-eyebrow{font-family:'Source Sans 3',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--fm-accent);margin-bottom:1.1rem}
+        .fm-title{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:500;font-style:italic;line-height:1.04;letter-spacing:-.015em;color:var(--fm-text);margin-bottom:.85rem;overflow-wrap:break-word;word-break:break-word}
+        .fm-title em{font-style:normal;font-weight:400;color:var(--fm-muted)}
+        .fm-subtitle{font-family:'Source Sans 3',sans-serif;font-size:.9rem;font-weight:300;color:rgba(255,255,255,.62);line-height:1.75;max-width:58ch}
+        .fm-meta{display:flex;flex-direction:column;gap:.85rem;font-family:'Source Code Pro',monospace;font-size:.62rem;min-width:200px;border-left:1px solid var(--fm-border);padding-left:2rem}
+        .fm-meta-row{display:flex;flex-direction:column;gap:.15rem}
+        .fm-meta-label{color:rgba(255,255,255,.40);letter-spacing:.16em;text-transform:uppercase;font-size:.52rem}
+        .fm-meta-value{color:rgba(255,255,255,.90);overflow-wrap:break-word}
+        .fm-rule-bot{height:1px;background:var(--fm-border);margin:0 3rem}
+        .fm-folio-bar{padding:.55rem 3rem;display:flex;justify-content:space-between;font-family:'Source Code Pro',monospace;font-size:.58rem;color:rgba(255,255,255,.38);letter-spacing:.08em;flex-wrap:wrap;gap:.4rem}
+        .theme-toggle{position:absolute;top:0;right:0;padding:.9rem 3rem 0 0;display:flex;align-items:center;gap:.55rem;z-index:10}
+        .toggle-label{font-family:'Source Sans 3',sans-serif;font-size:.6rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--fm-muted);user-select:none}
+        .toggle-btn{width:40px;height:20px;background:var(--toggle-bg);border:1px solid rgba(255,255,255,.14);border-radius:10px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+        .toggle-btn::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.7);transition:transform .22s cubic-bezier(.4,0,.2,1)}
+        [data-theme="dark"] .toggle-btn::after{transform:translateX(20px)}[data-theme="dark"] .toggle-btn{background:rgba(255,255,255,.12)}
+        .page{max-width:1080px;margin:0 auto;padding:0 3rem 6rem;display:grid;grid-template-columns:1fr 268px;gap:5rem;align-items:start}
+        .content{padding-top:3.5rem;max-width:100%;min-width:0}
+        .breadcrumb{display:flex;align-items:center;gap:.55rem;margin-bottom:2rem;font-family:'Source Sans 3',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);flex-wrap:wrap;overflow-wrap:break-word}
+        .breadcrumb a{color:var(--crimson);text-decoration:none}.breadcrumb a:hover{color:var(--crimson2);text-decoration:underline}
+        .breadcrumb .sep{color:var(--ink5);font-weight:400}.breadcrumb .current{color:var(--ink2)}
+        /* ML section tag */
+        .ml-tag{display:inline-block;font-family:'Source Sans 3',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:rgba(10,45,61,0.10);color:var(--teal);border:1px solid rgba(10,45,61,0.22);border-radius:3px;padding:.15rem .45rem;margin-left:.6rem;vertical-align:middle;flex-shrink:0}
+        [data-theme="dark"] .ml-tag{background:rgba(90,176,204,0.12);color:var(--teal);border-color:rgba(90,176,204,0.28)}
+        .section-block{margin-bottom:3rem;scroll-margin-top:2rem;max-width:100%}
+        .section-heading{display:flex;align-items:baseline;gap:1rem;margin-bottom:1rem;padding-bottom:.55rem;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+        .section-num-large{font-family:'Source Code Pro',monospace;font-size:1.05rem;font-weight:500;color:var(--crimson);letter-spacing:.04em;flex-shrink:0;min-width:3.6rem}
+        .section-title-large{font-family:'EB Garamond',Georgia,serif;font-size:1.6rem;font-weight:500;color:var(--ink);line-height:1.2;overflow-wrap:break-word}
+        .section-body{font-family:'Source Sans 3',sans-serif;font-size:.88rem;font-weight:400;color:var(--ink2);line-height:1.85;overflow-wrap:break-word;word-break:break-word}
+        .section-body p{margin-bottom:1rem}.section-body strong{color:var(--ink);font-weight:600}
+        .section-body ol,.section-body ul{margin:.6rem 0 1.2rem 1.5rem}.section-body ol li,.section-body ul li{margin-bottom:.35rem;padding-left:.3rem}
+        .intro-note{background:var(--callout-bg);border-left:3px solid var(--callout-border);padding:1.1rem 1.4rem;margin-bottom:2.6rem;font-family:'Source Sans 3',sans-serif;font-size:.84rem;color:var(--ink2);line-height:1.8;border-radius:0 6px 6px 0;overflow-wrap:break-word}
+        .intro-note strong{color:var(--crimson);font-weight:600}
+        .equation-block{background:var(--eq-bg);border:1px solid var(--eq-border);border-radius:5px;padding:1.1rem 1.3rem;margin:1rem 0 1.2rem;font-family:'STIX Two Math','Latin Modern Math','Cambria Math',serif;font-size:.94rem;font-weight:400;font-style:italic;color:var(--ink);overflow-x:auto;overflow-y:hidden;line-height:1.95;letter-spacing:.02em;max-width:100%}
+        .equation-block.multiline{white-space:normal;line-height:2.2;overflow-x:visible;word-break:break-word}
+        .var-def-list{list-style:none;margin:.6rem 0 1.4rem;border-top:1px solid var(--rule3);max-width:100%}
+        .var-def-item{display:flex;gap:.75rem;padding:.38rem 0;border-bottom:1px solid var(--rule3);font-family:'Source Sans 3',sans-serif;font-size:.78rem;font-weight:400;color:var(--ink3);line-height:1.55;align-items:baseline;flex-wrap:wrap}
+        .var-symbol{font-family:'STIX Two Math','Latin Modern Math','Cambria Math',serif;font-weight:500;font-style:italic;color:var(--crimson);min-width:4.6rem;flex-shrink:0;font-size:.82rem;letter-spacing:.03em;text-align:right;overflow-wrap:break-word}
+        .var-desc{flex:1;color:var(--ink2);min-width:0;overflow-wrap:break-word}
+        .conceptual-note{font-family:'Source Sans 3',sans-serif;font-size:.72rem;font-weight:400;color:var(--ink4);font-style:italic;margin-top:.5rem;padding:.4rem .6rem;background:var(--section-bg);border-radius:3px;display:inline-block;max-width:100%;overflow-wrap:break-word}
+        /* ML section divider */
+        .ml-divider{margin:3.5rem 0 2.5rem;display:flex;align-items:center;gap:1rem}
+        .ml-divider-line{flex:1;height:2px;background:linear-gradient(90deg,var(--teal),transparent)}
+        [data-theme="dark"] .ml-divider-line{background:linear-gradient(90deg,var(--teal),transparent)}
+        .ml-divider-label{font-family:'Source Sans 3',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);white-space:nowrap}
+        .sidebar{padding-top:3.5rem;overflow-y:auto;max-height:100vh;position:sticky;top:0}
+        .sb-section{margin-bottom:2.6rem;max-width:100%}
+        .sb-heading{font-family:'Source Sans 3',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);margin-bottom:.9rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule);overflow-wrap:break-word}
+        .sb-body{font-family:'Source Sans 3',sans-serif;font-size:.82rem;color:var(--ink3);line-height:1.75;overflow-wrap:break-word}
+        .sb-body p{margin-bottom:.65rem}.sb-body strong{color:var(--ink2);font-weight:600}
+        .sb-nav-list{list-style:none;display:flex;flex-direction:column;max-width:100%}
+        .sb-nav-list li{border-bottom:1px solid var(--rule3)}
+        .sb-nav-list a{display:block;padding:.55rem 0;font-family:'Source Sans 3',sans-serif;font-size:.78rem;font-weight:400;color:var(--ink3);text-decoration:none;transition:color .16s;overflow-wrap:break-word;word-break:break-word;line-height:1.5}
+        .sb-nav-list a:hover{color:var(--crimson)}
+        .sb-nav-list a.ml-nav{color:var(--teal)}
+        [data-theme="dark"] .sb-nav-list a.ml-nav{color:var(--teal)}
+        .sb-nav-list a.ml-nav:hover{opacity:.75}
+        .sb-nav-num{font-family:'Source Code Pro',monospace;font-size:.6rem;color:var(--crimson);margin-right:.4rem}
+        .sb-nav-num.ml{color:var(--teal)}
+        .sb-nav-sub{font-family:'Source Sans 3',sans-serif;font-size:.56rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);padding:.7rem 0 .2rem;border-bottom:1px solid var(--rule2)}
+        footer{background:var(--paper2);border-top:2px solid var(--ink);max-width:100vw}
+        .ft-inner{max-width:1080px;margin:0 auto;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+        .ft-title{font-family:'EB Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink2);overflow-wrap:break-word}
+        .ft-right{font-family:'Source Sans 3',sans-serif;font-size:.68rem;color:var(--ink4);letter-spacing:.04em;overflow-wrap:break-word}
+        #hamburger-btn{display:none;position:fixed;top:15px;left:15px;z-index:1001;background:#333;color:white;border:none;font-size:24px;padding:8px 12px;border-radius:5px;cursor:pointer}
+        #mobile-nav{display:none;position:fixed;top:0;left:0;height:100%;width:280px;max-width:80vw;background:#f5f5f5;box-shadow:2px 0 10px rgba(0,0,0,.3);z-index:1000;overflow-y:auto;padding:20px;transition:transform .3s ease;transform:translateX(-100%)}
+        [data-theme="dark"] #mobile-nav{background:#1a1a16;color:#f2ede2}[data-theme="dark"] #mobile-nav a{color:#e07070}
+        #mobile-nav.open{transform:translateX(0)}
+        #mobile-nav h3{margin-top:0;color:#333;font-family:'Source Sans 3',sans-serif;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}[data-theme="dark"] #mobile-nav h3{color:#f2ede2}
+        #mobile-nav ul{list-style:none;padding:0;margin:0}#mobile-nav li{margin:5px 0}
+        #mobile-nav a{text-decoration:none;color:#5c0a0a;font-size:15px;font-family:'Source Sans 3',sans-serif;display:block;padding:.35rem 0}#mobile-nav a:hover{text-decoration:underline}
+        #mobile-nav .mn-sub{font-size:.6rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#0a2d3d;padding:.7rem 0 .1rem;display:block}
+        [data-theme="dark"] #mobile-nav .mn-sub{color:#5ab0cc}
+        #nav-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:999}
+        @media (max-width:768px){#hamburger-btn{display:block}#mobile-nav{display:block}}
+        @media(max-width:820px){.page{grid-template-columns:1fr;gap:0}.sidebar{border-top:2px solid var(--ink);padding-top:2.5rem;max-width:100%;max-height:none;position:static}.var-symbol{min-width:3.8rem;font-size:.74rem}.equation-block{font-size:.84rem;padding:.95rem 1rem}.sb-nav-list a{font-size:.82rem;padding:.6rem 0}}
+        @media(max-width:680px){.page{padding:0 1.5rem 4rem}.fm-body{grid-template-columns:1fr;gap:1.5rem;padding:2.5rem 1.5rem 2rem}.fm-meta{border-left:none;border-top:1px solid var(--fm-border);padding-left:0;padding-top:1.25rem;min-width:0}.fm-rule-bot{margin:0 1.5rem}.fm-folio-bar{padding:.55rem 1.5rem}.fm-series-bar{padding:.55rem 1.5rem;font-size:.58rem;letter-spacing:.14em}.ft-inner{padding:1.2rem 1.5rem;flex-direction:column;align-items:flex-start;gap:.4rem}.theme-toggle{padding:.7rem 1.5rem 0 0}.section-num-large{min-width:2.8rem;font-size:.9rem}.section-title-large{font-size:1.3rem}.equation-block{font-size:.78rem;padding:.8rem .75rem}.equation-block.multiline{white-space:normal}.var-symbol{min-width:3.2rem;font-size:.7rem;text-align:left}.var-def-item{gap:.4rem}.sb-nav-list a{font-size:.8rem;padding:.55rem 0;line-height:1.5}.sb-heading{font-size:.58rem;letter-spacing:.16em}.breadcrumb{font-size:.58rem;letter-spacing:.08em;gap:.35rem}}
+        @media(max-width:400px){.page{padding:0 1rem 3rem}.fm-body{padding:2rem 1rem 1.5rem}.fm-rule-bot{margin:0 1rem}.fm-folio-bar{padding:.45rem 1rem}.fm-series-bar{padding:.45rem 1rem;font-size:.52rem;letter-spacing:.1em}.theme-toggle{padding:.5rem 1rem 0 0}.ft-inner{padding:1rem 1rem}.section-num-large{min-width:2.2rem;font-size:.78rem}.section-title-large{font-size:1.15rem}.equation-block{font-size:.72rem;padding:.65rem .6rem;border-radius:3px}.var-symbol{min-width:2.6rem;font-size:.66rem;text-align:left}.var-desc{font-size:.72rem}.sb-nav-list a{font-size:.76rem;padding:.5rem 0}.breadcrumb{font-size:.54rem;letter-spacing:.04em}.intro-note{padding:.85rem 1rem;font-size:.76rem}}
+        @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+    </style>
+</head>
+<body>
+    <div class="frontmatter">
+        <div class="fm-rule-top"></div>
+        <div class="fm-series-bar"><span>Mathematics Reference Series</span><span>Foundations for Machine Learning</span></div>
+        <div class="fm-body">
+            <div class="fm-left">
+                <div class="fm-eyebrow">Reference</div>
+                <h1 class="fm-title">Introduction to<br><em>Calculus</em></h1>
+                <p class="fm-subtitle">A structured mathematical reference covering limits, derivatives, integrals, sequences, series, multivariable calculus, differentials, matrix calculus, and Taylor's theorem — extended with machine learning essentials: convexity, gradient descent, backpropagation, automatic differentiation, proximal operators, and more.</p>
+            </div>
+            <div class="fm-meta">
+                <div class="fm-meta-row"><span class="fm-meta-label">Status</span><span class="fm-meta-value">Open Reference</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Sections</span><span class="fm-meta-value">60 Sections</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Numbering</span><span class="fm-meta-value">A2.1 — A2.60</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Domain</span><span class="fm-meta-value">Calculus · Real Analysis · Matrix Calculus · Optimization</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Prerequisites</span><span class="fm-meta-value">Precalculus · Linear Algebra</span></div>
+            </div>
+            <div class="theme-toggle"><span class="toggle-label" id="toggle-label-text">Light</span><button class="toggle-btn" id="themeToggle" aria-label="Switch to dark mode"></button></div>
+        </div>
+        <div class="fm-rule-bot"></div>
+        <div class="fm-folio-bar"><span>Calculus</span><span>Definitions · Theorems · Proofs — Reference</span></div>
+    </div>
+    <div class="page">
+        <main class="content">
+            <div class="breadcrumb"><a href="#">Mathematics</a><span class="sep">›</span><a href="#">Calculus</a><span class="sep">›</span><span class="current">Limits · Derivatives · Integrals · Series · Advanced · ML</span></div>
+            <div class="intro-note"><strong>Calculus</strong> is the mathematical study of continuous change. This reference builds from first principles — limits, derivatives, integrals, and series — then extends to multivariable functions, matrix calculus, and Taylor's theorem. Sections <strong>A2.43–A2.60</strong> cover the calculus concepts most critical to <strong>machine learning</strong>: convexity, gradient descent, backpropagation, Lagrange multipliers, automatic differentiation, and more. All formulas are rendered with <strong>MathJax</strong>.</div>
+
+            <!-- ── ORIGINAL SECTIONS A2.1–A2.42 ── -->
+            <div class="section-block" id="a2-1">
+                <div class="section-heading"><span class="section-num-large">A2.1</span><h2 class="section-title-large">Limit of a Function (ε–δ Definition)</h2></div>
+                <div class="section-body">
+                    <p>Let <em>f : D → ℝ</em> be a function defined on a set <em>D ⊆ ℝ</em>, and let <em>a</em> be a limit point of <em>D</em>. The <strong>limit</strong> of <em>f(x)</em> as <em>x</em> approaches <em>a</em> is <em>L</em>, written</p>
+                    <div class="equation-block">\[ \lim_{x\to a} f(x) = L, \]</div>
+                    <p>if for every <em>ε > 0</em> there exists <em>δ > 0</em> such that whenever <em>0 < |x − a| < δ</em> and <em>x ∈ D</em>, we have <em>|f(x) − L| < ε</em>.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\lim_{x\to a}f(x)$</span><span class="var-desc">the limit of <em>f</em> at <em>a</em>; the value <em>L</em> that <em>f(x)</em> approaches as <em>x → a</em>.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$\varepsilon$</span><span class="var-desc">an arbitrarily small positive tolerance on the output.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$\delta$</span><span class="var-desc">a positive radius around <em>a</em> ensuring the output stays within <em>ε</em> of <em>L</em>.</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section-block" id="a2-2">
+                <div class="section-heading"><span class="section-num-large">A2.2</span><h2 class="section-title-large">One-Sided Limits</h2></div>
+                <div class="section-body">
+                    <p>The <strong>right-hand limit</strong> of <em>f(x)</em> as <em>x</em> approaches <em>a</em> from the right is denoted <em>$\lim_{x\to a^+} f(x)$</em> and defined by restricting the ε–δ condition to <em>x > a</em>. Similarly, the <strong>left-hand limit</strong> <em>$\lim_{x\to a^-} f(x)$</em> restricts to <em>x < a</em>. The two-sided limit exists if and only if both one-sided limits exist and are equal:</p>
+                    <div class="equation-block multiline">\[ \lim_{x\to a} f(x) = L \quad\Longleftrightarrow\quad \lim_{x\to a^-} f(x) = \lim_{x\to a^+} f(x) = L. \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\lim_{x\to a^+} f(x)$</span><span class="var-desc">right-hand limit; <em>x</em> approaches <em>a</em> from above.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$\lim_{x\to a^-} f(x)$</span><span class="var-desc">left-hand limit; <em>x</em> approaches <em>a</em> from below.</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section-block" id="a2-3">
+                <div class="section-heading"><span class="section-num-large">A2.3</span><h2 class="section-title-large">Continuity</h2></div>
+                <div class="section-body">
+                    <p>A function <em>f : D → ℝ</em> is <strong>continuous</strong> at a point <em>a ∈ D</em> if</p>
+                    <div class="equation-block">\[ \lim_{x\to a} f(x) = f(a). \]</div>
+                    <p>Equivalently, for every <em>ε > 0</em> there exists <em>δ > 0</em> such that <em>|x − a| < δ</em> and <em>x ∈ D</em> implies <em>|f(x) − f(a)| < ε</em>. A function is continuous on an interval if it is continuous at every point of that interval.</p>
+                    <ul class="var-def-list"><li class="var-def-item"><span class="var-symbol">$f \in C^0(D)$</span><span class="var-desc">the set of all continuous functions on <em>D</em>.</span></li></ul>
+                </div>
+            </div>
+            <div class="section-block" id="a2-4">
+                <div class="section-heading"><span class="section-num-large">A2.4</span><h2 class="section-title-large">Intermediate Value Theorem</h2></div>
+                <div class="section-body">
+                    <p>Let <em>f : [a, b] → ℝ</em> be continuous on the closed interval <em>[a, b]</em>. If <em>y₀</em> is any number between <em>f(a)</em> and <em>f(b)</em> (inclusive), then there exists at least one <em>c ∈ [a, b]</em> such that</p>
+                    <div class="equation-block">\[ f(c) = y_0. \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$[a, b]$</span><span class="var-desc">a closed interval; includes both endpoints.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$y_0$</span><span class="var-desc">any value between <em>f(a)</em> and <em>f(b)</em>.</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section-block" id="a2-5">
+                <div class="section-heading"><span class="section-num-large">A2.5</span><h2 class="section-title-large">Extreme Value Theorem</h2></div>
+                <div class="section-body">
+                    <p>If <em>f : [a, b] → ℝ</em> is continuous on a closed and bounded interval <em>[a, b]</em>, then <em>f</em> attains both a <strong>maximum</strong> and a <strong>minimum</strong> value on <em>[a, b]</em>. That is, there exist <em>c, d ∈ [a, b]</em> such that</p>
+                    <div class="equation-block multiline">\[ f(c) \le f(x) \le f(d) \quad\text{for all } x\in[a,b]. \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$f(c)$</span><span class="var-desc">the global minimum value of <em>f</em> on <em>[a, b]</em>.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$f(d)$</span><span class="var-desc">the global maximum value of <em>f</em> on <em>[a, b]</em>.</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section-block" id="a2-6">
+                <div class="section-heading"><span class="section-num-large">A2.6</span><h2 class="section-title-large">The Derivative</h2></div>
+                <div class="section-body">
+                    <p>The <strong>derivative</strong> of a function <em>f</em> at a point <em>a</em> in its domain is the limit (if it exists):</p>
+                    <div class="equation-block multiline">\[ f'(a) = \lim_{h\to 0} \frac{f(a+h)-f(a)}{h}. \]</div>
+                    <p>Geometrically, <em>f'(a)</em> is the slope of the tangent line to the graph of <em>f</em> at <em>x = a</em>.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$f'(a)$</span><span class="var-desc">the derivative of <em>f</em> at <em>a</em>; also written <em>$\frac{df}{dx}\big|_{x=a}$</em> or <em>$Df(a)$</em>.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$h$</span><span class="var-desc">an infinitesimal increment; the difference quotient approaches the derivative as <em>h → 0</em>.</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section-block" id="a2-7">
+                <div class="section-heading"><span class="section-num-large">A2.7</span><h2 class="section-title-large">Differentiability Implies Continuity</h2></div>
+                <div class="section-body">
+                    <p>If <em>f</em> is differentiable at <em>a</em>, then <em>f</em> is continuous at <em>a</em>. The converse is false: continuity does not guarantee differentiability (e.g., <em>f(x) = |x|</em> at <em>x = 0</em>).</p>
+                    <div class="equation-block multiline">\[ f'(a)\text{ exists} \;\Longrightarrow\; \lim_{x\to a} f(x) = f(a). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-8">
+                <div class="section-heading"><span class="section-num-large">A2.8</span><h2 class="section-title-large">Basic Differentiation Rules</h2></div>
+                <div class="section-body">
+                    <p>For differentiable functions <em>f, g</em> and constant <em>c ∈ ℝ</em>:</p>
+                    <div class="equation-block multiline">\[ (c f)' = c f' \qquad (f+g)' = f' + g' \qquad (f g)' = f' g + f g' \qquad \left(\frac{f}{g}\right)' = \frac{f' g - f g'}{g^2} \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-9">
+                <div class="section-heading"><span class="section-num-large">A2.9</span><h2 class="section-title-large">The Chain Rule</h2></div>
+                <div class="section-body">
+                    <p>If <em>g</em> is differentiable at <em>x</em> and <em>f</em> is differentiable at <em>g(x)</em>, then <em>h = f ∘ g</em> is differentiable at <em>x</em> and</p>
+                    <div class="equation-block">\[ h'(x) = f'(g(x)) \cdot g'(x). \]</div>
+                    <p>In Leibniz notation: <em>$\frac{dy}{dx} = \frac{dy}{du}\cdot \frac{du}{dx}$</em>.</p>
+                </div>
+            </div>
+            <div class="section-block" id="a2-10">
+                <div class="section-heading"><span class="section-num-large">A2.10</span><h2 class="section-title-large">Mean Value Theorem</h2></div>
+                <div class="section-body">
+                    <p>Let <em>f : [a, b] → ℝ</em> be continuous on <em>[a, b]</em> and differentiable on <em>(a, b)</em>. Then there exists at least one <em>c ∈ (a, b)</em> such that</p>
+                    <div class="equation-block">\[ f'(c) = \frac{f(b)-f(a)}{b-a}. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-11">
+                <div class="section-heading"><span class="section-num-large">A2.11</span><h2 class="section-title-large">L'Hôpital's Rule</h2></div>
+                <div class="section-body">
+                    <p>If <em>$\lim_{x\to a} f(x) = \lim_{x\to a} g(x) = 0$</em> or both limits are <em>±∞</em>, then</p>
+                    <div class="equation-block multiline">\[ \lim_{x\to a} \frac{f(x)}{g(x)} = \lim_{x\to a} \frac{f'(x)}{g'(x)}, \]</div>
+                    <p>provided the limit on the right exists.</p>
+                </div>
+            </div>
+            <div class="section-block" id="a2-12">
+                <div class="section-heading"><span class="section-num-large">A2.12</span><h2 class="section-title-large">Higher-Order Derivatives</h2></div>
+                <div class="section-body">
+                    <p>The <strong>n-th derivative</strong> <em>$f^{(n)}(x)$</em> is defined recursively:</p>
+                    <div class="equation-block multiline">\[ f^{(n)}(x) = \frac{d}{dx}\left[f^{(n-1)}(x)\right],\qquad f^{(0)}(x) = f(x). \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$f \in C^n$</span><span class="var-desc"><em>f</em> is <em>n</em>-times continuously differentiable.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$C^\infty$</span><span class="var-desc">smooth functions; infinitely differentiable.</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section-block" id="a2-13">
+                <div class="section-heading"><span class="section-num-large">A2.13</span><h2 class="section-title-large">Taylor Polynomials</h2></div>
+                <div class="section-body">
+                    <p>The <strong>Taylor polynomial</strong> of degree <em>n</em> for <em>f</em> centred at <em>a</em> is</p>
+                    <div class="equation-block multiline">\[ T_n(x) = \sum_{k=0}^n \frac{f^{(k)}(a)}{k!}(x-a)^k. \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$R_n(x)$</span><span class="var-desc">remainder: <em>$f(x) - T_n(x) = O(|x-a|^{n+1})$</em>.</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section-block" id="a2-14">
+                <div class="section-heading"><span class="section-num-large">A2.14</span><h2 class="section-title-large">The Riemann Integral</h2></div>
+                <div class="section-body">
+                    <p>For a partition <em>$P = \{x_0,\dots,x_n\}$</em> of <em>[a, b]</em>, the <strong>Riemann sum</strong> is</p>
+                    <div class="equation-block multiline">\[ S(P,f) = \sum_{i=1}^{n} f(t_i) \Delta x_i,\qquad t_i \in [x_{i-1}, x_i]. \]</div>
+                    <p>The <strong>Riemann integral</strong> is the limit as <em>$\|P\| \to 0$</em>.</p>
+                </div>
+            </div>
+            <div class="section-block" id="a2-15">
+                <div class="section-heading"><span class="section-num-large">A2.15</span><h2 class="section-title-large">Fundamental Theorem of Calculus (Part I)</h2></div>
+                <div class="section-body">
+                    <p>Define <em>$F(x) = \int_a^x f(t)\,dt$</em>. If <em>f</em> is continuous at <em>c</em>, then <em>F</em> is differentiable at <em>c</em> and</p>
+                    <div class="equation-block">\[ F'(c) = f(c). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-16">
+                <div class="section-heading"><span class="section-num-large">A2.16</span><h2 class="section-title-large">Fundamental Theorem of Calculus (Part II)</h2></div>
+                <div class="section-body">
+                    <p>If <em>F</em> is any antiderivative of <em>f</em> on <em>[a, b]</em>, then</p>
+                    <div class="equation-block">\[ \int_a^b f(x)\,dx = F(b) - F(a). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-17">
+                <div class="section-heading"><span class="section-num-large">A2.17</span><h2 class="section-title-large">Integration by Substitution</h2></div>
+                <div class="section-body">
+                    <div class="equation-block multiline">\[ \int_a^b f(g(x))\,g'(x)\,dx = \int_{g(a)}^{g(b)} f(u)\,du. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-18">
+                <div class="section-heading"><span class="section-num-large">A2.18</span><h2 class="section-title-large">Integration by Parts</h2></div>
+                <div class="section-body">
+                    <div class="equation-block multiline">\[ \int_a^b u(x) v'(x)\,dx = \big[u(x)v(x)\big]_a^b - \int_a^b u'(x) v(x)\,dx. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-19">
+                <div class="section-heading"><span class="section-num-large">A2.19</span><h2 class="section-title-large">Improper Integrals</h2></div>
+                <div class="section-body">
+                    <div class="equation-block multiline">\[ \int_a^\infty f(x)\,dx = \lim_{b\to\infty} \int_a^b f(x)\,dx. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-20">
+                <div class="section-heading"><span class="section-num-large">A2.20</span><h2 class="section-title-large">Sequences and Convergence</h2></div>
+                <div class="section-body">
+                    <p>A sequence <em>$(a_n)$</em> converges to <em>L</em> if</p>
+                    <div class="equation-block multiline">\[ \forall \varepsilon > 0,\; \exists N \in \mathbb{N}\colon n \ge N \Rightarrow |a_n - L| < \varepsilon. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-21">
+                <div class="section-heading"><span class="section-num-large">A2.21</span><h2 class="section-title-large">Infinite Series</h2></div>
+                <div class="section-body">
+                    <p>The series <em>$\sum_{n=1}^\infty a_n$</em> converges to <em>S</em> if <em>$\lim_{N\to\infty} S_N = S$</em>, where <em>$S_N = \sum_{n=1}^N a_n$</em>.</p>
+                </div>
+            </div>
+            <div class="section-block" id="a2-22">
+                <div class="section-heading"><span class="section-num-large">A2.22</span><h2 class="section-title-large">Convergence Tests for Series</h2></div>
+                <div class="section-body">
+                    <ul>
+                        <li><strong>Comparison Test:</strong> <em>$0 \le a_n \le b_n$</em> and <em>$\sum b_n$</em> converges ⇒ <em>$\sum a_n$</em> converges.</li>
+                        <li><strong>Ratio Test:</strong> <em>$\rho = \lim |a_{n+1}/a_n|$</em>; converges if <em>$\rho < 1$</em>, diverges if <em>$\rho > 1$</em>.</li>
+                        <li><strong>Integral Test:</strong> <em>$\sum a_n$</em> converges iff <em>$\int_1^\infty f(x)\,dx$</em> converges (when <em>$f(n)=a_n$</em>, <em>f</em> positive, decreasing).</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="section-block" id="a2-23">
+                <div class="section-heading"><span class="section-num-large">A2.23</span><h2 class="section-title-large">Power Series</h2></div>
+                <div class="section-body">
+                    <div class="equation-block multiline">\[ \sum_{n=0}^\infty a_n (x-c)^n,\qquad R = \frac{1}{\limsup_{n\to\infty} |a_n|^{1/n}}. \]</div>
+                    <p>Converges absolutely for <em>$|x-c| < R$</em>, diverges for <em>$|x-c| > R$</em>.</p>
+                </div>
+            </div>
+            <div class="section-block" id="a2-24">
+                <div class="section-heading"><span class="section-num-large">A2.24</span><h2 class="section-title-large">Taylor and Maclaurin Series</h2></div>
+                <div class="section-body">
+                    <div class="equation-block multiline">\[ f(x) = \sum_{n=0}^\infty \frac{f^{(n)}(c)}{n!} (x-c)^n. \]</div>
+                    <div class="equation-block multiline">\[ e^x = \sum_{n=0}^\infty \frac{x^n}{n!},\qquad \sin x = \sum_{n=0}^\infty \frac{(-1)^n x^{2n+1}}{(2n+1)!},\qquad \frac{1}{1-x} = \sum_{n=0}^\infty x^n \;(|x|<1). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-25">
+                <div class="section-heading"><span class="section-num-large">A2.25</span><h2 class="section-title-large">Functions of Several Variables</h2></div>
+                <div class="section-body">
+                    <p>A function <em>$f : \mathbb{R}^n \to \mathbb{R}$</em> assigns a real number to each point <em>$x = (x_1,\dots,x_n)$</em>. The limit <em>$\lim_{x\to a}f(x)=L$</em> requires <em>$0 < \|x-a\| < \delta \Rightarrow |f(x)-L|<\varepsilon$</em>.</p>
+                </div>
+            </div>
+            <div class="section-block" id="a2-26">
+                <div class="section-heading"><span class="section-num-large">A2.26</span><h2 class="section-title-large">Partial Derivatives</h2></div>
+                <div class="section-body">
+                    <div class="equation-block multiline">\[ \frac{\partial f}{\partial x_i}(a) = \lim_{h\to 0} \frac{f(a_1,\dots,a_i+h,\dots,a_n) - f(a)}{h}. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-27">
+                <div class="section-heading"><span class="section-num-large">A2.27</span><h2 class="section-title-large">Gradient and Directional Derivatives</h2></div>
+                <div class="section-body">
+                    <div class="equation-block">\[ \nabla f(a) = \left( \frac{\partial f}{\partial x_1}(a),\dots,\frac{\partial f}{\partial x_n}(a) \right)^T. \]</div>
+                    <div class="equation-block">\[ D_v f(a) = \nabla f(a) \cdot v \qquad (\|v\|=1). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-28">
+                <div class="section-heading"><span class="section-num-large">A2.28</span><h2 class="section-title-large">Multiple Integrals and Fubini's Theorem</h2></div>
+                <div class="section-body">
+                    <div class="equation-block multiline">\[ \iint_R f(x,y)\,dA = \int_a^b \left( \int_c^d f(x,y)\,dy \right) dx = \int_c^d \left( \int_a^b f(x,y)\,dx \right) dy. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-29">
+                <div class="section-heading"><span class="section-num-large">A2.29</span><h2 class="section-title-large">Segment Notation</h2></div>
+                <div class="section-body">
+                    <div class="equation-block">\[ [x, y] = \{ (1-t)x + t y : 0 \le t \le 1 \}. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-30">
+                <div class="section-heading"><span class="section-num-large">A2.30</span><h2 class="section-title-large">Differential of a Vector‑Valued Function (Jacobian)</h2></div>
+                <div class="section-body">
+                    <p>For <em>$f : U \to \mathbb{R}^m$</em>, the <strong>differential</strong> at <em>x</em> is the <em>$m \times d$</em> matrix</p>
+                    <div class="equation-block">\[ df(x) = \big[ \partial_1 f(x), \dots, \partial_d f(x) \big]. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-31">
+                <div class="section-heading"><span class="section-num-large">A2.31</span><h2 class="section-title-large">Product Rule for Differentials</h2></div>
+                <div class="section-body">
+                    <div class="equation-block">\[ d(fg)(x) = f(x)\,dg(x) + g(x)\,df(x). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-32">
+                <div class="section-heading"><span class="section-num-large">A2.32</span><h2 class="section-title-large">Chain Rule for Multivariable Functions</h2></div>
+                <div class="section-body">
+                    <div class="equation-block">\[ d(f \circ g)(x) = df(g(x)) \cdot dg(x). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-33">
+                <div class="section-heading"><span class="section-num-large">A2.33</span><h2 class="section-title-large">Divergence</h2></div>
+                <div class="section-body">
+                    <div class="equation-block">\[ \nabla \cdot f(x) = \operatorname{trace}(df(x)) = \sum_{i=1}^d \partial_i f^{(i)}(x). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-34">
+                <div class="section-heading"><span class="section-num-large">A2.34</span><h2 class="section-title-large">Gradient with Respect to a Matrix Field</h2></div>
+                <div class="section-body">
+                    <div class="equation-block">\[ \nabla_A f(x) = A(x)^{-1} df(x)^T. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-35">
+                <div class="section-heading"><span class="section-num-large">A2.35</span><h2 class="section-title-large">Differential of the Determinant</h2></div>
+                <div class="section-body">
+                    <div class="equation-block">\[ d(\det)(A) H = \operatorname{trace}(\operatorname{cof}(A)^T H). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-36">
+                <div class="section-heading"><span class="section-num-large">A2.36</span><h2 class="section-title-large">Differential of Matrix Inversion</h2></div>
+                <div class="section-body">
+                    <div class="equation-block">\[ dI(A) H = -A^{-1} H A^{-1}. \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-37">
+                <div class="section-heading"><span class="section-num-large">A2.37</span><h2 class="section-title-large">Higher‑Order Partial Derivatives</h2></div>
+                <div class="section-body">
+                    <p>If all partials up to order <em>k</em> exist and are continuous, <em>f</em> is <em>$C^k$</em> and the order of differentiation is irrelevant: <em>$\partial_1\partial_2\partial_1 f = \partial_1^2 \partial_2 f$</em>.</p>
+                </div>
+            </div>
+            <div class="section-block" id="a2-38">
+                <div class="section-heading"><span class="section-num-large">A2.38</span><h2 class="section-title-large">k‑th Differential (Multilinear Map)</h2></div>
+                <div class="section-body">
+                    <div class="equation-block multiline">\[ d^k f(x)(h_1,\dots,h_k) = \sum_{i_1,\dots,i_k=1}^d h_1^{(i_1)} \cdots h_k^{(i_k)} \partial_{i_k}\cdots\partial_{i_1} f(x). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-39">
+                <div class="section-heading"><span class="section-num-large">A2.39</span><h2 class="section-title-large">Hessian Matrix</h2></div>
+                <div class="section-body">
+                    <div class="equation-block">\[ \nabla^2 f(x) = \big( \partial_i \partial_j f(x) \big)_{i,j=1,\dots,d}. \]</div>
+                    <ul class="var-def-list"><li class="var-def-item"><span class="var-symbol">$\nabla^2 f(x)$</span><span class="var-desc">symmetric <em>$d\times d$</em> matrix; <em>$h_1^T \nabla^2 f(x) h_2 = d^2 f(x)(h_1, h_2)$</em>.</span></li></ul>
+                </div>
+            </div>
+            <div class="section-block" id="a2-40">
+                <div class="section-heading"><span class="section-num-large">A2.40</span><h2 class="section-title-large">Laplacian</h2></div>
+                <div class="section-body">
+                    <div class="equation-block">\[ \Delta f(x) = \operatorname{trace}(\nabla^2 f(x)) = \sum_{i=1}^d \partial_i^2 f(x). \]</div>
+                </div>
+            </div>
+            <div class="section-block" id="a2-41">
+                <div class="section-heading"><span class="section-num-large">A2.41</span><h2 class="section-title-large">Taylor's Theorem (Multivariable, Integral Form)</h2></div>
+                <div class="section-body">
+                    <p>Let <em>$f \in C^k$</em> and <em>$[x, x+h] \subset U$</em>. Then</p>
+                    <div class="equation-block multiline">\[ f(x+h) = \sum_{j=0}^{k-1} \frac{1}{j!} d^{j}f(x)(h,\dots,h) + \frac{1}{(k-1)!} \int_{0}^{1} (1-t)^{k-1} d^{k}f(x+th)(h,\dots,h)\, dt. \]</div>
+                    <p>In big-O form: <em>$f(x+h) = \sum_{j=0}^{k} \frac{1}{j!} d^{j}f(x)(h,\dots,h) + o(\|h\|^k)$</em>.</p>
+                </div>
+            </div>
+            <div class="section-block" id="a2-42">
+                <div class="section-heading"><span class="section-num-large">A2.42</span><h2 class="section-title-large">Summary of Differential and Integral Formulas</h2></div>
+                <div class="section-body">
+                    <h3 style="font-family:'Source Sans 3',sans-serif;font-weight:600;margin:1rem 0 .5rem;color:var(--ink);">Differentiation Rules</h3>
+                    <ul>
+                        <li>Constant multiple: $(c f)' = c f'$</li>
+                        <li>Sum: $(f+g)' = f' + g'$</li>
+                        <li>Product: $(fg)' = f'g + fg'$</li>
+                        <li>Quotient: $(f/g)' = (f'g - fg')/g^2$</li>
+                        <li>Chain: $(f\circ g)' = f'(g)\cdot g'$</li>
+                    </ul>
+                    <h3 style="font-family:'Source Sans 3',sans-serif;font-weight:600;margin:1rem 0 .5rem;color:var(--ink);">Elementary Derivatives</h3>
+                    <ul>
+                        <li>$\frac{d}{dx}x^n = nx^{n-1}$</li>
+                        <li>$\frac{d}{dx}e^x = e^x$, $\frac{d}{dx}\ln x = 1/x$</li>
+                        <li>$\frac{d}{dx}\sin x = \cos x$, $\frac{d}{dx}\cos x = -\sin x$</li>
+                        <li>$\frac{d}{dx}\arctan x = 1/(1+x^2)$</li>
+                    </ul>
+                    <h3 style="font-family:'Source Sans 3',sans-serif;font-weight:600;margin:1rem 0 .5rem;color:var(--ink);">Integration Rules</h3>
+                    <ul>
+                        <li>Linearity: $\int(c_1 f+c_2 g) = c_1\int f + c_2\int g$</li>
+                        <li>Parts: $\int u\,dv = uv - \int v\,du$</li>
+                        <li>FTC II: $\int_a^b f = F(b)-F(a)$</li>
+                    </ul>
+                    <h3 style="font-family:'Source Sans 3',sans-serif;font-weight:600;margin:1rem 0 .5rem;color:var(--ink);">Multivariable Formulas</h3>
+                    <ul>
+                        <li>Gradient: $\nabla f = (\partial_1 f,\dots,\partial_d f)^T$</li>
+                        <li>Divergence: $\nabla\cdot F = \sum \partial_i F_i$</li>
+                        <li>Laplacian: $\Delta f = \sum \partial_i^2 f$</li>
+                        <li>Det differential: $d(\det)(A)H = \operatorname{trace}(\operatorname{cof}(A)^TH)$</li>
+                        <li>Inverse differential: $d(A^{-1})H = -A^{-1}HA^{-1}$</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ── ML EXTENSIONS DIVIDER ── -->
+            <div class="ml-divider">
+                <div class="ml-divider-line"></div>
+                <span class="ml-divider-label">Machine Learning Extensions · A2.43–A2.60</span>
+                <div class="ml-divider-line" style="background:linear-gradient(90deg,transparent,var(--teal))"></div>
+            </div>
+
+            <!-- A2.43 Convex Functions -->
+            <div class="section-block" id="a2-43">
+                <div class="section-heading"><span class="section-num-large">A2.43</span><h2 class="section-title-large">Convex Functions <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>A function <em>$f : C \to \mathbb{R}$</em> on a convex set <em>$C \subseteq \mathbb{R}^d$</em> is <strong>convex</strong> if for all <em>$x, y \in C$</em> and <em>$t \in [0, 1]$</em>,</p>
+                    <div class="equation-block multiline">\[ f\!\bigl((1-t)x + ty\bigr) \le (1-t)f(x) + t f(y). \]</div>
+                    <p>Geometrically, the chord connecting any two points on the graph lies above (or on) the graph. If the inequality is strict for <em>$x \neq y$</em> and <em>$t \in (0,1)$</em>, <em>f</em> is <strong>strictly convex</strong>.</p>
+                    <p>For a <em>$C^2$</em> function, convexity is equivalent to the Hessian being positive semi-definite everywhere:</p>
+                    <div class="equation-block">\[ f \text{ is convex} \iff \nabla^2 f(x) \succeq 0 \quad \forall\, x \in C. \]</div>
+                    <p>Convex functions have a crucial property: every <strong>local minimum is a global minimum</strong>. This makes convexity the central structural assumption in optimization for machine learning.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$A \succeq 0$</span><span class="var-desc">positive semi-definite; all eigenvalues are non-negative.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$A \succ 0$</span><span class="var-desc">strictly positive definite; all eigenvalues are strictly positive.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.44 First-Order Optimality -->
+            <div class="section-block" id="a2-44">
+                <div class="section-heading"><span class="section-num-large">A2.44</span><h2 class="section-title-large">First-Order Optimality Conditions <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>Let <em>$f : \mathbb{R}^d \to \mathbb{R}$</em> be differentiable. A necessary condition for <em>$x^*$</em> to be a local minimum is that the gradient vanishes:</p>
+                    <div class="equation-block">\[ \nabla f(x^*) = 0. \]</div>
+                    <p>Such a point is called a <strong>critical point</strong>. If <em>f</em> is convex, this condition is also <em>sufficient</em> for a global minimum. For constrained minimization <em>$\min_{x \in C} f(x)$</em> over a convex set <em>C</em>, the first-order condition becomes the <strong>variational inequality</strong>:</p>
+                    <div class="equation-block">\[ \nabla f(x^*)^T (y - x^*) \ge 0 \quad \forall\, y \in C. \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$x^*$</span><span class="var-desc">an optimal point (minimizer); satisfies the stationarity condition.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.45 Second-Order Conditions -->
+            <div class="section-block" id="a2-45">
+                <div class="section-heading"><span class="section-num-large">A2.45</span><h2 class="section-title-large">Second-Order Conditions and Saddle Points <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>Let <em>$f \in C^2$</em> and <em>$\nabla f(x^*) = 0$</em>. Let <em>$H = \nabla^2 f(x^*)$</em>:</p>
+                    <div class="equation-block multiline">\[ H \succ 0 \;\Rightarrow\; \text{strict local min},\quad H \prec 0 \;\Rightarrow\; \text{strict local max},\quad H \text{ indefinite} \;\Rightarrow\; \text{saddle point.} \]</div>
+                    <p>A <strong>saddle point</strong> is a critical point that is neither local min nor max. In neural network training, the loss landscape is typically non-convex and riddled with saddle points; their proliferation in high dimensions is a key challenge for gradient-based optimizers.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">saddle point</span><span class="var-desc">a critical point where <em>H</em> is indefinite; a min in some directions, max in others.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.46 Gradient Descent -->
+            <div class="section-block" id="a2-46">
+                <div class="section-heading"><span class="section-num-large">A2.46</span><h2 class="section-title-large">Gradient Descent <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p><strong>Gradient descent</strong> is the canonical first-order algorithm for minimizing a differentiable function. Starting from <em>$x_0$</em>, the update rule is</p>
+                    <div class="equation-block">\[ x_{k+1} = x_k - \eta \,\nabla f(x_k), \]</div>
+                    <p>where <em>$\eta > 0$</em> is the <strong>learning rate</strong>. For a convex, <em>L</em>-smooth function with step size <em>$\eta = 1/L$</em>, the convergence rate is</p>
+                    <div class="equation-block">\[ f(x_k) - f(x^*) \le \frac{L\|x_0 - x^*\|^2}{2k}. \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\eta$</span><span class="var-desc">learning rate; controls the step size in the negative gradient direction.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$L$</span><span class="var-desc">Lipschitz constant of <em>$\nabla f$</em>; governs the maximum stable step size.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.47 SGD -->
+            <div class="section-block" id="a2-47">
+                <div class="section-heading"><span class="section-num-large">A2.47</span><h2 class="section-title-large">Stochastic Gradient Descent <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>For an objective that is a sum over <em>n</em> training samples, <em>$f(x) = \frac{1}{n}\sum_{i=1}^n \ell_i(x)$</em>, <strong>SGD</strong> approximates the gradient with a mini-batch <em>$\mathcal{B}$</em>:</p>
+                    <div class="equation-block">\[ x_{k+1} = x_k - \eta_k \,g_k, \qquad g_k = \frac{1}{|\mathcal{B}|}\sum_{i\in\mathcal{B}} \nabla \ell_i(x_k). \]</div>
+                    <p>The estimator is <strong>unbiased</strong>: <em>$\mathbb{E}[g_k] = \nabla f(x_k)$</em>. Convergence requires a diminishing step-size schedule or adaptive methods (Adam, RMSProp). SGD is the workhorse of deep learning.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$g_k$</span><span class="var-desc">stochastic gradient; an unbiased estimate of <em>$\nabla f(x_k)$</em>.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$\mathcal{B}$</span><span class="var-desc">mini-batch; a random subset of training indices.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.48 Lagrange Multipliers -->
+            <div class="section-block" id="a2-48">
+                <div class="section-heading"><span class="section-num-large">A2.48</span><h2 class="section-title-large">Lagrange Multipliers and Constrained Optimization <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>To minimize <em>$f(x)$</em> subject to <em>$g_i(x) = 0$</em>, form the <strong>Lagrangian</strong>:</p>
+                    <div class="equation-block">\[ \mathcal{L}(x, \lambda) = f(x) + \sum_{i=1}^m \lambda_i\, g_i(x). \]</div>
+                    <p>At an optimum, the KKT stationarity condition requires</p>
+                    <div class="equation-block">\[ \nabla_x \mathcal{L}(x^*, \lambda^*) = \nabla f(x^*) + \sum_{i=1}^m \lambda_i^* \nabla g_i(x^*) = 0. \]</div>
+                    <p>For inequality constraints <em>$h_j(x) \le 0$</em>, KKT requires <em>$\mu_j \ge 0$</em> and complementary slackness <em>$\mu_j h_j(x^*) = 0$</em>. These conditions underpin SVMs, duality theory, and constrained neural network training.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\mathcal{L}$</span><span class="var-desc">Lagrangian; a penalized objective combining <em>f</em> and constraint violations.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$\lambda_i, \mu_j$</span><span class="var-desc">Lagrange / KKT multipliers for equality and inequality constraints.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.49 Backpropagation -->
+            <div class="section-block" id="a2-49">
+                <div class="section-heading"><span class="section-num-large">A2.49</span><h2 class="section-title-large">Backpropagation and the Computational Graph <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p><strong>Backpropagation</strong> is a systematic application of the chain rule on a <strong>computational graph</strong> to compute the gradient of a scalar loss <em>$\mathcal{L}$</em> with respect to all parameters. For a network computing <em>$z^{(l)} = \sigma(W^{(l)} z^{(l-1)} + b^{(l)})$</em>, define the error signal <em>$\delta^{(l)} = \partial \mathcal{L}/\partial z^{(l)}$</em>. The recurrence is</p>
+                    <div class="equation-block multiline">\[ \delta^{(l)} = \bigl(W^{(l+1)}\bigr)^T \delta^{(l+1)} \odot \sigma'\!\bigl(W^{(l)} z^{(l-1)} + b^{(l)}\bigr), \]</div>
+                    <p>and the weight gradients are</p>
+                    <div class="equation-block">\[ \frac{\partial \mathcal{L}}{\partial W^{(l)}} = \delta^{(l)} \bigl(z^{(l-1)}\bigr)^T. \]</div>
+                    <p>One forward pass (cache activations) plus one backward pass (propagate errors) gives all gradients in <em>$O(\text{parameters})$</em> time.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\delta^{(l)}$</span><span class="var-desc">error signal at layer <em>l</em>; gradient of the loss w.r.t. layer outputs.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$\odot$</span><span class="var-desc">element-wise (Hadamard) product.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.50 JVP / VJP -->
+            <div class="section-block" id="a2-50">
+                <div class="section-heading"><span class="section-num-large">A2.50</span><h2 class="section-title-large">Jacobian–Vector and Vector–Jacobian Products <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>For <em>$f : \mathbb{R}^d \to \mathbb{R}^m$</em> with Jacobian <em>$J = df(x) \in \mathbb{R}^{m\times d}$</em>:</p>
+                    <div class="equation-block">\[ \text{JVP}(v) = J v \;\in \mathbb{R}^m \quad\text{(forward-mode autodiff)}, \]</div>
+                    <div class="equation-block">\[ \text{VJP}(u) = J^T u \;\in \mathbb{R}^d \quad\text{(reverse-mode autodiff / backprop)}. \]</div>
+                    <p>For scalar losses (<em>m = 1</em>), one VJP with <em>$u = 1$</em> recovers the full gradient <em>$\nabla f(x)$</em> in a single pass — this is why reverse-mode is preferred when <em>d</em> (number of parameters) vastly exceeds <em>m</em>.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">JVP</span><span class="var-desc">Jacobian–vector product; directional derivative of <em>f</em> in direction <em>v</em>.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">VJP</span><span class="var-desc">vector–Jacobian product; gives gradients in one reverse pass.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.51 Lipschitz / Smoothness -->
+            <div class="section-block" id="a2-51">
+                <div class="section-heading"><span class="section-num-large">A2.51</span><h2 class="section-title-large">Lipschitz Continuity and Gradient Smoothness <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>A function is <strong>Lipschitz continuous</strong> with constant <em>$K$</em> if <em>$\|f(x)-f(y)\| \le K\|x-y\|$</em>. A differentiable scalar function is <strong><em>L</em>-smooth</strong> if</p>
+                    <div class="equation-block">\[ \|\nabla f(x) - \nabla f(y)\| \le L\,\|x - y\|. \]</div>
+                    <p>The <strong>descent lemma</strong> (key convergence tool) follows from <em>L</em>-smoothness:</p>
+                    <div class="equation-block">\[ f(y) \le f(x) + \nabla f(x)^T(y-x) + \frac{L}{2}\|y-x\|^2. \]</div>
+                    <p>This quadratic upper bound justifies the step size <em>$\eta \le 1/L$</em> in gradient descent.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$L$</span><span class="var-desc">smoothness constant; bounds the curvature; governs stable step sizes.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.52 Strong Convexity -->
+            <div class="section-block" id="a2-52">
+                <div class="section-heading"><span class="section-num-large">A2.52</span><h2 class="section-title-large">Strong Convexity <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>A differentiable function <em>$f$</em> is <strong><em>μ</em>-strongly convex</strong> if for all <em>$x, y$</em>,</p>
+                    <div class="equation-block">\[ f(y) \ge f(x) + \nabla f(x)^T(y-x) + \frac{\mu}{2}\|y-x\|^2. \]</div>
+                    <p>This ensures a <strong>unique global minimum</strong> and linear convergence. For an <em>L</em>-smooth, <em>μ</em>-strongly convex function, gradient descent converges as</p>
+                    <div class="equation-block">\[ \|x_k - x^*\|^2 \le \left(1 - \frac{\mu}{L}\right)^k \|x_0 - x^*\|^2. \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\mu$</span><span class="var-desc">strong convexity modulus; minimum curvature.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$\kappa = L/\mu$</span><span class="var-desc">condition number; large <em>κ</em> means slow convergence.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.53 Change of Variables -->
+            <div class="section-block" id="a2-53">
+                <div class="section-heading"><span class="section-num-large">A2.53</span><h2 class="section-title-large">Change of Variables for Probability Densities <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>Let <em>$g : \mathbb{R}^d \to \mathbb{R}^d$</em> be a diffeomorphism and <em>$Y = g(X)$</em> where <em>$X$</em> has density <em>$p_X$</em>. Then</p>
+                    <div class="equation-block">\[ p_Y(y) = \frac{p_X(x)}{|\det\, dg(x)|}\bigg|_{x=g^{-1}(y)}. \]</div>
+                    <p>The absolute Jacobian determinant <em>$|\det\, dg(x)|$</em> accounts for local volume distortion. This formula is fundamental to <strong>normalizing flows</strong>, the reparameterization trick in VAEs, and latent variable models.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$|\det\, dg|$</span><span class="var-desc">absolute Jacobian determinant; local volume scaling of the transformation.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.54 Convex Conjugate -->
+            <div class="section-block" id="a2-54">
+                <div class="section-heading"><span class="section-num-large">A2.54</span><h2 class="section-title-large">Convex Conjugate (Legendre–Fenchel Transform) <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>The <strong>convex conjugate</strong> (Fenchel conjugate) of <em>$f$</em> is</p>
+                    <div class="equation-block">\[ f^*(y) = \sup_{x \in \mathbb{R}^d} \bigl\{ y^T x - f(x) \bigr\}. \]</div>
+                    <p>The function <em>$f^*$</em> is always convex. For a convex, closed, proper <em>f</em>, the biconjugate satisfies <em>$f^{**} = f$</em>. The <strong>Fenchel–Young inequality</strong> states</p>
+                    <div class="equation-block">\[ f(x) + f^*(y) \ge x^T y. \]</div>
+                    <p>Conjugates appear in dual SVM formulations, mirror descent, and the derivation of softmax from the log-partition function.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$f^*(y)$</span><span class="var-desc">conjugate of <em>f</em>; always convex regardless of <em>f</em>.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.55 Subgradients -->
+            <div class="section-block" id="a2-55">
+                <div class="section-heading"><span class="section-num-large">A2.55</span><h2 class="section-title-large">Subgradients and Subgradient Methods <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>For a convex but possibly non-smooth <em>$f$</em>, a vector <em>$s$</em> is a <strong>subgradient</strong> at <em>x</em> if</p>
+                    <div class="equation-block">\[ f(y) \ge f(x) + s^T(y - x) \quad \forall\, y. \]</div>
+                    <p>The <strong>subdifferential</strong> <em>$\partial f(x)$</em> is the set of all subgradients. Optimality: <em>$0 \in \partial f(x^*)$</em>. The <strong>subgradient method</strong> is</p>
+                    <div class="equation-block">\[ x_{k+1} = x_k - \eta_k\, s_k, \quad s_k \in \partial f(x_k). \]</div>
+                    <p>Lasso regression, hinge loss, and ReLU activations all require subgradient reasoning. For <em>$f(x)=|x|$</em> at <em>$x=0$</em>: <em>$\partial f(0) = [-1,1]$</em>.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\partial f(x)$</span><span class="var-desc">subdifferential; set of all subgradients at <em>x</em>.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.56 Automatic Differentiation -->
+            <div class="section-block" id="a2-56">
+                <div class="section-heading"><span class="section-num-large">A2.56</span><h2 class="section-title-large">Automatic Differentiation <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p><strong>Automatic differentiation (AD)</strong> computes exact derivatives of programs via the chain rule on a computational graph — neither symbolic math nor finite differences.</p>
+                    <ul>
+                        <li><strong>Forward mode (JVP):</strong> propagates tangents <em>$\dot{v}_i = \partial v_i/\partial x_j$</em> alongside values; cost = <em>O(d)</em> passes for <em>d</em> inputs.</li>
+                        <li><strong>Reverse mode (VJP):</strong> propagates adjoints <em>$\bar{v}_i = \partial\mathcal{L}/\partial v_i$</em> backwards; cost = <em>O(1)</em> forward + backward for any number of inputs.</li>
+                    </ul>
+                    <p>The fundamental update at each node in reverse mode:</p>
+                    <div class="equation-block">\[ \bar{v}_{j} \mathrel{+}= \bar{v}_i \cdot \frac{\partial v_i}{\partial v_j}. \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\dot{v}_i$</span><span class="var-desc">forward tangent of node <em>i</em>.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$\bar{v}_i$</span><span class="var-desc">reverse adjoint of node <em>i</em>; gradient of loss w.r.t. intermediate value.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.57 Multivariate Gaussian -->
+            <div class="section-block" id="a2-57">
+                <div class="section-heading"><span class="section-num-large">A2.57</span><h2 class="section-title-large">Multivariate Gaussian and Calculus of Quadratic Forms <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>The multivariate Gaussian density with mean <em>$\mu$</em> and covariance <em>$\Sigma \succ 0$</em>:</p>
+                    <div class="equation-block">\[ p(x;\mu,\Sigma) = \frac{1}{(2\pi)^{d/2}|\det\Sigma|^{1/2}} \exp\!\left(-\tfrac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\right). \]</div>
+                    <p>Key matrix calculus identities for quadratic forms (constant symmetric <em>A</em>):</p>
+                    <div class="equation-block multiline">\[ \nabla_x(x^T A x) = 2Ax, \qquad \nabla_x(a^T x) = a, \qquad \frac{\partial}{\partial A}(x^T A x) = x x^T. \]</div>
+                    <p>The log-determinant gradient (needed for MLE of <em>$\Sigma$</em>):</p>
+                    <div class="equation-block">\[ \nabla_\Sigma \log\det\Sigma = \Sigma^{-1} \quad (\Sigma \text{ symmetric}). \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$x^T A x$</span><span class="var-desc">quadratic form; appears in Gaussian exponent and regularization.</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$\log\det\Sigma$</span><span class="var-desc">log-determinant; in Gaussian log-likelihood and KL divergence.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.58 Leibniz Rule -->
+            <div class="section-block" id="a2-58">
+                <div class="section-heading"><span class="section-num-large">A2.58</span><h2 class="section-title-large">Differentiation Under the Integral Sign (Leibniz Rule) <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>Under dominated convergence, differentiation and integration may be exchanged:</p>
+                    <div class="equation-block">\[ \frac{d}{d\theta} \int f(x,\theta)\, dx = \int \frac{\partial f}{\partial\theta}(x,\theta)\, dx. \]</div>
+                    <p>For expectations over a <em>fixed</em> distribution: <em>$\nabla_\theta\,\mathbb{E}_{p(x)}[f(x,\theta)] = \mathbb{E}_{p(x)}[\nabla_\theta f(x,\theta)]$</em>.</p>
+                    <p>When the distribution also depends on <em>$\theta$</em>, the <strong>log-derivative (REINFORCE) trick</strong> gives</p>
+                    <div class="equation-block multiline">\[ \nabla_\theta\, \mathbb{E}_{p(x;\theta)}[f(x)] = \mathbb{E}_{p(x;\theta)}\!\bigl[f(x)\,\nabla_\theta \log p(x;\theta)\bigr]. \]</div>
+                    <p>These identities underpin the <strong>reparameterization trick</strong> in VAEs and the <strong>policy gradient theorem</strong> in reinforcement learning.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\nabla_\theta \log p$</span><span class="var-desc">score function; its expectation under <em>$p(\cdot;\theta)$</em> equals zero.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.59 Fourier/Laplace -->
+            <div class="section-block" id="a2-59">
+                <div class="section-heading"><span class="section-num-large">A2.59</span><h2 class="section-title-large">Integral Transforms: Fourier and Laplace <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>The <strong>Fourier transform</strong> of <em>$f \in L^1(\mathbb{R}^d)$</em>:</p>
+                    <div class="equation-block">\[ \hat{f}(\xi) = \int_{\mathbb{R}^d} f(x)\, e^{-2\pi i\, \xi^T x}\, dx. \]</div>
+                    <p>Differentiation becomes multiplication in frequency space: <em>$\widehat{\partial_j f}(\xi) = 2\pi i\,\xi_j\,\hat{f}(\xi)$</em>. This is central to understanding neural network expressivity, kernel methods (Bochner's theorem), and spectral analysis.</p>
+                    <p>The <strong>Laplace transform</strong>:</p>
+                    <div class="equation-block">\[ \mathcal{L}\{f\}(s) = \int_0^\infty f(t)\, e^{-st}\, dt. \]</div>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\hat{f}(\xi)$</span><span class="var-desc">Fourier transform at frequency <em>$\xi$</em>; turns derivatives into multiplications.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A2.60 Proximal Operators -->
+            <div class="section-block" id="a2-60">
+                <div class="section-heading"><span class="section-num-large">A2.60</span><h2 class="section-title-large">Proximal Operators and Proximal Gradient Method <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>For a convex function <em>$g$</em> and step size <em>$\eta > 0$</em>, the <strong>proximal operator</strong> is</p>
+                    <div class="equation-block">\[ \operatorname{prox}_{\eta g}(v) = \arg\min_{x} \left\{ g(x) + \frac{1}{2\eta}\|x - v\|^2 \right\}. \]</div>
+                    <p>The <strong>proximal gradient method</strong> minimizes composite objectives <em>$f(x)+g(x)$</em> (smooth <em>f</em>, non-smooth <em>g</em>):</p>
+                    <div class="equation-block">\[ x_{k+1} = \operatorname{prox}_{\eta g}\!\bigl(x_k - \eta \nabla f(x_k)\bigr). \]</div>
+                    <p>For <em>$g(x)=\lambda\|x\|_1$</em> (Lasso), the proximal operator is <strong>soft-thresholding</strong>:</p>
+                    <div class="equation-block">\[ \bigl(\operatorname{prox}_{\eta g}(v)\bigr)_i = \operatorname{sign}(v_i)\max(|v_i| - \eta\lambda,\, 0). \]</div>
+                    <p>Proximal methods underlie ADMM, sparse representation, and many deep learning regularizers.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\operatorname{prox}_{\eta g}$</span><span class="var-desc">proximal operator; balances proximity to <em>v</em> with minimizing <em>g</em>.</span></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- END OF ALL SECTIONS -->
+        </main>
+
+        <aside class="sidebar">
+            <div class="sb-section">
+                <div class="sb-heading">About This Reference</div>
+                <div class="sb-body">
+                    <p><strong>Introduction to Calculus</strong> covers limits, differentiation, integration, series, and advanced topics including differentials of vector-valued functions, matrix calculus, and Taylor's theorem.</p>
+                    <p>Sections <strong>A2.43–A2.60</strong> extend the reference with <strong>machine learning essentials</strong>: convexity theory, gradient descent, backpropagation, automatic differentiation, Lagrange multipliers, proximal operators, and more.</p>
+                </div>
+            </div>
+            <div class="sb-section">
+                <div class="sb-heading">Quick Navigation</div>
+                <ul class="sb-nav-list">
+                    <li><a href="#a2-1"><span class="sb-nav-num">A2.1</span>Limit of a Function</a></li>
+                    <li><a href="#a2-2"><span class="sb-nav-num">A2.2</span>One‑Sided Limits</a></li>
+                    <li><a href="#a2-3"><span class="sb-nav-num">A2.3</span>Continuity</a></li>
+                    <li><a href="#a2-4"><span class="sb-nav-num">A2.4</span>Intermediate Value Theorem</a></li>
+                    <li><a href="#a2-5"><span class="sb-nav-num">A2.5</span>Extreme Value Theorem</a></li>
+                    <li><a href="#a2-6"><span class="sb-nav-num">A2.6</span>The Derivative</a></li>
+                    <li><a href="#a2-7"><span class="sb-nav-num">A2.7</span>Differentiability ⇒ Continuity</a></li>
+                    <li><a href="#a2-8"><span class="sb-nav-num">A2.8</span>Differentiation Rules</a></li>
+                    <li><a href="#a2-9"><span class="sb-nav-num">A2.9</span>Chain Rule</a></li>
+                    <li><a href="#a2-10"><span class="sb-nav-num">A2.10</span>Mean Value Theorem</a></li>
+                    <li><a href="#a2-11"><span class="sb-nav-num">A2.11</span>L'Hôpital's Rule</a></li>
+                    <li><a href="#a2-12"><span class="sb-nav-num">A2.12</span>Higher‑Order Derivatives</a></li>
+                    <li><a href="#a2-13"><span class="sb-nav-num">A2.13</span>Taylor Polynomials</a></li>
+                    <li><a href="#a2-14"><span class="sb-nav-num">A2.14</span>Riemann Integral</a></li>
+                    <li><a href="#a2-15"><span class="sb-nav-num">A2.15</span>FTC Part I</a></li>
+                    <li><a href="#a2-16"><span class="sb-nav-num">A2.16</span>FTC Part II</a></li>
+                    <li><a href="#a2-17"><span class="sb-nav-num">A2.17</span>Integration by Substitution</a></li>
+                    <li><a href="#a2-18"><span class="sb-nav-num">A2.18</span>Integration by Parts</a></li>
+                    <li><a href="#a2-19"><span class="sb-nav-num">A2.19</span>Improper Integrals</a></li>
+                    <li><a href="#a2-20"><span class="sb-nav-num">A2.20</span>Sequences</a></li>
+                    <li><a href="#a2-21"><span class="sb-nav-num">A2.21</span>Infinite Series</a></li>
+                    <li><a href="#a2-22"><span class="sb-nav-num">A2.22</span>Convergence Tests</a></li>
+                    <li><a href="#a2-23"><span class="sb-nav-num">A2.23</span>Power Series</a></li>
+                    <li><a href="#a2-24"><span class="sb-nav-num">A2.24</span>Taylor &amp; Maclaurin Series</a></li>
+                    <li><a href="#a2-25"><span class="sb-nav-num">A2.25</span>Functions of Several Variables</a></li>
+                    <li><a href="#a2-26"><span class="sb-nav-num">A2.26</span>Partial Derivatives</a></li>
+                    <li><a href="#a2-27"><span class="sb-nav-num">A2.27</span>Gradient &amp; Directional Derivatives</a></li>
+                    <li><a href="#a2-28"><span class="sb-nav-num">A2.28</span>Multiple Integrals</a></li>
+                    <li><a href="#a2-29"><span class="sb-nav-num">A2.29</span>Segment Notation</a></li>
+                    <li><a href="#a2-30"><span class="sb-nav-num">A2.30</span>Differential (Jacobian)</a></li>
+                    <li><a href="#a2-31"><span class="sb-nav-num">A2.31</span>Product Rule (Differentials)</a></li>
+                    <li><a href="#a2-32"><span class="sb-nav-num">A2.32</span>Chain Rule (Multivariable)</a></li>
+                    <li><a href="#a2-33"><span class="sb-nav-num">A2.33</span>Divergence</a></li>
+                    <li><a href="#a2-34"><span class="sb-nav-num">A2.34</span>Gradient w.r.t. Matrix Field</a></li>
+                    <li><a href="#a2-35"><span class="sb-nav-num">A2.35</span>Differential of the Determinant</a></li>
+                    <li><a href="#a2-36"><span class="sb-nav-num">A2.36</span>Differential of Matrix Inversion</a></li>
+                    <li><a href="#a2-37"><span class="sb-nav-num">A2.37</span>Higher‑Order Partial Derivatives</a></li>
+                    <li><a href="#a2-38"><span class="sb-nav-num">A2.38</span>k‑th Differential (Multilinear)</a></li>
+                    <li><a href="#a2-39"><span class="sb-nav-num">A2.39</span>Hessian Matrix</a></li>
+                    <li><a href="#a2-40"><span class="sb-nav-num">A2.40</span>Laplacian</a></li>
+                    <li><a href="#a2-41"><span class="sb-nav-num">A2.41</span>Taylor's Theorem (Multivariable)</a></li>
+                    <li><a href="#a2-42"><span class="sb-nav-num">A2.42</span>Summary of Formulas</a></li>
+                    <li class="sb-nav-sub">Machine Learning · A2.43–A2.60</li>
+                    <li><a href="#a2-43" class="ml-nav"><span class="sb-nav-num ml">A2.43</span>Convex Functions</a></li>
+                    <li><a href="#a2-44" class="ml-nav"><span class="sb-nav-num ml">A2.44</span>First-Order Optimality</a></li>
+                    <li><a href="#a2-45" class="ml-nav"><span class="sb-nav-num ml">A2.45</span>Second-Order &amp; Saddle Points</a></li>
+                    <li><a href="#a2-46" class="ml-nav"><span class="sb-nav-num ml">A2.46</span>Gradient Descent</a></li>
+                    <li><a href="#a2-47" class="ml-nav"><span class="sb-nav-num ml">A2.47</span>Stochastic Gradient Descent</a></li>
+                    <li><a href="#a2-48" class="ml-nav"><span class="sb-nav-num ml">A2.48</span>Lagrange Multipliers / KKT</a></li>
+                    <li><a href="#a2-49" class="ml-nav"><span class="sb-nav-num ml">A2.49</span>Backpropagation</a></li>
+                    <li><a href="#a2-50" class="ml-nav"><span class="sb-nav-num ml">A2.50</span>JVP &amp; VJP</a></li>
+                    <li><a href="#a2-51" class="ml-nav"><span class="sb-nav-num ml">A2.51</span>Lipschitz &amp; Smoothness</a></li>
+                    <li><a href="#a2-52" class="ml-nav"><span class="sb-nav-num ml">A2.52</span>Strong Convexity</a></li>
+                    <li><a href="#a2-53" class="ml-nav"><span class="sb-nav-num ml">A2.53</span>Change of Variables (PDF)</a></li>
+                    <li><a href="#a2-54" class="ml-nav"><span class="sb-nav-num ml">A2.54</span>Convex Conjugate</a></li>
+                    <li><a href="#a2-55" class="ml-nav"><span class="sb-nav-num ml">A2.55</span>Subgradients</a></li>
+                    <li><a href="#a2-56" class="ml-nav"><span class="sb-nav-num ml">A2.56</span>Automatic Differentiation</a></li>
+                    <li><a href="#a2-57" class="ml-nav"><span class="sb-nav-num ml">A2.57</span>Gaussian &amp; Quadratic Forms</a></li>
+                    <li><a href="#a2-58" class="ml-nav"><span class="sb-nav-num ml">A2.58</span>Leibniz Rule &amp; REINFORCE</a></li>
+                    <li><a href="#a2-59" class="ml-nav"><span class="sb-nav-num ml">A2.59</span>Fourier &amp; Laplace Transforms</a></li>
+                    <li><a href="#a2-60" class="ml-nav"><span class="sb-nav-num ml">A2.60</span>Proximal Operators</a></li>
+                </ul>
+            </div>
+            <div class="sb-section">
+                <div class="sb-heading">Notation</div>
+                <div class="sb-body">
+                    <p><strong>$\nabla f$</strong> — gradient &nbsp;|&nbsp; <strong>$df(x)$</strong> — Jacobian</p>
+                    <p><strong>$\nabla^2 f$</strong> — Hessian &nbsp;|&nbsp; <strong>$\Delta f$</strong> — Laplacian</p>
+                    <p><strong>$\partial f(x)$</strong> — subdifferential</p>
+                    <p><strong>$\operatorname{prox}_{\eta g}$</strong> — proximal operator</p>
+                    <p><strong>$f^*$</strong> — convex conjugate</p>
+                    <p><strong>$A \succ 0$</strong> — positive definite</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+    <footer><div class="ft-inner"><span class="ft-title">Calculus Reference · Foundations for Machine Learning</span><span class="ft-right">Mathematics Reference Series · A2.1–A2.60 · Open Reference</span></div></footer>
+
+    <button id="hamburger-btn" aria-label="Open navigation menu">☰</button>
+    <div id="nav-overlay"></div>
+    <nav id="mobile-nav">
+        <h3>Navigation</h3>
+        <ul>
+            <li><a href="#a2-1">A2.1 — Limit of a Function</a></li>
+            <li><a href="#a2-2">A2.2 — One‑Sided Limits</a></li>
+            <li><a href="#a2-3">A2.3 — Continuity</a></li>
+            <li><a href="#a2-4">A2.4 — IVT</a></li>
+            <li><a href="#a2-5">A2.5 — EVT</a></li>
+            <li><a href="#a2-6">A2.6 — The Derivative</a></li>
+            <li><a href="#a2-7">A2.7 — Differentiability</a></li>
+            <li><a href="#a2-8">A2.8 — Differentiation Rules</a></li>
+            <li><a href="#a2-9">A2.9 — Chain Rule</a></li>
+            <li><a href="#a2-10">A2.10 — Mean Value Theorem</a></li>
+            <li><a href="#a2-11">A2.11 — L'Hôpital's Rule</a></li>
+            <li><a href="#a2-12">A2.12 — Higher-Order Derivatives</a></li>
+            <li><a href="#a2-13">A2.13 — Taylor Polynomials</a></li>
+            <li><a href="#a2-14">A2.14 — Riemann Integral</a></li>
+            <li><a href="#a2-15">A2.15 — FTC Part I</a></li>
+            <li><a href="#a2-16">A2.16 — FTC Part II</a></li>
+            <li><a href="#a2-17">A2.17 — Substitution</a></li>
+            <li><a href="#a2-18">A2.18 — Integration by Parts</a></li>
+            <li><a href="#a2-19">A2.19 — Improper Integrals</a></li>
+            <li><a href="#a2-20">A2.20 — Sequences</a></li>
+            <li><a href="#a2-21">A2.21 — Infinite Series</a></li>
+            <li><a href="#a2-22">A2.22 — Convergence Tests</a></li>
+            <li><a href="#a2-23">A2.23 — Power Series</a></li>
+            <li><a href="#a2-24">A2.24 — Taylor &amp; Maclaurin</a></li>
+            <li><a href="#a2-25">A2.25 — Several Variables</a></li>
+            <li><a href="#a2-26">A2.26 — Partial Derivatives</a></li>
+            <li><a href="#a2-27">A2.27 — Gradient</a></li>
+            <li><a href="#a2-28">A2.28 — Multiple Integrals</a></li>
+            <li><a href="#a2-29">A2.29 — Segment Notation</a></li>
+            <li><a href="#a2-30">A2.30 — Jacobian</a></li>
+            <li><a href="#a2-31">A2.31 — Product Rule</a></li>
+            <li><a href="#a2-32">A2.32 — Chain Rule (Multi)</a></li>
+            <li><a href="#a2-33">A2.33 — Divergence</a></li>
+            <li><a href="#a2-34">A2.34 — Matrix Gradient</a></li>
+            <li><a href="#a2-35">A2.35 — Det Differential</a></li>
+            <li><a href="#a2-36">A2.36 — Inverse Differential</a></li>
+            <li><a href="#a2-37">A2.37 — Higher Partials</a></li>
+            <li><a href="#a2-38">A2.38 — k-th Differential</a></li>
+            <li><a href="#a2-39">A2.39 — Hessian</a></li>
+            <li><a href="#a2-40">A2.40 — Laplacian</a></li>
+            <li><a href="#a2-41">A2.41 — Taylor Multivariable</a></li>
+            <li><a href="#a2-42">A2.42 — Formula Summary</a></li>
+            <li><a class="mn-sub">— Machine Learning —</a></li>
+            <li><a href="#a2-43">A2.43 — Convex Functions</a></li>
+            <li><a href="#a2-44">A2.44 — First-Order Optimality</a></li>
+            <li><a href="#a2-45">A2.45 — Saddle Points</a></li>
+            <li><a href="#a2-46">A2.46 — Gradient Descent</a></li>
+            <li><a href="#a2-47">A2.47 — SGD</a></li>
+            <li><a href="#a2-48">A2.48 — Lagrange / KKT</a></li>
+            <li><a href="#a2-49">A2.49 — Backpropagation</a></li>
+            <li><a href="#a2-50">A2.50 — JVP &amp; VJP</a></li>
+            <li><a href="#a2-51">A2.51 — Lipschitz &amp; Smoothness</a></li>
+            <li><a href="#a2-52">A2.52 — Strong Convexity</a></li>
+            <li><a href="#a2-53">A2.53 — Change of Variables</a></li>
+            <li><a href="#a2-54">A2.54 — Convex Conjugate</a></li>
+            <li><a href="#a2-55">A2.55 — Subgradients</a></li>
+            <li><a href="#a2-56">A2.56 — Auto-Diff</a></li>
+            <li><a href="#a2-57">A2.57 — Gaussian &amp; Quadratic Forms</a></li>
+            <li><a href="#a2-58">A2.58 — Leibniz / REINFORCE</a></li>
+            <li><a href="#a2-59">A2.59 — Fourier &amp; Laplace</a></li>
+            <li><a href="#a2-60">A2.60 — Proximal Operators</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        const lbl = document.getElementById('toggle-label-text');
+        const saved = localStorage.getItem('calc-theme');
+        if (saved) { html.setAttribute('data-theme', saved); syncUI(); }
+        btn.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('calc-theme', next);
+            syncUI();
+        });
+        function syncUI() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            lbl.textContent = isDark ? 'Dark' : 'Light';
+            btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        }
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileNav = document.getElementById('mobile-nav');
+        const navOverlay = document.getElementById('nav-overlay');
+        function openNav(){ mobileNav.classList.add('open'); navOverlay.style.display='block'; hamburgerBtn.style.display='none'; }
+        function closeNav(){ mobileNav.classList.remove('open'); navOverlay.style.display='none'; hamburgerBtn.style.display='block'; }
+        hamburgerBtn.addEventListener('click', openNav);
+        navOverlay.addEventListener('click', closeNav);
+        mobileNav.querySelectorAll('a[href]').forEach(link => { link.addEventListener('click', closeNav); });
+    </script>
+</body>
+</html>
