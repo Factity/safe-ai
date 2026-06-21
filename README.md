@@ -124,7 +124,7 @@ The final chapter looks outward, considering how AI transforms international rel
 
 - **A1:** Linear Algebra  
 - **A2:** Probability and Statistics  
-- **A3:** Calculus  
+- **A3:** 
 - **A4:** Machine Learning  
 - **A5:** Deep Learning  
 - **A6:** Programming  
