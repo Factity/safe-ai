@@ -17,88 +17,90 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
     <style>
-        [data-theme="light"] {
-            --paper: #f7f4ec;
-            --paper2: #eae6db;
-            --paper3: #dedad0;
-            --ink: #080706;
-            --ink2: #1c1a14;
-            --ink3: #3e3830;
-            --ink4: #736c62;
-            --ink5: #b0a99f;
-            --rule: rgba(8, 7, 6, 0.20);
-            --rule2: rgba(8, 7, 6, 0.11);
-            --rule3: rgba(8, 7, 6, 0.06);
-            --crimson: #5c0a0a;
-            --crimson2: #7a1010;
-            --crimson-lo: rgba(92, 10, 10, 0.07);
-            --hover-lo: rgba(8, 7, 6, 0.05);
-            --gold: #513d08;
-            --gold-lo: rgba(81, 61, 8, 0.09);
-            --teal: #0a2d3d;
-            --fm-bg: #080705;
-            --fm-rule: #5c0a0a;
-            --fm-accent: #a02020;
-            --fm-text: #ffffff;
-            --fm-muted: rgba(255, 255, 255, 0.45);
-            --fm-border: rgba(255, 255, 255, 0.11);
-            --toggle-bg: rgba(255, 255, 255, 0.10);
-            --toggle-ico: rgba(255, 255, 255, 0.60);
-            --section-bg: rgba(8, 7, 6, 0.04);
-            --section-border: rgba(8, 7, 6, 0.16);
-            --section-num: rgba(92, 10, 10, 0.60);
-            --callout-bg: rgba(92, 10, 10, 0.04);
-            --callout-border: rgba(92, 10, 10, 0.22);
-            --eq-bg: rgba(8, 7, 6, 0.025);
-            --eq-border: rgba(8, 7, 6, 0.13);
-            --tag-available-bg: rgba(92, 10, 10, 0.09);
-            --tag-available-border: rgba(92, 10, 10, 0.26);
-            --tag-available-color: #5c0a0a;
-            --tag-draft-bg: rgba(81, 61, 8, 0.09);
-            --tag-draft-border: rgba(81, 61, 8, 0.24);
-            --tag-draft-color: #513d08;
-        }
-        [data-theme="dark"] {
-            --paper: #0c0b08;
-            --paper2: #141310;
-            --paper3: #1d1c18;
-            --ink: #f2ede2;
-            --ink2: #d8d2c4;
-            --ink3: #b0a898;
-            --ink4: #766e62;
-            --ink5: #3a3730;
-            --rule: rgba(242, 237, 226, 0.18);
-            --rule2: rgba(242, 237, 226, 0.10);
-            --rule3: rgba(242, 237, 226, 0.05);
-            --crimson: #e07070;
-            --crimson2: #f08080;
-            --crimson-lo: rgba(224, 112, 112, 0.12);
-            --hover-lo: rgba(242, 237, 226, 0.05);
-            --gold: #d4aa55;
-            --gold-lo: rgba(212, 170, 85, 0.11);
-            --teal: #5ab0cc;
-            --fm-bg: #080706;
-            --fm-rule: #8b2020;
-            --fm-accent: #e07070;
-            --fm-text: #f2ede2;
-            --fm-muted: rgba(242, 237, 226, 0.42);
-            --fm-border: rgba(242, 237, 226, 0.10);
-            --toggle-bg: rgba(242, 237, 226, 0.10);
-            --toggle-ico: rgba(242, 237, 226, 0.60);
-            --section-bg: rgba(242, 237, 226, 0.04);
-            --section-border: rgba(242, 237, 226, 0.12);
-            --section-num: rgba(224, 112, 112, 0.65);
-            --callout-bg: rgba(224, 112, 112, 0.06);
-            --callout-border: rgba(224, 112, 112, 0.25);
-            --eq-bg: rgba(242, 237, 226, 0.025);
-            --eq-border: rgba(242, 237, 226, 0.11);
-            --tag-available-bg: rgba(224, 112, 112, 0.12);
-            --tag-available-border: rgba(224, 112, 112, 0.30);
-            --tag-available-color: #e07070;
-            --tag-draft-bg: rgba(212, 170, 85, 0.11);
-            --tag-draft-border: rgba(212, 170, 85, 0.28);
-            --tag-draft-color: #d4aa55;
-        }
+       [data-theme="light"] {
+    --paper: #f7f4ec;
+    --paper2: #eae6db;
+    --paper3: #dedad0;
+    --ink: #080706;
+    --ink2: #1c1a14;
+    --ink3: #3e3830;
+    --ink4: #736c62;
+    --ink5: #b0a99f;
+    --rule: rgba(8, 7, 6, 0.20);
+    --rule2: rgba(8, 7, 6, 0.11);
+    --rule3: rgba(8, 7, 6, 0.06);
+    /* crimson → blue gem (sapphire-inspired) */
+    --crimson: #0a2a5c;
+    --crimson2: #1d3b6e;
+    --crimson-lo: rgba(10, 42, 92, 0.07);
+    --hover-lo: rgba(8, 7, 6, 0.05);
+    --gold: #513d08;
+    --gold-lo: rgba(81, 61, 8, 0.09);
+    --teal: #0a2d3d;
+    --fm-bg: #080705;
+    --fm-rule: #0a2a5c;
+    --fm-accent: #265292;
+    --fm-text: #ffffff;
+    --fm-muted: rgba(255, 255, 255, 0.45);
+    --fm-border: rgba(255, 255, 255, 0.11);
+    --toggle-bg: rgba(255, 255, 255, 0.10);
+    --toggle-ico: rgba(255, 255, 255, 0.60);
+    --section-bg: rgba(8, 7, 6, 0.04);
+    --section-border: rgba(8, 7, 6, 0.16);
+    --section-num: rgba(10, 42, 92, 0.60);
+    --callout-bg: rgba(10, 42, 92, 0.04);
+    --callout-border: rgba(10, 42, 92, 0.22);
+    --eq-bg: rgba(8, 7, 6, 0.025);
+    --eq-border: rgba(8, 7, 6, 0.13);
+    --tag-available-bg: rgba(10, 42, 92, 0.09);
+    --tag-available-border: rgba(10, 42, 92, 0.26);
+    --tag-available-color: #0a2a5c;
+    --tag-draft-bg: rgba(81, 61, 8, 0.09);
+    --tag-draft-border: rgba(81, 61, 8, 0.24);
+    --tag-draft-color: #513d08;
+}
+[data-theme="dark"] {
+    --paper: #0c0b08;
+    --paper2: #141310;
+    --paper3: #1d1c18;
+    --ink: #f2ede2;
+    --ink2: #d8d2c4;
+    --ink3: #b0a898;
+    --ink4: #766e62;
+    --ink5: #3a3730;
+    --rule: rgba(242, 237, 226, 0.18);
+    --rule2: rgba(242, 237, 226, 0.10);
+    --rule3: rgba(242, 237, 226, 0.05);
+    /* crimson → blue gem (sapphire-inspired) */
+    --crimson: #7c8ce5;
+    --crimson2: #8a9cee;
+    --crimson-lo: rgba(124, 140, 229, 0.12);
+    --hover-lo: rgba(242, 237, 226, 0.05);
+    --gold: #d4aa55;
+    --gold-lo: rgba(212, 170, 85, 0.11);
+    --teal: #5ab0cc;
+    --fm-bg: #080706;
+    --fm-rule: #2a4a7a;
+    --fm-accent: #7c8ce5;
+    --fm-text: #f2ede2;
+    --fm-muted: rgba(242, 237, 226, 0.42);
+    --fm-border: rgba(242, 237, 226, 0.10);
+    --toggle-bg: rgba(242, 237, 226, 0.10);
+    --toggle-ico: rgba(242, 237, 226, 0.60);
+    --section-bg: rgba(242, 237, 226, 0.04);
+    --section-border: rgba(242, 237, 226, 0.12);
+    --section-num: rgba(124, 140, 229, 0.65);
+    --callout-bg: rgba(124, 140, 229, 0.06);
+    --callout-border: rgba(124, 140, 229, 0.25);
+    --eq-bg: rgba(242, 237, 226, 0.025);
+    --eq-border: rgba(242, 237, 226, 0.11);
+    --tag-available-bg: rgba(124, 140, 229, 0.12);
+    --tag-available-border: rgba(124, 140, 229, 0.30);
+    --tag-available-color: #7c8ce5;
+    --tag-draft-bg: rgba(212, 170, 85, 0.11);
+    --tag-draft-border: rgba(212, 170, 85, 0.28);
+    --tag-draft-color: #d4aa55;
+}
         *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;font-size:16px}
         body{background:var(--paper);color:var(--ink);font-family:'EB Garamond',Georgia,'Times New Roman',serif;overflow-x:hidden;line-height:1.6;transition:background .22s ease,color .22s ease;max-width:100vw}
         ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--paper2)}::-webkit-scrollbar-thumb{background:var(--ink5)}
@@ -199,8 +201,8 @@
             </div>
             <div class="fm-meta">
                 <div class="fm-meta-row"><span class="fm-meta-label">Status</span><span class="fm-meta-value">Open Reference</span></div>
-                <div class="fm-meta-row"><span class="fm-meta-label">Sections</span><span class="fm-meta-value">60 Sections</span></div>
-                <div class="fm-meta-row"><span class="fm-meta-label">Numbering</span><span class="fm-meta-value">A2.1 — A2.60</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Sections</span><span class="fm-meta-value">97 Sections</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Numbering</span><span class="fm-meta-value">A2.1 — A2.97</span></div>
                 <div class="fm-meta-row"><span class="fm-meta-label">Domain</span><span class="fm-meta-value">Calculus · Real Analysis · Matrix Calculus · Optimization</span></div>
                 <div class="fm-meta-row"><span class="fm-meta-label">Prerequisites</span><span class="fm-meta-value">Precalculus · Linear Algebra</span></div>
             </div>
@@ -841,6 +843,533 @@
                     </ul>
                 </div>
             </div>
+
+<!-- A2.61 Global Minimizers and Maximizers -->
+<div class="section-block" id="a2-61">
+    <div class="section-heading"><span class="section-num-large">A2.61</span><h2 class="section-title-large">Global Minimizers and Maximizers</h2></div>
+    <div class="section-body">
+        <p>A point <em>$x \in \Omega$</em> is a <strong>global minimizer</strong> (resp. <strong>maximizer</strong>) of <em>$F$</em> on <em>$\Omega$</em> if <em>$F(y) \ge F(x)$</em> (resp. <em>$F(y) \le F(x)$</em>) for all <em>$y \in \Omega$</em>. Equivalently,</p>
+        <div class="equation-block multiline">\[ x \in \operatorname{argmin}_{\Omega} F \;\Longleftrightarrow\; F(x) = \min_{\Omega} F, \qquad x \in \operatorname{argmax}_{\Omega} F \;\Longleftrightarrow\; F(x) = \max_{\Omega} F. \]</div>
+        <p>The set of all minimizers is denoted <em>$\operatorname{argmin}_{\Omega} F$</em> (respectively <em>$\operatorname{argmax}_{\Omega} F$</em>). Minimizers need not be unique.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\operatorname{argmin}_{\Omega} F$</span><span class="var-desc">the (possibly empty) set of global minimizers of <em>$F$</em> on <em>$\Omega$</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\operatorname{argmax}_{\Omega} F$</span><span class="var-desc">the set of global maximizers.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.62 Local Minimizers and Maximizers -->
+<div class="section-block" id="a2-62">
+    <div class="section-heading"><span class="section-num-large">A2.62</span><h2 class="section-title-large">Local Minimizers and Maximizers</h2></div>
+    <div class="section-body">
+        <p>A point <em>$x \in \Omega$</em> is a <strong>local minimizer</strong> (resp. <strong>maximizer</strong>) of <em>$F$</em> on <em>$\Omega$</em> if there exists an open ball <em>$B \subset \mathbb{R}^d$</em> containing <em>$x$</em> such that</p>
+        <div class="equation-block">\[ F(x) = \min_{\Omega \cap B} F \quad \big(\text{resp. } F(x) = \max_{\Omega \cap B} F\big). \]</div>
+        <p>Thus a local extremum is only required to be optimal within some neighbourhood.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">local minimizer</span><span class="var-desc">a point that minimizes <em>$F$</em> in a small neighbourhood intersected with <em>$\Omega$</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.63 Existence of Minimizers and Lower Semicontinuity -->
+<div class="section-block" id="a2-63">
+    <div class="section-heading"><span class="section-num-large">A2.63</span><h2 class="section-title-large">Existence of Minimizers and Lower Semicontinuity</h2></div>
+    <div class="section-body">
+        <p>An <strong>optimization problem</strong> consists of finding a minimizer (or maximizer) of an objective function <em>$F$</em> on a set <em>$\Omega$</em>. We focus on minimization; maximization is symmetric.</p>
+        <p>The <strong>sublevel sets</strong> of <em>$F$</em> are defined as <em>$[F \le u]_{\Omega} = \{ x \in \Omega : F(x) \le u \}$</em>. Note that</p>
+        <div class="equation-block">\[ \operatorname{argmin}_{\Omega} F = \bigcap_{u > \inf F} [F \le u]_{\Omega}. \]</div>
+        <p><em>$F$</em> is called <strong>lower semicontinuous</strong> (l.s.c.) on <em>$\Omega$</em> if its sublevel sets are closed in <em>$\mathbb{R}^d$</em>. This means: if a sequence <em>$(x_n) \subset \Omega$</em> satisfies <em>$F(x_n) \le u$</em> and converges to <em>$x$</em>, then <em>$x \in \Omega$</em> and <em>$F(x) \le u$</em>. If, in addition, the sublevel sets are bounded for <em>$u$</em> sufficiently close to <em>$\inf F$</em>, then <em>$\operatorname{argmin}_{\Omega} F$</em> is an intersection of nested compact sets and therefore non‑empty — i.e., a minimizer exists.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$[F \le u]_{\Omega}$</span><span class="var-desc">sublevel set of <em>$F$</em> at level <em>$u$</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">l.s.c.</span><span class="var-desc">lower semicontinuous; sublevel sets are closed.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.64 Classification of Optimization Problems -->
+<div class="section-block" id="a2-64">
+    <div class="section-heading"><span class="section-num-large">A2.64</span><h2 class="section-title-large">Classification of Optimization Problems</h2></div>
+    <div class="section-body">
+        <p>Different assumptions on <em>$F$</em> and <em>$\Omega$</em> lead to distinct problem classes:</p>
+        <ol>
+            <li><strong>Unconstrained smooth optimization:</strong> <em>$F$</em> is <em>$C^1$</em> (or smoother) and <em>$\Omega = \mathbb{R}^d$</em>.</li>
+            <li><strong>Constrained smooth optimization:</strong> <em>$\Omega = \{ x \in \mathbb{R}^d : \gamma_i(x) \le 0,\; i=1,\dots,q \}$</em> with <em>$F$</em> and all <em>$\gamma_i$</em> of class <em>$C^1$</em>.</li>
+            <li><strong>Convex optimization:</strong> <em>$\Omega$</em> is convex (i.e., <em>$x,y\in\Omega \Rightarrow [x,y]\subset\Omega$</em>) and <em>$F$</em> is convex (<em>$F((1-t)x+ty) \le (1-t)F(x)+tF(y)$</em> for <em>$x,y\in\Omega$</em>).</li>
+            <li><strong>Non‑smooth optimization:</strong> <em>$F$</em> (or the constraints) lack differentiability; often arise in data science.</li>
+            <li><strong>Linear programming:</strong> <em>$F$</em> and all <em>$\gamma_i$</em> are affine (<em>$F(x) = b^T x + \beta$</em>, <em>$\gamma_i(x) = a_i^T x + c_i$</em>).</li>
+            <li><strong>Quadratic programming:</strong> <em>$F$</em> is quadratic (<em>$F(x) = \frac12 x^T A x - b^T x$</em>) and the <em>$\gamma_i$</em> are affine.</li>
+            <li><strong>Combinatorial optimization:</strong> <em>$\Omega$</em> is a discrete or finite set (e.g., <em>$\mathbb{Z}^d$</em> or <em>$\{0,1\}^d$</em>).</li>
+        </ol>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">Convex set</span><span class="var-desc">a set <em>$\Omega$</em> such that the segment joining any two points in <em>$\Omega$</em> is fully contained in <em>$\Omega$</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Convex function</span><span class="var-desc">a function satisfying <em>$F((1-t)x+ty) \le (1-t)F(x) + t F(y)$</em> for all <em>$x,y$</em> and <em>$t\in[0,1]$</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">Affine function</span><span class="var-desc">a mapping of the form <em>$x \mapsto b^T x + \beta$</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A2.65 Optimality Conditions for Unconstrained Problems -->
+<div class="section-block" id="a2-65">
+    <div class="section-heading"><span class="section-num-large">A2.65</span><h2 class="section-title-large">Optimality Conditions for Unconstrained Problems</h2></div>
+    <div class="section-body">
+        <p>Let <em>$\Omega \subset \mathbb{R}^d$</em> be open and <em>$F : \Omega \to \mathbb{R}$</em> differentiable. Consider the problem <em>$\min_{x\in\Omega} F(x)$</em>.</p>
+        <p><strong>Theorem 3.1 (Necessary conditions).</strong> If <em>$x^*$</em> is a local minimum, then <em>$\nabla F(x^*) = 0$</em>. If <em>$F$</em> is <em>$C^2$</em>, then <em>$\nabla^2 F(x^*)$</em> is positive semidefinite.</p>
+        <p><strong>Sufficient conditions.</strong> If <em>$F$</em> is <em>$C^2$</em>, <em>$\nabla F(x^*) = 0$</em>, and <em>$\nabla^2 F(x^*) \succ 0$</em>, then <em>$x^*$</em> is a local minimum.</p>
+        <p>For maximization, replace “positive semidefinite” by “negative semidefinite” (and similarly for definite).</p>
+        <div class="equation-block multiline">\[ \text{local min } \Rightarrow \nabla F(x^*) = 0, \quad \nabla^2 F(x^*) \succeq 0. \] \[ \nabla F(x^*) = 0,\; \nabla^2 F(x^*) \succ 0 \Rightarrow \text{ strict local min}. \]</div>
+    </div>
+</div>
+
+<!-- A2.66 Convex Sets and Functions -->
+<div class="section-block" id="a2-66">
+    <div class="section-heading"><span class="section-num-large">A2.66</span><h2 class="section-title-large">Convex Sets and Functions</h2></div>
+    <div class="section-body">
+        <p><strong>Definition 3.2.</strong> A set <em>$\Omega \subset \mathbb{R}^d$</em> is <strong>convex</strong> if <em>$\forall x,y\in\Omega$</em>, the segment <em>$[x,y]\subset\Omega$</em>. A function <em>$F:\mathbb{R}^d \to (-\infty,+\infty]$</em> is <strong>convex</strong> if for all <em>$x,y\in\mathbb{R}^d$</em>, <em>$\lambda\in[0,1]$</em>,</p>
+        <div class="equation-block">\[ F((1-\lambda)x + \lambda y) \le (1-\lambda)F(x) + \lambda F(y). \tag{3.2} \]</div>
+        <p>If the inequality is strict for <em>$\lambda\in(0,1)$</em> when finite, <em>$F$</em> is <strong>strictly convex</strong>. The <strong>domain</strong> of <em>$F$</em> is <em>$\operatorname{dom}(F) = \{x : F(x) < \infty\}$</em>; <em>$F$</em> is <strong>proper</strong> if <em>$\operatorname{dom}(F) \neq \emptyset$</em>.</p>
+        <p><strong>Proposition 3.5.</strong> For convex <em>$F$</em>, the function <em>$\lambda \mapsto \frac{1}{\lambda}(F((1-\lambda)x+\lambda y)-F(x))$</em> is non‑decreasing (increasing if strictly convex).</p>
+        <p><strong>Corollary 3.6.</strong> Any local minimum of a convex function is a global minimum.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\operatorname{dom}(F)$</span><span class="var-desc">the effective domain of <em>$F$</em> (points where <em>$F$</em> is finite).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.67 Relative Interior -->
+<div class="section-block" id="a2-67">
+    <div class="section-heading"><span class="section-num-large">A2.67</span><h2 class="section-title-large">Relative Interior</h2></div>
+    <div class="section-body">
+        <p>For a convex set <em>$\Omega$</em>, the <strong>affine hull</strong> <em>$\operatorname{aff}(\Omega)$</em> is the smallest affine subspace containing <em>$\Omega$</em>. The <strong>relative interior</strong> is</p>
+        <div class="equation-block">\[ \operatorname{relint}(\Omega) = \{x\in\Omega : \exists \epsilon>0,\; \operatorname{aff}(\Omega)\cap B(x,\epsilon)\subset\Omega\}. \]</div>
+        <p><strong>Proposition 3.8.</strong> <em>$\operatorname{relint}(\Omega)$</em> is non‑empty and convex. If <em>$x\in\operatorname{relint}(\Omega)$</em>, <em>$y\in\Omega$</em>, then <em>$(1-\lambda)x+\lambda y \in \operatorname{relint}(\Omega)$</em> for all <em>$\lambda\in[0,1)$</em>.</p>
+        <p><strong>Proposition 3.9.</strong> <em>$x\in\operatorname{relint}(\Omega)$</em> iff for every <em>$y\in\Omega$</em> there exists <em>$\epsilon>0$</em> such that <em>$x-\epsilon(y-x)\in\Omega$</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\operatorname{relint}(\Omega)$</span><span class="var-desc">relative interior; always non‑empty for a non‑empty convex set.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.68 Derivatives of Convex Functions and Optimality -->
+<div class="section-block" id="a2-68">
+    <div class="section-heading"><span class="section-num-large">A2.68</span><h2 class="section-title-large">Derivatives of Convex Functions and Optimality</h2></div>
+    <div class="section-body">
+        <p><strong>Theorem 3.11.</strong> Let <em>$F$</em> be convex and differentiable at <em>$x\in\operatorname{int}(\operatorname{dom}(F))$</em>. Then for all <em>$y$</em>,</p>
+        <div class="equation-block">\[ \nabla F(x)^T (y-x) \le F(y) - F(x). \tag{3.5} \]</div>
+        <p>Hence <em>$\nabla F(x)=0$</em> implies <em>$x$</em> is a global minimizer (unique if strictly convex). Conversely, if <em>$F$</em> is <em>$C^1$</em> on an open convex set and satisfies (3.5), then <em>$F$</em> is convex.</p>
+        <p><strong>Proposition 3.12.</strong> If <em>$F$</em> is <em>$C^2$</em> on an open convex domain, <em>$F$</em> is convex iff <em>$\nabla^2 F(x) \succeq 0$</em> for all <em>$x$</em>; strict convexity follows if <em>$\nabla^2 F(x) \succ 0$</em>.</p>
+        <p><strong>Definition 3.13.</strong> A <em>$C^1$</em> function <em>$F$</em> is <strong>strongly convex</strong> (with modulus <em>$m>0$</em>) if</p>
+        <div class="equation-block">\[ F(y) - F(x) - \nabla F(x)^T(y-x) \ge \frac{m}{2}\|y-x\|^2. \tag{3.6} \]</div>
+        <p><strong>Proposition 3.14.</strong> A strongly convex function is strictly convex; if <em>$\operatorname{dom}(F)=\mathbb{R}^d$</em>, then <em>$\operatorname{argmin} F$</em> is a single point. Moreover, (3.6) implies the quadratic growth condition (3.9).</p>
+        <p><strong>Definition 3.15.</strong> <em>$F$</em> is <strong>$L$-$C^k$</strong> if it is <em>$C^k$</em> and <em>$\|d^k F(x) - d^k F(y)\| \le L\|x-y\|$</em>. If <em>$F$</em> is <em>$L$-$C^1$</em> and strongly convex, one has the double inequality (3.8).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$m$-strongly convex</span><span class="var-desc">satisfies (3.6); implies uniqueness of minimizer and quadratic growth.</span></li>
+            <li class="var-def-item"><span class="var-symbol">$L$-$C^k$</span><span class="var-desc">$k$‑times differentiable with $L$‑Lipschitz $k$‑th differential.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.69 Direction of Descent and Steepest Descent -->
+<div class="section-block" id="a2-69">
+    <div class="section-heading"><span class="section-num-large">A2.69</span><h2 class="section-title-large">Direction of Descent and Steepest Descent</h2></div>
+    <div class="section-body">
+        <p><strong>Definition 3.17.</strong> A non‑zero vector <em>$h$</em> is a <strong>direction of descent</strong> for <em>$F$</em> at <em>$x$</em> if <em>$F(x+\epsilon h) < F(x)$</em> for small enough <em>$\epsilon>0$</em>.</p>
+        <p><strong>Proposition 3.18.</strong> For <em>$C^1$</em> <em>$F$</em>, if <em>$h^T\nabla F(x) < 0$</em> then <em>$h$</em> is a descent direction; conversely, any descent direction satisfies <em>$h^T\nabla F(x) \le 0$</em>.</p>
+        <p>The <strong>steepest descent</strong> direction for the Euclidean norm is <em>$h = -\nabla F(x)$</em>. More generally, given a positive definite matrix <em>$A$</em>, the steepest descent direction with respect to the norm <em>$\|h\|_A = \sqrt{h^T A h}$</em> is <em>$-\nabla_A F(x) = -A^{-1}\nabla F(x)$</em>. Newton’s method uses <em>$A = \nabla^2 F(x)$</em> (when positive definite).</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$-\nabla F(x)$</span><span class="var-desc">steepest descent direction (Euclidean norm).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$-\nabla_A F(x)$</span><span class="var-desc">steepest descent for the norm induced by <em>$A$</em>.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.70 Convergence of Descent Algorithms -->
+<div class="section-block" id="a2-70">
+    <div class="section-heading"><span class="section-num-large">A2.70</span><h2 class="section-title-large">Convergence of Descent Algorithms</h2></div>
+    <div class="section-body">
+        <p>Consider the iteration <em>$x_{t+1} = x_t + \alpha_t h_t$</em> with <em>$h_t$</em> a descent direction satisfying</p>
+        <div class="equation-block multiline">\[ -h_t^T \nabla F(x_t) \ge \epsilon \|h_t\| \|\nabla F(x_t)\|, \qquad \gamma_1 \|\nabla F(x_t)\| \le \|h_t\| \le \gamma_2 \|\nabla F(x_t)\|. \tag{3.12} \]</div>
+        <p><strong>Proposition 3.19.</strong> If <em>$F$</em> is <em>$L$-$C^1$</em> and (3.12) holds, then for sufficiently small <em>$\alpha_t$</em>,</p>
+        <div class="equation-block">\[ F(x_{t+1}) - F(x_t) \le -C \alpha_t \|\nabla F(x_t)\|^2. \tag{3.13} \]</div>
+        <p>Thus, if <em>$F$</em> is bounded below, <em>$\min_{t\le T} \|\nabla F(x_t)\|^2 = O(1/T)$</em>.</p>
+        <p><strong>Theorem 3.20 (convex case).</strong> If <em>$F$</em> is convex and (3.14) holds (<em>$F(x_{t+1})-F(x_t) \le -C\|\nabla F(x_t)\|^2$</em>), then</p>
+        <div class="equation-block">\[ F(x_t) - F(x^*) \le \frac{R^2}{C(t+1)}, \quad R = \max\{\|x-x^*\| : F(x)\le F(x_0)\}. \]</div>
+        <p><strong>Proposition 3.21 (strongly convex case).</strong> If <em>$F$</em> is strongly convex with modulus <em>$m$</em> and (3.14) holds, then</p>
+        <div class="equation-block">\[ F(x_t) - F(x^*) \le (1-2Cm)^t (F(x_0)-F(x^*)). \]</div>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">linear convergence</span><span class="var-desc">achieved under strong convexity; the error decays geometrically.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.71 Line Search: Armijo Rule and Wolfe Conditions -->
+<div class="section-block" id="a2-71">
+    <div class="section-heading"><span class="section-num-large">A2.71</span><h2 class="section-title-large">Line Search: Armijo Rule and Wolfe Conditions</h2></div>
+    <div class="section-body">
+        <p>A <strong>line search</strong> determines a step size <em>$\alpha$</em> along a descent direction <em>$h$</em>. Let <em>$f_h(\alpha) = F(x+\alpha h)$</em>. The <strong>Armijo condition</strong> requires (with <em>$c_1\in(0,1)$</em>)</p>
+        <div class="equation-block">\[ f_h(\alpha) \le f_h(0) + c_1 \alpha h^T \nabla F(x). \tag{3.15} \]</div>
+        <p>Backtracking: start with <em>$\alpha = \alpha_{\max}$</em> and repeatedly multiply by <em>$\rho\in(0,1)$</em> until (3.15) holds.</p>
+        <p>The <strong>weak Wolfe conditions</strong> add</p>
+        <div class="equation-block">\[ h^T \nabla F(x+\alpha h) \ge c_2 h^T \nabla F(x), \quad c_1 < c_2 < 1. \tag{3.16a} \]</div>
+        <p>The <strong>strong Wolfe conditions</strong> require <em>$|h^T \nabla F(x+\alpha h)| \le c_2 |h^T \nabla F(x)|$</em>.</p>
+        <p><strong>Proposition 3.22.</strong> If <em>$F$</em> is <em>$L$-$C^1$</em> and (3.12), (3.15), (3.16a) hold, then there exists <em>$C>0$</em> such that <em>$F(x+\alpha h) \le F(x) - C\|\nabla F(x)\|^2$</em>.</p>
+        <p><strong>Proposition 3.23 / 3.24.</strong> Finite algorithms exist to find a step size satisfying the weak or strong Wolfe conditions, provided <em>$F$</em> is <em>$C^1$</em> and bounded below.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$c_1$</span><span class="var-desc">Armijo constant (typically small, e.g., $10^{-4}$).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$c_2$</span><span class="var-desc">Wolfe curvature constant (e.g., 0.9 for strong Wolfe).</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- A2.72 Stochastic Gradient Descent (SGD) -->
+<div class="section-block" id="a2-72">
+    <div class="section-heading"><span class="section-num-large">A2.72</span><h2 class="section-title-large">Stochastic Gradient Descent (SGD)</h2></div>
+    <div class="section-body">
+        <p>When the gradient <em>$\nabla F$</em> is too costly to compute exactly, a <strong>stochastic approximation</strong> can be used. The Robbins‑Monro type <strong>stochastic gradient descent (SGD)</strong> updates a parameter <em>$x \in \mathbb{R}^d$</em> using random iterations:</p>
+        <div class="equation-block multiline">\[ \xi_{t+1} \sim \pi_{X_t}, \qquad X_{t+1} = X_t + \alpha_{t+1} H(X_t, \xi_{t+1}), \tag{3.17} \]</div>
+        <p>where <em>$\pi_x$</em> is a probability distribution on a set <em>$S$</em> (which may depend on <em>$x$</em>), <em>$H: \mathbb{R}^d \times S \to \mathbb{R}^d$</em> is an easily computable update direction, and <em>$\alpha_{t+1}$</em> is the step size. The conditional distribution of <em>$\xi_{t+1}$</em> given the past <em>$U_t = (\xi_1,X_1,\dots,\xi_t,X_t)$</em> depends only on <em>$X_t$</em> and is given by <em>$\pi_{X_t}$</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\pi_x$</span><span class="var-desc">probability distribution used to generate the stochastic update at <em>$x$</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">$H(x,\xi)$</span><span class="var-desc">a noisy estimate of the (negative) gradient direction.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.73 Deterministic Approximation and Convergence -->
+<div class="section-block" id="a2-73">
+    <div class="section-heading"><span class="section-num-large">A2.73</span><h2 class="section-title-large">Deterministic Approximation and Convergence</h2></div>
+    <div class="section-body">
+        <p>Define the <strong>average direction</strong></p>
+        <div class="equation-block">\[ \bar{H}(x) = \mathbb{E}_{\pi_x}[H(x,\cdot)]. \]</div>
+        <p>Write <em>$X_{t+1} = X_t + \alpha_{t+1}\bar{H}(X_t) + \alpha_{t+1}\eta_{t+1}$</em> with <em>$\eta_{t+1} = H(X_t,\xi_{t+1}) - \bar{H}(X_t)$</em>. Then <em>$\mathbb{E}[\eta_{t+1}\mid U_t] = 0$</em>, making <em>$M_T = \sum_{t=0}^T \alpha_{t+1}\eta_{t+1}$</em> a <strong>martingale</strong>.</p>
+        <p>Consider the following typical assumptions:</p>
+        <ul>
+            <li><strong>(H1)</strong> There exists <em>$C$</em> such that <em>$\mathbb{E}_{\pi_x}[|H(x,\cdot)|^2] \le C(1+|x|^2)$</em>.</li>
+            <li><strong>(H2)</strong> There exist <em>$x^* \in \mathbb{R}^d$</em> and <em>$\mu > 0$</em> such that <em>$(x-x^*)^T\bar{H}(x) \le -\mu|x-x^*|^2$</em>.</li>
+            <li><strong>(H3)</strong> <em>$\sum_{k=1}^\infty \alpha_k = \infty$</em> and <em>$\sum_{k=1}^\infty \alpha_k^2 < \infty$</em>.</li>
+        </ul>
+        <p>Under (H1)–(H3), the sequence <em>$X_t$</em> converges in <em>$L^2$</em> to <em>$x^*$</em>; in fact, almost‑sure convergence holds as well.</p>
+
+        <p><strong>Lemma 3.25.</strong> If a non‑negative sequence <em>$a_t$</em> satisfies <em>$a_{t+1} \le (1-\delta_t)a_t + \epsilon_t$</em> with <em>$0\le \delta_t\le 1$</em>, let <em>$v_{k,t} = \prod_{j=k+1}^t (1-\delta_j)$</em>. Then</p>
+        <div class="equation-block multiline">\[ a_t \le a_0 v_{0,t} + \sum_{k=1}^t \epsilon_k v_{k,t}. \tag{3.22} \]</div>
+
+        <p><strong>Lemma 3.26.</strong> Let <em>$w_{st}$</em> (<em>$s\le t$</em>) be bounded with <em>$\lim_{t\to\infty} w_{st}=0$</em> for each <em>$s$</em>, and <em>$\sum_t |\beta_t| < \infty$</em>. Then <em>$\lim_{t\to\infty} \sum_{s=1}^t \beta_s w_{st} = 0$</em>.</p>
+        <p>Using Lemma 3.25 with <em>$\delta_t = 2\alpha_{t+1}\mu - C\alpha_{t+1}^2$</em> and <em>$\epsilon_t = \tilde C \alpha_{t+1}^2$</em>, one shows that <em>$\mathbb{E}[|X_t-x^*|^2] \to 0$</em>. In the constant step‑size case <em>$\alpha_t = \alpha$</em>, the mean‑square error satisfies <em>$\limsup \mathbb{E}[|X_t-x^*|^2] = O(\alpha)$</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\bar{H}(x)$</span><span class="var-desc">expected update direction; the deterministic flow follows <em>$\dot{\bar{x}} = \bar{H}(\bar{x})$</em>.</span></li>
+            <li class="var-def-item"><span class="var-symbol">$M_T$</span><span class="var-desc">martingale noise term; its variance is controlled by the step‑size schedule.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.74 ODE Method for SGD -->
+<div class="section-block" id="a2-74">
+    <div class="section-heading"><span class="section-num-large">A2.74</span><h2 class="section-title-large">ODE Method for Stochastic Approximation</h2></div>
+    <div class="section-body">
+        <p>Define the continuous‑time interpolation <em>$X^\ell(\rho)$</em> by</p>
+        <div class="equation-block multiline">\[ \tau_0 = 0,\; \tau_t = \tau_{t-1} + \alpha_t,\quad X^\ell(\rho) = X_t + \frac{\rho-\tau_t}{\alpha_{t+1}}(X_{t+1}-X_t),\; \rho\in[\tau_t,\tau_{t+1}). \]</div>
+        <p>The deterministic part of the algorithm is an Euler discretisation of the <strong>ordinary differential equation (ODE)</strong></p>
+        <div class="equation-block">\[ \partial_\rho \bar{x} = \bar{H}(\bar{x}). \tag{3.24} \]</div>
+
+        <p><strong>Proposition 3.27 (Benaïm).</strong> Assume <em>$\bar{H}$</em> is Lipschitz and bounded. Then, for any <em>$T>0$</em>, there exists <em>$C(T)$</em> such that for all <em>$\rho\ge 0$</em>,</p>
+        <div class="equation-block multiline">\[ \sup_{h\in[0,T]} \big| X^\ell(\rho+h) - \phi(h, X^\ell(\rho)) \big| \le C(T) \Big( \Delta(\rho-1,T+1) + \max_{s\in[\rho,\rho+T]} \alpha^c(s) \Big), \]</div>
+        <p>where <em>$\phi(\cdot,\omega)$</em> is the solution of (3.24) with <em>$\bar{x}(0)=\omega$</em>, and <em>$\Delta(\rho,T)$</em> controls the cumulative martingale noise.</p>
+        <p>Using martingale inequalities (Doob’s inequality), one can show that <em>$\Delta(\rho,T)$</em> is small with high probability, so the stochastic process stays close to the ODE solution over finite intervals.</p>
+
+        <p><strong>Proposition 3.28.</strong> If <em>$\bar{H} = -\nabla E$</em> is a gradient field with finitely many critical points and <em>$X_t$</em> remains bounded, then <em>$X_t$</em> converges to a critical point of <em>$E$</em>.</p>
+
+        <p><strong>Theorem 3.29 (Lyapunov stability).</strong> Assume there exists a <em>$C^2$</em> function <em>$U$</em> with bounded second derivatives and <em>$K_0>0$</em> such that for <em>$|x|\ge K_0$</em>, <em>$\nabla U(x)^T \bar{H}(x) \le 0$</em> and <em>$U(x) \ge \gamma|x|^2$</em>, <em>$\gamma>0$</em>. Then the interpolated trajectories <em>$X^\ell(\rho)$</em> are almost surely bounded. Hypothesis (H2) provides such a Lyapunov function (<em>$U(x)=|x-x^*|^2$</em>).</p>
+    </div>
+</div>
+
+<!-- A2.75 ADAM Algorithm -->
+<div class="section-block" id="a2-75">
+    <div class="section-heading"><span class="section-num-large">A2.75</span><h2 class="section-title-large">ADAM Algorithm</h2></div>
+    <div class="section-body">
+        <p><strong>ADAM (Adaptive Moment Estimation)</strong> is a widely used variant of SGD that adapts the step sizes per coordinate using running averages of the first and second moments of the stochastic gradients.</p>
+        <p><strong>Algorithm 3.30 (ADAM).</strong> Given parameters <em>$\alpha$</em> (step size, e.g., 0.001), <em>$\beta_1,\beta_2\in[0,1)$</em> (moment decay rates, e.g., 0.9 and 0.999), <em>$\epsilon>0$</em> (small constant, e.g., $10^{-8}$), and initial state <em>$X_0$</em>, <em>$m_0=0$</em>, <em>$v_0=0$</em>:</p>
+        <ol>
+            <li>At step <em>$t$</em>, obtain stochastic gradient <em>$g_{t+1} = H(X_t, \xi_{t+1})$</em>.</li>
+            <li>Update biased first moment: <em>$m_{t+1} = \beta_1 m_t + (1-\beta_1) g_{t+1}$</em>.</li>
+            <li>Update biased second moment: <em>$v_{t+1} = \beta_2 v_t + (1-\beta_2) g_{t+1}^{\odot 2}$</em> (element‑wise square).</li>
+            <li>Compute bias‑corrected estimates:
+                <div class="equation-block multiline">\[ \hat{m}_{t+1} = \frac{m_{t+1}}{1-\beta_1^{t+1}}, \qquad \hat{v}_{t+1} = \frac{v_{t+1}}{1-\beta_2^{t+1}}. \]</div>
+            </li>
+            <li>Update parameter:
+                <div class="equation-block">\[ X_{t+1} = X_t - \alpha \frac{\hat{m}_{t+1}}{\sqrt{\hat{v}_{t+1}} + \epsilon}, \]</div>
+                where all operations on vectors are element‑wise.</li>
+        </ol>
+        <p>The bias correction accounts for the initialisation at zero, ensuring unbiased estimates of the moments. ADAM can be seen as a diagonal approximation of a natural gradient method.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\hat{m}_{t+1}$</span><span class="var-desc">bias‑corrected moving average of the gradient (first moment).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\hat{v}_{t+1}$</span><span class="var-desc">bias‑corrected moving average of the squared gradient (second moment).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A2.76 Stochastic Gradient Descent (SGD) - simplified version, but we already have A2.72, so this is duplicate, but keep renumbered as A2.76 as per original mapping -->
+<div class="section-block" id="a2-76">
+    <div class="section-heading"><span class="section-num-large">A2.76</span><h2 class="section-title-large">Stochastic Gradient Descent (SGD)</h2></div>
+    <div class="section-body">
+        <p>When the exact gradient <em>$\nabla F$</em> is too costly to compute, a <strong>stochastic approximation</strong> can be used. The Robbins–Monro type <strong>stochastic gradient descent (SGD)</strong> iterates</p>
+        <div class="equation-block multiline">\[ \xi_{t+1} \sim \pi_{X_t}, \qquad X_{t+1} = X_t + \alpha_{t+1} H(X_t, \xi_{t+1}), \tag{3.17} \]</div>
+        <p>where <em>$\pi_x$</em> is a probability distribution on a set <em>$S$</em> (which may depend on <em>$x$</em>), <em>$H:\mathbb{R}^d\times S\to\mathbb{R}^d$</em> is an easy‑to‑compute update, and <em>$\alpha_{t+1}$</em> is the step size. The distribution of <em>$\xi_{t+1}$</em> given the past <em>$U_t=(\xi_1,X_1,\dots,\xi_t,X_t)$</em> depends only on <em>$X_t$</em> and is given by <em>$\pi_{X_t}$</em>. Often <em>$\pi_x$</em> can be taken independent of <em>$x$</em> without loss of generality.</p>
+    </div>
+</div>
+
+<!-- A2.77 Deterministic Approximation and Convergence -->
+<div class="section-block" id="a2-77">
+    <div class="section-heading"><span class="section-num-large">A2.77</span><h2 class="section-title-large">Deterministic Approximation and Convergence</h2></div>
+    <div class="section-body">
+        <p>Define <em>$\bar{H}(x) = \mathbb{E}_{\pi_x}[H(x,\cdot)]$</em>. Then</p>
+        <div class="equation-block multiline">\[ X_{t+1} = X_t + \alpha_{t+1}\bar{H}(X_t) + \alpha_{t+1}\eta_{t+1}, \quad \eta_{t+1}=H(X_t,\xi_{t+1})-\bar{H}(X_t). \]</div>
+        <p><em>$\mathbb{E}[\eta_{t+1}\mid U_t]=0$</em>, so <em>$M_T = \sum_{t=0}^T \alpha_{t+1}\eta_{t+1}$</em> is a martingale. Typical assumptions are:</p>
+        <ul>
+            <li><strong>(H1)</strong> <em>$\mathbb{E}_{\pi_x}[|H(x,\cdot)|^2] \le C(1+|x|^2)$</em>.</li>
+            <li><strong>(H2)</strong> There exist <em>$x^*\in\mathbb{R}^d$</em> and <em>$\mu>0$</em> such that <em>$(x-x^*)^T\bar{H}(x) \le -\mu|x-x^*|^2$</em>.</li>
+            <li><strong>(H3)</strong> <em>$\sum_{k=1}^\infty \alpha_k = \infty$</em> and <em>$\sum_{k=1}^\infty \alpha_k^2 < \infty$</em>.</li>
+        </ul>
+        <p>Under (H1)–(H3) the sequence <em>$X_t$</em> converges in <em>$L^2$</em> (and almost surely) to <em>$x^*$</em>. With constant step size <em>$\alpha_t=\alpha$</em>, the mean‑square error satisfies <em>$\limsup \mathbb{E}[|X_t-x^*|^2] = O(\alpha)$</em>.</p>
+    </div>
+</div>
+
+<!-- A2.78 ODE Method for SGD -->
+<div class="section-block" id="a2-78">
+    <div class="section-heading"><span class="section-num-large">A2.78</span><h2 class="section-title-large">ODE Method for Stochastic Approximation</h2></div>
+    <div class="section-body">
+        <p>Define the continuous‑time interpolation <em>$X^\ell(\rho)$</em> by <em>$\tau_0=0$</em>, <em>$\tau_t=\tau_{t-1}+\alpha_t$</em>,</p>
+        <div class="equation-block multiline">\[ X^\ell(\rho) = X_t + \frac{\rho-\tau_t}{\alpha_{t+1}}(X_{t+1}-X_t), \quad \rho\in[\tau_t,\tau_{t+1}). \]</div>
+        <p>The deterministic part follows the ODE <em>$\partial_\rho \bar{x} = \bar{H}(\bar{x})$</em>. Under Lipschitz and boundedness assumptions on <em>$\bar{H}$</em>, the process stays close to the ODE solution over finite intervals (Proposition 3.27). If <em>$\bar{H}=-\nabla E$</em> is a gradient field with finitely many critical points and <em>$X_t$</em> remains bounded, <em>$X_t$</em> converges to a critical point of <em>$E$</em> (Proposition 3.28). A Lyapunov function (e.g., <em>$|x-x^*|^2$</em> under (H2)) guarantees boundedness (Theorem 3.29).</p>
+    </div>
+</div>
+
+<!-- A2.79 ADAM Algorithm -->
+<div class="section-block" id="a2-79">
+    <div class="section-heading"><span class="section-num-large">A2.79</span><h2 class="section-title-large">ADAM Algorithm</h2></div>
+    <div class="section-body">
+        <p><strong>ADAM (Adaptive Moment Estimation)</strong> adapts step sizes per coordinate using running averages of the first and second moments of the stochastic gradient.</p>
+        <p><strong>Algorithm 3.30 (ADAM).</strong> Given <em>$\alpha$</em>, <em>$\beta_1,\beta_2\in[0,1)$</em>, <em>$\epsilon>0$</em>, initial <em>$X_0$</em>, <em>$m_0=0$</em>, <em>$v_0=0$</em>:</p>
+        <ol>
+            <li>Obtain stochastic gradient <em>$g_{t+1} = H(X_t,\xi_{t+1})$</em>.</li>
+            <li><em>$m_{t+1} = \beta_1 m_t + (1-\beta_1)g_{t+1}$</em>.</li>
+            <li><em>$v_{t+1} = \beta_2 v_t + (1-\beta_2)g_{t+1}^{\odot 2}$</em> (element‑wise square).</li>
+            <li>Bias‑corrected estimates: <em>$\hat{m}_{t+1} = m_{t+1}/(1-\beta_1^{t+1})$</em>, <em>$\hat{v}_{t+1} = v_{t+1}/(1-\beta_2^{t+1})$</em>.</li>
+            <li><em>$X_{t+1} = X_t - \alpha\, \hat{m}_{t+1}/(\sqrt{\hat{v}_{t+1}}+\epsilon)$</em> (element‑wise).</li>
+        </ol>
+    </div>
+</div>
+
+<!-- A2.80 Constrained Optimization: Lagrange Multipliers -->
+<div class="section-block" id="a2-80">
+    <div class="section-heading"><span class="section-num-large">A2.80</span><h2 class="section-title-large">Lagrange Multipliers and KKT Conditions</h2></div>
+    <div class="section-body">
+        <p>Minimize a <em>$C^1$</em> function <em>$F$</em> over <em>$\Omega = \{x\in\mathbb{R}^d : \gamma_i(x)=0,\; i\in E,\; \gamma_i(x)\le 0,\; i\in I\}$</em>, where <em>$E\cap I=\emptyset$</em>. The <strong>active set</strong> at <em>$x\in\Omega$</em> is <em>$\mathcal{A}(x)=\{i\in\mathcal{C} : \gamma_i(x)=0\}$</em>. Define the <strong>Lagrangian</strong></p>
+        <div class="equation-block">\[ \mathcal{L}(x,\lambda) = F(x) + \sum_{i\in\mathcal{C}} \lambda_i \gamma_i(x). \]</div>
+        <p>Under the Mangasarian‑Fromovitz constraint qualification (MF‑CQ) – e.g., linear independence of <em>$\{\nabla\gamma_i(x),\, i\in\mathcal{A}(x)\}$</em> – a minimizer <em>$x^*$</em> satisfies the <strong>Karush–Kuhn–Tucker (KKT) conditions</strong>:</p>
+        <div class="equation-block multiline">\[ \partial_x \mathcal{L}(x^*,\lambda) = 0,\qquad \lambda_i \ge 0\;(i\in I),\quad \lambda_i=0\;\text{if } i\notin\mathcal{A}(x^*). \]</div>
+        <p>If all constraints are affine, the KKT conditions hold without any qualification (Theorem 3.33).</p>
+    </div>
+</div>
+
+<!-- A2.81 Convex Constraints and Normal Cone -->
+<div class="section-block" id="a2-81">
+    <div class="section-heading"><span class="section-num-large">A2.81</span><h2 class="section-title-large">Convex Constraints and the Normal Cone</h2></div>
+    <div class="section-body">
+        <p>For a closed convex set <em>$\Omega\subset\mathbb{R}^d$</em>, the <strong>normal cone</strong> at <em>$x\in\Omega$</em> is</p>
+        <div class="equation-block">\[ N_\Omega(x) = \{ h\in\mathbb{R}^d : h^T(y-x)\le 0 \;\forall y\in\Omega \}. \]</div>
+        <p>If <em>$F$</em> is <em>$C^1$</em>, a necessary condition for <em>$x^*\in\operatorname{argmin}_\Omega F$</em> is <em>$-\nabla F(x^*) \in N_\Omega(x^*)$</em>. If <em>$F$</em> is convex, this condition is also sufficient (Theorem 3.37). For convex constraints <em>$\Omega$</em> defined by affine equalities and convex inequalities, the KKT conditions are equivalent to <em>$-\nabla F(x^*) \in N_\Omega(x^*)$</em> (Farkas’ lemma).</p>
+    </div>
+</div>
+
+<!-- A2.82 Positive Semidefinite Matrices Example -->
+<div class="section-block" id="a2-82">
+    <div class="section-heading"><span class="section-num-large">A2.82</span><h2 class="section-title-large">Minimization over Positive Semidefinite Matrices</h2></div>
+    <div class="section-body">
+        <p>Let <em>$\Omega = \mathbb{S}_+^n$</em>, the cone of positive semidefinite matrices. For a minimizer <em>$A^*$</em> of a convex <em>$F$</em> over <em>$\Omega$</em>, the normal cone yields: <em>$-\nabla F(A^*)_s \in \mathbb{S}_+^n$</em> and <em>$A^*\nabla F(A^*)_s = 0$</em> (Proposition 3.38). For example, with <em>$F(A)=\frac12\operatorname{trace}(A^2)-\operatorname{trace}(BA)$</em> and <em>$B$</em> diagonalised as <em>$U^T D U$</em>, the solution is <em>$A^* = U^T D_+ U$</em>, where <em>$D_+$</em> replaces negative entries of <em>$D$</em> by zero.</p>
+    </div>
+</div>
+
+<!-- A2.83 Projection -->
+<div class="section-block" id="a2-83">
+    <div class="section-heading"><span class="section-num-large">A2.83</span><h2 class="section-title-large">Projection onto a Closed Convex Set</h2></div>
+    <div class="section-body">
+        <p>The <strong>projection</strong> of <em>$x_0$</em> onto a closed convex <em>$\Omega$</em> is the unique minimizer of <em>$F(x)=\frac12|x-x_0|^2$</em> over <em>$\Omega$</em>, denoted <em>$\operatorname{proj}_\Omega(x_0)$</em>. It is characterized by</p>
+        <div class="equation-block multiline">\[ \operatorname{proj}_\Omega(x_0)\in\Omega,\qquad (x_0-\operatorname{proj}_\Omega(x_0))^T(y-\operatorname{proj}_\Omega(x_0))\le 0 \;\forall y\in\Omega. \]</div>
+        <p>Examples: affine subspace (orthogonal projection), unit ball (<em>$\operatorname{proj}_{\bar B(0,1)}(x_0)=x_0/|x_0|$</em> for <em>$|x_0|\ge1$</em>), positive semidefinite cone (set negative eigenvalues to zero). The projection is 1‑Lipschitz (Proposition 3.39).</p>
+    </div>
+</div>
+
+<!-- A2.84 Projected Gradient Descent -->
+<div class="section-block" id="a2-84">
+    <div class="section-heading"><span class="section-num-large">A2.84</span><h2 class="section-title-large">Projected Gradient Descent</h2></div>
+    <div class="section-body">
+        <p>To minimize <em>$F$</em> over a closed convex <em>$\Omega$</em>, the projected gradient descent iterates</p>
+        <div class="equation-block">\[ x_{t+1} = \operatorname{proj}_\Omega\big( x_t - \alpha_t \nabla F(x_t) \big). \tag{3.38} \]</div>
+        <p>Equivalently, <em>$x_{t+1} = \operatorname{argmin}_{y\in\Omega}\big( F(x_t) + \nabla F(x_t)^T(y-x_t) + \frac{1}{2\alpha_t}|y-x_t|^2 \big)$</em>. Convergence properties are discussed in the proximal gradient framework (A2.88).</p>
+    </div>
+</div>
+
+<!-- A2.85 Epigraphs -->
+<div class="section-block" id="a2-85">
+    <div class="section-heading"><span class="section-num-large">A2.85</span><h2 class="section-title-large">Epigraphs and Closed Convex Functions</h2></div>
+    <div class="section-body">
+        <p>The <strong>epigraph</strong> of a convex function <em>$F$</em> is <em>$\operatorname{epi}(F) = \{(x,a)\in\mathbb{R}^d\times\mathbb{R} : F(x)\le a\}$</em>. It is always convex. <em>$F$</em> is <strong>closed</strong> if <em>$\operatorname{epi}(F)$</em> is closed, equivalently, all sub‑level sets <em>$\{x:F(x)\le a\}$</em> are closed (Proposition 3.41). Continuous convex functions are closed. The indicator function <em>$\sigma_\Omega$</em> of a closed convex <em>$\Omega$</em> is closed.</p>
+    </div>
+</div>
+
+<!-- A2.86 Subgradients and Subdifferential -->
+<div class="section-block" id="a2-86">
+    <div class="section-heading"><span class="section-num-large">A2.86</span><h2 class="section-title-large">Subgradients and the Subdifferential</h2></div>
+    <div class="section-body">
+        <p>For a convex function <em>$F$</em> and <em>$x\in\operatorname{dom}(F)$</em>, a vector <em>$g\in\mathbb{R}^d$</em> is a <strong>subgradient</strong> if</p>
+        <div class="equation-block">\[ F(y) \ge F(x) + g^T(y-x) \quad \forall y\in\mathbb{R}^d. \]</div>
+        <p>The set of all subgradients, <strong>subdifferential</strong> <em>$\partial F(x)$</em>, is closed convex. If <em>$F$</em> is differentiable at <em>$x$</em>, <em>$\partial F(x)=\{\nabla F(x)\}$</em>. At a relative interior point, <em>$\partial F(x)\neq\emptyset$</em> and its projection onto the affine hull is compact (Proposition 3.45). Subdifferentials are additive under mild conditions (Theorem 3.46) and respect affine composition (Theorem 3.47).</p>
+        <p>The normal cone is the subdifferential of the indicator function: <em>$\partial\sigma_\Omega(x)=N_\Omega(x)$</em> for <em>$x\in\Omega$</em>.</p>
+    </div>
+</div>
+
+<!-- A2.87 Directional Derivatives -->
+<div class="section-block" id="a2-87">
+    <div class="section-heading"><span class="section-num-large">A2.87</span><h2 class="section-title-large">Directional Derivatives</h2></div>
+    <div class="section-body">
+        <p>The <strong>directional derivative</strong> of a convex <em>$F$</em> at <em>$x\in\operatorname{dom}(F)$</em> in direction <em>$h$</em> is</p>
+        <div class="equation-block">\[ dF(x,h) = \lim_{t\downarrow 0} \frac{F(x+th)-F(x)}{t} \in [-\infty,\infty]. \]</div>
+        <p>It is positively homogeneous and subadditive in <em>$h$</em> (hence convex). <em>$x^*$</em> is a minimizer iff <em>$dF(x^*,h)\ge 0$</em> for all <em>$h$</em>. For <em>$x\in\operatorname{ri}(\operatorname{dom}(F))$</em>, <em>$dF(x,h) = \max\{g^T h : g\in\partial F(x)\}$</em> (Proposition 3.52).</p>
+    </div>
+</div>
+
+<!-- A2.88 Subgradient Descent -->
+<div class="section-block" id="a2-88">
+    <div class="section-heading"><span class="section-num-large">A2.88</span><h2 class="section-title-large">Subgradient Descent</h2></div>
+    <div class="section-body">
+        <p>When <em>$F$</em> is non‑differentiable, the direction <em>$h = -\operatorname{argmin}\{|g| : g\in\partial F(x)\}$</em> (the minimal‑norm subgradient) is a descent direction. The <strong>subgradient descent</strong> iteration <em>$x_{t+1}=x_t - \alpha_t g_t$</em> with <em>$g_t\in\partial F(x_t)$</em> can be combined with averaging: define <em>$\bar{x}_t = (\sum_{j=1}^t \alpha_j x_j)/(\sum_{j=1}^t \alpha_j)$</em>, which converges to a minimizer under convexity and suitable step sizes.</p>
+    </div>
+</div>
+
+<!-- A2.89 Proximal Operator -->
+<div class="section-block" id="a2-89">
+    <div class="section-heading"><span class="section-num-large">A2.89</span><h2 class="section-title-large">Proximal Operator</h2></div>
+    <div class="section-body">
+        <p>For a closed convex function <em>$F$</em>, the <strong>proximal operator</strong> is</p>
+        <div class="equation-block">\[ \operatorname{prox}_F(x) = \operatorname{argmin}_{v\in\mathbb{R}^d}\left( F(v) + \frac12 |x-v|^2 \right). \]</div>
+        <p>It satisfies <em>$x \in x' + \partial F(x')$</em> iff <em>$x' = \operatorname{prox}_F(x)$</em>. Thus minimizers of <em>$F$</em> are fixed points of <em>$\operatorname{prox}_{\alpha F}$</em>. The proximal operator is 1‑Lipschitz (Proposition 3.56). Example: <em>$F(x)=\lambda|x|$</em> yields the soft‑thresholding operator <em>$\operatorname{prox}_{\lambda|\cdot|}(x) = \operatorname{sign}(x)\max(|x|-\lambda,0)$</em>. For <em>$F=\sigma_\Omega$</em>, <em>$\operatorname{prox}_{\sigma_\Omega} = \operatorname{proj}_\Omega$</em>.</p>
+    </div>
+</div>
+
+<!-- A2.90 Proximal Gradient Descent -->
+<div class="section-block" id="a2-90">
+    <div class="section-heading"><span class="section-num-large">A2.90</span><h2 class="section-title-large">Proximal Gradient Descent</h2></div>
+    <div class="section-body">
+        <p>Minimize <em>$F = G + H$</em> with <em>$G$</em> <em>$C^1$</em> and <em>$H$</em> closed convex. The <strong>proximal gradient descent</strong> iteration is</p>
+        <div class="equation-block">\[ x_{t+1} = \operatorname{prox}_{\alpha_t H}\big( x_t - \alpha_t \nabla G(x_t) \big). \tag{3.49} \]</div>
+        <p>If <em>$G$</em> is <em>$L$</em>‑<em>$C^1$</em> and <em>$\alpha_t \le 2/L$</em>, the objective decreases. A stationary point satisfies <em>$-\nabla G(x)\in\partial H(x)$</em>, which is the optimality condition.</p>
+    </div>
+</div>
+
+<!-- A2.91 Convergence of Proximal Gradient Descent -->
+<div class="section-block" id="a2-91">
+    <div class="section-heading"><span class="section-num-large">A2.91</span><h2 class="section-title-large">Convergence of Proximal Gradient Descent</h2></div>
+    <div class="section-body">
+        <p><strong>Theorem 3.57 (convex case).</strong> If <em>$G$</em> is <em>$L$</em>‑<em>$C^1$</em> and convex, <em>$H$</em> closed convex, and a minimizer <em>$x^*$</em> exists, then with constant step <em>$\alpha \le 1/L$</em>,</p>
+        <div class="equation-block">\[ F(x_T) - F(x^*) \le \frac{|x_0-x^*|^2}{2\alpha T}. \]</div>
+        <p><strong>Theorem 3.58 (strongly convex case).</strong> If, in addition, <em>$G$</em> is <em>$C^2$</em> with eigenvalues of <em>$\nabla^2 G$</em> in <em>$[m,L]$</em>, <em>$m>0$</em>, then with constant step <em>$\alpha < 1/L$</em>,</p>
+        <div class="equation-block">\[ |x_t - x^*| \le (1-\alpha m)^t |x_0 - x^*|. \]</div>
+        <p>These results include projected gradient descent as a special case (<em>$H=\sigma_\Omega$</em>).</p>
+    </div>
+</div>
+
+<!-- A2.92 Proximal Point Algorithm -->
+<div class="section-block" id="a2-92">
+    <div class="section-heading"><span class="section-num-large">A2.92</span><h2 class="section-title-large">Proximal Point Algorithm</h2></div>
+    <div class="section-body">
+        <p>When <em>$G=0$</em>, the scheme reduces to the <strong>proximal point algorithm</strong>:</p>
+        <div class="equation-block">\[ x_{t+1} = \operatorname{prox}_{\alpha F}(x_t). \]</div>
+        <p>It converges to a minimizer for any <em>$\alpha>0$</em> if <em>$F$</em> is closed convex (a consequence of Theorem 3.57).</p>
+    </div>
+</div>
+
+<!-- A2.93 Generalized KKT Conditions (Non‑smooth Convex) -->
+<div class="section-block" id="a2-93">
+    <div class="section-heading"><span class="section-num-large">A2.93</span><h2 class="section-title-large">Generalized KKT Conditions (Non‑smooth Convex Case)</h2></div>
+    <div class="section-body">
+        <p>Consider minimizing a closed convex function <em>$F$</em> over a closed convex set <em>$\Omega \subset \operatorname{ri}(\operatorname{dom}(F))$</em>. For a minimizer <em>$x^*$</em>, the optimality condition generalizes to</p>
+        <div class="equation-block">\[ 0 \in \partial F(x^*) + N_\Omega(x^*), \]</div>
+        <p>where <em>$N_\Omega(x)$</em> is the normal cone. This follows because the indicator <em>$\sigma_\Omega$</em> is closed convex and <em>$\partial\sigma_\Omega(x)=N_\Omega(x)$</em>. The condition is both necessary and sufficient (Theorem 3.59).</p>
+        <p>Now specialise to <em>$\Omega = \{x\in\mathbb{R}^d : \gamma_i(x)=0,\;i\in E,\; \gamma_i(x)\le 0,\;i\in I\}$</em> with <em>$\gamma_i$</em> affine for <em>$i\in E$</em> and closed convex for <em>$i\in I$</em>. For <em>$x\in\Omega$</em> with active set <em>$\mathcal{A}(x)=\{i\in\mathcal{C}:\gamma_i(x)=0\}$</em>, define</p>
+        <div class="equation-block multiline">\[ N'_\gamma(x) = \Big\{ \sum_{i\in\mathcal{A}(x)} \lambda_i s_i : s_i\in\partial\gamma_i(x),\; \lambda_i\ge 0 \text{ if } i\in I \Big\}. \]</div>
+        <p>The KKT conditions in the non‑smooth case read <em>$0 \in \partial F(x^*) + N'_\gamma(x^*)$</em>, which holds provided <em>$N_\Omega(x^*) = N'_\gamma(x^*)$</em>. The <strong>Slater constraint qualification (Sl‑CQ)</strong> ensures this equality:</p>
+        <ul>
+            <li><strong>(Sl 1)</strong> The vectors <em>$\{b_i : i\in E\}$</em> (gradients of affine equalities) are linearly independent.</li>
+            <li><strong>(Sl 2)</strong> There exists <em>$x$</em> such that <em>$\gamma_i(x)=0$</em> for <em>$i\in E$</em> and <em>$\gamma_i(x) < 0$</em> for all <em>$i\in I$</em>.</li>
+        </ul>
+        <p>Sl‑CQ is weaker than the Mangasarian‑Fromovitz CQ when the <em>$\gamma_i$</em> are <em>$C^1$</em>, but is equivalent under differentiability (Proposition 3.61). Theorem 3.62 states that under Sl‑CQ, if <em>$x^*$</em> is a minimizer, then there exist <em>$s_0\in\partial F(x^*)$</em>, <em>$s_i\in\partial\gamma_i(x^*)$</em> for <em>$i\in\mathcal{A}(x^*)$</em>, and multipliers <em>$\lambda_i\ge 0$</em> (with <em>$\lambda_i=0$</em> for inactive constraints) such that <em>$s_0 + \sum \lambda_i s_i = 0$</em>.</p>
+    </div>
+</div>
+
+<!-- A2.94 Dual Problem and Saddle Points -->
+<div class="section-block" id="a2-94">
+    <div class="section-heading"><span class="section-num-large">A2.94</span><h2 class="section-title-large">Dual Problem and Saddle Points</h2></div>
+    <div class="section-body">
+        <p>Define the <strong>Lagrangian</strong> <em>$\mathcal{L}(x,\lambda) = F(x) + \sum_{i\in\mathcal{C}} \lambda_i \gamma_i(x)$</em>, with <em>$\lambda\in D = \{\lambda : \lambda_i\ge 0,\; i\in I\}$</em>. For any <em>$x\in\Omega$</em>, <em>$\lambda\in D$</em>, we have <em>$\mathcal{L}(x,\lambda) \le F(x)$</em>. Let</p>
+        <div class="equation-block">\[ \mathcal{L}^*(\lambda) = \inf_{x\in\mathbb{R}^d} \mathcal{L}(x,\lambda), \]</div>
+        <p>so that <em>$\mathcal{L}^*(\lambda) \le F(x)$</em> for all <em>$x\in\Omega$</em>. The <strong>dual problem</strong> is <em>$\hat d = \sup_{\lambda\in D} \mathcal{L}^*(\lambda)$</em> and the <strong>primal problem</strong> is <em>$\hat p = \inf_{x\in\Omega} F(x)$</em>. Always <em>$\hat d \le \hat p$</em> (weak duality).</p>
+        <p>Under the Slater conditions, the <strong>duality gap</strong> vanishes: <em>$\hat d = \hat p$</em>. Moreover, any solution <em>$\lambda^*$</em> of the dual provides multipliers satisfying the KKT conditions, and conversely (Theorem 3.63). The pair <em>$(x^*,\lambda^*)\in\Omega\times D$</em> satisfies the KKT conditions iff it is a <strong>saddle point</strong> of <em>$\mathcal{L}$</em>:</p>
+        <div class="equation-block">\[ \mathcal{L}(x^*,\lambda) \le \mathcal{L}(x^*,\lambda^*) \le \mathcal{L}(x,\lambda^*) \quad \forall x\in\mathbb{R}^d,\; \forall \lambda\in D. \]</div>
+        <p>Thus, under constraint qualifications, solving the primal is equivalent to finding a saddle point of <em>$\mathcal{L}$</em>, and the dual optimum equals the primal optimum.</p>
+    </div>
+</div>
+
+<!-- A2.95 Example: Quadratic Programming (SVM Dual) -->
+<div class="section-block" id="a2-95">
+    <div class="section-heading"><span class="section-num-large">A2.95</span><h2 class="section-title-large">Example: Quadratic Programming (SVM Dual)</h2></div>
+    <div class="section-body">
+        <p>Consider the quadratic program (support vector machine formulation) with variables <em>$x\in\mathbb{R}^d$</em>, <em>$x_0\in\mathbb{R}$</em>, <em>$\xi\in\mathbb{R}^N$</em>, parameter <em>$\gamma>0$</em>:</p>
+        <div class="equation-block multiline">\[ \min \frac12 \|x\|^2 + \gamma \sum_{k=1}^N \xi^{(k)} \quad \text{s.t. } \xi^{(k)}\ge 0,\; b_k(x_0 + x^T a_k) + \xi^{(k)} \ge 1, \]</div>
+        <p>where <em>$b_k\in\{-1,1\}$</em>, <em>$a_k\in\mathbb{R}^n$</em>. Introduce multipliers <em>$\alpha_k\ge 0$</em> (for the second constraint) and <em>$\eta_k\ge 0$</em> (for <em>$\xi^{(k)}\ge 0$</em>). The Lagrangian is</p>
+        <div class="equation-block multiline">\[ \mathcal{L}(x,x_0,\xi,\alpha,\eta) = \frac12\|x\|^2 + \gamma\sum\xi^{(k)} - \sum\eta_k\xi^{(k)} - \sum\alpha_k\big(b_k(x_0+x^T a_k)+\xi^{(k)}-1\big). \]</div>
+        <p>Minimizing over the primal variables yields <em>$\sum\alpha_k b_k = 0$</em>, <em>$x = \sum\alpha_k b_k a_k$</em>, and <em>$\gamma - \eta_k - \alpha_k = 0$</em> with <em>$\eta_k\ge 0 \Rightarrow 0\le\alpha_k\le\gamma$</em>. Substituting back gives the <strong>dual problem</strong></p>
+        <div class="equation-block multiline">\[ \max_{0\le\alpha_k\le\gamma,\; \sum\alpha_k b_k = 0} \left( -\frac12 \sum_{k,l=1}^N \alpha_k\alpha_l b_k b_l a_k^T a_l + \sum_{k=1}^N \alpha_k \right). \]</div>
+        <p>The dual is a quadratic program with simple box constraints and one linear equality constraint, and its solution <em>$\alpha^*$</em> yields the primal minimizer <em>$x^* = \sum \alpha_k^* b_k a_k$</em>.</p>
+    </div>
+</div>
+
+<!-- A2.96 Proximal Iterations and Augmented Lagrangian -->
+<div class="section-block" id="a2-96">
+    <div class="section-heading"><span class="section-num-large">A2.96</span><h2 class="section-title-large">Proximal Iterations and Augmented Lagrangian</h2></div>
+    <div class="section-body">
+        <p>The dual function <em>$\mathcal{L}^*$</em> is concave; maximizing it is equivalent to minimizing <em>$-\mathcal{L}^*$</em>. The proximal point algorithm applied to <em>$-\mathcal{L}^*$</em> yields</p>
+        <div class="equation-block">\[ \lambda(t+1) = \operatorname{prox}_{-\alpha_t \mathcal{L}^*}(\lambda(t)) = \operatorname{argmax}_{\mu\in D}\left( \mathcal{L}^*(\mu) - \frac{1}{2\alpha_t}\|\mu-\lambda(t)\|^2 \right). \]</div>
+        <p>Define the <strong>augmented Lagrangian</strong> function <em>$\phi(x,\mu) = F(x) + \sum_{i\in\mathcal{C}} \mu_i \gamma_i(x) - \frac{1}{2\alpha_t}\|\mu-\lambda(t)\|^2$</em>. Under appropriate conditions (e.g., compact sub‑level sets of <em>$F$</em> on <em>$\Omega$</em>), minimax equality holds:</p>
+        <div class="equation-block">\[ \max_{\mu\in D}\inf_{x\in\mathbb{R}^d} \phi(x,\mu) = \inf_{x\in\mathbb{R}^d}\sup_{\mu\in D} \phi(x,\mu). \]</div>
+        <p>The inner maximization over <em>$\mu$</em> can be solved in closed form: for <em>$i\in E$</em>, <em>$\mu_i = \lambda_i(t) + \alpha_t \gamma_i(x)$</em>; for <em>$i\in I$</em>, <em>$\mu_i = \max(0, \lambda_i(t) + \alpha_t \gamma_i(x))$</em>. Substituting back gives the <strong>augmented Lagrangian algorithm</strong>:</p>
+        <div class="equation-block multiline">\[ \begin{cases} 
+        x(t) = \operatorname{argmin}_{x\in\mathbb{R}^d} \Big( F(x) + \frac{1}{2\alpha_t}\sum_{i\in E} (\lambda_i(t)+\alpha_t\gamma_i(x))^2 + \frac{1}{2\alpha_t}\sum_{i\in I} \max(0,\lambda_i(t)+\alpha_t\gamma_i(x))^2 \Big), \\
+        \lambda_i(t+1) = \lambda_i(t) + \alpha_t \gamma_i(x(t)), \quad i\in E, \\
+        \lambda_i(t+1) = \max(0,\; \lambda_i(t) + \alpha_t \gamma_i(x(t))), \quad i\in I.
+        \end{cases} \]</div>
+        <p>Starting from <em>$\lambda(0)$</em>, the iterates <em>$\lambda(t)$</em> converge to a solution of the dual problem, and cluster points of <em>$x(t)$</em> (if they exist) are primal minimizers. The method works for convex problems; with small <em>$\alpha_t$</em> it can also be applied to non‑convex settings.</p>
+    </div>
+</div>
+
+<!-- A2.97 Alternative Direction Method of Multipliers (ADMM) -->
+<div class="section-block" id="a2-97">
+    <div class="section-heading"><span class="section-num-large">A2.97</span><h2 class="section-title-large">Alternative Direction Method of Multipliers (ADMM)</h2></div>
+    <div class="section-body">
+        <p>Consider the problem <em>$\min_{x,z} \{ G(x) + H(z) : Ax + Bz = c \}$</em> with <em>$G,H$</em> closed convex. The augmented Lagrangian method (with equality constraints) would jointly minimize over <em>$(x,z)$</em>. ADMM splits this into two easier subproblems. With fixed step size <em>$\alpha>0$</em> and scaled multiplier <em>$u = \lambda/\alpha$</em>, the iterations are (after removing constants):</p>
+        <div class="equation-block multiline">\[ \begin{cases} 
+        x_t = \operatorname{argmin}_{x} \big( G(x) + \frac{\alpha}{2}\| u_{t-1} + Ax + Bz_{t-1} - c \|^2 \big), \\
+        z_t = \operatorname{argmin}_{z} \big( H(z) + \frac{\alpha}{2}\| u_{t-1} + Ax_t + Bz - c \|^2 \big), \\
+        u_t = u_{t-1} + Ax_t + Bz_t - c.
+        \end{cases} \]</div>
+        <p>This is the <strong>Alternative Direction Method of Multipliers (ADMM)</strong>, also known as Douglas‑Rachford splitting. Under the assumptions that <em>$G$</em> and <em>$H$</em> are closed convex and the Lagrangian <em>$\mathcal{L}(x,z,\lambda)=G(x)+H(z)+\lambda^T(Ax+Bz-c)$</em> has a saddle point, the iterates converge: <em>$x_t, z_t$</em> to a primal solution, and <em>$u_t$</em> (or <em>$\lambda_t$</em>) to a dual solution. ADMM is particularly efficient when the proximal operators of <em>$G$</em> and <em>$H$</em> are easy to compute.</p>
+    </div>
+</div>
+
+
+
+
+
             <!-- END OF ALL SECTIONS -->
         </main>
 
@@ -916,6 +1445,44 @@
                     <li><a href="#a2-58" class="ml-nav"><span class="sb-nav-num ml">A2.58</span>Leibniz Rule &amp; REINFORCE</a></li>
                     <li><a href="#a2-59" class="ml-nav"><span class="sb-nav-num ml">A2.59</span>Fourier &amp; Laplace Transforms</a></li>
                     <li><a href="#a2-60" class="ml-nav"><span class="sb-nav-num ml">A2.60</span>Proximal Operators</a></li>
+                                        <li class="sb-nav-sub">Optimization Theory · A2.61–A2.97</li>
+                    <li><a href="#a2-61"><span class="sb-nav-num">A2.61</span>Global Minimizers / Maximizers</a></li>
+                    <li><a href="#a2-62"><span class="sb-nav-num">A2.62</span>Local Minimizers / Maximizers</a></li>
+                    <li><a href="#a2-63"><span class="sb-nav-num">A2.63</span>Existence via l.s.c.</a></li>
+                    <li><a href="#a2-64"><span class="sb-nav-num">A2.64</span>Types of Optimization</a></li>
+                    <li><a href="#a2-65"><span class="sb-nav-num">A2.65</span>Optimality (Unconstrained)</a></li>
+                    <li><a href="#a2-66"><span class="sb-nav-num">A2.66</span>Convex Sets &amp; Functions</a></li>
+                    <li><a href="#a2-67"><span class="sb-nav-num">A2.67</span>Relative Interior</a></li>
+                    <li><a href="#a2-68"><span class="sb-nav-num">A2.68</span>Derivatives of Convex Fns</a></li>
+                    <li><a href="#a2-69"><span class="sb-nav-num">A2.69</span>Descent &amp; Steepest Descent</a></li>
+                    <li><a href="#a2-70"><span class="sb-nav-num">A2.70</span>Convergence of Descent</a></li>
+                    <li><a href="#a2-71"><span class="sb-nav-num">A2.71</span>Line Search (Armijo/Wolfe)</a></li>
+                    <li><a href="#a2-72"><span class="sb-nav-num">A2.72</span>Stochastic Gradient Descent</a></li>
+                    <li><a href="#a2-73"><span class="sb-nav-num">A2.73</span>Deterministic Approximation</a></li>
+                    <li><a href="#a2-74"><span class="sb-nav-num">A2.74</span>ODE Method for SGD</a></li>
+                    <li><a href="#a2-75"><span class="sb-nav-num">A2.75</span>ADAM Algorithm</a></li>
+                    <li><a href="#a2-76"><span class="sb-nav-num">A2.76</span>Stochastic Gradient Descent</a></li>
+                    <li><a href="#a2-77"><span class="sb-nav-num">A2.77</span>Deterministic Approximation</a></li>
+                    <li><a href="#a2-78"><span class="sb-nav-num">A2.78</span>ODE Method for SGD</a></li>
+                    <li><a href="#a2-79"><span class="sb-nav-num">A2.79</span>ADAM Algorithm</a></li>
+                    <li><a href="#a2-80"><span class="sb-nav-num">A2.80</span>Lagrange Multipliers (KKT)</a></li>
+                    <li><a href="#a2-81"><span class="sb-nav-num">A2.81</span>Convex Constraints &amp; Normal Cone</a></li>
+                    <li><a href="#a2-82"><span class="sb-nav-num">A2.82</span>Minimization over PSD Matrices</a></li>
+                    <li><a href="#a2-83"><span class="sb-nav-num">A2.83</span>Projection</a></li>
+                    <li><a href="#a2-84"><span class="sb-nav-num">A2.84</span>Projected Gradient Descent</a></li>
+                    <li><a href="#a2-85"><span class="sb-nav-num">A2.85</span>Epigraphs &amp; Closed Convex Fns</a></li>
+                    <li><a href="#a2-86"><span class="sb-nav-num">A2.86</span>Subgradients &amp; Subdifferential</a></li>
+                    <li><a href="#a2-87"><span class="sb-nav-num">A2.87</span>Directional Derivatives</a></li>
+                    <li><a href="#a2-88"><span class="sb-nav-num">A2.88</span>Subgradient Descent</a></li>
+                    <li><a href="#a2-89"><span class="sb-nav-num">A2.89</span>Proximal Operator</a></li>
+                    <li><a href="#a2-90"><span class="sb-nav-num">A2.90</span>Proximal Gradient Descent</a></li>
+                    <li><a href="#a2-91"><span class="sb-nav-num">A2.91</span>Convergence of Proximal Gradient</a></li>
+                    <li><a href="#a2-92"><span class="sb-nav-num">A2.92</span>Proximal Point Algorithm</a></li>
+                    <li><a href="#a2-93"><span class="sb-nav-num">A2.93</span>Generalized KKT (Non‑smooth)</a></li>
+                    <li><a href="#a2-94"><span class="sb-nav-num">A2.94</span>Dual Problem &amp; Saddle Points</a></li>
+                    <li><a href="#a2-95"><span class="sb-nav-num">A2.95</span>Example: Quadratic Programming</a></li>
+                    <li><a href="#a2-96"><span class="sb-nav-num">A2.96</span>Augmented Lagrangian</a></li>
+                    <li><a href="#a2-97"><span class="sb-nav-num">A2.97</span>ADMM</a></li>
                 </ul>
             </div>
             <div class="sb-section">
@@ -999,6 +1566,44 @@
             <li><a href="#a2-58">A2.58 — Leibniz / REINFORCE</a></li>
             <li><a href="#a2-59">A2.59 — Fourier &amp; Laplace</a></li>
             <li><a href="#a2-60">A2.60 — Proximal Operators</a></li>
+                        <li><a class="mn-sub">— Optimization Theory —</a></li>
+            <li><a href="#a2-61">A2.61 — Global Minimizers / Maximizers</a></li>
+            <li><a href="#a2-62">A2.62 — Local Minimizers / Maximizers</a></li>
+            <li><a href="#a2-63">A2.63 — Existence via l.s.c.</a></li>
+            <li><a href="#a2-64">A2.64 — Types of Optimization</a></li>
+            <li><a href="#a2-65">A2.65 — Optimality (Unconstrained)</a></li>
+            <li><a href="#a2-66">A2.66 — Convex Sets &amp; Functions</a></li>
+            <li><a href="#a2-67">A2.67 — Relative Interior</a></li>
+            <li><a href="#a2-68">A2.68 — Derivatives of Convex Fns</a></li>
+            <li><a href="#a2-69">A2.69 — Descent &amp; Steepest Descent</a></li>
+            <li><a href="#a2-70">A2.70 — Convergence of Descent</a></li>
+            <li><a href="#a2-71">A2.71 — Line Search (Armijo/Wolfe)</a></li>
+            <li><a href="#a2-72">A2.72 — Stochastic Gradient Descent</a></li>
+            <li><a href="#a2-73">A2.73 — Deterministic Approximation</a></li>
+            <li><a href="#a2-74">A2.74 — ODE Method for SGD</a></li>
+            <li><a href="#a2-75">A2.75 — ADAM Algorithm</a></li>
+            <li><a href="#a2-76">A2.76 — Stochastic Gradient Descent</a></li>
+            <li><a href="#a2-77">A2.77 — Deterministic Approximation</a></li>
+            <li><a href="#a2-78">A2.78 — ODE Method for SGD</a></li>
+            <li><a href="#a2-79">A2.79 — ADAM Algorithm</a></li>
+            <li><a href="#a2-80">A2.80 — Lagrange Multipliers (KKT)</a></li>
+            <li><a href="#a2-81">A2.81 — Convex Constraints &amp; Normal Cone</a></li>
+            <li><a href="#a2-82">A2.82 — Minimization over PSD Matrices</a></li>
+            <li><a href="#a2-83">A2.83 — Projection</a></li>
+            <li><a href="#a2-84">A2.84 — Projected Gradient Descent</a></li>
+            <li><a href="#a2-85">A2.85 — Epigraphs &amp; Closed Convex Fns</a></li>
+            <li><a href="#a2-86">A2.86 — Subgradients &amp; Subdifferential</a></li>
+            <li><a href="#a2-87">A2.87 — Directional Derivatives</a></li>
+            <li><a href="#a2-88">A2.88 — Subgradient Descent</a></li>
+            <li><a href="#a2-89">A2.89 — Proximal Operator</a></li>
+            <li><a href="#a2-90">A2.90 — Proximal Gradient Descent</a></li>
+            <li><a href="#a2-91">A2.91 — Convergence of Proximal Gradient</a></li>
+            <li><a href="#a2-92">A2.92 — Proximal Point Algorithm</a></li>
+            <li><a href="#a2-93">A2.93 — Generalized KKT (Non‑smooth)</a></li>
+            <li><a href="#a2-94">A2.94 — Dual Problem &amp; Saddle Points</a></li>
+            <li><a href="#a2-95">A2.95 — Example: Quadratic Programming</a></li>
+            <li><a href="#a2-96">A2.96 — Augmented Lagrangian</a></li>
+            <li><a href="#a2-97">A2.97 — ADMM</a></li>
         </ul>
     </nav>
 

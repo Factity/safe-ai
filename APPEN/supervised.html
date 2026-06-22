@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Supervised Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ── THEME TOKENS ── */
+        [data-theme="light"] {
+            --paper: #f7f4ec;
+            --paper2: #eae6db;
+            --paper3: #dedad0;
+            --ink: #080706;
+            --ink2: #1c1a14;
+            --ink3: #3e3830;
+            --ink4: #736c62;
+            --ink5: #b0a99f;
+            --rule: rgba(8, 7, 6, 0.20);
+            --rule2: rgba(8, 7, 6, 0.11);
+            --rule3: rgba(8, 7, 6, 0.06);
+            --crimson: #c44d0e;
+            --crimson2: #8b3300;
+            --crimson-lo: rgba(196, 77, 14, 0.07);
+            --hover-lo: rgba(8, 7, 6, 0.05);
+            --gold: #513d08;
+            --gold-lo: rgba(81, 61, 8, 0.09);
+            --teal: #0a2d3d;
+            --fm-bg: #080705;
+            --fm-rule: #c44d0e;
+            --fm-accent: #e06020;
+            --fm-text: #ffffff;
+            --fm-muted: rgba(255, 255, 255, 0.45);
+            --fm-border: rgba(255, 255, 255, 0.11);
+            --toggle-bg: rgba(255, 255, 255, 0.10);
+            --toggle-ico: rgba(255, 255, 255, 0.60);
+            --section-bg: rgba(8, 7, 6, 0.04);
+            --section-border: rgba(8, 7, 6, 0.16);
+            --section-num: rgba(196, 77, 14, 0.60);
+            --callout-bg: rgba(196, 77, 14, 0.04);
+            --callout-border: rgba(196, 77, 14, 0.22);
+            --eq-bg: rgba(8, 7, 6, 0.025);
+            --eq-border: rgba(8, 7, 6, 0.13);
+            --tag-available-bg: rgba(196, 77, 14, 0.09);
+            --tag-available-border: rgba(196, 77, 14, 0.26);
+            --tag-available-color: #c44d0e;
+            --tag-draft-bg: rgba(81, 61, 8, 0.09);
+            --tag-draft-border: rgba(81, 61, 8, 0.24);
+            --tag-draft-color: #513d08;
+        }
+        [data-theme="dark"] {
+            --paper: #0c0b08;
+            --paper2: #141310;
+            --paper3: #1d1c18;
+            --ink: #f2ede2;
+            --ink2: #d8d2c4;
+            --ink3: #b0a898;
+            --ink4: #766e62;
+            --ink5: #3a3730;
+            --rule: rgba(242, 237, 226, 0.18);
+            --rule2: rgba(242, 237, 226, 0.10);
+            --rule3: rgba(242, 237, 226, 0.05);
+            --crimson: #e09050;
+            --crimson2: #f0b070;
+            --crimson-lo: rgba(224, 144, 80, 0.12);
+            --hover-lo: rgba(242, 237, 226, 0.05);
+            --gold: #d4aa55;
+            --gold-lo: rgba(212, 170, 85, 0.11);
+            --teal: #5ab0cc;
+            --fm-bg: #080706;
+            --fm-rule: #a04010;
+            --fm-accent: #e09050;
+            --fm-text: #f2ede2;
+            --fm-muted: rgba(242, 237, 226, 0.42);
+            --fm-border: rgba(242, 237, 226, 0.10);
+            --toggle-bg: rgba(242, 237, 226, 0.10);
+            --toggle-ico: rgba(242, 237, 226, 0.60);
+            --section-bg: rgba(242, 237, 226, 0.04);
+            --section-border: rgba(242, 237, 226, 0.12);
+            --section-num: rgba(224, 144, 80, 0.65);
+            --callout-bg: rgba(224, 144, 80, 0.06);
+            --callout-border: rgba(224, 144, 80, 0.25);
+            --eq-bg: rgba(242, 237, 226, 0.025);
+            --eq-border: rgba(242, 237, 226, 0.11);
+            --tag-available-bg: rgba(224, 144, 80, 0.12);
+            --tag-available-border: rgba(224, 144, 80, 0.30);
+            --tag-available-color: #e09050;
+            --tag-draft-bg: rgba(212, 170, 85, 0.11);
+            --tag-draft-border: rgba(212, 170, 85, 0.28);
+            --tag-draft-color: #d4aa55;
+        }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background 0.22s ease, color 0.22s ease;
+            max-width: 100vw;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--paper2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--ink5);
+        }
+        .frontmatter {
+            background: var(--fm-bg);
+            color: var(--fm-text);
+            position: relative;
+            overflow: hidden;
+            max-width: 100vw;
+        }
+        .frontmatter::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 6px, rgba(255, 255, 255, 0.012) 6px, rgba(255, 255, 255, 0.012) 7px);
+            pointer-events: none;
+        }
+        .fm-rule-top {
+            height: 3px;
+            background: var(--fm-rule);
+        }
+        .fm-series-bar {
+            border-bottom: 1px solid var(--fm-border);
+            padding: .55rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .65rem;
+            font-weight: 600;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.58);
+            flex-wrap: wrap;
+            gap: .4rem;
+        }
+        .fm-body {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 3.5rem 3rem 3rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 3rem;
+            align-items: end;
+            position: relative;
+        }
+        .fm-eyebrow {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .26em;
+            text-transform: uppercase;
+            color: var(--fm-accent);
+            margin-bottom: 1.1rem;
+        }
+        .fm-title {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: clamp(2.4rem, 5vw, 3.8rem);
+            font-weight: 500;
+            font-style: italic;
+            line-height: 1.04;
+            letter-spacing: -.015em;
+            color: var(--fm-text);
+            margin-bottom: .85rem;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+        .fm-title em {
+            font-style: normal;
+            font-weight: 400;
+            color: var(--fm-muted);
+        }
+        .fm-subtitle {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .9rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, .62);
+            line-height: 1.75;
+            max-width: 58ch;
+        }
+        .fm-meta {
+            display: flex;
+            flex-direction: column;
+            gap: .85rem;
+            font-family: 'Source Code Pro', monospace;
+            font-size: .62rem;
+            min-width: 200px;
+            border-left: 1px solid var(--fm-border);
+            padding-left: 2rem;
+        }
+        .fm-meta-row {
+            display: flex;
+            flex-direction: column;
+            gap: .15rem;
+        }
+        .fm-meta-label {
+            color: rgba(255, 255, 255, .40);
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            font-size: .52rem;
+        }
+        .fm-meta-value {
+            color: rgba(255, 255, 255, .90);
+            overflow-wrap: break-word;
+        }
+        .fm-rule-bot {
+            height: 1px;
+            background: var(--fm-border);
+            margin: 0 3rem;
+        }
+        .fm-folio-bar {
+            padding: .55rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Source Code Pro', monospace;
+            font-size: .58rem;
+            color: rgba(255, 255, 255, .38);
+            letter-spacing: .08em;
+            flex-wrap: wrap;
+            gap: .4rem;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: .9rem 3rem 0 0;
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            z-index: 10;
+        }
+        .toggle-label {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .6rem;
+            font-weight: 600;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--fm-muted);
+            user-select: none;
+        }
+        .toggle-btn {
+            width: 40px;
+            height: 20px;
+            background: var(--toggle-bg);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: background .2s;
+            flex-shrink: 0;
+        }
+        .toggle-btn::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            transition: transform .22s cubic-bezier(.4, 0, .2, 1);
+        }
+        [data-theme="dark"] .toggle-btn::after {
+            transform: translateX(20px);
+        }
+        [data-theme="dark"] .toggle-btn {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .page {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 3rem 6rem;
+            display: grid;
+            grid-template-columns: 1fr 268px;
+            gap: 5rem;
+            align-items: start;
+        }
+        .content {
+            padding-top: 3.5rem;
+            max-width: 100%;
+            min-width: 0;
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            margin-bottom: 2rem;
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .62rem;
+            font-weight: 600;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--ink4);
+            flex-wrap: wrap;
+            overflow-wrap: break-word;
+        }
+        .breadcrumb a {
+            color: var(--crimson);
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            color: var(--crimson2);
+            text-decoration: underline;
+        }
+        .breadcrumb .sep {
+            color: var(--ink5);
+            font-weight: 400;
+        }
+        .breadcrumb .current {
+            color: var(--ink2);
+        }
+        .section-block {
+            margin-bottom: 3rem;
+            scroll-margin-top: 2rem;
+            max-width: 100%;
+        }
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: .55rem;
+            border-bottom: 1px solid var(--rule);
+            flex-wrap: wrap;
+        }
+        .section-num-large {
+            font-family: 'Source Code Pro', monospace;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--crimson);
+            letter-spacing: .04em;
+            flex-shrink: 0;
+            min-width: 3.6rem;
+        }
+        .section-title-large {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--ink);
+            line-height: 1.2;
+            overflow-wrap: break-word;
+        }
+        .section-body {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .88rem;
+            font-weight: 400;
+            color: var(--ink2);
+            line-height: 1.85;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+        .section-body p {
+            margin-bottom: 1rem;
+        }
+        .section-body strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+        .section-body ol,
+        .section-body ul {
+            margin: .6rem 0 1.2rem 1.5rem;
+        }
+        .section-body ol li,
+        .section-body ul li {
+            margin-bottom: .35rem;
+            padding-left: .3rem;
+        }
+        .intro-note {
+            background: var(--callout-bg);
+            border-left: 3px solid var(--callout-border);
+            padding: 1.1rem 1.4rem;
+            margin-bottom: 2.6rem;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .84rem;
+            color: var(--ink2);
+            line-height: 1.8;
+            border-radius: 0 6px 6px 0;
+            overflow-wrap: break-word;
+        }
+        .intro-note strong {
+            color: var(--crimson);
+            font-weight: 600;
+        }
+        .equation-block {
+            background: var(--eq-bg);
+            border: 1px solid var(--eq-border);
+            border-radius: 5px;
+            padding: 1.1rem 1.3rem;
+            margin: 1rem 0 1.2rem;
+            font-family: 'STIX Two Math', 'Latin Modern Math', 'Cambria Math', serif;
+            font-size: .94rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--ink);
+            overflow-x: auto;
+            overflow-y: hidden;
+            line-height: 1.95;
+            letter-spacing: .02em;
+            white-space: nowrap;
+            max-width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+        .equation-block.multiline {
+            white-space: normal;
+            line-height: 2.2;
+            overflow-x: visible;
+            word-break: break-word;
+        }
+        .var-def-list {
+            list-style: none;
+            margin: .6rem 0 1.4rem;
+            border-top: 1px solid var(--rule3);
+            max-width: 100%;
+        }
+        .var-def-item {
+            display: flex;
+            gap: .75rem;
+            padding: .38rem 0;
+            border-bottom: 1px solid var(--rule3);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .78rem;
+            font-weight: 400;
+            color: var(--ink3);
+            line-height: 1.55;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+        .var-symbol {
+            font-family: 'STIX Two Math', 'Latin Modern Math', 'Cambria Math', serif;
+            font-weight: 500;
+            font-style: italic;
+            color: var(--crimson);
+            min-width: 4.6rem;
+            flex-shrink: 0;
+            font-size: .82rem;
+            letter-spacing: .03em;
+            text-align: right;
+            overflow-wrap: break-word;
+        }
+        .var-desc {
+            flex: 1;
+            color: var(--ink2);
+            min-width: 0;
+            overflow-wrap: break-word;
+        }
+        .conceptual-note {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .72rem;
+            font-weight: 400;
+            color: var(--ink4);
+            font-style: italic;
+            margin-top: .5rem;
+            padding: .4rem .6rem;
+            background: var(--section-bg);
+            border-radius: 3px;
+            display: inline-block;
+            max-width: 100%;
+            overflow-wrap: break-word;
+        }
+        .sidebar {
+            padding-top: 3.5rem;
+            overflow-y: auto;
+            max-height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+        .sb-section {
+            margin-bottom: 2.6rem;
+            max-width: 100%;
+        }
+        .sb-heading {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin-bottom: .9rem;
+            padding-bottom: .4rem;
+            border-bottom: 1px solid var(--rule);
+            overflow-wrap: break-word;
+        }
+        .sb-body {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .82rem;
+            color: var(--ink3);
+            line-height: 1.75;
+            overflow-wrap: break-word;
+        }
+        .sb-body p {
+            margin-bottom: .65rem;
+        }
+        .sb-body strong {
+            color: var(--ink2);
+            font-weight: 600;
+        }
+        .sb-nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            max-width: 100%;
+        }
+        .sb-nav-list li {
+            border-bottom: 1px solid var(--rule3);
+        }
+        .sb-nav-list a {
+            display: block;
+            padding: .55rem 0;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .78rem;
+            font-weight: 400;
+            color: var(--ink3);
+            text-decoration: none;
+            transition: color .16s;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+        .sb-nav-list a:hover {
+            color: var(--crimson);
+        }
+        .sb-nav-num {
+            font-family: 'Source Code Pro', monospace;
+            font-size: .6rem;
+            color: var(--crimson);
+            margin-right: .4rem;
+        }
+        .sb-nav-group {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .58rem;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--ink5);
+            padding: .9rem 0 .3rem;
+        }
+        .sb-nav-list li:first-child .sb-nav-group {
+            padding-top: 0;
+        }
+        footer {
+            background: var(--paper2);
+            border-top: 2px solid var(--ink);
+            max-width: 100vw;
+        }
+        .ft-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+        .ft-title {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--ink2);
+            overflow-wrap: break-word;
+        }
+        .ft-right {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .68rem;
+            color: var(--ink4);
+            letter-spacing: .04em;
+            overflow-wrap: break-word;
+        }
+        #hamburger-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #333;
+            color: white;
+            border: none;
+            font-size: 24px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 280px;
+            max-width: 80vw;
+            background: #f5f5f5;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+        }
+        [data-theme="dark"] #mobile-nav {
+            background: #1a1a16;
+            color: #f2ede2;
+        }
+        [data-theme="dark"] #mobile-nav a {
+            color: #e07070;
+        }
+        #mobile-nav.open {
+            transform: translateX(0);
+        }
+        #mobile-nav h3 {
+            margin-top: 0;
+            color: #333;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .75rem;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        [data-theme="dark"] #mobile-nav h3 {
+            color: #f2ede2;
+        }
+        #mobile-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #mobile-nav li {
+            margin: 5px 0;
+        }
+        #mobile-nav a {
+            text-decoration: none;
+            color: #5c0a0a;
+            font-size: 15px;
+            font-family: 'Source Sans 3', sans-serif;
+            display: block;
+            padding: .35rem 0;
+        }
+        #mobile-nav a:hover {
+            text-decoration: underline;
+        }
+        #mobile-nav .mnav-group {
+            font-size: 11px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: #999;
+            padding: .8rem 0 .25rem;
+            font-family: 'Source Sans 3', sans-serif;
+        }
+        #nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+        }
+        @media (max-width: 768px) {
+            #hamburger-btn {
+                display: block;
+            }
+            #mobile-nav {
+                display: block;
+            }
+        }
+        @media(max-width:820px) {
+            .page {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .sidebar {
+                border-top: 2px solid var(--ink);
+                padding-top: 2.5rem;
+                max-width: 100%;
+                max-height: none;
+                position: static;
+            }
+            .var-symbol {
+                min-width: 3.8rem;
+                font-size: .74rem;
+            }
+            .equation-block {
+                font-size: .84rem;
+                padding: .95rem 1rem;
+            }
+            .sb-nav-list a {
+                font-size: .82rem;
+                padding: .6rem 0;
+            }
+        }
+        @media(max-width:680px) {
+            .page {
+                padding: 0 1.5rem 4rem;
+            }
+            .fm-body {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 2.5rem 1.5rem 2rem;
+            }
+            .fm-meta {
+                border-left: none;
+                border-top: 1px solid var(--fm-border);
+                padding-left: 0;
+                padding-top: 1.25rem;
+                min-width: 0;
+            }
+            .fm-rule-bot {
+                margin: 0 1.5rem;
+            }
+            .fm-folio-bar {
+                padding: .55rem 1.5rem;
+            }
+            .fm-series-bar {
+                padding: .55rem 1.5rem;
+                font-size: .58rem;
+                letter-spacing: .14em;
+            }
+            .ft-inner {
+                padding: 1.2rem 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: .4rem;
+            }
+            .theme-toggle {
+                padding: .7rem 1.5rem 0 0;
+            }
+            .section-num-large {
+                min-width: 2.8rem;
+                font-size: .9rem;
+            }
+            .section-title-large {
+                font-size: 1.3rem;
+            }
+            .equation-block {
+                font-size: .78rem;
+                padding: .8rem .75rem;
+            }
+            .var-symbol {
+                min-width: 3.2rem;
+                font-size: .7rem;
+                text-align: left;
+            }
+            .sb-nav-list a {
+                font-size: .8rem;
+            }
+            .breadcrumb {
+                font-size: .58rem;
+                letter-spacing: .08em;
+                gap: .35rem;
+            }
+        }
+        @media(max-width:400px) {
+            .page {
+                padding: 0 1rem 3rem;
+            }
+            .fm-body {
+                padding: 2rem 1rem 1.5rem;
+            }
+            .fm-rule-bot {
+                margin: 0 1rem;
+            }
+            .fm-folio-bar {
+                padding: .45rem 1rem;
+            }
+            .fm-series-bar {
+                padding: .45rem 1rem;
+                font-size: .52rem;
+                letter-spacing: .1em;
+            }
+            .theme-toggle {
+                padding: .5rem 1rem 0 0;
+            }
+            .ft-inner {
+                padding: 1rem 1rem;
+            }
+            .section-num-large {
+                min-width: 2.2rem;
+                font-size: .78rem;
+            }
+            .section-title-large {
+                font-size: 1.15rem;
+            }
+            .equation-block {
+                font-size: .72rem;
+                padding: .65rem .6rem;
+            }
+            .var-symbol {
+                min-width: 2.6rem;
+                font-size: .66rem;
+            }
+            .intro-note {
+                padding: .85rem 1rem;
+                font-size: .76rem;
+            }
+        }
+        @media(prefers-reduced-motion:reduce) {
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="frontmatter">
+        <div class="fm-rule-top"></div>
+        <div class="fm-series-bar">
+            <span>Machine Learning Reference Series</span>
+            <span>Foundations for Data Science</span>
+        </div>
+        <div class="fm-body">
+            <div class="fm-left">
+                <div class="fm-eyebrow">Reference</div>
+                <h1 class="fm-title">Introduction to<br><em>Supervised Learning</em></h1>
+                <p class="fm-subtitle">A comprehensive reference covering the theory and practice of supervised machine learning — from linear regression and logistic classification through decision trees, support vector machines, neural networks, ensemble methods, model evaluation, and advanced topics — presented through definitions, theorems, algorithms, and conceptual explanations.</p>
+            </div>
+            <div class="fm-meta">
+                <div class="fm-meta-row"><span class="fm-meta-label">Status</span><span class="fm-meta-value">Open Reference</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Sections</span><span class="fm-meta-value">130 Sections</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Numbering</span><span class="fm-meta-value">B1.1 — B1.130</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Domain</span><span class="fm-meta-value">Supervised Learning · Regression · Classification</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Prerequisites</span><span class="fm-meta-value">Linear Algebra · Probability · Calculus</span></div>
+            </div>
+            <div class="theme-toggle" aria-label="Toggle colour theme">
+                <span class="toggle-label" id="toggle-label-text">Light</span>
+                <button class="toggle-btn" id="themeToggle" aria-label="Switch to dark mode" role="switch" aria-checked="false"></button>
+            </div>
+        </div>
+        <div class="fm-rule-bot"></div>
+        <div class="fm-folio-bar">
+            <span>Supervised Learning</span>
+            <span>Definitions · Theorems · Algorithms — Reference</span>
+        </div>
+    </div>
+
+    <div class="page">
+        <main class="content">
+            <div class="breadcrumb">
+                <a href="#">Machine Learning</a>
+                <span class="sep">›</span>
+                <a href="#">Supervised Learning</a>
+                <span class="sep">›</span>
+                <span class="current">Regression, Classification &amp; Model Evaluation</span>
+            </div>
+            <div class="intro-note">
+                <strong>Supervised learning</strong> is the branch of machine learning concerned with learning a mapping from inputs to outputs based on example input–output pairs. It encompasses regression (predicting continuous values), classification (predicting discrete categories), and structured prediction. This reference builds from first principles: the definition of the learning problem and key concepts like loss functions and generalization (B1.1–B1.19), then progresses through linear models, tree‑based methods, kernel methods, neural networks, ensemble techniques, probabilistic approaches, and model evaluation (B1.20–B1.130), with each topic presented as a formal <strong>definition</strong>, <strong>theorem</strong>, or <strong>algorithm</strong> accompanied by conceptual explanation.
+            </div>
+
+            <!-- B1.1 Supervised Learning -->
+            <div class="section-block" id="b1-1"><div class="section-heading"><span class="section-num-large">B1.1</span><h2 class="section-title-large">Supervised Learning (Definition)</h2></div><div class="section-body"><p><strong>Supervised learning</strong> is the task of learning a function <em>f : 𝒳 → 𝒴</em> from a labeled dataset <em>𝒟 = {(x<sub>i</sub>, y<sub>i</sub>)}<sub>i=1</sub><sup>n</sup></em>, where each <em>x<sub>i</sub> ∈ 𝒳</em> is a feature vector and <em>y<sub>i</sub> ∈ 𝒴</em> is its corresponding label or target value. The goal is to produce a model <em>f̂</em> that generalizes well: for a new, unseen input <em>x</em>, the prediction <em>f̂(x)</em> should be close to the true <em>y</em>.</p><ul class="var-def-list"><li class="var-def-item"><span class="var-symbol">𝒳</span><span class="var-desc">the input (feature) space, typically ℝ<sup>d</sup> or a subset.</span></li><li class="var-def-item"><span class="var-symbol">𝒴</span><span class="var-desc">the output (label) space; ℝ for regression, {0,1} or {1,…,K} for classification.</span></li><li class="var-def-item"><span class="var-symbol">f : 𝒳 → 𝒴</span><span class="var-desc">the unknown true function we aim to approximate.</span></li></ul></div></div>
+
+            <!-- B1.2 Features and Labels -->
+            <div class="section-block" id="b1-2"><div class="section-heading"><span class="section-num-large">B1.2</span><h2 class="section-title-large">Features and Labels</h2></div><div class="section-body"><p>A <strong>feature</strong> (or predictor, attribute, independent variable) is an individual measurable property of the phenomenon being observed. The <strong>label</strong> (or target, response, dependent variable) is the quantity we wish to predict. Features are typically represented as a vector <em>x ∈ ℝ<sup>d</sup></em>, where <em>d</em> is the number of features (dimensionality).</p><ul class="var-def-list"><li class="var-def-item"><span class="var-symbol">x<sup>(j)</sup></span><span class="var-desc">the j‑th feature of input x, j = 1,…,d.</span></li><li class="var-def-item"><span class="var-symbol">y</span><span class="var-desc">the label associated with input x.</span></li></ul></div></div>
+
+            <!-- B1.3 Training, Validation, and Test Sets -->
+            <div class="section-block" id="b1-3"><div class="section-heading"><span class="section-num-large">B1.3</span><h2 class="section-title-large">Training, Validation, and Test Sets</h2></div><div class="section-body"><p>The available labeled data is typically partitioned into three disjoint subsets:</p><ul><li><strong>Training set:</strong> used to fit the model parameters.</li><li><strong>Validation set:</strong> used for hyperparameter tuning and model selection; not used for training.</li><li><strong>Test set:</strong> held out until final evaluation; provides an unbiased estimate of generalization performance.</li></ul><p>A common split ratio is 60/20/20 or 70/15/15, depending on dataset size.</p></div></div>
+
+            <!-- B1.4 Hypothesis Space -->
+            <div class="section-block" id="b1-4"><div class="section-heading"><span class="section-num-large">B1.4</span><h2 class="section-title-large">Hypothesis Space</h2></div><div class="section-body"><p>The <strong>hypothesis space</strong> <em>ℋ</em> is the set of all functions <em>h : 𝒳 → 𝒴</em> that the learning algorithm is allowed to select from. For linear regression, <em>ℋ = {h(x) = w<sup>T</sup>x + b ∣ w ∈ ℝ<sup>d</sup>, b ∈ ℝ}</em>. The choice of <em>ℋ</em> encodes the <strong>inductive bias</strong> of the learner — its built‑in assumptions about the nature of the target function.</p><ul class="var-def-list"><li class="var-def-item"><span class="var-symbol">ℋ</span><span class="var-desc">the hypothesis space; the set of candidate functions considered by the learner.</span></li></ul></div></div>
+
+            <!-- B1.5 Loss Function -->
+            <div class="section-block" id="b1-5"><div class="section-heading"><span class="section-num-large">B1.5</span><h2 class="section-title-large">Loss Function</h2></div><div class="section-body"><p>A <strong>loss function</strong> <em>ℓ : 𝒴 × 𝒴 → ℝ<sub>≥0</sub></em> quantifies the discrepancy between a predicted value <em>ŷ</em> and the true label <em>y</em>. Common examples:</p><div class="equation-block multiline">ℓ<sub>squared</sub>(y, ŷ) = (y − ŷ)<sup>2</sup>      (squared error, for regression)<br>ℓ<sub>0-1</sub>(y, ŷ) = 1[y ≠ ŷ]       (zero‑one loss, for classification)<br>ℓ<sub>hinge</sub>(y, ŷ) = max(0, 1 − y·ŷ)    (hinge loss, for SVMs)<br>ℓ<sub>log</sub>(y, ŷ) = −y log(ŷ) − (1−y) log(1−ŷ) (binary cross‑entropy)</div><ul class="var-def-list"><li class="var-def-item"><span class="var-symbol">ℓ(y, ŷ)</span><span class="var-desc">the loss incurred when predicting ŷ while the true label is y.</span></li></ul></div></div>
+
+            <!-- B1.6 Risk -->
+            <div class="section-block" id="b1-6"><div class="section-heading"><span class="section-num-large">B1.6</span><h2 class="section-title-large">Risk (Expected Loss / Generalization Error)</h2></div><div class="section-body"><p>The <strong>risk</strong> (or <strong>expected loss</strong>) of a hypothesis <em>h</em> is the expected loss over the true data distribution <em>P(x, y)</em>:</p><div class="equation-block">R(h) = 𝔼<sub>(x,y)∼P</sub>[ℓ(y, h(x))].</div><p>This is the quantity we truly wish to minimize, but it is inaccessible because <em>P</em> is unknown. The risk quantifies <strong>generalization</strong> — performance on future, unseen data.</p></div></div>
+
+            <!-- B1.7 Empirical Risk -->
+            <div class="section-block" id="b1-7"><div class="section-heading"><span class="section-num-large">B1.7</span><h2 class="section-title-large">Empirical Risk</h2></div><div class="section-body"><p>The <strong>empirical risk</strong> is the average loss on the training set <em>𝒟</em>:</p><div class="equation-block">R̂<sub>n</sub>(h) = (1/n) ∑<sub>i=1</sub><sup>n</sup> ℓ(y<sub>i</sub>, h(x<sub>i</sub>)).</div><p><strong>Empirical Risk Minimization (ERM)</strong> is the principle of choosing <em>h</em> that minimizes <em>R̂<sub>n</sub></em>. This is what virtually all supervised learning algorithms do, either exactly (OLS) or approximately (gradient descent).</p></div></div>
+
+            <!-- B1.8 Regression vs Classification -->
+            <div class="section-block" id="b1-8"><div class="section-heading"><span class="section-num-large">B1.8</span><h2 class="section-title-large">Regression vs Classification</h2></div><div class="section-body"><ul><li><strong>Regression:</strong> <em>𝒴</em> is continuous (typically ℝ). The goal is to predict a real‑valued quantity. Examples: predicting house prices, temperature, stock returns.</li><li><strong>Classification:</strong> <em>𝒴</em> is discrete (finite set of categories). The goal is to assign an input to one of <em>K</em> classes. Examples: spam detection (<em>K=2</em>), handwritten digit recognition (<em>K=10</em>).</li></ul><div class="conceptual-note">The distinction is not always sharp — ordinal regression, ranking, and structured prediction bridge the gap.</div></div></div>
+
+            <!-- B1.9 Binary vs Multi-class Classification -->
+            <div class="section-block" id="b1-9"><div class="section-heading"><span class="section-num-large">B1.9</span><h2 class="section-title-large">Binary and Multi‑class Classification</h2></div><div class="section-body"><p>In <strong>binary classification</strong>, <em>𝒴 = {0,1}</em> (or <em>{−1,+1}</em>). Many algorithms are natively binary (logistic regression, SVM). For <strong>multi‑class classification</strong> with <em>K > 2</em> classes, strategies include:</p><ul><li><strong>One‑vs‑Rest (OvR):</strong> train <em>K</em> binary classifiers, each distinguishing one class from all others.</li><li><strong>One‑vs‑One (OvO):</strong> train <em>K(K−1)/2</em> binary classifiers for every pair of classes.</li><li><strong>Softmax / multinomial:</strong> a single model with <em>K</em> outputs normalized by the softmax function (B1.31).</li></ul></div></div>
+
+            <!-- B1.10 Training Error vs Test Error -->
+            <div class="section-block" id="b1-10"><div class="section-heading"><span class="section-num-large">B1.10</span><h2 class="section-title-large">Training Error vs Test Error</h2></div><div class="section-body"><p>The <strong>training error</strong> is the empirical risk on the training set; the <strong>test error</strong> is the empirical risk on the held‑out test set. A large gap between them signals <strong>overfitting</strong>: the model has memorized the training data rather than learning generalizable patterns. A model with high training error and high test error is <strong>underfitting</strong>.</p></div></div>
+
+            <!-- B1.11 Generalization -->
+            <div class="section-block" id="b1-11"><div class="section-heading"><span class="section-num-large">B1.11</span><h2 class="section-title-large">Generalization</h2></div><div class="section-body"><p><strong>Generalization</strong> is the ability of a model to perform accurately on unseen data. The <strong>generalization gap</strong> is <em>R(h) − R̂<sub>n</sub>(h)</em>. PAC (Probably Approximately Correct) learning theory provides bounds on this gap in terms of the complexity of <em>ℋ</em> (e.g., VC dimension) and the sample size <em>n</em>.</p><div class="conceptual-note">ML relevance: all of model selection, regularization, and cross‑validation are strategies to minimize the generalization gap.</div></div></div>
+
+            <!-- B1.12 Overfitting and Underfitting -->
+            <div class="section-block" id="b1-12"><div class="section-heading"><span class="section-num-large">B1.12</span><h2 class="section-title-large">Overfitting and Underfitting</h2></div><div class="section-body"><ul><li><strong>Overfitting:</strong> the model is too complex relative to the amount/quality of training data; it captures noise as if it were signal. Characterized by low training error, high test error.</li><li><strong>Underfitting:</strong> the model is too simple to capture the underlying structure. Characterized by high training error and high test error.</li></ul><p>The <strong>bias–variance tradeoff</strong> (B1.13) provides a formal decomposition of this phenomenon.</p></div></div>
+
+            <!-- B1.13 Bias–Variance Tradeoff -->
+            <div class="section-block" id="b1-13"><div class="section-heading"><span class="section-num-large">B1.13</span><h2 class="section-title-large">Bias–Variance Decomposition</h2></div><div class="section-body"><p>For squared‑error loss, the expected prediction error at a point <em>x</em> can be decomposed as:</p><div class="equation-block multiline">𝔼[(y − f̂(x))<sup>2</sup>] = (Bias[f̂(x)])<sup>2</sup> + Var[f̂(x)] + σ<sup>2</sup></div><p>where <em>σ<sup>2</sup></em> is the irreducible noise, <strong>Bias</strong> measures how far the average prediction is from the truth, and <strong>Variance</strong> measures how much predictions fluctuate across different training sets. Flexible models have low bias but high variance; rigid models have high bias but low variance. The tradeoff is fundamental to model selection.</p></div></div>
+
+            <!-- B1.14 No Free Lunch Theorem -->
+            <div class="section-block" id="b1-14"><div class="section-heading"><span class="section-num-large">B1.14</span><h2 class="section-title-large">No Free Lunch Theorem</h2></div><div class="section-body"><p>The <strong>No Free Lunch (NFL) theorem</strong> states that, averaged over all possible data distributions, every learning algorithm has the same expected performance on unseen data. There is no universally best algorithm. The practical implication: assumptions (inductive bias) are necessary; the art of ML is matching the algorithm's bias to the structure of the problem.</p></div></div>
+
+            <!-- B1.15 Inductive Bias -->
+            <div class="section-block" id="b1-15"><div class="section-heading"><span class="section-num-large">B1.15</span><h2 class="section-title-large">Inductive Bias</h2></div><div class="section-body"><p><strong>Inductive bias</strong> is the set of assumptions a learning algorithm makes about the target function. Examples:</p><ul><li>Linear regression: the target is linear in the features.</li><li>k‑NN: nearby points have similar labels (smoothness).</li><li>Decision trees: the target can be expressed as axis‑aligned splits.</li><li>Neural networks: the target is a composition of simple non‑linear functions.</li></ul><p>The inductive bias is what allows an algorithm to generalize beyond the training data.</p></div></div>
+
+            <!-- B1.16 Model Complexity -->
+            <div class="section-block" id="b1-16"><div class="section-heading"><span class="section-num-large">B1.16</span><h2 class="section-title-large">Model Complexity</h2></div><div class="section-body"><p><strong>Model complexity</strong> refers to the capacity of the hypothesis space — roughly, how many different functions it can represent. Measured by:</p><ul><li>Number of parameters (e.g., polynomial degree in regression).</li><li>VC dimension (for binary classifiers).</li><li>Rademacher complexity.</li><li>Effective degrees of freedom.</li></ul><p>Higher complexity allows fitting more intricate patterns but increases the risk of overfitting.</p></div></div>
+
+            <!-- B1.17 Parametric vs Non‑parametric -->
+            <div class="section-block" id="b1-17"><div class="section-heading"><span class="section-num-large">B1.17</span><h2 class="section-title-large">Parametric vs Non‑parametric Models</h2></div><div class="section-body"><ul><li><strong>Parametric models:</strong> have a fixed, finite number of parameters regardless of dataset size. Examples: linear regression, logistic regression, neural networks (fixed architecture). Fast to train, but may underfit if the parameter count is insufficient.</li><li><strong>Non‑parametric models:</strong> the effective number of parameters grows with the data. Examples: k‑NN, kernel regression, Gaussian processes. More flexible, but can be computationally expensive and prone to overfitting without careful regularization.</li></ul></div></div>
+
+            <!-- B1.18 Notation Conventions -->
+            <div class="section-block" id="b1-18"><div class="section-heading"><span class="section-num-large">B1.18</span><h2 class="section-title-large">Notation Conventions</h2></div><div class="section-body"><p>Throughout this reference:</p><ul><li><strong>Scalars:</strong> italic lowercase (<em>y, α, n</em>).</li><li><strong>Vectors:</strong> bold lowercase (<strong>x</strong>, <strong>w</strong>) or italic with superscript (<em>x<sup>(j)</sup></em>).</li><li><strong>Matrices:</strong> bold uppercase (<strong>X</strong>, <strong>W</strong>).</li><li><strong>Design matrix X ∈ ℝ<sup>n×d</sup></strong>: rows are training examples, columns are features.</li><li><strong>Label vector y ∈ ℝ<sup>n</sup></strong>: the corresponding labels.</li><li><strong>Prediction:</strong> <em>ŷ = f̂(x)</em>.</li></ul></div></div>
+
+            <!-- B1.19 Data Matrix -->
+            <div class="section-block" id="b1-19"><div class="section-heading"><span class="section-num-large">B1.19</span><h2 class="section-title-large">Design Matrix and Label Vector</h2></div><div class="section-body"><p>The <strong>design matrix</strong> <strong>X</strong> ∈ ℝ<sup>n×d</sup> stacks <em>n</em> training examples as rows, each with <em>d</em> features:</p><div class="equation-block">X = [x<sub>1</sub><sup>T</sup>; x<sub>2</sub><sup>T</sup>; …; x<sub>n</sub><sup>T</sup>] with y = (y<sub>1</sub>, y<sub>2</sub>, …, y<sub>n</sub>)<sup>T</sup>.</div><p>This compact notation is used throughout: the <em>i</em>-th row of <strong>X</strong> is <em>x<sub>i</sub><sup>T</sup></em>, and the <em>j</em>-th column contains all values of feature <em>j</em> across the dataset.</p></div></div>
+
+            <!-- B1.20 Linear Regression -->
+            <div class="section-block" id="b1-20"><div class="section-heading"><span class="section-num-large">B1.20</span><h2 class="section-title-large">Linear Regression</h2></div><div class="section-body"><p><strong>Linear regression</strong> models the target as a linear function of the features:</p><div class="equation-block">f̂(x) = w<sup>T</sup>x + b = ∑<sub>j=1</sub><sup>d</sup> w<sub>j</sub>x<sup>(j)</sup> + b.</div><p>The parameters <strong>w</strong> ∈ ℝ<sup>d</sup> (weights) and <em>b</em> ∈ ℝ (bias or intercept) are learned from data. Despite its simplicity, linear regression is a foundational building block: it underlies more complex models (polynomial regression via basis expansion, the final layer of many neural networks, etc.).</p><div class="conceptual-note">ML relevance: linear regression is the first model tried in virtually every regression task — it is fast, interpretable, and provides a baseline for more complex approaches.</div></div></div>
+
+            <!-- B1.21 Ordinary Least Squares -->
+            <div class="section-block" id="b1-21"><div class="section-heading"><span class="section-num-large">B1.21</span><h2 class="section-title-large">Ordinary Least Squares (OLS)</h2></div><div class="section-body"><p><strong>Ordinary Least Squares</strong> finds the parameters that minimize the sum of squared errors:</p><div class="equation-block">min<sub>w,b</sub> ∑<sub>i=1</sub><sup>n</sup> (y<sub>i</sub> − w<sup>T</sup>x<sub>i</sub> − b)<sup>2</sup> = ∥y − Xw − b·1<sub>n</sub>∥<sup>2</sup>.</div><p>This is the maximum likelihood estimator under the assumption of Gaussian noise with constant variance.</p></div></div>
+
+            <!-- B1.22 Normal Equations -->
+            <div class="section-block" id="b1-22"><div class="section-heading"><span class="section-num-large">B1.22</span><h2 class="section-title-large">Normal Equations</h2></div><div class="section-body"><p>Assuming the bias is absorbed into <strong>w</strong> by prepending a constant feature of 1 to each <em>x<sub>i</sub></em>, the OLS solution is given by the <strong>normal equations</strong>:</p><div class="equation-block">X<sup>T</sup>X w = X<sup>T</sup>y ⇒ w* = (X<sup>T</sup>X)<sup>−1</sup>X<sup>T</sup>y,</div><p>provided <strong>X<sup>T</sup>X</strong> is invertible (i.e., <strong>X</strong> has full column rank). The matrix <strong>(X<sup>T</sup>X)<sup>−1</sup>X<sup>T</sup></strong> is the <strong>Moore–Penrose pseudoinverse</strong> of <strong>X</strong> when <strong>X</strong> is full‑rank.</p></div></div>
+
+            <!-- B1.23 Geometric Interpretation -->
+            <div class="section-block" id="b1-23"><div class="section-heading"><span class="section-num-large">B1.23</span><h2 class="section-title-large">Geometric Interpretation of OLS</h2></div><div class="section-body"><p>Geometrically, OLS projects the label vector <strong>y</strong> onto the column space of <strong>X</strong>. The prediction <strong>ŷ = Xw*</strong> is the orthogonal projection of <strong>y</strong> onto span(columns of <strong>X</strong>), and the residual vector <strong>y − ŷ</strong> is orthogonal to every column of <strong>X</strong>: <strong>X<sup>T</sup>(y − ŷ) = 0</strong>. This is why it is called "least squares" — it minimizes the Euclidean distance between <strong>y</strong> and the subspace spanned by the features.</p></div></div>
+
+            <!-- B1.24 Gauss–Markov Theorem -->
+            <div class="section-block" id="b1-24"><div class="section-heading"><span class="section-num-large">B1.24</span><h2 class="section-title-large">Gauss–Markov Theorem</h2></div><div class="section-body"><p>Under the assumptions that errors are uncorrelated, have zero mean, and have equal variance (homoscedasticity), the OLS estimator is the <strong>Best Linear Unbiased Estimator (BLUE)</strong>: among all linear unbiased estimators, it has the smallest variance. No distributional assumption (e.g., normality) is needed for this result.</p></div></div>
+
+            <!-- B1.25 Ridge Regression -->
+            <div class="section-block" id="b1-25"><div class="section-heading"><span class="section-num-large">B1.25</span><h2 class="section-title-large">Ridge Regression (L2 Regularization)</h2></div><div class="section-body"><p><strong>Ridge regression</strong> adds an L2 penalty on the weights to the OLS objective:</p><div class="equation-block">min<sub>w</sub> ∥y − Xw∥<sup>2</sup> + λ∥w∥<sup>2</sup>,</div><p>with closed‑form solution <strong>w* = (X<sup>T</sup>X + λI)<sup>−1</sup>X<sup>T</sup>y</strong>. The penalty <em>λ ≥ 0</em> shrinks weights toward zero, improving numerical stability (always invertible, even when <strong>X<sup>T</sup>X</strong> is singular) and reducing variance at the cost of introducing bias. This is a classic realization of the bias–variance tradeoff.</p></div></div>
+
+            <!-- B1.26 Lasso Regression -->
+            <div class="section-block" id="b1-26"><div class="section-heading"><span class="section-num-large">B1.26</span><h2 class="section-title-large">Lasso Regression (L1 Regularization)</h2></div><div class="section-body"><p><strong>Lasso</strong> (Least Absolute Shrinkage and Selection Operator) uses an L1 penalty:</p><div class="equation-block">min<sub>w</sub> ∥y − Xw∥<sup>2</sup> + λ∥w∥<sub>1</sub>.</div><p>Unlike ridge, the L1 penalty drives some coefficients exactly to zero, performing <strong>automatic feature selection</strong>. The solution is not available in closed form; it is found via convex optimization (coordinate descent, proximal gradient methods). Lasso is especially valuable in high‑dimensional settings (<em>d ≫ n</em>).</p></div></div>
+
+            <!-- B1.27 Elastic Net -->
+            <div class="section-block" id="b1-27"><div class="section-heading"><span class="section-num-large">B1.27</span><h2 class="section-title-large">Elastic Net</h2></div><div class="section-body"><p><strong>Elastic Net</strong> combines L1 and L2 penalties:</p><div class="equation-block">min<sub>w</sub> ∥y − Xw∥<sup>2</sup> + λ<sub>1</sub>∥w∥<sub>1</sub> + λ<sub>2</sub>∥w∥<sup>2</sup>.</div><p>It inherits Lasso's sparsity (feature selection) while addressing some of its limitations: when features are highly correlated, Lasso tends to pick one arbitrarily; Elastic Net tends to select groups of correlated features together.</p></div></div>
+
+            <!-- B1.28 Logistic Regression -->
+            <div class="section-block" id="b1-28"><div class="section-heading"><span class="section-num-large">B1.28</span><h2 class="section-title-large">Logistic Regression</h2></div><div class="section-body"><p><strong>Logistic regression</strong> is a linear model for binary classification. It models the probability that an input belongs to the positive class as:</p><div class="equation-block">P(y=1 ∣ x) = σ(w<sup>T</sup>x + b) = 1 / (1 + e<sup>−(w<sup>T</sup>x + b)</sup>),</div><p>where <em>σ(z) = 1/(1+e<sup>−z</sup>)</em> is the <strong>sigmoid</strong> (logistic) function, mapping ℝ → (0,1). The decision boundary is linear: predict <em>y=1</em> if <em>w<sup>T</sup>x + b > 0</em>.</p></div></div>
+
+            <!-- B1.29 Sigmoid Function -->
+            <div class="section-block" id="b1-29"><div class="section-heading"><span class="section-num-large">B1.29</span><h2 class="section-title-large">Sigmoid (Logistic) Function</h2></div><div class="section-body"><p>The <strong>sigmoid function</strong> <em>σ(z) = 1/(1 + e<sup>−z</sup>)</em> has several important properties:</p><ul><li><em>σ(z) ∈ (0,1)</em> for all <em>z ∈ ℝ</em>.</li><li><em>σ(0) = 0.5</em>.</li><li>It is monotonic and S‑shaped.</li><li>Its derivative is <em>σ′(z) = σ(z)(1−σ(z))</em>, a convenient form for gradient‑based optimization.</li><li>Its inverse is the <strong>logit</strong> function: <em>logit(p) = log(p/(1−p))</em>.</li></ul></div></div>
+
+            <!-- B1.30 Cross‑Entropy Loss -->
+            <div class="section-block" id="b1-30"><div class="section-heading"><span class="section-num-large">B1.30</span><h2 class="section-title-large">Binary Cross‑Entropy Loss</h2></div><div class="section-body"><p>For binary classification, the <strong>cross‑entropy loss</strong> (log loss) for a single example is:</p><div class="equation-block">ℓ(y, ŷ) = −[y log(ŷ) + (1−y) log(1−ŷ)],</div><p>where <em>ŷ = σ(w<sup>T</sup>x + b)</em>. This is the negative log‑likelihood under the Bernoulli model. Minimizing cross‑entropy is equivalent to maximum likelihood estimation for logistic regression. The loss is convex in <strong>w</strong>, guaranteeing that gradient descent finds the global optimum.</p></div></div>
+
+            <!-- B1.31 Softmax Regression -->
+            <div class="section-block" id="b1-31"><div class="section-heading"><span class="section-num-large">B1.31</span><h2 class="section-title-large">Softmax (Multinomial Logistic) Regression</h2></div><div class="section-body"><p>For <em>K</em>-class classification, <strong>softmax regression</strong> generalizes logistic regression:</p><div class="equation-block">P(y=k ∣ x) = exp(w<sub>k</sub><sup>T</sup>x + b<sub>k</sub>) / ∑<sub>j=1</sub><sup>K</sup> exp(w<sub>j</sub><sup>T</sup>x + b<sub>j</sub>).</div><p>The <strong>softmax function</strong> maps a vector of <em>K</em> raw scores (logits) to a probability distribution over the <em>K</em> classes. The corresponding loss is <strong>categorical cross‑entropy</strong>: <em>ℓ = −∑<sub>k</sub> y<sub>k</sub> log(ŷ<sub>k</sub>)</em>, where <em>y</em> is a one‑hot encoded true label.</p></div></div>
+
+            <!-- B1.32 Maximum Likelihood Estimation -->
+            <div class="section-block" id="b1-32"><div class="section-heading"><span class="section-num-large">B1.32</span><h2 class="section-title-large">Maximum Likelihood Estimation (MLE)</h2></div><div class="section-body"><p><strong>Maximum Likelihood Estimation</strong> chooses parameters <em>θ</em> that maximize the probability (likelihood) of observing the training data under the model. For i.i.d. data:</p><div class="equation-block">θ<sub>MLE</sub> = argmax<sub>θ</sub> ∏<sub>i=1</sub><sup>n</sup> P(y<sub>i</sub> ∣ x<sub>i</sub>; θ).</div><p>Equivalently, minimize the negative log‑likelihood. OLS corresponds to MLE with Gaussian noise; logistic regression is MLE under the Bernoulli model. MLE is consistent (converges to the true parameter as <em>n → ∞</em>) under mild regularity conditions.</p></div></div>
+
+            <!-- B1.33 Gradient Descent -->
+            <div class="section-block" id="b1-33"><div class="section-heading"><span class="section-num-large">B1.33</span><h2 class="section-title-large">Gradient Descent</h2></div><div class="section-body"><p><strong>Gradient descent</strong> is an iterative optimization algorithm that updates parameters in the direction of steepest descent of the loss function:</p><div class="equation-block">θ<sup>(t+1)</sup> = θ<sup>(t)</sup> − η ∇<sub>θ</sub>J(θ<sup>(t)</sup>),</div><p>where <em>η > 0</em> is the <strong>learning rate</strong> (step size) and <em>J(θ)</em> is the objective (typically empirical risk). For convex objectives (OLS, logistic regression), gradient descent converges to the global minimum. For non‑convex objectives (neural networks), it finds a local minimum.</p></div></div>
+
+            <!-- B1.34 Stochastic Gradient Descent -->
+            <div class="section-block" id="b1-34"><div class="section-heading"><span class="section-num-large">B1.34</span><h2 class="section-title-large">Stochastic Gradient Descent (SGD)</h2></div><div class="section-body"><p><strong>SGD</strong> replaces the full gradient (over all <em>n</em> examples) with an estimate from a single randomly chosen example (or a mini‑batch):</p><div class="equation-block">θ<sup>(t+1)</sup> = θ<sup>(t)</sup> − η ∇<sub>θ</sub>ℓ(y<sub>i</sub>, f̂(x<sub>i</sub>; θ)).</div><p>The gradient is noisy but unbiased. SGD is vastly more scalable for large datasets, introduces stochasticity that can help escape shallow local minima, and is the workhorse of modern deep learning.</p></div></div>
+
+            <!-- B1.35 Mini‑batch Gradient Descent -->
+            <div class="section-block" id="b1-35"><div class="section-heading"><span class="section-num-large">B1.35</span><h2 class="section-title-large">Mini‑batch Gradient Descent</h2></div><div class="section-body"><p><strong>Mini‑batch GD</strong> is a compromise between full‑batch GD and pure SGD: each step uses a small random subset (mini‑batch) of size <em>m</em> (typically 32–512):</p><div class="equation-block">θ<sup>(t+1)</sup> = θ<sup>(t)</sup> − (η/m) ∑<sub>i∈ℬ<sub>t</sub></sub> ∇<sub>θ</sub>ℓ(y<sub>i</sub>, f̂(x<sub>i</sub>; θ)).</div><p>Benefits include reduced variance in the gradient estimate (vs. pure SGD), computational efficiency via vectorized operations, and compatibility with GPU hardware.</p></div></div>
+
+            <!-- B1.36 Learning Rate -->
+            <div class="section-block" id="b1-36"><div class="section-heading"><span class="section-num-large">B1.36</span><h2 class="section-title-large">Learning Rate and Scheduling</h2></div><div class="section-body"><p>The <strong>learning rate</strong> <em>η</em> is the most critical hyperparameter in gradient‑based optimization. Too large: divergence or oscillation. Too small: slow convergence. Common scheduling strategies include:</p><ul><li><strong>Step decay:</strong> reduce <em>η</em> by a factor every <em>k</em> epochs.</li><li><strong>Exponential decay:</strong> <em>η<sub>t</sub> = η<sub>0</sub> · γ<sup>t</sup></em>.</li><li><strong>Cosine annealing:</strong> smoothly decrease <em>η</em> following a cosine curve.</li><li><strong>Adaptive methods:</strong> Adam, RMSProp, AdaGrad — each parameter gets its own learning rate based on historical gradients.</li></ul></div></div>
+
+            <!-- B1.37 Convergence of Gradient Descent -->
+            <div class="section-block" id="b1-37"><div class="section-heading"><span class="section-num-large">B1.37</span><h2 class="section-title-large">Convergence of Gradient Descent for Convex Functions</h2></div><div class="section-body"><p>For an <em>L</em>-smooth, convex function <em>J</em>, gradient descent with constant step size <em>η ≤ 1/L</em> converges at a rate of <em>O(1/t)</em>. For <em>μ</em>-strongly convex functions, the rate improves to linear convergence: <em>J(θ<sup>(t)</sup>) − J* ≤ (1 − ημ)<sup>t</sup></em>. The <strong>condition number</strong> <em>κ = L/μ</em> governs the practical convergence speed — poorly conditioned problems (large <em>κ</em>) converge slowly.</p></div></div>
+
+            <!-- B1.38 Perceptron -->
+            <div class="section-block" id="b1-38"><div class="section-heading"><span class="section-num-large">B1.38</span><h2 class="section-title-large">Perceptron</h2></div><div class="section-body"><p>The <strong>perceptron</strong> is the simplest neural model for binary classification (<em>y ∈ {−1,+1}</em>):</p><div class="equation-block">f̂(x) = sign(w<sup>T</sup>x + b).</div><p>The perceptron algorithm updates weights only when a mistake is made: if <em>y<sub>i</sub>(w<sup>T</sup>x<sub>i</sub>) ≤ 0</em>, set <strong>w ← w + η·y<sub>i</sub>x<sub>i</sub></strong>. It is an online algorithm — it processes examples one at a time and converges to a separating hyperplane if the data is linearly separable.</p></div></div>
+
+            <!-- B1.39 Perceptron Convergence Theorem -->
+            <div class="section-block" id="b1-39"><div class="section-heading"><span class="section-num-large">B1.39</span><h2 class="section-title-large">Perceptron Convergence Theorem</h2></div><div class="section-body"><p>If the training data is linearly separable with margin <em>γ > 0</em> and bounded by radius <em>R</em> (i.e., <em>∥x<sub>i</sub>∥ ≤ R</em>), the perceptron algorithm makes at most <em>(R/γ)<sup>2</sup></em> mistakes before finding a separating hyperplane — regardless of the order in which examples are presented. This guarantees convergence in finitely many steps.</p></div></div>
+
+            <!-- B1.40 Multi‑layer Perceptron -->
+            <div class="section-block" id="b1-40"><div class="section-heading"><span class="section-num-large">B1.40</span><h2 class="section-title-large">Multi‑layer Perceptron (MLP)</h2></div><div class="section-body"><p>An <strong>MLP</strong> (feedforward neural network) is composed of multiple layers of neurons, each applying a linear transformation followed by a non‑linear activation:</p><div class="equation-block">h<sup>(l)</sup> = φ<sup>(l)</sup>(W<sup>(l)</sup>h<sup>(l−1)</sup> + b<sup>(l)</sup>),</div><p>where <em>h<sup>(0)</sup> = x</em>, <em>φ</em> is an activation function, and the final layer produces the output. MLPs can approximate any continuous function on compact sets (Universal Approximation Theorem, B1.43).</p></div></div>
+
+            <!-- B1.41 Activation Functions -->
+            <div class="section-block" id="b1-41"><div class="section-heading"><span class="section-num-large">B1.41</span><h2 class="section-title-large">Activation Functions</h2></div><div class="section-body"><p>Common activation functions:</p><ul><li><strong>ReLU:</strong> <em>φ(z) = max(0, z)</em>. Simple, avoids vanishing gradients for positive inputs, but can "die" for negative inputs.</li><li><strong>Sigmoid:</strong> <em>φ(z) = 1/(1+e<sup>−z</sup>)</em>. Smooth, bounded, but saturates → vanishing gradients.</li><li><strong>Tanh:</strong> <em>φ(z) = tanh(z)</em>. Zero‑centered, but also saturates.</li><li><strong>Leaky ReLU:</strong> <em>φ(z) = max(αz, z)</em> with small <em>α</em>. Fixes the dying ReLU problem.</li><li><strong>GELU:</strong> smooth approximation to ReLU, popular in transformers.</li></ul></div></div>
+
+            <!-- B1.42 Backpropagation -->
+            <div class="section-block" id="b1-42"><div class="section-heading"><span class="section-num-large">B1.42</span><h2 class="section-title-large">Backpropagation</h2></div><div class="section-body"><p><strong>Backpropagation</strong> is the algorithm for computing gradients in a neural network efficiently. It applies the chain rule of calculus recursively from the output layer backward through the network. For a network with <em>L</em> layers, backprop computes <em>∂ℓ/∂W<sup>(l)</sup></em> and <em>∂ℓ/∂b<sup>(l)</sup></em> for all <em>l</em> in <em>O(L)</em> time, reusing intermediate results (the "error" signals) to avoid redundant computation.</p><div class="conceptual-note">Backpropagation is not a training algorithm — it is the gradient computation engine that enables gradient descent to train neural networks.</div></div></div>
+
+            <!-- B1.43 Universal Approximation Theorem -->
+            <div class="section-block" id="b1-43"><div class="section-heading"><span class="section-num-large">B1.43</span><h2 class="section-title-large">Universal Approximation Theorem</h2></div><div class="section-body"><p>A feedforward neural network with a single hidden layer containing a finite number of neurons, using a non‑constant, bounded, continuous activation function (e.g., sigmoid), can approximate any continuous function on a compact subset of ℝ<sup>d</sup> to arbitrary accuracy. This is a <strong>theoretical existence result</strong> — it does not guarantee that training will find such an approximation, nor does it specify how many neurons are needed.</p></div></div>
+
+            <!-- B1.44 Regularization in Neural Networks -->
+            <div class="section-block" id="b1-44"><div class="section-heading"><span class="section-num-large">B1.44</span><h2 class="section-title-large">Regularization in Neural Networks</h2></div><div class="section-body"><p>Techniques to prevent overfitting in neural networks include:</p><ul><li><strong>L2 regularization (weight decay):</strong> add <em>λ∑∥W<sup>(l)</sup>∥<sup>2</sup></em> to the loss.</li><li><strong>L1 regularization:</strong> encourages sparse weights.</li><li><strong>Early stopping:</strong> halt training when validation error starts rising.</li><li><strong>Dropout:</strong> randomly zero out neurons during training (B1.45).</li><li><strong>Batch normalization:</strong> normalizes activations within each mini‑batch, providing a mild regularizing effect and enabling higher learning rates.</li><li><strong>Data augmentation:</strong> artificially expand the training set with transformations (rotations, flips, noise).</li></ul></div></div>
+
+            <!-- B1.45 Dropout -->
+            <div class="section-block" id="b1-45"><div class="section-heading"><span class="section-num-large">B1.45</span><h2 class="section-title-large">Dropout</h2></div><div class="section-body"><p><strong>Dropout</strong> is a regularization technique: during each training step, each neuron is independently "dropped" (set to zero) with probability <em>p</em>. At test time, all neurons are used, but their outputs are scaled by <em>1−p</em> (or equivalently, weights are scaled). Dropout can be interpreted as training an ensemble of exponentially many subnetworks that share parameters, providing a powerful, cheap form of model averaging.</p></div></div>
+
+            <!-- B1.46 Decision Trees -->
+            <div class="section-block" id="b1-46"><div class="section-heading"><span class="section-num-large">B1.46</span><h2 class="section-title-large">Decision Trees</h2></div><div class="section-body"><p>A <strong>decision tree</strong> recursively partitions the feature space into axis‑aligned regions and assigns a constant prediction to each region. Internal nodes test a feature against a threshold; leaf nodes contain predictions. Trees are interpretable, handle mixed data types, require little preprocessing, and are the foundation of powerful ensemble methods (random forests, gradient boosting).</p></div></div>
+
+            <!-- B1.47 Splitting Criteria -->
+            <div class="section-block" id="b1-47"><div class="section-heading"><span class="section-num-large">B1.47</span><h2 class="section-title-large">Splitting Criteria</h2></div><div class="section-body"><p>At each node, the tree selects the feature and threshold that maximize the "purity" improvement. For regression, the criterion is typically <strong>variance reduction</strong>: split to minimize the weighted sum of child‑node variances. For classification, common criteria include <strong>information gain</strong> (based on entropy), <strong>Gini impurity</strong>, and <strong>misclassification rate</strong>.</p></div></div>
+
+            <!-- B1.48 Information Gain -->
+            <div class="section-block" id="b1-48"><div class="section-heading"><span class="section-num-large">B1.48</span><h2 class="section-title-large">Information Gain</h2></div><div class="section-body"><p><strong>Information gain</strong> is the reduction in entropy achieved by a split:</p><div class="equation-block">IG(S, A) = H(S) − ∑<sub>v∈Values(A)</sub> (|S<sub>v</sub>|/|S|) · H(S<sub>v</sub>),</div><p>where <em>H(S) = −∑<sub>k</sub> p<sub>k</sub> log<sub>2</sub>(p<sub>k</sub>)</em> is the entropy of the class distribution at node <em>S</em>, and <em>S<sub>v</sub></em> is the subset of examples where feature <em>A</em> takes value <em>v</em>. The split with highest IG is chosen.</p></div></div>
+
+            <!-- B1.49 Gini Impurity -->
+            <div class="section-block" id="b1-49"><div class="section-heading"><span class="section-num-large">B1.49</span><h2 class="section-title-large">Gini Impurity</h2></div><div class="section-body"><p><strong>Gini impurity</strong> measures the probability of misclassifying a randomly chosen element if it were labeled according to the class distribution at the node:</p><div class="equation-block">G(S) = 1 − ∑<sub>k=1</sub><sup>K</sup> p<sub>k</sub><sup>2</sup>.</div><p>Gini is computationally cheaper than entropy (no logarithms) and behaves similarly in practice. It is the default splitting criterion in CART (Classification And Regression Trees).</p></div></div>
+
+            <!-- B1.50 Entropy -->
+            <div class="section-block" id="b1-50"><div class="section-heading"><span class="section-num-large">B1.50</span><h2 class="section-title-large">Entropy</h2></div><div class="section-body"><p><strong>Entropy</strong> <em>H(S)</em> quantifies the uncertainty (impurity) of the class distribution at a node. <em>H = 0</em> when all examples belong to one class (pure node); <em>H</em> is maximized when classes are equally represented. Entropy‑based splitting (used in ID3 and C4.5) tends to produce more balanced trees than Gini, but at slightly higher computational cost.</p></div></div>
+
+            <!-- B1.51 CART Algorithm -->
+            <div class="section-block" id="b1-51"><div class="section-heading"><span class="section-num-large">B1.51</span><h2 class="section-title-large">CART Algorithm</h2></div><div class="section-body"><p><strong>CART</strong> (Classification And Regression Trees) builds binary trees by greedily choosing, at each node, the feature and threshold that minimize the weighted impurity of the two child nodes. The tree is grown to a maximum size and then <strong>pruned</strong> back using cost‑complexity pruning to avoid overfitting. CART handles both regression (squared error criterion) and classification (Gini impurity).</p></div></div>
+
+            <!-- B1.52 Pruning -->
+            <div class="section-block" id="b1-52"><div class="section-heading"><span class="section-num-large">B1.52</span><h2 class="section-title-large">Pruning</h2></div><div class="section-body"><p><strong>Pruning</strong> reduces tree complexity to improve generalization. <strong>Pre‑pruning</strong> (early stopping) halts growth when a node's impurity improvement is below a threshold or when the node has too few samples. <strong>Post‑pruning</strong> (e.g., cost‑complexity pruning) grows a full tree, then removes subtrees that do not significantly reduce error on a validation set, trading a small increase in training error for a simpler model.</p></div></div>
+
+            <!-- B1.53 Random Forest -->
+            <div class="section-block" id="b1-53"><div class="section-heading"><span class="section-num-large">B1.53</span><h2 class="section-title-large">Random Forest</h2></div><div class="section-body"><p>A <strong>random forest</strong> is an ensemble of decision trees, each trained on a bootstrap sample of the data. Two sources of randomness reduce correlation among trees and improve generalization:</p><ul><li><strong>Bagging (bootstrap aggregating):</strong> each tree is trained on a random sample (with replacement) of the training data.</li><li><strong>Feature randomness:</strong> at each split, only a random subset of <em>m</em> features (typically <em>m ≈ √d</em> for classification, <em>m ≈ d/3</em> for regression) is considered.</li></ul><p>Prediction is by majority vote (classification) or averaging (regression).</p></div></div>
+
+            <!-- B1.54 Bagging -->
+            <div class="section-block" id="b1-54"><div class="section-heading"><span class="section-num-large">B1.54</span><h2 class="section-title-large">Bagging (Bootstrap Aggregating)</h2></div><div class="section-body"><p><strong>Bagging</strong> is a general ensemble technique: train <em>B</em> base learners on <em>B</em> bootstrap samples from the original training set, then aggregate predictions (averaging for regression, voting for classification). Bagging reduces variance without increasing bias, and is most effective for high‑variance, low‑bias base learners like deep decision trees.</p></div></div>
+
+            <!-- B1.55 Out‑of‑Bag Error -->
+            <div class="section-block" id="b1-55"><div class="section-heading"><span class="section-num-large">B1.55</span><h2 class="section-title-large">Out‑of‑Bag (OOB) Error</h2></div><div class="section-body"><p>For each bootstrap sample, roughly one‑third of the training examples are left out (out‑of‑bag). The <strong>OOB error</strong> estimates generalization performance by evaluating each example only on trees for which it was OOB, then averaging. OOB error is a free, unbiased alternative to cross‑validation for bagged ensembles like random forests.</p></div></div>
+
+            <!-- B1.56 Feature Importance -->
+            <div class="section-block" id="b1-56"><div class="section-heading"><span class="section-num-large">B1.56</span><h2 class="section-title-large">Feature Importance</h2></div><div class="section-body"><p>Tree‑based models provide natural <strong>feature importance</strong> scores. Two common measures:</p><ul><li><strong>Mean decrease in impurity (MDI):</strong> total reduction in the splitting criterion (Gini, entropy, variance) attributed to each feature, averaged over all trees.</li><li><strong>Permutation importance:</strong> the drop in model performance when a feature's values are randomly shuffled, breaking its association with the target.</li></ul><p>Feature importance aids interpretability and feature selection.</p></div></div>
+
+            <!-- B1.57 Gradient Boosting -->
+            <div class="section-block" id="b1-57"><div class="section-heading"><span class="section-num-large">B1.57</span><h2 class="section-title-large">Gradient Boosting</h2></div><div class="section-body"><p><strong>Gradient boosting</strong> builds an ensemble sequentially: each new tree is trained to predict the <strong>negative gradient</strong> (residuals) of the loss function with respect to the current ensemble's predictions. Formally, at iteration <em>m</em>, with current model <em>F<sub>m−1</sub></em>, the new tree <em>h<sub>m</sub></em> fits the pseudo‑residuals:</p><div class="equation-block">r<sub>i</sub> = −[∂ℓ(y<sub>i</sub>, F(x<sub>i</sub>)) / ∂F(x<sub>i</sub>)]<sub>F=F<sub>m−1</sub></sub>.</div><p>Then <em>F<sub>m</sub>(x) = F<sub>m−1</sub>(x) + ν·h<sub>m</sub>(x)</em>, where <em>ν</em> (learning rate, shrinkage) controls the contribution of each tree.</p></div></div>
+
+            <!-- B1.58 AdaBoost -->
+            <div class="section-block" id="b1-58"><div class="section-heading"><span class="section-num-large">B1.58</span><h2 class="section-title-large">AdaBoost</h2></div><div class="section-body"><p><strong>AdaBoost</strong> (Adaptive Boosting) is the original boosting algorithm for binary classification. It sequentially trains weak learners (typically shallow trees), reweighting training examples at each step: misclassified examples receive higher weight, forcing subsequent learners to focus on hard cases. The final prediction is a weighted majority vote of all learners, with weights proportional to each learner's accuracy.</p></div></div>
+
+            <!-- B1.59 XGBoost -->
+            <div class="section-block" id="b1-59"><div class="section-heading"><span class="section-num-large">B1.59</span><h2 class="section-title-large">XGBoost</h2></div><div class="section-body"><p><strong>XGBoost</strong> (eXtreme Gradient Boosting) is a highly optimized gradient boosting implementation. Key innovations include:</p><ul><li><strong>Second‑order approximation:</strong> uses both gradient and Hessian for more accurate tree fitting.</li><li><strong>Regularization:</strong> penalizes tree complexity (number of leaves, leaf weights) directly in the objective.</li><li><strong>System optimizations:</strong> column block structure, cache‑aware access, out‑of‑core computation, parallelized tree construction.</li></ul><p>XGBoost has dominated structured/tabular data competitions for years.</p></div></div>
+
+            <!-- B1.60 LightGBM -->
+            <div class="section-block" id="b1-60"><div class="section-heading"><span class="section-num-large">B1.60</span><h2 class="section-title-large">LightGBM</h2></div><div class="section-body"><p><strong>LightGBM</strong> is a gradient boosting framework emphasizing speed and memory efficiency. Its key innovations:</p><ul><li><strong>Gradient‑based One‑Side Sampling (GOSS):</strong> keeps instances with large gradients (hard to fit) and samples those with small gradients.</li><li><strong>Exclusive Feature Bundling (EFB):</strong> combines mutually exclusive sparse features to reduce dimensionality.</li><li><strong>Leaf‑wise tree growth:</strong> grows the leaf with the highest loss reduction, producing asymmetric, deeper trees that can be more accurate than level‑wise growth.</li></ul></div></div>
+
+            <!-- B1.61 CatBoost -->
+            <div class="section-block" id="b1-61"><div class="section-heading"><span class="section-num-large">B1.61</span><h2 class="section-title-large">CatBoost</h2></div><div class="section-body"><p><strong>CatBoost</strong> is a gradient boosting library designed to handle categorical features natively — without manual one‑hot encoding. It uses <strong>ordered target encoding</strong> (with a permutation‑based scheme to avoid data leakage) and symmetric (oblivious) trees. It is known for strong out‑of‑the‑box performance, especially on datasets with many categorical columns.</p></div></div>
+
+            <!-- B1.62 Stacking -->
+            <div class="section-block" id="b1-62"><div class="section-heading"><span class="section-num-large">B1.62</span><h2 class="section-title-large">Stacking (Stacked Generalization)</h2></div><div class="section-body"><p><strong>Stacking</strong> combines multiple base models by training a <strong>meta‑learner</strong> on their outputs. Base models (level‑0) are trained on the original data; their predictions become features for the meta‑model (level‑1), which learns how to best combine them. To avoid overfitting, base model predictions should be generated via cross‑validation (out‑of‑fold predictions).</p></div></div>
+
+            <!-- B1.63 Voting Classifiers -->
+            <div class="section-block" id="b1-63"><div class="section-heading"><span class="section-num-large">B1.63</span><h2 class="section-title-large">Voting Classifiers</h2></div><div class="section-body"><p>A <strong>voting classifier</strong> aggregates predictions from multiple heterogeneous models. <strong>Hard voting:</strong> each model casts a vote for a class; the majority wins. <strong>Soft voting:</strong> predicted class probabilities are averaged, and the class with highest average probability is selected. Soft voting often outperforms hard voting because it accounts for each model's confidence.</p></div></div>
+
+            <!-- B1.64 Support Vector Machines -->
+            <div class="section-block" id="b1-64"><div class="section-heading"><span class="section-num-large">B1.64</span><h2 class="section-title-large">Support Vector Machines (SVM)</h2></div><div class="section-body"><p>A <strong>Support Vector Machine</strong> finds the hyperplane that maximizes the <strong>margin</strong> between classes. The decision boundary is determined entirely by the <strong>support vectors</strong> — the training examples closest to the hyperplane. SVMs are inherently regularized (maximizing margin controls complexity) and can learn non‑linear boundaries via the <strong>kernel trick</strong>.</p></div></div>
+
+            <!-- B1.65 Maximum Margin Classifier -->
+            <div class="section-block" id="b1-65"><div class="section-heading"><span class="section-num-large">B1.65</span><h2 class="section-title-large">Maximum Margin Classifier</h2></div><div class="section-body"><p>For linearly separable data, the <strong>maximum margin classifier</strong> solves:</p><div class="equation-block">min<sub>w,b</sub> ½∥w∥<sup>2</sup> subject to y<sub>i</sub>(w<sup>T</sup>x<sub>i</sub> + b) ≥ 1, ∀i.</div><p>The margin is <em>2/∥w∥</em>; minimizing <em>∥w∥</em> maximizes the margin. This is a convex quadratic program with a unique solution.</p></div></div>
+
+            <!-- B1.66 Hard Margin SVM -->
+            <div class="section-block" id="b1-66"><div class="section-heading"><span class="section-num-large">B1.66</span><h2 class="section-title-large">Hard Margin SVM</h2></div><div class="section-body"><p>The <strong>hard margin</strong> formulation requires perfect separation of the classes — no training point may violate the margin. This works only when the data is linearly separable. In practice, data is rarely separable; the soft‑margin formulation (B1.67) is preferred.</p></div></div>
+
+            <!-- B1.67 Soft Margin SVM -->
+            <div class="section-block" id="b1-67"><div class="section-heading"><span class="section-num-large">B1.67</span><h2 class="section-title-large">Soft Margin SVM</h2></div><div class="section-body"><p>The <strong>soft margin</strong> SVM allows some violations of the margin, controlled by slack variables <em>ξ<sub>i</sub> ≥ 0</em>:</p><div class="equation-block">min<sub>w,b,ξ</sub> ½∥w∥<sup>2</sup> + C ∑<sub>i</sub> ξ<sub>i</sub> subject to y<sub>i</sub>(w<sup>T</sup>x<sub>i</sub> + b) ≥ 1 − ξ<sub>i</sub>, ξ<sub>i</sub> ≥ 0.</div><p>The hyperparameter <em>C > 0</em> trades off margin maximization vs. training error tolerance. Large <em>C</em>: fewer violations, narrower margin (risk of overfitting). Small <em>C</em>: wider margin, more tolerance for misclassification (smoother boundary).</p></div></div>
+
+            <!-- B1.68 Hinge Loss -->
+            <div class="section-block" id="b1-68"><div class="section-heading"><span class="section-num-large">B1.68</span><h2 class="section-title-large">Hinge Loss</h2></div><div class="section-body"><p>The soft‑margin SVM objective can be written as an unconstrained empirical risk minimization with <strong>hinge loss</strong>:</p><div class="equation-block">ℓ<sub>hinge</sub>(y, f̂(x)) = max(0, 1 − y·f̂(x)),</div><p>where <em>y ∈ {−1,+1}</em> and <em>f̂(x) = w<sup>T</sup>x + b</em>. The hinge loss is zero for correct predictions with margin ≥ 1, and grows linearly for margin violations. It is a convex surrogate for the 0‑1 loss.</p></div></div>
+
+            <!-- B1.69 Kernel Trick -->
+            <div class="section-block" id="b1-69"><div class="section-heading"><span class="section-num-large">B1.69</span><h2 class="section-title-large">Kernel Trick</h2></div><div class="section-body"><p>The <strong>kernel trick</strong> allows linear algorithms (SVMs, ridge regression, PCA) to learn non‑linear decision boundaries by implicitly mapping inputs into a high‑dimensional (possibly infinite‑dimensional) feature space, without ever computing the coordinates in that space. All computations are done via the <strong>kernel function</strong> <em>K(x, x′) = ⟨φ(x), φ(x′)⟩</em>, which computes the inner product in the feature space directly from the original inputs.</p></div></div>
+
+            <!-- B1.70 Common Kernels -->
+            <div class="section-block" id="b1-70"><div class="section-heading"><span class="section-num-large">B1.70</span><h2 class="section-title-large">Common Kernel Functions</h2></div><div class="section-body"><ul><li><strong>Linear kernel:</strong> <em>K(x, x′) = x<sup>T</sup>x′</em>. No mapping; equivalent to standard linear SVM.</li><li><strong>Polynomial kernel:</strong> <em>K(x, x′) = (γ·x<sup>T</sup>x′ + r)<sup>d</sup></em>. Degree‑<em>d</em> polynomial decision boundaries.</li><li><strong>RBF (Gaussian) kernel:</strong> <em>K(x, x′) = exp(−γ∥x − x′∥<sup>2</sup>)</em>. Infinite‑dimensional feature space; the most popular non‑linear kernel.</li><li><strong>Sigmoid kernel:</strong> <em>K(x, x′) = tanh(γ·x<sup>T</sup>x′ + r)</em>. Inspired by neural networks.</li></ul></div></div>
+
+            <!-- B1.71 RBF Kernel -->
+            <div class="section-block" id="b1-71"><div class="section-heading"><span class="section-num-large">B1.71</span><h2 class="section-title-large">RBF (Gaussian) Kernel</h2></div><div class="section-body"><p>The <strong>RBF kernel</strong> <em>K(x, x′) = exp(−γ∥x − x′∥<sup>2</sup>)</em> measures similarity as a Gaussian function of Euclidean distance. The parameter <em>γ > 0</em> controls the "reach" of each training example: large <em>γ</em> → each point influences only its immediate neighborhood (complex, wiggly boundary, risk of overfitting); small <em>γ</em> → broad influence (smoother boundary). The RBF kernel is universal: its feature space is infinite‑dimensional and can approximate any continuous decision boundary.</p></div></div>
+
+            <!-- B1.72 Polynomial Kernel -->
+            <div class="section-block" id="b1-72"><div class="section-heading"><span class="section-num-large">B1.72</span><h2 class="section-title-large">Polynomial Kernel</h2></div><div class="section-body"><p>The <strong>polynomial kernel</strong> <em>K(x, x′) = (γ·x<sup>T</sup>x′ + r)<sup>d</sup></em> corresponds to a feature space of all monomials up to degree <em>d</em>. The parameter <em>r</em> controls the relative weight of lower‑ vs. higher‑degree terms. Polynomial kernels are a natural choice when interactions between features are expected to be important, but the exponential growth of the feature space with <em>d</em> makes them impractical for very high degrees without the kernel trick.</p></div></div>
+
+            <!-- B1.73 Mercer's Theorem -->
+            <div class="section-block" id="b1-73"><div class="section-heading"><span class="section-num-large">B1.73</span><h2 class="section-title-large">Mercer's Theorem</h2></div><div class="section-body"><p><strong>Mercer's Theorem</strong> characterizes valid kernel functions: a symmetric function <em>K(x, x′)</em> is a valid (Mercer) kernel — i.e., there exists a Hilbert space <em>ℋ</em> and a feature map <em>φ</em> such that <em>K(x, x′) = ⟨φ(x), φ(x′)⟩<sub>ℋ</sub></em> — if and only if the <strong>Gram matrix</strong> <em>[K(x<sub>i</sub>, x<sub>j</sub>)]</em> is positive semidefinite for any finite set of points. This provides the mathematical foundation for the kernel trick.</p></div></div>
+
+            <!-- B1.74 SVM for Regression (SVR) -->
+            <div class="section-block" id="b1-74"><div class="section-heading"><span class="section-num-large">B1.74</span><h2 class="section-title-large">Support Vector Regression (SVR)</h2></div><div class="section-body"><p><strong>SVR</strong> extends SVM to regression. Instead of maximizing the margin between classes, SVR fits a tube of width <em>ε</em> around the regression line: errors smaller than <em>ε</em> are considered acceptable (zero loss). The objective minimizes <em>∥w∥<sup>2</sup></em> (model flatness) while penalizing points outside the <em>ε</em>‑tube via the <strong>ε‑insensitive loss</strong>: <em>ℓ<sub>ε</sub>(y, ŷ) = max(0, |y − ŷ| − ε)</em>. SVR produces sparse solutions where only points outside the tube are support vectors.</p></div></div>
+
+            <!-- B1.75 One‑Class SVM -->
+            <div class="section-block" id="b1-75"><div class="section-heading"><span class="section-num-large">B1.75</span><h2 class="section-title-large">One‑Class SVM</h2></div><div class="section-body"><p>A <strong>One‑Class SVM</strong> is trained on only one class (the "normal" class) and learns a decision boundary that encloses the training data in feature space. It is used for <strong>anomaly detection</strong>: new points falling outside the boundary are flagged as anomalous. The hyperparameter <em>ν</em> controls the fraction of training points allowed to fall outside the boundary (an upper bound on the false positive rate).</p></div></div>
+
+            <!-- B1.76 Dual Formulation -->
+            <div class="section-block" id="b1-76"><div class="section-heading"><span class="section-num-large">B1.76</span><h2 class="section-title-large">Dual Formulation of SVM</h2></div><div class="section-body"><p>The SVM optimization is typically solved in its <strong>dual form</strong>, which expresses the problem in terms of Lagrange multipliers <em>α<sub>i</sub></em> (one per training example). The dual has several advantages: (i) it depends on the data only through inner products <em>x<sub>i</sub><sup>T</sup>x<sub>j</sub></em>, enabling the kernel trick; (ii) it is a concave maximization problem (easier to solve); (iii) the solution is sparse — only support vectors have <em>α<sub>i</sub> > 0</em>. The dual is solved via Sequential Minimal Optimization (SMO) or quadratic programming.</p></div></div>
+
+            <!-- B1.77 k‑Nearest Neighbors -->
+            <div class="section-block" id="b1-77"><div class="section-heading"><span class="section-num-large">B1.77</span><h2 class="section-title-large">k‑Nearest Neighbors (k‑NN)</h2></div><div class="section-body"><p><strong>k‑NN</strong> is a non‑parametric, instance‑based algorithm. To predict for a new point <em>x</em>, it finds the <em>k</em> closest training examples (by some distance metric) and aggregates their labels: majority vote for classification, average for regression. k‑NN makes no explicit assumptions about the functional form; its inductive bias is <strong>local smoothness</strong> — nearby points are assumed to have similar outputs. The parameter <em>k</em> controls the bias–variance tradeoff: small <em>k</em> → low bias, high variance; large <em>k</em> → high bias, low variance.</p></div></div>
+
+            <!-- B1.78 Distance Metrics -->
+            <div class="section-block" id="b1-78"><div class="section-heading"><span class="section-num-large">B1.78</span><h2 class="section-title-large">Distance Metrics</h2></div><div class="section-body"><p>The choice of distance metric is crucial for k‑NN and other distance‑based methods. Common metrics:</p><ul><li><strong>Euclidean (L2):</strong> <em>d(x, x′) = √∑(x<sub>j</sub> − x′<sub>j</sub>)<sup>2</sup></em>. Sensitive to scale differences.</li><li><strong>Manhattan (L1):</strong> <em>d(x, x′) = ∑|x<sub>j</sub> − x′<sub>j</sub>|</em>. More robust to outliers in high dimensions.</li><li><strong>Minkowski (Lp):</strong> generalizes L1 and L2.</li><li><strong>Cosine distance:</strong> <em>1 − cos(θ)</em>. Ignores magnitude, captures directional similarity — popular for text data (TF‑IDF vectors).</li><li><strong>Mahalanobis distance:</strong> accounts for feature correlations: <em>d(x, x′) = √((x−x′)<sup>T</sup>Σ<sup>−1</sup>(x−x′))</em>.</li></ul></div></div>
+
+            <!-- B1.79 Curse of Dimensionality -->
+            <div class="section-block" id="b1-79"><div class="section-heading"><span class="section-num-large">B1.79</span><h2 class="section-title-large">Curse of Dimensionality</h2></div><div class="section-body"><p>The <strong>curse of dimensionality</strong> refers to phenomena that arise in high‑dimensional spaces that make distance‑based methods (like k‑NN) break down: as dimensionality increases, (i) the volume of the space grows exponentially, making data increasingly sparse; (ii) pairwise distances tend to become uniform — the contrast between nearest and farthest neighbors diminishes. In practice, k‑NN becomes unreliable above ~10–20 dimensions unless the data lies on a lower‑dimensional manifold.</p></div></div>
+
+            <!-- B1.80 Locally Weighted Regression -->
+            <div class="section-block" id="b1-80"><div class="section-heading"><span class="section-num-large">B1.80</span><h2 class="section-title-large">Locally Weighted Regression (LOESS / LOWESS)</h2></div><div class="section-body"><p><strong>Locally Weighted Regression</strong> fits a (typically linear or quadratic) model using only the <em>k</em> nearest neighbors of the query point, with weights that decay with distance (e.g., a Gaussian kernel). This produces a smooth, non‑linear fit that adapts to local structure. It is a non‑parametric method; the entire training set must be stored, and predictions are computed on‑demand (lazy learning).</p></div></div>
+
+            <!-- B1.81 RBF Networks -->
+            <div class="section-block" id="b1-81"><div class="section-heading"><span class="section-num-large">B1.81</span><h2 class="section-title-large">Radial Basis Function (RBF) Networks</h2></div><div class="section-body"><p>An <strong>RBF network</strong> is a feedforward neural network with a single hidden layer where each neuron uses an RBF activation (typically Gaussian). The output is a linear combination of these radial basis functions:</p><div class="equation-block">f̂(x) = ∑<sub>j=1</sub><sup>m</sup> w<sub>j</sub> exp(−β<sub>j</sub>∥x − c<sub>j</sub>∥<sup>2</sup>).</div><p>Training typically involves two stages: (i) unsupervised selection of centers <em>c<sub>j</sub></em> (e.g., via k‑means clustering), (ii) supervised learning of the output weights <em>w<sub>j</sub></em> via linear regression.</p></div></div>
+
+            <!-- B1.82 Naive Bayes -->
+            <div class="section-block" id="b1-82"><div class="section-heading"><span class="section-num-large">B1.82</span><h2 class="section-title-large">Naive Bayes Classifier</h2></div><div class="section-body"><p>The <strong>Naive Bayes</strong> classifier applies Bayes' theorem with the "naive" assumption of <strong>conditional independence</strong> of features given the class:</p><div class="equation-block">P(y=k ∣ x) ∝ P(y=k) ∏<sub>j=1</sub><sup>d</sup> P(x<sup>(j)</sup> ∣ y=k).</div><p>Despite the strong independence assumption (rarely true in practice), Naive Bayes often performs surprisingly well, especially for text classification. It is extremely fast, requires little data to estimate parameters, and provides well‑calibrated probability estimates.</p></div></div>
+
+            <!-- B1.83 Bayes Theorem -->
+            <div class="section-block" id="b1-83"><div class="section-heading"><span class="section-num-large">B1.83</span><h2 class="section-title-large">Bayes Theorem (Recap)</h2></div><div class="section-body"><p><strong>Bayes' theorem</strong> relates conditional and marginal probabilities:</p><div class="equation-block">P(y ∣ x) = P(x ∣ y) · P(y) / P(x).</div><p>In the classification context: <em>P(y ∣ x)</em> is the <strong>posterior</strong> (what we want), <em>P(x ∣ y)</em> is the <strong>likelihood</strong> (how features are distributed given the class), <em>P(y)</em> is the <strong>prior</strong> (class frequency), and <em>P(x)</em> is the <strong>evidence</strong> (normalizing constant).</p></div></div>
+
+            <!-- B1.84 Gaussian Naive Bayes -->
+            <div class="section-block" id="b1-84"><div class="section-heading"><span class="section-num-large">B1.84</span><h2 class="section-title-large">Gaussian Naive Bayes</h2></div><div class="section-body"><p>When features are continuous, a common choice is to model <em>P(x<sup>(j)</sup> ∣ y=k)</em> as a Gaussian distribution: <em>𝒩(μ<sub>kj</sub>, σ<sub>kj</sub><sup>2</sup>)</em>, where <em>μ<sub>kj</sub></em> and <em>σ<sub>kj</sub><sup>2</sup></em> are the mean and variance of feature <em>j</em> for class <em>k</em>, estimated from the training data. The decision boundary is quadratic (since the Gaussian likelihood yields a quadratic discriminant).</p></div></div>
+
+            <!-- B1.85 Multinomial Naive Bayes -->
+            <div class="section-block" id="b1-85"><div class="section-heading"><span class="section-num-large">B1.85</span><h2 class="section-title-large">Multinomial Naive Bayes</h2></div><div class="section-body"><p>For discrete count data (especially text), <strong>Multinomial Naive Bayes</strong> models features as word counts drawn from a multinomial distribution per class. With <strong>Laplace smoothing</strong> (adding <em>α</em> to all counts to avoid zero probabilities), it is the classic baseline for document classification tasks like spam detection and topic categorization.</p></div></div>
+
+            <!-- B1.86 Bayesian Regression -->
+            <div class="section-block" id="b1-86"><div class="section-heading"><span class="section-num-large">B1.86</span><h2 class="section-title-large">Bayesian Linear Regression</h2></div><div class="section-body"><p>In <strong>Bayesian linear regression</strong>, we place a prior distribution over the weights <strong>w</strong> (e.g., <strong>w ∼ 𝒩(0, τ<sup>2</sup>I)</strong>) and compute the <strong>posterior distribution</strong> <em>P(w ∣ X, y)</em> using Bayes' theorem. Prediction becomes: <em>P(y<sub>*</sub> ∣ x<sub>*</sub>, X, y) = ∫ P(y<sub>*</sub> ∣ x<sub>*</sub>, w) P(w ∣ X, y) dw</em>. This yields not just a point estimate but a full predictive distribution, capturing uncertainty. Under a Gaussian prior and Gaussian likelihood, the posterior is also Gaussian and has a closed form.</p></div></div>
+
+            <!-- B1.87 Gaussian Processes -->
+            <div class="section-block" id="b1-87"><div class="section-heading"><span class="section-num-large">B1.87</span><h2 class="section-title-large">Gaussian Processes (GP) for Regression</h2></div><div class="section-body"><p>A <strong>Gaussian Process</strong> defines a distribution over functions. It is fully specified by a <strong>mean function</strong> <em>m(x)</em> and a <strong>covariance (kernel) function</strong> <em>K(x, x′)</em>. Given training data, the posterior predictive distribution at a new point <em>x<sub>*</sub></em> is Gaussian with closed‑form mean and variance. GPs provide <strong>principled uncertainty estimates</strong> and are highly flexible (via kernel choice), but scale as <em>O(n<sup>3</sup>)</em> with dataset size, limiting their application to moderate <em>n</em> (though sparse approximations exist).</p></div></div>
+
+            <!-- B1.88 Confusion Matrix -->
+            <div class="section-block" id="b1-88"><div class="section-heading"><span class="section-num-large">B1.88</span><h2 class="section-title-large">Confusion Matrix</h2></div><div class="section-body"><p>A <strong>confusion matrix</strong> tabulates the counts of correct and incorrect predictions for each class. For binary classification:</p><div class="equation-block multiline">TP (True Positive): predicted positive, actually positive<br>TN (True Negative): predicted negative, actually negative<br>FP (False Positive): predicted positive, actually negative (Type I error)<br>FN (False Negative): predicted negative, actually positive (Type II error)</div><p>The confusion matrix is the foundation for computing all classification metrics.</p></div></div>
+
+            <!-- B1.89 Accuracy, Precision, Recall -->
+            <div class="section-block" id="b1-89"><div class="section-heading"><span class="section-num-large">B1.89</span><h2 class="section-title-large">Accuracy, Precision, and Recall</h2></div><div class="section-body"><ul><li><strong>Accuracy:</strong> <em>(TP + TN) / (TP + TN + FP + FN)</em>. Fraction of correct predictions overall. Misleading for imbalanced datasets.</li><li><strong>Precision:</strong> <em>TP / (TP + FP)</em>. Of all positive predictions, how many are correct? Measures exactness.</li><li><strong>Recall (Sensitivity):</strong> <em>TP / (TP + FN)</em>. Of all actual positives, how many are captured? Measures completeness.</li></ul><p>There is an inherent tradeoff between precision and recall — improving one typically degrades the other.</p></div></div>
+
+            <!-- B1.90 F1 Score -->
+            <div class="section-block" id="b1-90"><div class="section-heading"><span class="section-num-large">B1.90</span><h2 class="section-title-large">F1 Score</h2></div><div class="section-body"><p>The <strong>F1 score</strong> is the harmonic mean of precision and recall:</p><div class="equation-block">F1 = 2 · (Precision · Recall) / (Precision + Recall).</div><p>The harmonic mean penalizes extreme imbalances (a model with perfect recall but near‑zero precision gets a low F1). The <strong>F<sub>β</sub></strong> score generalizes this, weighting recall <em>β</em> times as important as precision. F1 is the standard single‑number metric when both false positives and false negatives matter.</p></div></div>
+
+            <!-- B1.91 ROC Curve -->
+            <div class="section-block" id="b1-91"><div class="section-heading"><span class="section-num-large">B1.91</span><h2 class="section-title-large">ROC Curve</h2></div><div class="section-body"><p>The <strong>Receiver Operating Characteristic (ROC) curve</strong> plots the <strong>True Positive Rate (TPR = Recall)</strong> vs. the <strong>False Positive Rate (FPR = FP/(FP+TN))</strong> as the classification threshold is varied. Each point on the curve corresponds to a different threshold. The ROC curve illustrates the diagnostic ability of a binary classifier across all thresholds.</p></div></div>
+
+            <!-- B1.92 AUC -->
+            <div class="section-block" id="b1-92"><div class="section-heading"><span class="section-num-large">B1.92</span><h2 class="section-title-large">AUC (Area Under the ROC Curve)</h2></div><div class="section-body"><p><strong>AUC</strong> (or AUC‑ROC) is the area under the ROC curve, ranging from 0 to 1. It has a probabilistic interpretation: AUC is the probability that a randomly chosen positive example is ranked higher than a randomly chosen negative example. AUC = 0.5 corresponds to random guessing; AUC = 1.0 is perfect separation. AUC is threshold‑invariant and robust to class imbalance, making it a popular metric for comparing classifiers.</p></div></div>
+
+            <!-- B1.93 Cross‑Validation -->
+            <div class="section-block" id="b1-93"><div class="section-heading"><span class="section-num-large">B1.93</span><h2 class="section-title-large">Cross‑Validation</h2></div><div class="section-body"><p><strong>Cross‑validation (CV)</strong> is a resampling technique for estimating model performance and selecting hyperparameters. It partitions the data into <em>k</em> folds, trains on <em>k−1</em> folds, tests on the held‑out fold, and repeats <em>k</em> times. The average test performance across folds provides a more reliable estimate than a single train/test split, at the cost of <em>k</em>-fold training time. CV is essential when data is limited.</p></div></div>
+
+            <!-- B1.94 k‑Fold Cross‑Validation -->
+            <div class="section-block" id="b1-94"><div class="section-heading"><span class="section-num-large">B1.94</span><h2 class="section-title-large">k‑Fold Cross‑Validation</h2></div><div class="section-body"><p>In <strong>k‑fold CV</strong>, the data is randomly partitioned into <em>k</em> equal‑sized folds. Common choices are <em>k = 5</em> or <em>k = 10</em>. Each fold serves as the validation set exactly once. The CV estimate is the mean performance across folds; its standard error provides a measure of uncertainty. Large <em>k</em> gives lower bias but higher variance and computational cost; <em>k = n</em> is Leave‑One‑Out CV (B1.95).</p></div></div>
+
+            <!-- B1.95 Leave‑One‑Out CV -->
+            <div class="section-block" id="b1-95"><div class="section-heading"><span class="section-num-large">B1.95</span><h2 class="section-title-large">Leave‑One‑Out Cross‑Validation (LOOCV)</h2></div><div class="section-body"><p><strong>LOOCV</strong> is the extreme case of k‑fold CV with <em>k = n</em>: each training set contains <em>n−1</em> examples, and the held‑out set is a single example. LOOCV is nearly unbiased but can have high variance and is computationally expensive (requires <em>n</em> model fits). For linear models, LOOCV can be computed efficiently via closed‑form shortcuts (e.g., the PRESS statistic).</p></div></div>
+
+            <!-- B1.96 Stratified Sampling -->
+            <div class="section-block" id="b1-96"><div class="section-heading"><span class="section-num-large">B1.96</span><h2 class="section-title-large">Stratified k‑Fold Cross‑Validation</h2></div><div class="section-body"><p><strong>Stratified k‑fold CV</strong> preserves the class distribution in each fold — each fold has approximately the same proportion of each class as the full dataset. This is crucial for imbalanced datasets, where random splitting could produce folds with zero instances of a minority class, making evaluation meaningless. Stratification should be the default for classification tasks.</p></div></div>
+
+            <!-- B1.97 Hyperparameter Tuning -->
+            <div class="section-block" id="b1-97"><div class="section-heading"><span class="section-num-large">B1.97</span><h2 class="section-title-large">Hyperparameter Tuning</h2></div><div class="section-body"><p><strong>Hyperparameters</strong> are parameters that control the learning process itself (e.g., <em>λ</em> in ridge regression, <em>C</em> and <em>γ</em> in SVM, learning rate, tree depth). Unlike model parameters, they are not learned from the training data but must be set before training. <strong>Hyperparameter tuning</strong> searches for the combination that minimizes validation error, typically using grid search, random search, or Bayesian optimization within a nested cross‑validation loop.</p></div></div>
+
+            <!-- B1.98 Grid Search -->
+            <div class="section-block" id="b1-98"><div class="section-heading"><span class="section-num-large">B1.98</span><h2 class="section-title-large">Grid Search</h2></div><div class="section-body"><p><strong>Grid search</strong> exhaustively evaluates all combinations of hyperparameters from a pre‑specified grid. For <em>m</em> hyperparameters with <em>k<sub>i</sub></em> values each, the total number of combinations is <em>∏k<sub>i</sub></em>, which grows exponentially. Grid search is simple, parallelizable, and guaranteed to find the best combination within the grid — but it is inefficient: many combinations may be uniformly bad, yet all are evaluated.</p></div></div>
+
+            <!-- B1.99 Random Search -->
+            <div class="section-block" id="b1-99"><div class="section-heading"><span class="section-num-large">B1.99</span><h2 class="section-title-large">Random Search</h2></div><div class="section-body"><p><strong>Random search</strong> samples hyperparameter combinations from specified distributions (uniform, log‑uniform, etc.) for a fixed budget of <em>N</em> trials. Empirically, random search often outperforms grid search for the same computational budget because (i) not all hyperparameters are equally important, and random search explores more distinct values of the important ones; (ii) it can discover good regions that a coarse grid might miss.</p></div></div>
+
+            <!-- B1.100 Bayesian Optimization -->
+            <div class="section-block" id="b1-100"><div class="section-heading"><span class="section-num-large">B1.100</span><h2 class="section-title-large">Bayesian Optimization for Hyperparameter Tuning</h2></div><div class="section-body"><p><strong>Bayesian optimization</strong> builds a probabilistic surrogate model (typically a Gaussian Process) of the validation performance as a function of hyperparameters. It uses an <strong>acquisition function</strong> (e.g., Expected Improvement) to decide which hyperparameters to evaluate next, balancing <strong>exploration</strong> (trying uncertain regions) and <strong>exploitation</strong> (refining near the current best). Bayesian optimization is far more sample‑efficient than grid or random search, making it ideal when each evaluation is expensive.</p></div></div>
+
+            <!-- B1.101 Learning Curves -->
+            <div class="section-block" id="b1-101"><div class="section-heading"><span class="section-num-large">B1.101</span><h2 class="section-title-large">Learning Curves</h2></div><div class="section-body"><p>A <strong>learning curve</strong> plots training and validation error as a function of training set size. It is a diagnostic tool:</p><ul><li><strong>High bias (underfitting):</strong> training and validation errors converge to a high value; more data won't help.</li><li><strong>High variance (overfitting):</strong> large gap between training and validation error; more data is likely to help.</li><li><strong>Well‑fit model:</strong> both errors are low and converge.</li></ul><p>Learning curves guide decisions about collecting more data vs. changing model complexity.</p></div></div>
+
+            <!-- B1.102 Early Stopping -->
+            <div class="section-block" id="b1-102"><div class="section-heading"><span class="section-num-large">B1.102</span><h2 class="section-title-large">Early Stopping</h2></div><div class="section-body"><p><strong>Early stopping</strong> halts training when validation error stops improving (with a patience parameter to allow for temporary fluctuations). It is a simple, effective form of regularization: training a model beyond the point of minimum validation error leads to overfitting. Early stopping is standard practice when training neural networks and gradient‑boosted trees.</p></div></div>
+
+            <!-- B1.103 Data Augmentation -->
+            <div class="section-block" id="b1-103"><div class="section-heading"><span class="section-num-large">B1.103</span><h2 class="section-title-large">Data Augmentation</h2></div><div class="section-body"><p><strong>Data augmentation</strong> artificially expands the training set by applying label‑preserving transformations to existing examples. For images: random crops, flips, rotations, color jittering. For text: synonym replacement, back‑translation. For tabular data: SMOTE (synthetic minority oversampling). Augmentation acts as a regularizer by teaching the model about valid invariances and increasing effective dataset size.</p></div></div>
+
+            <!-- B1.104 Class Imbalance -->
+            <div class="section-block" id="b1-104"><div class="section-heading"><span class="section-num-large">B1.104</span><h2 class="section-title-large">Class Imbalance</h2></div><div class="section-body"><p><strong>Class imbalance</strong> occurs when one class (the majority) vastly outnumbers another (the minority). Standard algorithms trained on imbalanced data tend to ignore the minority class because doing so minimizes overall error. Strategies to address imbalance include:</p><ul><li><strong>Resampling:</strong> oversample the minority class, undersample the majority, or both.</li><li><strong>Cost‑sensitive learning:</strong> assign higher misclassification cost to the minority class.</li><li><strong>Synthetic data generation:</strong> SMOTE (B1.105).</li><li><strong>Threshold adjustment:</strong> shift the decision threshold based on class priors.</li><li><strong>Use metrics robust to imbalance:</strong> AUC, F1, precision‑recall AUC.</li></ul></div></div>
+
+            <!-- B1.105 SMOTE -->
+            <div class="section-block" id="b1-105"><div class="section-heading"><span class="section-num-large">B1.105</span><h2 class="section-title-large">SMOTE (Synthetic Minority Over‑sampling Technique)</h2></div><div class="section-body"><p><strong>SMOTE</strong> creates synthetic minority‑class examples by interpolating between existing minority examples. For each minority example, it selects <em>k</em> nearest minority neighbors and creates new points along the line segments connecting them. Unlike simple duplication, SMOTE produces genuinely new feature combinations, helping classifiers learn broader, less overfitted decision regions for the minority class.</p></div></div>
+
+            <!-- B1.106 Feature Scaling -->
+            <div class="section-block" id="b1-106"><div class="section-heading"><span class="section-num-large">B1.106</span><h2 class="section-title-large">Feature Scaling</h2></div><div class="section-body"><p><strong>Feature scaling</strong> transforms features to a comparable range. It is essential for:</p><ul><li>Distance‑based methods (k‑NN, SVM with RBF kernel, k‑means) — features with larger scales dominate distance calculations.</li><li>Gradient‑based optimization — features on different scales cause elongated loss contours, slowing convergence.</li><li>Regularized linear models — L1/L2 penalties are not scale‑invariant; coefficients of unscaled features are penalized unevenly.</li></ul><p>Two common methods: <strong>standardization</strong> (B1.108) and <strong>normalization</strong> (B1.107).</p></div></div>
+
+            <!-- B1.107 Normalization -->
+            <div class="section-block" id="b1-107"><div class="section-heading"><span class="section-num-large">B1.107</span><h2 class="section-title-large">Min–Max Normalization</h2></div><div class="section-body"><p><strong>Min–max normalization</strong> rescales features to a fixed range, typically [0, 1]:</p><div class="equation-block">x′<sup>(j)</sup> = (x<sup>(j)</sup> − min<sub>j</sub>) / (max<sub>j</sub> − min<sub>j</sub>).</div><p>It preserves zero values and the shape of the original distribution but is sensitive to outliers (which compress the majority of values into a narrow subrange). Best used when the data has known, bounded ranges (e.g., pixel intensities).</p></div></div>
+
+            <!-- B1.108 Standardization -->
+            <div class="section-block" id="b1-108"><div class="section-heading"><span class="section-num-large">B1.108</span><h2 class="section-title-large">Standardization (Z‑score Normalization)</h2></div><div class="section-body"><p><strong>Standardization</strong> centers each feature to zero mean and scales to unit variance:</p><div class="equation-block">x′<sup>(j)</sup> = (x<sup>(j)</sup> − μ<sub>j</sub>) / σ<sub>j</sub>.</div><p>It does not bound values to a fixed range, but is more robust to outliers than min–max normalization. Standardization is the default preprocessing step for most linear models, SVMs, and neural networks.</p></div></div>
+
+            <!-- B1.109 One‑Hot Encoding -->
+            <div class="section-block" id="b1-109"><div class="section-heading"><span class="section-num-large">B1.109</span><h2 class="section-title-large">One‑Hot Encoding</h2></div><div class="section-body"><p><strong>One‑hot encoding</strong> converts a categorical feature with <em>c</em> categories into <em>c</em> binary indicator columns. Exactly one column is "hot" (1) for each example; all others are 0. This avoids imposing an artificial ordinal relationship that would exist if categories were encoded as integers (e.g., "red"=1, "blue"=2, "green"=3). For high‑cardinality categorical features, alternative encodings (target encoding, embedding layers) are preferred.</p></div></div>
+
+            <!-- B1.110 Feature Selection -->
+            <div class="section-block" id="b1-110"><div class="section-heading"><span class="section-num-large">B1.110</span><h2 class="section-title-large">Feature Selection</h2></div><div class="section-body"><p><strong>Feature selection</strong> identifies and retains the most informative features while discarding irrelevant or redundant ones. Benefits include: simpler, more interpretable models; reduced overfitting; faster training and inference. Three main approaches:</p><ul><li><strong>Filter methods:</strong> rank features by a statistical score (correlation, mutual information, chi‑squared) independent of the model.</li><li><strong>Wrapper methods:</strong> evaluate subsets of features by training a model (e.g., recursive feature elimination).</li><li><strong>Embedded methods:</strong> feature selection is built into the training algorithm (e.g., Lasso's L1 penalty, tree feature importance).</li></ul></div></div>
+
+            <!-- B1.111 Dimensionality Reduction -->
+            <div class="section-block" id="b1-111"><div class="section-heading"><span class="section-num-large">B1.111</span><h2 class="section-title-large">Dimensionality Reduction</h2></div><div class="section-body"><p><strong>Dimensionality reduction</strong> transforms the original high‑dimensional feature space into a lower‑dimensional one while preserving as much relevant information as possible. Unlike feature selection (which keeps a subset of original features), dimensionality reduction creates new features that are combinations of the originals. Principal techniques include PCA, t‑SNE, UMAP, and autoencoders.</p></div></div>
+
+            <!-- B1.112 PCA for Supervised Learning -->
+            <div class="section-block" id="b1-112"><div class="section-heading"><span class="section-num-large">B1.112</span><h2 class="section-title-large">PCA as Preprocessing for Supervised Learning</h2></div><div class="section-body"><p><strong>Principal Component Analysis (PCA)</strong> projects data onto the directions of maximum variance. As preprocessing for supervised learning, PCA can reduce noise and accelerate training by eliminating near‑constant or highly correlated dimensions. However, PCA is unsupervised — the directions of maximum variance are not necessarily the directions most predictive of the target. <strong>Partial Least Squares (PLS)</strong> addresses this by finding components that maximize covariance with the target.</p></div></div>
+
+            <!-- B1.113 Pipeline -->
+            <div class="section-block" id="b1-113"><div class="section-heading"><span class="section-num-large">B1.113</span><h2 class="section-title-large">Machine Learning Pipeline</h2></div><div class="section-body"><p>A <strong>pipeline</strong> chains multiple processing steps (scaling, encoding, imputation, feature selection, model training) into a single object. Key benefits: (i) prevents data leakage — all transformations are fit only on training data and applied consistently to validation/test; (ii) simplifies cross‑validation and hyperparameter tuning; (iii) ensures reproducibility. Pipelines are a foundational engineering pattern in production ML.</p></div></div>
+
+            <!-- B1.114 Model Calibration -->
+            <div class="section-block" id="b1-114"><div class="section-heading"><span class="section-num-large">B1.114</span><h2 class="section-title-large">Probability Calibration</h2></div><div class="section-body"><p>A classifier is <strong>calibrated</strong> if its predicted probability <em>ŷ</em> matches the empirical frequency: among examples where the model predicts probability <em>p</em>, a fraction <em>p</em> actually belong to the positive class. Many models (SVMs, boosted trees, Naive Bayes) produce poorly calibrated probabilities. Calibration methods include <strong>Platt scaling</strong> (fitting a logistic regression on raw scores) and <strong>isotonic regression</strong> (fitting a non‑decreasing function).</p></div></div>
+
+            <!-- B1.115 Calibration Plots -->
+            <div class="section-block" id="b1-115"><div class="section-heading"><span class="section-num-large">B1.115</span><h2 class="section-title-large">Reliability Diagrams (Calibration Plots)</h2></div><div class="section-body"><p>A <strong>reliability diagram</strong> bins predicted probabilities and plots the mean predicted probability vs. the observed fraction of positives in each bin. A perfectly calibrated model follows the diagonal. Deviations above the diagonal indicate <strong>under‑confidence</strong>; below the diagonal indicates <strong>over‑confidence</strong>. The <strong>Expected Calibration Error (ECE)</strong> summarizes the diagram as a weighted average of the bin gaps.</p></div></div>
+
+            <!-- B1.116 Multi‑label Classification -->
+            <div class="section-block" id="b1-116"><div class="section-heading"><span class="section-num-large">B1.116</span><h2 class="section-title-large">Multi‑label Classification</h2></div><div class="section-body"><p>In <strong>multi‑label classification</strong>, each example can belong to multiple classes simultaneously (unlike multi‑class, where classes are mutually exclusive). Example: tagging an image with multiple objects. Approaches include:</p><ul><li><strong>Binary relevance:</strong> train one binary classifier per label.</li><li><strong>Classifier chains:</strong> train binary classifiers sequentially, using previous predictions as additional features.</li><li><strong>Label powerset:</strong> treat each unique label combination as a separate class (exponential in number of labels).</li><li><strong>Adapted algorithms:</strong> modifications of k‑NN, decision trees, and neural networks (with sigmoid outputs and binary cross‑entropy per label).</li></ul></div></div>
+
+            <!-- B1.117 Multi‑task Learning -->
+            <div class="section-block" id="b1-117"><div class="section-heading"><span class="section-num-large">B1.117</span><h2 class="section-title-large">Multi‑task Learning</h2></div><div class="section-body"><p><strong>Multi‑task learning</strong> trains a single model to perform multiple related tasks simultaneously, sharing representations across tasks. The shared layers learn features that are useful for all tasks, which acts as a powerful regularizer — it biases the model toward representations that capture underlying structure common to the tasks, improving generalization on each individual task (especially when data for some tasks is scarce).</p></div></div>
+
+            <!-- B1.118 Transfer Learning -->
+            <div class="section-block" id="b1-118"><div class="section-heading"><span class="section-num-large">B1.118</span><h2 class="section-title-large">Transfer Learning</h2></div><div class="section-body"><p><strong>Transfer learning</strong> reuses a model trained on a large source task (e.g., ImageNet classification) as the starting point for a target task with limited data. Common approach: take a pre‑trained network, replace the final layer(s) with task‑specific ones, and <strong>fine‑tune</strong> — train with a small learning rate, possibly freezing early layers. Transfer learning is the dominant paradigm in computer vision and NLP, enabling state‑of‑the‑art performance with modest target‑domain data.</p></div></div>
+
+            <!-- B1.119 Semi‑supervised Learning -->
+            <div class="section-block" id="b1-119"><div class="section-heading"><span class="section-num-large">B1.119</span><h2 class="section-title-large">Semi‑supervised Learning</h2></div><div class="section-body"><p><strong>Semi‑supervised learning</strong> leverages a small amount of labeled data together with a large amount of unlabeled data. Key assumptions that make this possible: (i) <strong>cluster assumption</strong> — points in the same cluster likely share a label; (ii) <strong>low‑density separation</strong> — the decision boundary should lie in low‑density regions; (iii) <strong>manifold assumption</strong> — the data lies on a low‑dimensional manifold. Techniques include self‑training, co‑training, and consistency regularization.</p></div></div>
+
+            <!-- B1.120 Active Learning -->
+            <div class="section-block" id="b1-120"><div class="section-heading"><span class="section-num-large">B1.120</span><h2 class="section-title-large">Active Learning</h2></div><div class="section-body"><p><strong>Active learning</strong> is a paradigm where the learning algorithm can query an oracle (e.g., a human annotator) to label selected examples. The goal is to achieve high accuracy with minimal labeling cost by choosing the most informative examples. Query strategies include:</p><ul><li><strong>Uncertainty sampling:</strong> query the example the model is most uncertain about.</li><li><strong>Query‑by‑committee:</strong> query where an ensemble of models disagrees most.</li><li><strong>Expected model change:</strong> query the example that would most change the model if its label were known.</li></ul></div></div>
+
+            <!-- B1.121 Online Learning -->
+            <div class="section-block" id="b1-121"><div class="section-heading"><span class="section-num-large">B1.121</span><h2 class="section-title-large">Online Learning</h2></div><div class="section-body"><p>In <strong>online learning</strong>, data arrives sequentially and the model is updated after each example (or small batch). There is no fixed training set; the model must continuously adapt. Key considerations: (i) the data distribution may shift over time (<strong>concept drift</strong>); (ii) computational efficiency is paramount. Algorithms like the perceptron, stochastic gradient descent, and online gradient boosting are natural fits. Online learning is essential for recommender systems, fraud detection, and high‑frequency trading.</p></div></div>
+
+            <!-- B1.122 Curriculum Learning -->
+            <div class="section-block" id="b1-122"><div class="section-heading"><span class="section-num-large">B1.122</span><h2 class="section-title-large">Curriculum Learning</h2></div><div class="section-body"><p><strong>Curriculum learning</strong> trains a model by presenting examples in a meaningful order — typically from "easy" to "hard" — rather than randomly. Inspired by human education, it can accelerate convergence and guide the model toward better local minima. The definition of "easy" is task‑dependent: shorter sentences in NLP, cleaner images in vision, lower‑noise examples. The approach can be seen as a form of continuation method in optimization.</p></div></div>
+
+            <!-- B1.123 Imbalanced Learning -->
+            <div class="section-block" id="b1-123"><div class="section-heading"><span class="section-num-large">B1.123</span><h2 class="section-title-large">Imbalanced Learning (Extended)</h2></div><div class="section-body"><p>Building on B1.104, <strong>imbalanced learning</strong> encompasses a broader set of techniques: <strong>ensemble methods</strong> (Balanced Random Forest, EasyEnsemble), <strong>anomaly detection</strong> approaches (treating the minority class as anomalies), <strong>threshold moving</strong> (adjusting the decision threshold post‑training based on class priors or cost ratios), and <strong>specialized loss functions</strong> (focal loss, which down‑weights easy examples and focuses on hard ones).</p></div></div>
+
+            <!-- B1.124 Cost‑sensitive Learning -->
+            <div class="section-block" id="b1-124"><div class="section-heading"><span class="section-num-large">B1.124</span><h2 class="section-title-large">Cost‑sensitive Learning</h2></div><div class="section-body"><p><strong>Cost‑sensitive learning</strong> incorporates different costs for different types of errors. In medical diagnosis, a false negative (missing a disease) may be far more costly than a false positive (unnecessary follow‑up). Costs can be integrated into the loss function (weighted loss), into resampling strategies, or via post‑hoc threshold adjustment. The goal shifts from minimizing error to minimizing <strong>expected cost</strong>.</p></div></div>
+
+            <!-- B1.125 Explainability -->
+            <div class="section-block" id="b1-125"><div class="section-heading"><span class="section-num-large">B1.125</span><h2 class="section-title-large">Explainability in Supervised Models</h2></div><div class="section-body"><p><strong>Explainability</strong> (or interpretability) concerns understanding why a model made a particular prediction. Methods are categorized as:</p><ul><li><strong>Intrinsic:</strong> the model is inherently interpretable (linear regression coefficients, decision tree rules).</li><li><strong>Post‑hoc:</strong> explanations are generated after training, for any model type. Includes feature importance, SHAP (B1.126), LIME (B1.127), partial dependence plots (B1.128), and saliency maps.</li></ul><p>Explainability is critical for trust, debugging, regulatory compliance, and fairness auditing.</p></div></div>
+
+            <!-- B1.126 SHAP -->
+            <div class="section-block" id="b1-126"><div class="section-heading"><span class="section-num-large">B1.126</span><h2 class="section-title-large">SHAP (SHapley Additive exPlanations)</h2></div><div class="section-body"><p><strong>SHAP</strong> values are a unified framework for interpreting model predictions based on <strong>Shapley values</strong> from cooperative game theory. The SHAP value of a feature is the average contribution of that feature to the prediction, averaged over all possible feature orderings. SHAP satisfies desirable axioms: local accuracy, missingness, and consistency. It provides both local explanations (per‑prediction) and global insights (via aggregation).</p></div></div>
+
+            <!-- B1.127 LIME -->
+            <div class="section-block" id="b1-127"><div class="section-heading"><span class="section-num-large">B1.127</span><h2 class="section-title-large">LIME (Local Interpretable Model‑agnostic Explanations)</h2></div><div class="section-body"><p><strong>LIME</strong> explains individual predictions by locally approximating the complex model with a simple, interpretable model (e.g., linear regression) around the neighborhood of the instance being explained. It generates perturbed samples around the instance, gets predictions from the black‑box model, and fits an interpretable model weighted by proximity. LIME is model‑agnostic — it works with any classifier.</p></div></div>
+
+            <!-- B1.128 Partial Dependence Plots -->
+            <div class="section-block" id="b1-128"><div class="section-heading"><span class="section-num-large">B1.128</span><h2 class="section-title-large">Partial Dependence Plots (PDP)</h2></div><div class="section-body"><p>A <strong>Partial Dependence Plot</strong> shows the marginal effect of a feature (or two features) on the predicted outcome, averaged over the distribution of all other features. For feature <em>j</em>:</p><div class="equation-block">PDP<sub>j</sub>(x) = (1/n) ∑<sub>i=1</sub><sup>n</sup> f̂(x<sub>i</sub><sup>(1)</sup>, …, x, …, x<sub>i</sub><sup>(d)</sup>).</div><p>PDPs reveal whether the relationship is linear, monotonic, or more complex. Their limitation is that they assume feature independence, which can produce misleading results for correlated features.</p></div></div>
+
+            <!-- B1.129 Ethical Considerations -->
+            <div class="section-block" id="b1-129"><div class="section-heading"><span class="section-num-large">B1.129</span><h2 class="section-title-large">Ethical Considerations in Supervised Learning</h2></div><div class="section-body"><p>Supervised learning models can perpetuate and amplify biases present in training data. Key concerns:</p><ul><li><strong>Fairness:</strong> models should not discriminate based on protected attributes (race, gender, age). Metrics include demographic parity, equalized odds, and individual fairness.</li><li><strong>Accountability:</strong> who is responsible when a model makes a harmful decision?</li><li><strong>Transparency:</strong> stakeholders should understand how decisions are made.</li><li><strong>Privacy:</strong> models may memorize training data; differential privacy provides formal guarantees.</li></ul><p>Ethical ML is not merely a technical challenge — it requires interdisciplinary collaboration and ongoing societal dialogue.</p></div></div>
+
+            <!-- B1.130 Summary -->
+            <div class="section-block" id="b1-130"><div class="section-heading"><span class="section-num-large">B1.130</span><h2 class="section-title-large">Summary of Supervised Learning</h2></div><div class="section-body"><p>Supervised learning is the cornerstone of applied machine learning. The key themes of this reference:</p><ul><li><strong>Fundamentals:</strong> empirical risk minimization, bias–variance tradeoff, generalization.</li><li><strong>Linear models:</strong> OLS, ridge, lasso, logistic regression — simple, interpretable, and often surprisingly effective.</li><li><strong>Tree ensembles:</strong> random forests and gradient boosting — the dominant methods for tabular data.</li><li><strong>Kernel methods:</strong> SVMs — elegant theory, strong performance on medium‑sized datasets.</li><li><strong>Neural networks:</strong> MLPs — universal approximators that scale to massive data.</li><li><strong>Probabilistic methods:</strong> Naive Bayes, Gaussian Processes — principled uncertainty quantification.</li><li><strong>Evaluation:</strong> a rich suite of metrics, cross‑validation, and diagnostic tools (learning curves, calibration plots).</li><li><strong>Advanced topics:</strong> transfer learning, multi‑task learning, active learning, explainability, and ethics.</li></ul><p>Mastery of supervised learning requires both theoretical understanding and practical experience — knowing which algorithm to apply, how to preprocess data, how to tune hyperparameters, and how to rigorously evaluate results.</p><div class="conceptual-note">The field continues to evolve rapidly, but the foundational principles laid out in this reference remain constant — they provide the conceptual toolkit for understanding and applying any supervised learning method.</div></div></div>
+
+        </main>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sb-section">
+                <div class="sb-heading">About This Reference</div>
+                <div class="sb-body">
+                    <p><strong>Introduction to Supervised Learning</strong> is a comprehensive reference covering the theory and practice of supervised machine learning — from foundational concepts and linear models through tree ensembles, kernel methods, neural networks, probabilistic approaches, and model evaluation.</p>
+                    <p>Each section is presented as a formal <strong>definition</strong>, <strong>theorem</strong>, or <strong>algorithm</strong>, with conceptual explanations and practical insights. The numbering follows the appendix convention (B1.1–B1.130).</p>
+                    <p>Intended as a companion reference for machine learning practitioners and students of data science.</p>
+                </div>
+            </div>
+            <div class="sb-section">
+                <div class="sb-heading">Quick Navigation</div>
+                <ul class="sb-nav-list">
+                    <li><a href="#b1-1"><span class="sb-nav-num">B1.1</span> Supervised Learning (Definition)</a></li>
+                    <li><a href="#b1-2"><span class="sb-nav-num">B1.2</span> Features and Labels</a></li>
+                    <li><a href="#b1-3"><span class="sb-nav-num">B1.3</span> Training, Validation, and Test Sets</a></li>
+                    <li><a href="#b1-4"><span class="sb-nav-num">B1.4</span> Hypothesis Space</a></li>
+                    <li><a href="#b1-5"><span class="sb-nav-num">B1.5</span> Loss Function</a></li>
+                    <li><a href="#b1-6"><span class="sb-nav-num">B1.6</span> Risk (Expected Loss)</a></li>
+                    <li><a href="#b1-7"><span class="sb-nav-num">B1.7</span> Empirical Risk</a></li>
+                    <li><a href="#b1-8"><span class="sb-nav-num">B1.8</span> Regression vs Classification</a></li>
+                    <li><a href="#b1-9"><span class="sb-nav-num">B1.9</span> Binary and Multi‑class</a></li>
+                    <li><a href="#b1-10"><span class="sb-nav-num">B1.10</span> Training Error vs Test Error</a></li>
+                    <li><a href="#b1-11"><span class="sb-nav-num">B1.11</span> Generalization</a></li>
+                    <li><a href="#b1-12"><span class="sb-nav-num">B1.12</span> Overfitting and Underfitting</a></li>
+                    <li><a href="#b1-13"><span class="sb-nav-num">B1.13</span> Bias–Variance Tradeoff</a></li>
+                    <li><a href="#b1-14"><span class="sb-nav-num">B1.14</span> No Free Lunch Theorem</a></li>
+                    <li><a href="#b1-15"><span class="sb-nav-num">B1.15</span> Inductive Bias</a></li>
+                    <li><a href="#b1-16"><span class="sb-nav-num">B1.16</span> Model Complexity</a></li>
+                    <li><a href="#b1-17"><span class="sb-nav-num">B1.17</span> Parametric vs Non‑parametric</a></li>
+                    <li><a href="#b1-18"><span class="sb-nav-num">B1.18</span> Notation Conventions</a></li>
+                    <li><a href="#b1-19"><span class="sb-nav-num">B1.19</span> Design Matrix and Label Vector</a></li>
+                    <li><a href="#b1-20"><span class="sb-nav-num">B1.20</span> Linear Regression</a></li>
+                    <li><a href="#b1-21"><span class="sb-nav-num">B1.21</span> Ordinary Least Squares (OLS)</a></li>
+                    <li><a href="#b1-22"><span class="sb-nav-num">B1.22</span> Normal Equations</a></li>
+                    <li><a href="#b1-23"><span class="sb-nav-num">B1.23</span> Geometric Interpretation of OLS</a></li>
+                    <li><a href="#b1-24"><span class="sb-nav-num">B1.24</span> Gauss–Markov Theorem</a></li>
+                    <li><a href="#b1-25"><span class="sb-nav-num">B1.25</span> Ridge Regression (L2)</a></li>
+                    <li><a href="#b1-26"><span class="sb-nav-num">B1.26</span> Lasso Regression (L1)</a></li>
+                    <li><a href="#b1-27"><span class="sb-nav-num">B1.27</span> Elastic Net</a></li>
+                    <li><a href="#b1-28"><span class="sb-nav-num">B1.28</span> Logistic Regression</a></li>
+                    <li><a href="#b1-29"><span class="sb-nav-num">B1.29</span> Sigmoid Function</a></li>
+                    <li><a href="#b1-30"><span class="sb-nav-num">B1.30</span> Binary Cross‑Entropy Loss</a></li>
+                    <li><a href="#b1-31"><span class="sb-nav-num">B1.31</span> Softmax Regression</a></li>
+                    <li><a href="#b1-32"><span class="sb-nav-num">B1.32</span> Maximum Likelihood Estimation</a></li>
+                    <li><a href="#b1-33"><span class="sb-nav-num">B1.33</span> Gradient Descent</a></li>
+                    <li><a href="#b1-34"><span class="sb-nav-num">B1.34</span> Stochastic Gradient Descent</a></li>
+                    <li><a href="#b1-35"><span class="sb-nav-num">B1.35</span> Mini‑batch Gradient Descent</a></li>
+                    <li><a href="#b1-36"><span class="sb-nav-num">B1.36</span> Learning Rate</a></li>
+                    <li><a href="#b1-37"><span class="sb-nav-num">B1.37</span> Convergence of GD</a></li>
+                    <li><a href="#b1-38"><span class="sb-nav-num">B1.38</span> Perceptron</a></li>
+                    <li><a href="#b1-39"><span class="sb-nav-num">B1.39</span> Perceptron Convergence</a></li>
+                    <li><a href="#b1-40"><span class="sb-nav-num">B1.40</span> Multi‑layer Perceptron</a></li>
+                    <li><a href="#b1-41"><span class="sb-nav-num">B1.41</span> Activation Functions</a></li>
+                    <li><a href="#b1-42"><span class="sb-nav-num">B1.42</span> Backpropagation</a></li>
+                    <li><a href="#b1-43"><span class="sb-nav-num">B1.43</span> Universal Approx. Theorem</a></li>
+                    <li><a href="#b1-44"><span class="sb-nav-num">B1.44</span> Regularization in NNs</a></li>
+                    <li><a href="#b1-45"><span class="sb-nav-num">B1.45</span> Dropout</a></li>
+                    <li><a href="#b1-46"><span class="sb-nav-num">B1.46</span> Decision Trees</a></li>
+                    <li><a href="#b1-47"><span class="sb-nav-num">B1.47</span> Splitting Criteria</a></li>
+                    <li><a href="#b1-48"><span class="sb-nav-num">B1.48</span> Information Gain</a></li>
+                    <li><a href="#b1-49"><span class="sb-nav-num">B1.49</span> Gini Impurity</a></li>
+                    <li><a href="#b1-50"><span class="sb-nav-num">B1.50</span> Entropy</a></li>
+                    <li><a href="#b1-51"><span class="sb-nav-num">B1.51</span> CART Algorithm</a></li>
+                    <li><a href="#b1-52"><span class="sb-nav-num">B1.52</span> Pruning</a></li>
+                    <li><a href="#b1-53"><span class="sb-nav-num">B1.53</span> Random Forest</a></li>
+                    <li><a href="#b1-54"><span class="sb-nav-num">B1.54</span> Bagging</a></li>
+                    <li><a href="#b1-55"><span class="sb-nav-num">B1.55</span> Out‑of‑Bag Error</a></li>
+                    <li><a href="#b1-56"><span class="sb-nav-num">B1.56</span> Feature Importance</a></li>
+                    <li><a href="#b1-57"><span class="sb-nav-num">B1.57</span> Gradient Boosting</a></li>
+                    <li><a href="#b1-58"><span class="sb-nav-num">B1.58</span> AdaBoost</a></li>
+                    <li><a href="#b1-59"><span class="sb-nav-num">B1.59</span> XGBoost</a></li>
+                    <li><a href="#b1-60"><span class="sb-nav-num">B1.60</span> LightGBM</a></li>
+                    <li><a href="#b1-61"><span class="sb-nav-num">B1.61</span> CatBoost</a></li>
+                    <li><a href="#b1-62"><span class="sb-nav-num">B1.62</span> Stacking</a></li>
+                    <li><a href="#b1-63"><span class="sb-nav-num">B1.63</span> Voting Classifiers</a></li>
+                    <li><a href="#b1-64"><span class="sb-nav-num">B1.64</span> Support Vector Machines</a></li>
+                    <li><a href="#b1-65"><span class="sb-nav-num">B1.65</span> Maximum Margin Classifier</a></li>
+                    <li><a href="#b1-66"><span class="sb-nav-num">B1.66</span> Hard Margin SVM</a></li>
+                    <li><a href="#b1-67"><span class="sb-nav-num">B1.67</span> Soft Margin SVM</a></li>
+                    <li><a href="#b1-68"><span class="sb-nav-num">B1.68</span> Hinge Loss</a></li>
+                    <li><a href="#b1-69"><span class="sb-nav-num">B1.69</span> Kernel Trick</a></li>
+                    <li><a href="#b1-70"><span class="sb-nav-num">B1.70</span> Common Kernels</a></li>
+                    <li><a href="#b1-71"><span class="sb-nav-num">B1.71</span> RBF Kernel</a></li>
+                    <li><a href="#b1-72"><span class="sb-nav-num">B1.72</span> Polynomial Kernel</a></li>
+                    <li><a href="#b1-73"><span class="sb-nav-num">B1.73</span> Mercer's Theorem</a></li>
+                    <li><a href="#b1-74"><span class="sb-nav-num">B1.74</span> SVR</a></li>
+                    <li><a href="#b1-75"><span class="sb-nav-num">B1.75</span> One‑Class SVM</a></li>
+                    <li><a href="#b1-76"><span class="sb-nav-num">B1.76</span> Dual Formulation</a></li>
+                    <li><a href="#b1-77"><span class="sb-nav-num">B1.77</span> k‑Nearest Neighbors</a></li>
+                    <li><a href="#b1-78"><span class="sb-nav-num">B1.78</span> Distance Metrics</a></li>
+                    <li><a href="#b1-79"><span class="sb-nav-num">B1.79</span> Curse of Dimensionality</a></li>
+                    <li><a href="#b1-80"><span class="sb-nav-num">B1.80</span> Locally Weighted Regression</a></li>
+                    <li><a href="#b1-81"><span class="sb-nav-num">B1.81</span> RBF Networks</a></li>
+                    <li><a href="#b1-82"><span class="sb-nav-num">B1.82</span> Naive Bayes</a></li>
+                    <li><a href="#b1-83"><span class="sb-nav-num">B1.83</span> Bayes Theorem</a></li>
+                    <li><a href="#b1-84"><span class="sb-nav-num">B1.84</span> Gaussian Naive Bayes</a></li>
+                    <li><a href="#b1-85"><span class="sb-nav-num">B1.85</span> Multinomial Naive Bayes</a></li>
+                    <li><a href="#b1-86"><span class="sb-nav-num">B1.86</span> Bayesian Linear Regression</a></li>
+                    <li><a href="#b1-87"><span class="sb-nav-num">B1.87</span> Gaussian Processes</a></li>
+                    <li><a href="#b1-88"><span class="sb-nav-num">B1.88</span> Confusion Matrix</a></li>
+                    <li><a href="#b1-89"><span class="sb-nav-num">B1.89</span> Accuracy, Precision, Recall</a></li>
+                    <li><a href="#b1-90"><span class="sb-nav-num">B1.90</span> F1 Score</a></li>
+                    <li><a href="#b1-91"><span class="sb-nav-num">B1.91</span> ROC Curve</a></li>
+                    <li><a href="#b1-92"><span class="sb-nav-num">B1.92</span> AUC</a></li>
+                    <li><a href="#b1-93"><span class="sb-nav-num">B1.93</span> Cross‑Validation</a></li>
+                    <li><a href="#b1-94"><span class="sb-nav-num">B1.94</span> k‑Fold Cross‑Validation</a></li>
+                    <li><a href="#b1-95"><span class="sb-nav-num">B1.95</span> Leave‑One‑Out CV</a></li>
+                    <li><a href="#b1-96"><span class="sb-nav-num">B1.96</span> Stratified k‑Fold CV</a></li>
+                    <li><a href="#b1-97"><span class="sb-nav-num">B1.97</span> Hyperparameter Tuning</a></li>
+                    <li><a href="#b1-98"><span class="sb-nav-num">B1.98</span> Grid Search</a></li>
+                    <li><a href="#b1-99"><span class="sb-nav-num">B1.99</span> Random Search</a></li>
+                    <li><a href="#b1-100"><span class="sb-nav-num">B1.100</span> Bayesian Optimization</a></li>
+                    <li><a href="#b1-101"><span class="sb-nav-num">B1.101</span> Learning Curves</a></li>
+                    <li><a href="#b1-102"><span class="sb-nav-num">B1.102</span> Early Stopping</a></li>
+                    <li><a href="#b1-103"><span class="sb-nav-num">B1.103</span> Data Augmentation</a></li>
+                    <li><a href="#b1-104"><span class="sb-nav-num">B1.104</span> Class Imbalance</a></li>
+                    <li><a href="#b1-105"><span class="sb-nav-num">B1.105</span> SMOTE</a></li>
+                    <li><a href="#b1-106"><span class="sb-nav-num">B1.106</span> Feature Scaling</a></li>
+                    <li><a href="#b1-107"><span class="sb-nav-num">B1.107</span> Min–Max Normalization</a></li>
+                    <li><a href="#b1-108"><span class="sb-nav-num">B1.108</span> Standardization</a></li>
+                    <li><a href="#b1-109"><span class="sb-nav-num">B1.109</span> One‑Hot Encoding</a></li>
+                    <li><a href="#b1-110"><span class="sb-nav-num">B1.110</span> Feature Selection</a></li>
+                    <li><a href="#b1-111"><span class="sb-nav-num">B1.111</span> Dimensionality Reduction</a></li>
+                    <li><a href="#b1-112"><span class="sb-nav-num">B1.112</span> PCA for Supervised Learning</a></li>
+                    <li><a href="#b1-113"><span class="sb-nav-num">B1.113</span> ML Pipeline</a></li>
+                    <li><a href="#b1-114"><span class="sb-nav-num">B1.114</span> Probability Calibration</a></li>
+                    <li><a href="#b1-115"><span class="sb-nav-num">B1.115</span> Reliability Diagrams</a></li>
+                    <li><a href="#b1-116"><span class="sb-nav-num">B1.116</span> Multi‑label Classification</a></li>
+                    <li><a href="#b1-117"><span class="sb-nav-num">B1.117</span> Multi‑task Learning</a></li>
+                    <li><a href="#b1-118"><span class="sb-nav-num">B1.118</span> Transfer Learning</a></li>
+                    <li><a href="#b1-119"><span class="sb-nav-num">B1.119</span> Semi‑supervised Learning</a></li>
+                    <li><a href="#b1-120"><span class="sb-nav-num">B1.120</span> Active Learning</a></li>
+                    <li><a href="#b1-121"><span class="sb-nav-num">B1.121</span> Online Learning</a></li>
+                    <li><a href="#b1-122"><span class="sb-nav-num">B1.122</span> Curriculum Learning</a></li>
+                    <li><a href="#b1-123"><span class="sb-nav-num">B1.123</span> Imbalanced Learning</a></li>
+                    <li><a href="#b1-124"><span class="sb-nav-num">B1.124</span> Cost‑sensitive Learning</a></li>
+                    <li><a href="#b1-125"><span class="sb-nav-num">B1.125</span> Explainability</a></li>
+                    <li><a href="#b1-126"><span class="sb-nav-num">B1.126</span> SHAP</a></li>
+                    <li><a href="#b1-127"><span class="sb-nav-num">B1.127</span> LIME</a></li>
+                    <li><a href="#b1-128"><span class="sb-nav-num">B1.128</span> Partial Dependence Plots</a></li>
+                    <li><a href="#b1-129"><span class="sb-nav-num">B1.129</span> Ethical Considerations</a></li>
+                    <li><a href="#b1-130"><span class="sb-nav-num">B1.130</span> Summary</a></li>
+                </ul>
+            </div>
+            <div class="sb-section">
+                <div class="sb-heading">Notation</div>
+                <div class="sb-body">
+                    <p><strong>𝒳</strong> — input (feature) space.</p>
+                    <p><strong>𝒴</strong> — output (label) space.</p>
+                    <p><strong>ℋ</strong> — hypothesis space.</p>
+                    <p><strong>ℓ(y, ŷ)</strong> — loss function.</p>
+                    <p><strong>R(h), R̂<sub>n</sub>(h)</strong> — risk and empirical risk.</p>
+                    <p><strong>X, y</strong> — design matrix and label vector.</p>
+                    <p><strong>w, b</strong> — weights and bias.</p>
+                    <p><strong>σ(z)</strong> — sigmoid function.</p>
+                    <p><strong>K(x, x′)</strong> — kernel function.</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <div class="ft-inner">
+            <span class="ft-title">Supervised Learning Reference &nbsp;·&nbsp; Foundations for Data Science</span>
+            <span class="ft-right">Machine Learning Reference Series &nbsp;·&nbsp; Open Reference</span>
+        </div>
+    </footer>
+
+    <button id="hamburger-btn" aria-label="Open navigation menu">☰</button>
+    <div id="nav-overlay"></div>
+    <nav id="mobile-nav">
+        <h3>Navigation</h3>
+        <ul>
+            <li class="mnav-group">Foundations</li>
+            <li><a href="#b1-1"><span class="sb-nav-num">B1.1</span> Supervised Learning</a></li>
+            <li><a href="#b1-5"><span class="sb-nav-num">B1.5</span> Loss Function</a></li>
+            <li><a href="#b1-8"><span class="sb-nav-num">B1.8</span> Regression vs Classification</a></li>
+            <li><a href="#b1-13"><span class="sb-nav-num">B1.13</span> Bias–Variance Tradeoff</a></li>
+            <li class="mnav-group">Linear Models</li>
+            <li><a href="#b1-20"><span class="sb-nav-num">B1.20</span> Linear Regression</a></li>
+            <li><a href="#b1-25"><span class="sb-nav-num">B1.25</span> Ridge Regression</a></li>
+            <li><a href="#b1-28"><span class="sb-nav-num">B1.28</span> Logistic Regression</a></li>
+            <li class="mnav-group">Neural Networks</li>
+            <li><a href="#b1-40"><span class="sb-nav-num">B1.40</span> Multi‑layer Perceptron</a></li>
+            <li><a href="#b1-42"><span class="sb-nav-num">B1.42</span> Backpropagation</a></li>
+            <li class="mnav-group">Tree Ensembles</li>
+            <li><a href="#b1-46"><span class="sb-nav-num">B1.46</span> Decision Trees</a></li>
+            <li><a href="#b1-53"><span class="sb-nav-num">B1.53</span> Random Forest</a></li>
+            <li><a href="#b1-57"><span class="sb-nav-num">B1.57</span> Gradient Boosting</a></li>
+            <li class="mnav-group">Kernel Methods</li>
+            <li><a href="#b1-64"><span class="sb-nav-num">B1.64</span> Support Vector Machines</a></li>
+            <li><a href="#b1-69"><span class="sb-nav-num">B1.69</span> Kernel Trick</a></li>
+            <li class="mnav-group">Instance & Probabilistic</li>
+            <li><a href="#b1-77"><span class="sb-nav-num">B1.77</span> k‑Nearest Neighbors</a></li>
+            <li><a href="#b1-82"><span class="sb-nav-num">B1.82</span> Naive Bayes</a></li>
+            <li class="mnav-group">Evaluation</li>
+            <li><a href="#b1-88"><span class="sb-nav-num">B1.88</span> Confusion Matrix</a></li>
+            <li><a href="#b1-91"><span class="sb-nav-num">B1.91</span> ROC Curve</a></li>
+            <li><a href="#b1-93"><span class="sb-nav-num">B1.93</span> Cross‑Validation</a></li>
+            <li class="mnav-group">Advanced Topics</li>
+            <li><a href="#b1-118"><span class="sb-nav-num">B1.118</span> Transfer Learning</a></li>
+            <li><a href="#b1-125"><span class="sb-nav-num">B1.125</span> Explainability</a></li>
+            <li><a href="#b1-129"><span class="sb-nav-num">B1.129</span> Ethical Considerations</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        const lbl = document.getElementById('toggle-label-text');
+        const saved = localStorage.getItem('sl-theme');
+        if (saved) { html.setAttribute('data-theme', saved);
+            syncUI(); }
+        btn.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('sl-theme', next);
+            syncUI();
+        });
+        function syncUI() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            lbl.textContent = isDark ? 'Dark' : 'Light';
+            btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
+        }
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileNav = document.getElementById('mobile-nav');
+        const navOverlay = document.getElementById('nav-overlay');
+        function openNav() { mobileNav.classList.add('open');
+            navOverlay.style.display = 'block';
+            hamburgerBtn.style.display = 'none'; }
+        function closeNav() { mobileNav.classList.remove('open');
+            navOverlay.style.display = 'none';
+            hamburgerBtn.style.display = 'block'; }
+        hamburgerBtn.addEventListener('click', openNav);
+        navOverlay.addEventListener('click', closeNav);
+        mobileNav.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { closeNav(); }); });
+    </script>
+</body>
+</html>
