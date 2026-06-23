@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Machine Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        /* ── VIOLET THEME TOKENS ── */
+        [data-theme="light"] {
+            --paper: #f7f4ec;
+            --paper2: #eae6db;
+            --paper3: #dedad0;
+            --ink: #0b0014;
+            --ink2: #1e0a2e;
+            --ink3: #3a1e4e;
+            --ink4: #6a4a7a;
+            --ink5: #b09cc6;
+            --rule: rgba(11, 0, 20, 0.18);
+            --rule2: rgba(11, 0, 20, 0.10);
+            --rule3: rgba(11, 0, 20, 0.05);
+            --crimson: #6a0dad;
+            --crimson2: #8a2be2;
+            --crimson-lo: rgba(106, 13, 173, 0.07);
+            --hover-lo: rgba(11, 0, 20, 0.04);
+            --gold: #3d1e6b;
+            --gold-lo: rgba(61, 30, 107, 0.09);
+            --teal: #4b0082;
+            --fm-bg: #060806;
+            --fm-rule: #6a0dad;
+            --fm-accent: #b266ff;
+            --fm-text: #f4eeff;
+            --fm-muted: rgba(244, 238, 255, 0.45);
+            --fm-border: rgba(244, 238, 255, 0.12);
+            --toggle-bg: rgba(244, 238, 255, 0.10);
+            --toggle-ico: rgba(244, 238, 255, 0.60);
+            --section-bg: rgba(11, 0, 20, 0.03);
+            --section-border: rgba(11, 0, 20, 0.14);
+            --section-num: rgba(106, 13, 173, 0.60);
+            --callout-bg: rgba(106, 13, 173, 0.04);
+            --callout-border: rgba(106, 13, 173, 0.22);
+            --eq-bg: rgba(11, 0, 20, 0.02);
+            --eq-border: rgba(11, 0, 20, 0.12);
+            --tag-ml-bg: rgba(75, 0, 130, 0.12);
+            --tag-ml-border: rgba(75, 0, 130, 0.28);
+            --tag-ml-color: #4b0082;
+        }
+        [data-theme="dark"] {
+            
+            --paper: #0a0c0a;
+            --paper2: #131512;
+            --paper3: #1c1f1a;
+            --ink: #f4eeff;
+            --ink2: #e0d2f5;
+            --ink3: #c2a8e0;
+            --ink4: #8a6aa8;
+            --ink5: #4a3068;
+            --rule: rgba(244, 238, 255, 0.18);
+            --rule2: rgba(244, 238, 255, 0.10);
+            --rule3: rgba(244, 238, 255, 0.05);
+            --crimson: #b266ff;
+            --crimson2: #cc99ff;
+            --crimson-lo: rgba(178, 102, 255, 0.12);
+            --hover-lo: rgba(244, 238, 255, 0.05);
+            --gold: #ccb3e6;
+            --gold-lo: rgba(204, 179, 230, 0.11);
+            --teal: #9955ff;
+            --fm-bg: #060806;
+            --fm-rule: #6a0dad;
+            --fm-accent: #b266ff;
+            --fm-text: #f4eeff;
+            --fm-muted: rgba(244, 238, 255, 0.42);
+            --fm-border: rgba(244, 238, 255, 0.10);
+            --toggle-bg: rgba(244, 238, 255, 0.10);
+            --toggle-ico: rgba(244, 238, 255, 0.60);
+            --section-bg: rgba(244, 238, 255, 0.03);
+            --section-border: rgba(244, 238, 255, 0.12);
+            --section-num: rgba(178, 102, 255, 0.65);
+            --callout-bg: rgba(178, 102, 255, 0.06);
+            --callout-border: rgba(178, 102, 255, 0.25);
+            --eq-bg: rgba(244, 238, 255, 0.02);
+            --eq-border: rgba(244, 238, 255, 0.10);
+            --tag-ml-bg: rgba(153, 85, 255, 0.14);
+            --tag-ml-border: rgba(153, 85, 255, 0.32);
+            --tag-ml-color: #9955ff;
+        }
+        *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;font-size:16px}
+        body{background:var(--paper);color:var(--ink);font-family:'EB Garamond',Georgia,'Times New Roman',serif;overflow-x:hidden;line-height:1.6;transition:background .22s ease,color .22s ease;max-width:100vw}
+        ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--paper2)}::-webkit-scrollbar-thumb{background:var(--ink5)}
+        .frontmatter{background:var(--fm-bg);color:var(--fm-text);position:relative;overflow:hidden;max-width:100vw}
+        .frontmatter::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 6px,rgba(255,255,255,0.018) 6px,rgba(255,255,255,0.018) 7px);pointer-events:none}
+        .fm-rule-top{height:3px;background:var(--fm-rule)}
+        .fm-series-bar{border-bottom:1px solid var(--fm-border);padding:.55rem 3rem;display:flex;justify-content:space-between;align-items:center;font-family:'Source Sans 3',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.58);flex-wrap:wrap;gap:.4rem}
+        .fm-body{max-width:1080px;margin:0 auto;padding:3.5rem 3rem 3rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:end;position:relative}
+        .fm-eyebrow{font-family:'Source Sans 3',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--fm-accent);margin-bottom:1.1rem}
+        .fm-title{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:500;font-style:italic;line-height:1.04;letter-spacing:-.015em;color:var(--fm-text);margin-bottom:.85rem;overflow-wrap:break-word;word-break:break-word}
+        .fm-title em{font-style:normal;font-weight:400;color:var(--fm-muted)}
+        .fm-subtitle{font-family:'Source Sans 3',sans-serif;font-size:.9rem;font-weight:300;color:rgba(255,255,255,.62);line-height:1.75;max-width:58ch}
+        .fm-meta{display:flex;flex-direction:column;gap:.85rem;font-family:'Source Code Pro',monospace;font-size:.62rem;min-width:200px;border-left:1px solid var(--fm-border);padding-left:2rem}
+        .fm-meta-row{display:flex;flex-direction:column;gap:.15rem}
+        .fm-meta-label{color:rgba(255,255,255,.40);letter-spacing:.16em;text-transform:uppercase;font-size:.52rem}
+        .fm-meta-value{color:rgba(255,255,255,.90);overflow-wrap:break-word}
+        .fm-rule-bot{height:1px;background:var(--fm-border);margin:0 3rem}
+        .fm-folio-bar{padding:.55rem 3rem;display:flex;justify-content:space-between;font-family:'Source Code Pro',monospace;font-size:.58rem;color:rgba(255,255,255,.38);letter-spacing:.08em;flex-wrap:wrap;gap:.4rem}
+        .theme-toggle{position:absolute;top:0;right:0;padding:.9rem 3rem 0 0;display:flex;align-items:center;gap:.55rem;z-index:10}
+        .toggle-label{font-family:'Source Sans 3',sans-serif;font-size:.6rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--fm-muted);user-select:none}
+        .toggle-btn{width:40px;height:20px;background:var(--toggle-bg);border:1px solid rgba(255,255,255,.14);border-radius:10px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+        .toggle-btn::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.7);transition:transform .22s cubic-bezier(.4,0,.2,1)}
+        [data-theme="dark"] .toggle-btn::after{transform:translateX(20px)}[data-theme="dark"] .toggle-btn{background:rgba(255,255,255,.12)}
+        .page{max-width:1080px;margin:0 auto;padding:0 3rem 6rem;display:grid;grid-template-columns:1fr 268px;gap:5rem;align-items:start}
+        .content{padding-top:3.5rem;max-width:100%;min-width:0}
+        .breadcrumb{display:flex;align-items:center;gap:.55rem;margin-bottom:2rem;font-family:'Source Sans 3',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);flex-wrap:wrap;overflow-wrap:break-word}
+        .breadcrumb a{color:var(--crimson);text-decoration:none}.breadcrumb a:hover{color:var(--crimson2);text-decoration:underline}
+        .breadcrumb .sep{color:var(--ink5);font-weight:400}.breadcrumb .current{color:var(--ink2)}
+        .ml-tag{display:inline-block;font-family:'Source Sans 3',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:var(--tag-ml-bg);color:var(--tag-ml-color);border:1px solid var(--tag-ml-border);border-radius:3px;padding:.15rem .45rem;margin-left:.6rem;vertical-align:middle;flex-shrink:0}
+        .section-block{margin-bottom:3rem;scroll-margin-top:2rem;max-width:100%}
+        .section-heading{display:flex;align-items:baseline;gap:1rem;margin-bottom:1rem;padding-bottom:.55rem;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+        .section-num-large{font-family:'Source Code Pro',monospace;font-size:1.05rem;font-weight:500;color:var(--crimson);letter-spacing:.04em;flex-shrink:0;min-width:3.6rem}
+        .section-title-large{font-family:'EB Garamond',Georgia,serif;font-size:1.6rem;font-weight:500;color:var(--ink);line-height:1.2;overflow-wrap:break-word}
+        .section-body{font-family:'Source Sans 3',sans-serif;font-size:.88rem;font-weight:400;color:var(--ink2);line-height:1.85;overflow-wrap:break-word;word-break:break-word}
+        .section-body p{margin-bottom:1rem}.section-body strong{color:var(--ink);font-weight:600}
+        .section-body ol,.section-body ul{margin:.6rem 0 1.2rem 1.5rem}.section-body ol li,.section-body ul li{margin-bottom:.35rem;padding-left:.3rem}
+        .intro-note{background:var(--callout-bg);border-left:3px solid var(--callout-border);padding:1.1rem 1.4rem;margin-bottom:2.6rem;font-family:'Source Sans 3',sans-serif;font-size:.84rem;color:var(--ink2);line-height:1.8;border-radius:0 6px 6px 0;overflow-wrap:break-word}
+        .intro-note strong{color:var(--crimson);font-weight:600}
+        .equation-block{background:var(--eq-bg);border:1px solid var(--eq-border);border-radius:5px;padding:1.1rem 1.3rem;margin:1rem 0 1.2rem;font-family:'STIX Two Math','Latin Modern Math','Cambria Math',serif;font-size:.94rem;font-weight:400;font-style:italic;color:var(--ink);overflow-x:auto;overflow-y:hidden;line-height:1.95;letter-spacing:.02em;max-width:100%}
+        .equation-block.multiline{white-space:normal;line-height:2.2;overflow-x:visible;word-break:break-word}
+        .var-def-list{list-style:none;margin:.6rem 0 1.4rem;border-top:1px solid var(--rule3);max-width:100%}
+        .var-def-item{display:flex;gap:.75rem;padding:.38rem 0;border-bottom:1px solid var(--rule3);font-family:'Source Sans 3',sans-serif;font-size:.78rem;font-weight:400;color:var(--ink3);line-height:1.55;align-items:baseline;flex-wrap:wrap}
+        .var-symbol{font-family:'STIX Two Math','Latin Modern Math','Cambria Math',serif;font-weight:500;font-style:italic;color:var(--crimson);min-width:4.6rem;flex-shrink:0;font-size:.82rem;letter-spacing:.03em;text-align:right;overflow-wrap:break-word}
+        .var-desc{flex:1;color:var(--ink2);min-width:0;overflow-wrap:break-word}
+        .sidebar{padding-top:3.5rem;overflow-y:auto;max-height:100vh;position:sticky;top:0}
+        .sb-section{margin-bottom:2.6rem;max-width:100%}
+        .sb-heading{font-family:'Source Sans 3',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);margin-bottom:.9rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule);overflow-wrap:break-word}
+        .sb-body{font-family:'Source Sans 3',sans-serif;font-size:.82rem;color:var(--ink3);line-height:1.75;overflow-wrap:break-word}
+        .sb-body p{margin-bottom:.65rem}.sb-body strong{color:var(--ink2);font-weight:600}
+        .sb-nav-list{list-style:none;display:flex;flex-direction:column;max-width:100%}
+        .sb-nav-list li{border-bottom:1px solid var(--rule3)}
+        .sb-nav-list a{display:block;padding:.55rem 0;font-family:'Source Sans 3',sans-serif;font-size:.78rem;font-weight:400;color:var(--ink3);text-decoration:none;transition:color .16s;overflow-wrap:break-word;word-break:break-word;line-height:1.5}
+        .sb-nav-list a:hover{color:var(--crimson)}
+        .sb-nav-num{font-family:'Source Code Pro',monospace;font-size:.6rem;color:var(--crimson);margin-right:.4rem}
+        footer{background:var(--paper2);border-top:2px solid var(--ink);max-width:100vw}
+        .ft-inner{max-width:1080px;margin:0 auto;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+        .ft-title{font-family:'EB Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink2);overflow-wrap:break-word}
+        .ft-right{font-family:'Source Sans 3',sans-serif;font-size:.68rem;color:var(--ink4);letter-spacing:.04em;overflow-wrap:break-word}
+        #hamburger-btn{display:none;position:fixed;top:15px;left:15px;z-index:1001;background:#333;color:white;border:none;font-size:24px;padding:8px 12px;border-radius:5px;cursor:pointer}
+        #mobile-nav{display:none;position:fixed;top:0;left:0;height:100%;width:280px;max-width:80vw;background:#f5f5f5;box-shadow:2px 0 10px rgba(0,0,0,.3);z-index:1000;overflow-y:auto;padding:20px;transition:transform .3s ease;transform:translateX(-100%)}
+        [data-theme="dark"] #mobile-nav{background:#1a0a26;color:#f4eeff}[data-theme="dark"] #mobile-nav a{color:#b266ff}
+        #mobile-nav.open{transform:translateX(0)}
+        #mobile-nav h3{margin-top:0;color:#333;font-family:'Source Sans 3',sans-serif;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}[data-theme="dark"] #mobile-nav h3{color:#f4eeff}
+        #mobile-nav ul{list-style:none;padding:0;margin:0}#mobile-nav li{margin:5px 0}
+        #mobile-nav a{text-decoration:none;color:#6a0dad;font-size:15px;font-family:'Source Sans 3',sans-serif;display:block;padding:.35rem 0}#mobile-nav a:hover{text-decoration:underline}
+        #nav-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:999}
+        @media (max-width:768px){#hamburger-btn{display:block}#mobile-nav{display:block}}
+        @media(max-width:820px){.page{grid-template-columns:1fr;gap:0}.sidebar{border-top:2px solid var(--ink);padding-top:2.5rem;max-width:100%;max-height:none;position:static}.var-symbol{min-width:3.8rem;font-size:.74rem}.equation-block{font-size:.84rem;padding:.95rem 1rem}.sb-nav-list a{font-size:.82rem;padding:.6rem 0}}
+        @media(max-width:680px){.page{padding:0 1.5rem 4rem}.fm-body{grid-template-columns:1fr;gap:1.5rem;padding:2.5rem 1.5rem 2rem}.fm-meta{border-left:none;border-top:1px solid var(--fm-border);padding-left:0;padding-top:1.25rem;min-width:0}.fm-rule-bot{margin:0 1.5rem}.fm-folio-bar{padding:.55rem 1.5rem}.fm-series-bar{padding:.55rem 1.5rem;font-size:.58rem;letter-spacing:.14em}.ft-inner{padding:1.2rem 1.5rem;flex-direction:column;align-items:flex-start;gap:.4rem}.theme-toggle{padding:.7rem 1.5rem 0 0}.section-num-large{min-width:2.8rem;font-size:.9rem}.section-title-large{font-size:1.3rem}.equation-block{font-size:.78rem;padding:.8rem .75rem}.equation-block.multiline{white-space:normal}.var-symbol{min-width:3.2rem;font-size:.7rem;text-align:left}.var-def-item{gap:.4rem}.sb-nav-list a{font-size:.8rem;padding:.55rem 0;line-height:1.5}.sb-heading{font-size:.58rem;letter-spacing:.16em}.breadcrumb{font-size:.58rem;letter-spacing:.08em;gap:.35rem}}
+        @media(max-width:400px){.page{padding:0 1rem 3rem}.fm-body{padding:2rem 1rem 1.5rem}.fm-rule-bot{margin:0 1rem}.fm-folio-bar{padding:.45rem 1rem}.fm-series-bar{padding:.45rem 1rem;font-size:.52rem;letter-spacing:.1em}.theme-toggle{padding:.5rem 1rem 0 0}.ft-inner{padding:1rem 1rem}.section-num-large{min-width:2.2rem;font-size:.78rem}.section-title-large{font-size:1.15rem}.equation-block{font-size:.72rem;padding:.65rem .6rem;border-radius:3px}.var-symbol{min-width:2.6rem;font-size:.66rem;text-align:left}.var-desc{font-size:.72rem}.sb-nav-list a{font-size:.76rem;padding:.5rem 0}.breadcrumb{font-size:.54rem;letter-spacing:.04em}.intro-note{padding:.85rem 1rem;font-size:.76rem}}
+        @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+    </style>
+</head>
+<body>
+    <div class="frontmatter">
+        <div class="fm-rule-top"></div>
+        <div class="fm-series-bar"><span>Mathematics for Machine Learning</span><span>Reference Series</span></div>
+        <div class="fm-body">
+            <div class="fm-left">
+                <div class="fm-eyebrow">Reference</div>
+                <h1 class="fm-title">Introduction to<br><em>Machine Learning</em></h1>
+                <p class="fm-subtitle">A concise mathematical reference covering ten fundamental concepts of machine learning — from linear regression to neural networks, with a focus on the underlying mathematics and algorithms.</p>
+            </div>
+            <div class="fm-meta">
+                <div class="fm-meta-row"><span class="fm-meta-label">Status</span><span class="fm-meta-value">Open Reference</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Sections</span><span class="fm-meta-value">10 Sections</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Numbering</span><span class="fm-meta-value">A4.1 — A4.10</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Domain</span><span class="fm-meta-value">Machine Learning · Statistics · Optimization</span></div>
+                <div class="fm-meta-row"><span class="fm-meta-label">Prerequisites</span><span class="fm-meta-value">Linear Algebra · Calculus · Probability</span></div>
+            </div>
+            <div class="theme-toggle"><span class="toggle-label" id="toggle-label-text">Light</span><button class="toggle-btn" id="themeToggle" aria-label="Switch to dark mode"></button></div>
+        </div>
+        <div class="fm-rule-bot"></div>
+        <div class="fm-folio-bar"><span>Machine Learning</span><span>Definitions · Theorems · Algorithms</span></div>
+    </div>
+
+    <div class="page">
+        <main class="content">
+            <div class="breadcrumb"><a href="#">Mathematics</a><span class="sep">›</span><a href="#">Machine Learning</a><span class="sep">›</span><span class="current">Fundamentals</span></div>
+            <div class="intro-note"><strong>Machine learning</strong> is the study of algorithms that improve automatically through experience. This reference presents ten cornerstone concepts, each defined mathematically and accompanied by the relevant formulas and a brief discussion. All equations are rendered with <strong>MathJax</strong>.</div>
+
+            <!-- A4.1 Linear Regression -->
+            <div class="section-block" id="a4-1">
+                <div class="section-heading"><span class="section-num-large">A4.1</span><h2 class="section-title-large">Linear Regression <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>Given a dataset $\{(\mathbf{x}_i, y_i)\}_{i=1}^n$ with $\mathbf{x}_i \in \mathbb{R}^d$, linear regression assumes a linear relationship $y_i \approx \mathbf{x}_i^\top \boldsymbol{\beta} + \beta_0$. The ordinary least squares (OLS) estimator minimizes the residual sum of squares:</p>
+                    <div class="equation-block multiline">\[ \hat{\boldsymbol{\beta}} = \arg\min_{\boldsymbol{\beta}, \beta_0} \sum_{i=1}^n \bigl(y_i - \mathbf{x}_i^\top \boldsymbol{\beta} - \beta_0\bigr)^2. \]</div>
+                    <p>In matrix form with $\mathbf{X} \in \mathbb{R}^{n \times d}$ (including a column of ones for the intercept) and $\mathbf{y} \in \mathbb{R}^n$, the closed‑form solution is</p>
+                    <div class="equation-block">\[ \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}, \]</div>
+                    <p>provided $\mathbf{X}^\top \mathbf{X}$ is invertible. The prediction for a new point $\mathbf{x}$ is $\hat{y} = \mathbf{x}^\top \hat{\boldsymbol{\beta}}$.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\mathbf{X}$</span><span class="var-desc">design matrix (each row is a sample, each column a feature).</span></li>
+                        <li class="var-def-item"><span class="var-symbol">$(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$</span><span class="var-desc">Moore–Penrose pseudoinverse of $\mathbf{X}$.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A4.2 Logistic Regression -->
+            <div class="section-block" id="a4-2">
+                <div class="section-heading"><span class="section-num-large">A4.2</span><h2 class="section-title-large">Logistic Regression <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>For binary classification ($y_i \in \{0,1\}$), logistic regression models the probability $P(Y=1 \mid \mathbf{x})$ using the <strong>sigmoid</strong> function:</p>
+                    <div class="equation-block">\[ \sigma(z) = \frac{1}{1+e^{-z}}, \qquad z = \mathbf{x}^\top \boldsymbol{\beta} + \beta_0. \]</div>
+                    <p>The parameters are estimated by maximizing the likelihood (or minimizing the negative log‑likelihood), which leads to the <strong>cross‑entropy</strong> loss:</p>
+                    <div class="equation-block multiline">\[ \mathcal{L}(\boldsymbol{\beta}) = -\sum_{i=1}^n \Bigl[ y_i \log \sigma(\mathbf{x}_i^\top \boldsymbol{\beta}) + (1-y_i) \log\bigl(1-\sigma(\mathbf{x}_i^\top \boldsymbol{\beta})\bigr) \Bigr]. \]</div>
+                    <p>Gradient descent or Newton’s method is used because no closed‑form solution exists.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\sigma(z)$</span><span class="var-desc">logistic sigmoid; maps $\mathbb{R} \to (0,1)$.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A4.3 Regularization: Ridge and Lasso -->
+            <div class="section-block" id="a4-3">
+                <div class="section-heading"><span class="section-num-large">A4.3</span><h2 class="section-title-large">Regularization: Ridge and Lasso <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>To prevent overfitting, a penalty is added to the loss. <strong>Ridge regression</strong> uses $\ell_2$ regularization:</p>
+                    <div class="equation-block">\[ \hat{\boldsymbol{\beta}}_{\text{ridge}} = \arg\min_{\boldsymbol{\beta}} \Bigl\{ \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|_2^2 + \lambda \|\boldsymbol{\beta}\|_2^2 \Bigr\}, \]</div>
+                    <p>with closed‑form solution $(\mathbf{X}^\top \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^\top \mathbf{y}$.</p>
+                    <p><strong>Lasso</strong> uses $\ell_1$ regularization, which promotes sparsity:</p>
+                    <div class="equation-block">\[ \hat{\boldsymbol{\beta}}_{\text{lasso}} = \arg\min_{\boldsymbol{\beta}} \Bigl\{ \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|_2^2 + \lambda \|\boldsymbol{\beta}\|_1 \Bigr\}. \]</div>
+                    <p>Lasso does not have a closed form and is typically solved via coordinate descent or proximal gradient methods.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\lambda > 0$</span><span class="var-desc">regularization strength; larger $\lambda$ shrinks coefficients more.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A4.4 Support Vector Machines -->
+            <div class="section-block" id="a4-4">
+                <div class="section-heading"><span class="section-num-large">A4.4</span><h2 class="section-title-large">Support Vector Machines <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>For binary classification with labels $y_i \in \{-1, +1\}$, the linear SVM finds the maximum‑margin separating hyperplane by solving</p>
+                    <div class="equation-block multiline">\[ \min_{\mathbf{w}, b} \frac12 \|\mathbf{w}\|^2 \quad \text{s.t. } y_i(\mathbf{w}^\top \mathbf{x}_i + b) \ge 1,\; i=1,\dots,n. \]</div>
+                    <p>For non‑separable data, slack variables $\xi_i$ are introduced (soft margin):</p>
+                    <div class="equation-block multiline">\[ \min_{\mathbf{w}, b, \boldsymbol{\xi}} \frac12 \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i \quad \text{s.t. } y_i(\mathbf{w}^\top \mathbf{x}_i + b) \ge 1 - \xi_i,\; \xi_i \ge 0. \]</div>
+                    <p>The dual formulation allows the use of kernel functions $K(\mathbf{x}_i, \mathbf{x}_j)$ for non‑linear classification.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$C$</span><span class="var-desc">regularization parameter trading off margin width and misclassification.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A4.5 Decision Trees -->
+            <div class="section-block" id="a4-5">
+                <div class="section-heading"><span class="section-num-large">A4.5</span><h2 class="section-title-large">Decision Trees <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>A decision tree recursively partitions the feature space into axis‑aligned rectangles. At each node, a split $(j, s)$ (feature $j$, threshold $s$) is chosen to maximize the reduction in impurity:</p>
+                    <div class="equation-block multiline">\[ \Delta \mathcal{I} = \mathcal{I}(\text{parent}) - \frac{N_{\text{left}}}{N} \mathcal{I}(\text{left}) - \frac{N_{\text{right}}}{N} \mathcal{I}(\text{right}). \]</div>
+                    <p>Common impurity measures include Gini impurity $\mathcal{I}(t) = \sum_{k=1}^K p_k(1-p_k)$ and entropy $\mathcal{I}(t) = -\sum_{k=1}^K p_k \log p_k$.</p>
+                    <p>Single trees tend to overfit; <strong>random forests</strong> and <strong>gradient boosting</strong> combine many trees to improve generalization.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$p_k$</span><span class="var-desc">proportion of samples in node $t$ belonging to class $k$.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A4.6 Ensemble Methods -->
+            <div class="section-block" id="a4-6">
+                <div class="section-heading"><span class="section-num-large">A4.6</span><h2 class="section-title-large">Ensemble Methods <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>Ensembles combine multiple weak learners to produce a strong learner. Two major families:</p>
+                    <ul>
+                        <li><strong>Bagging (Bootstrap Aggregating):</strong> trains each model on a bootstrap sample of the data and averages predictions (e.g., Random Forest). Reduces variance.</li>
+                        <li><strong>Boosting:</strong> sequentially trains models, each focusing on the mistakes of the previous one. <strong>AdaBoost</strong> weights misclassified samples more heavily; <strong>Gradient Boosting</strong> fits each new model to the negative gradient of the loss.</li>
+                    </ul>
+                    <p>The final prediction for a regression ensemble is $\hat{f}(\mathbf{x}) = \frac{1}{M}\sum_{m=1}^M f_m(\mathbf{x})$ (bagging) or a weighted sum $\sum_{m=1}^M \alpha_m f_m(\mathbf{x})$ (boosting).</p>
+                </div>
+            </div>
+
+            <!-- A4.7 Neural Networks -->
+            <div class="section-block" id="a4-7">
+                <div class="section-heading"><span class="section-num-large">A4.7</span><h2 class="section-title-large">Neural Networks (Feedforward) <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>A feedforward neural network is a composition of affine transformations and non‑linear activation functions. A layer $\ell$ computes:</p>
+                    <div class="equation-block">\[ \mathbf{z}^{(\ell)} = \mathbf{W}^{(\ell)} \mathbf{a}^{(\ell-1)} + \mathbf{b}^{(\ell)}, \qquad \mathbf{a}^{(\ell)} = \sigma(\mathbf{z}^{(\ell)}), \]</div>
+                    <p>where $\mathbf{a}^{(0)} = \mathbf{x}$ is the input, and $\sigma$ is an activation such as ReLU $\sigma(z)=\max(0,z)$, sigmoid, or tanh. The final layer typically uses a linear output for regression or softmax for classification:</p>
+                    <div class="equation-block">\[ \text{softmax}(\mathbf{z})_k = \frac{e^{z_k}}{\sum_{j} e^{z_j}}. \]</div>
+                    <p>The network is trained by minimizing a loss function using gradient‑based optimization (e.g., SGD) with gradients computed via backpropagation.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\mathbf{W}^{(\ell)}, \mathbf{b}^{(\ell)}$</span><span class="var-desc">weight matrix and bias vector of layer $\ell$.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A4.8 Backpropagation -->
+            <div class="section-block" id="a4-8">
+                <div class="section-heading"><span class="section-num-large">A4.8</span><h2 class="section-title-large">Backpropagation <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>Backpropagation efficiently computes the gradient of the loss $\mathcal{L}$ with respect to all parameters using the chain rule. Define the error signal $\boldsymbol{\delta}^{(\ell)} = \frac{\partial \mathcal{L}}{\partial \mathbf{z}^{(\ell)}}$. For layer $\ell$ (from output backwards):</p>
+                    <div class="equation-block multiline">\[ \boldsymbol{\delta}^{(\ell)} = \bigl(\mathbf{W}^{(\ell+1)}\bigr)^\top \boldsymbol{\delta}^{(\ell+1)} \odot \sigma'(\mathbf{z}^{(\ell)}), \]</div>
+                    <p>and the parameter gradients are</p>
+                    <div class="equation-block">\[ \frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(\ell)}} = \boldsymbol{\delta}^{(\ell)} (\mathbf{a}^{(\ell-1)})^\top, \qquad \frac{\partial \mathcal{L}}{\partial \mathbf{b}^{(\ell)}} = \boldsymbol{\delta}^{(\ell)}. \]</div>
+                    <p>One forward pass stores activations; one backward pass yields all gradients — crucial for training deep networks.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\odot$</span><span class="var-desc">element‑wise (Hadamard) product.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A4.9 Principal Component Analysis -->
+            <div class="section-block" id="a4-9">
+                <div class="section-heading"><span class="section-num-large">A4.9</span><h2 class="section-title-large">Principal Component Analysis (PCA) <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>PCA reduces dimensionality by projecting data onto the directions of maximum variance. Given centered data $\mathbf{X} \in \mathbb{R}^{n \times d}$, compute the eigendecomposition of the covariance matrix:</p>
+                    <div class="equation-block">\[ \mathbf{C} = \frac{1}{n-1} \mathbf{X}^\top \mathbf{X} = \mathbf{V} \boldsymbol{\Lambda} \mathbf{V}^\top, \]</div>
+                    <p>where $\boldsymbol{\Lambda} = \operatorname{diag}(\lambda_1,\dots,\lambda_d)$ with $\lambda_1 \ge \cdots \ge \lambda_d$. The first $k$ principal components are the columns of $\mathbf{V}_k$ (the top $k$ eigenvectors). The transformed data is $\mathbf{Z} = \mathbf{X} \mathbf{V}_k$.</p>
+                    <p>PCA can also be performed via the SVD of $\mathbf{X}$.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\lambda_i$</span><span class="var-desc">eigenvalue; variance explained by the $i$‑th principal component.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- A4.10 K‑Means Clustering -->
+            <div class="section-block" id="a4-10">
+                <div class="section-heading"><span class="section-num-large">A4.10</span><h2 class="section-title-large">K‑Means Clustering <span class="ml-tag">ML</span></h2></div>
+                <div class="section-body">
+                    <p>K‑means partitions $n$ observations into $k$ clusters by minimizing the within‑cluster sum of squares:</p>
+                    <div class="equation-block">\[ \min_{\{C_j\}_{j=1}^k} \sum_{j=1}^k \sum_{\mathbf{x} \in C_j} \|\mathbf{x} - \boldsymbol{\mu}_j\|^2, \quad \boldsymbol{\mu}_j = \frac{1}{|C_j|} \sum_{\mathbf{x} \in C_j} \mathbf{x}. \]</div>
+                    <p>The standard algorithm (Lloyd’s algorithm) alternates between:</p>
+                    <ol>
+                        <li><strong>Assignment step:</strong> assign each point to the nearest centroid.</li>
+                        <li><strong>Update step:</strong> recompute centroids as the means of the assigned points.</li>
+                    </ol>
+                    <p>Convergence is guaranteed to a local minimum; multiple restarts help find a good solution.</p>
+                    <ul class="var-def-list">
+                        <li class="var-def-item"><span class="var-symbol">$\boldsymbol{\mu}_j$</span><span class="var-desc">centroid (prototype) of cluster $j$.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+        </main>
+
+        <aside class="sidebar">
+            <div class="sb-section">
+                <div class="sb-heading">About This Reference</div>
+                <div class="sb-body">
+                    <p><strong>Introduction to Machine Learning</strong> presents ten essential concepts in a mathematically concise format. Each section provides the core definition, key formulas, and a short explanation.</p>
+                    <p>Numbering follows the appendix convention (A4.1–A4.10). Intended as a quick reference for students and practitioners.</p>
+                </div>
+            </div>
+            <div class="sb-section">
+                <div class="sb-heading">Quick Navigation</div>
+                <ul class="sb-nav-list">
+                    <li><a href="#a4-1"><span class="sb-nav-num">A4.1</span>Linear Regression</a></li>
+                    <li><a href="#a4-2"><span class="sb-nav-num">A4.2</span>Logistic Regression</a></li>
+                    <li><a href="#a4-3"><span class="sb-nav-num">A4.3</span>Regularization (Ridge / Lasso)</a></li>
+                    <li><a href="#a4-4"><span class="sb-nav-num">A4.4</span>Support Vector Machines</a></li>
+                    <li><a href="#a4-5"><span class="sb-nav-num">A4.5</span>Decision Trees</a></li>
+                    <li><a href="#a4-6"><span class="sb-nav-num">A4.6</span>Ensemble Methods</a></li>
+                    <li><a href="#a4-7"><span class="sb-nav-num">A4.7</span>Neural Networks</a></li>
+                    <li><a href="#a4-8"><span class="sb-nav-num">A4.8</span>Backpropagation</a></li>
+                    <li><a href="#a4-9"><span class="sb-nav-num">A4.9</span>Principal Component Analysis</a></li>
+                    <li><a href="#a4-10"><span class="sb-nav-num">A4.10</span>K‑Means Clustering</a></li>
+                </ul>
+            </div>
+            <div class="sb-section">
+                <div class="sb-heading">Notation</div>
+                <div class="sb-body">
+                    <p><strong>$\mathbf{X}$</strong> — design matrix</p>
+                    <p><strong>$\boldsymbol{\beta}$</strong> — coefficient vector</p>
+                    <p><strong>$\sigma(\cdot)$</strong> — sigmoid / activation</p>
+                    <p><strong>$\lambda$</strong> — regularization parameter</p>
+                    <p><strong>$\mathbf{W}^{(\ell)}$</strong> — weight matrix</p>
+                    <p><strong>$\boldsymbol{\delta}^{(\ell)}$</strong> — error signal</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <footer><div class="ft-inner"><span class="ft-title">Machine Learning Reference · Foundations</span><span class="ft-right">Mathematics Reference Series · A4.1–A4.10 · Open Reference</span></div></footer>
+
+    <button id="hamburger-btn" aria-label="Open navigation menu">☰</button>
+    <div id="nav-overlay"></div>
+    <nav id="mobile-nav">
+        <h3>Navigation</h3>
+        <ul>
+            <li><a href="#a4-1">A4.1 — Linear Regression</a></li>
+            <li><a href="#a4-2">A4.2 — Logistic Regression</a></li>
+            <li><a href="#a4-3">A4.3 — Regularization</a></li>
+            <li><a href="#a4-4">A4.4 — Support Vector Machines</a></li>
+            <li><a href="#a4-5">A4.5 — Decision Trees</a></li>
+            <li><a href="#a4-6">A4.6 — Ensemble Methods</a></li>
+            <li><a href="#a4-7">A4.7 — Neural Networks</a></li>
+            <li><a href="#a4-8">A4.8 — Backpropagation</a></li>
+            <li><a href="#a4-9">A4.9 — PCA</a></li>
+            <li><a href="#a4-10">A4.10 — K‑Means Clustering</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        const lbl = document.getElementById('toggle-label-text');
+        const saved = localStorage.getItem('ml-theme');
+        if (saved) { html.setAttribute('data-theme', saved); syncUI(); }
+        btn.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('ml-theme', next);
+            syncUI();
+        });
+        function syncUI() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            lbl.textContent = isDark ? 'Dark' : 'Light';
+            btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        }
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileNav = document.getElementById('mobile-nav');
+        const navOverlay = document.getElementById('nav-overlay');
+        function openNav(){ mobileNav.classList.add('open'); navOverlay.style.display='block'; hamburgerBtn.style.display='none'; }
+        function closeNav(){ mobileNav.classList.remove('open'); navOverlay.style.display='none'; hamburgerBtn.style.display='block'; }
+        hamburgerBtn.addEventListener('click', openNav);
+        navOverlay.addEventListener('click', closeNav);
+        mobileNav.querySelectorAll('a[href]').forEach(link => { link.addEventListener('click', closeNav); });
+    </script>
+</body>
+</html>

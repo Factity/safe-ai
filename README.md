@@ -123,8 +123,8 @@ The final chapter looks outward, considering how AI transforms international rel
 ## Appendix – AI Fundamentals
 
 - **A1:** Linear Algebra  
-- **A2:** Probability and Statistics  
-- **A3:** 
+- **A2:** Calculus  
+- **A3:** Probability and Statistics 
 - **A4:** Machine Learning  
 - **A5:** Deep Learning  
 - **A6:** Programming  
