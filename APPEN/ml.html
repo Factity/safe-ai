@@ -4300,16 +4300,276 @@ Return x̄_k = (1/k) ∑_{t=1}^k x_t  (or last iterate with averaging)
             <div class="sb-section">
                 <div class="sb-heading">Quick Navigation</div>
                 <ul class="sb-nav-list">
-                    <li><a href="#a4-1"><span class="sb-nav-num">A4.1</span>Linear Regression</a></li>
-                    <li><a href="#a4-2"><span class="sb-nav-num">A4.2</span>Logistic Regression</a></li>
-                    <li><a href="#a4-3"><span class="sb-nav-num">A4.3</span>Regularization (Ridge / Lasso)</a></li>
-                    <li><a href="#a4-4"><span class="sb-nav-num">A4.4</span>Support Vector Machines</a></li>
-                    <li><a href="#a4-5"><span class="sb-nav-num">A4.5</span>Decision Trees</a></li>
-                    <li><a href="#a4-6"><span class="sb-nav-num">A4.6</span>Ensemble Methods</a></li>
-                    <li><a href="#a4-7"><span class="sb-nav-num">A4.7</span>Neural Networks</a></li>
-                    <li><a href="#a4-8"><span class="sb-nav-num">A4.8</span>Backpropagation</a></li>
-                    <li><a href="#a4-9"><span class="sb-nav-num">A4.9</span>Principal Component Analysis</a></li>
-                    <li><a href="#a4-10"><span class="sb-nav-num">A4.10</span>K‑Means Clustering</a></li>
+<li><a href="#a4-1"><span class="sb-nav-num">A13.1</span> The Binary Classification ProblemSetup</a></li>
+<li><a href="#a4-2"><span class="sb-nav-num">A13.2</span> The Supervised Learning ProtocolNEW</a></li>
+<li><a href="#a4-3"><span class="sb-nav-num">A13.3</span> Input Space, Label Space, and the Data Generating DistributionNEW</a></li>
+<li><a href="#a4-4"><span class="sb-nav-num">A13.4</span> The Regression Function $\eta$</a></li>
+<li><a href="#a4-5"><span class="sb-nav-num">A13.5</span> Classification Error (True Risk)</a></li>
+<li><a href="#a4-6"><span class="sb-nav-num">A13.6</span> Conditional Risk and Pointwise ErrorNEW</a></li>
+<li><a href="#a4-7"><span class="sb-nav-num">A13.7</span> The Bayes Classifier \(h^*\)Optimal Rule</a></li>
+<li><a href="#a4-8"><span class="sb-nav-num">A13.8</span> Bayes Risk \(R^*\)</a></li>
+<li><a href="#a4-9"><span class="sb-nav-num">A13.9</span> Excess Risk \(E(h)\)</a></li>
+<li><a href="#a4-10"><span class="sb-nav-num">A13.10</span> Theorem: Excess Risk Identity and Optimality of \(h^*\)</a></li>
+<li><a href="#a4-11"><span class="sb-nav-num">A13.11</span> Interpretation of the Excess Risk Identity</a></li>
+<li><a href="#a4-12"><span class="sb-nav-num">A13.12</span> The Comparison VariableAnalytic Tool</a></li>
+<li><a href="#a4-13"><span class="sb-nav-num">A13.13</span> Empirical Risk \(\widehat{R}_n(h)\)Training Error</a></li>
+<li><a href="#a4-14"><span class="sb-nav-num">A13.14</span> Claim: Unbiasedness of Empirical Risk</a></li>
+<li><a href="#a4-15"><span class="sb-nav-num">A13.15</span> Empirical Risk Minimizer (ERM) \(\widehat{h}_{\text{erm}}\)</a></li>
+<li><a href="#a4-16"><span class="sb-nav-num">A13.16</span> Overfitting: The Memorization Trap</a></li>
+<li><a href="#a4-17"><span class="sb-nav-num">A13.17</span> Learning ParadigmsComplete Overview</a></li>
+<li><a href="#a4-17"><span class="sb-nav-num">A13.17</span> Inductive Bias and the Hypothesis ClassCore Principle</a></li>
+<li><a href="#a4-18"><span class="sb-nav-num">A13.18</span> Oracle and Approximation ErrorBenchmark</a></li>
+<li><a href="#a4-19"><span class="sb-nav-num">A13.19</span> Oracle Inequality (General Form)Fundamental Decomposition</a></li>
+<li><a href="#a4-20"><span class="sb-nav-num">A13.20</span> Realizability Assumption</a></li>
+<li><a href="#a4-21"><span class="sb-nav-num">A13.21</span> No‑Free‑Lunch Theorem (I): Worst‑Case ErrorImpossibility</a></li>
+<li><a href="#a4-22"><span class="sb-nav-num">A13.22</span> No‑Free‑Lunch Theorem (II): Arbitrarily Slow RatesNo Uniform Rates</a></li>
+<li><a href="#a4-23"><span class="sb-nav-num">A13.23</span> PAC Learning Framework — Realizable Case</a></li>
+<li><a href="#a4-24"><span class="sb-nav-num">A13.24</span> PAC Learning Framework — Agnostic Case</a></li>
+<li><a href="#a4-25"><span class="sb-nav-num">A13.25</span> Bias–Complexity TradeoffThe Core Dilemma</a></li>
+<li><a href="#a4-26"><span class="sb-nav-num">A13.26</span> The Need for Assumptions: Generative vs. DiscriminativeNEW</a></li>
+<li><a href="#a4-27"><span class="sb-nav-num">A13.27</span> Why Concentration Inequalities?Motivation</a></li>
+<li><a href="#a4-28"><span class="sb-nav-num">A13.28</span> The Chernoff Bounding TechniqueExponential Moment Method</a></li>
+<li><a href="#a4-29"><span class="sb-nav-num">A13.29</span> Hoeffding's LemmaMGF of Bounded Variables</a></li>
+<li><a href="#a4-30"><span class="sb-nav-num">A13.30</span> Theorem: Hoeffding's Inequality (Sample Mean)</a></li>
+<li><a href="#a4-31"><span class="sb-nav-num">A13.31</span> Hoeffding's Theorem (General Form)Full Statement</a></li>
+<li><a href="#a4-32"><span class="sb-nav-num">A13.32</span> Corollary: Confidence Interval for a Single Classifier</a></li>
+<li><a href="#a4-33"><span class="sb-nav-num">A13.33</span> Corollary: Uniform Bound for Finite \(\mathcal{H}\) via Union Bound</a></li>
+<li><a href="#a4-34"><span class="sb-nav-num">A13.34</span> The Log‑Sum‑Exp Trick and Expectation Bound</a></li>
+<li><a href="#a4-35"><span class="sb-nav-num">A13.35</span> McDiarmid's Inequality (Bounded Differences)</a></li>
+<li><a href="#a4-36"><span class="sb-nav-num">A13.36</span> Martingales and Martingale DifferencesDependence</a></li>
+<li><a href="#a4-37"><span class="sb-nav-num">A13.37</span> Theorem: Azuma–Hoeffding Inequality</a></li>
+<li><a href="#a4-38"><span class="sb-nav-num">A13.38</span> Corollary: Bounded Differences for Uniform Deviations</a></li>
+<li><a href="#a4-39"><span class="sb-nav-num">A13.39</span> Note: Slow Rate is Unavoidable from Bounded Differences</a></li>
+<li><a href="#a4-40"><span class="sb-nav-num">A13.40</span> Variance of the Zero‑One Loss</a></li>
+<li><a href="#a4-41"><span class="sb-nav-num">A13.41</span> Variance Bound for the Comparison Variable</a></li>
+<li><a href="#a4-42"><span class="sb-nav-num">A13.42</span> Markov's InequalityBasic Tool</a></li>
+<li><a href="#a4-43"><span class="sb-nav-num">A13.43</span> Jensen's Inequality</a></li>
+<li><a href="#a4-44"><span class="sb-nav-num">A13.44</span> Theorem: Bernstein's InequalityVariance‑Aware</a></li>
+<li><a href="#a4-45"><span class="sb-nav-num">A13.45</span> Bernstein vs. Hoeffding: When to Use Which</a></li>
+<li><a href="#a4-46"><span class="sb-nav-num">A13.46</span> Corollary: Two‑Level Bernstein Bound (Self‑Bounding)</a></li>
+<li><a href="#a4-47"><span class="sb-nav-num">A13.47</span> Tower Property (Law of Total Expectation)</a></li>
+<li><a href="#a4-48"><span class="sb-nav-num">A13.48</span> The Self‑Bounding Inequality Technique</a></li>
+<li><a href="#a4-49"><span class="sb-nav-num">A13.49</span> The Sub‑Gaussian PropertyTail Behaviour</a></li>
+<li><a href="#a4-50"><span class="sb-nav-num">A13.50</span> Chebyshev's Inequality (Comparison)</a></li>
+<li><a href="#a4-51"><span class="sb-nav-num">A13.51</span> Cramér's Theorem and Large DeviationsNEW</a></li>
+<li><a href="#a4-53"><span class="sb-nav-num">A13.53</span> Setup: Finite Dictionary \(\mathcal{H}=\{h_1,\dots,h_M\}\)</a></li>
+<li><a href="#a4-54"><span class="sb-nav-num">A13.54</span> Theorem: Oracle Inequality for Finite \(\mathcal{H}\) (High Probability)</a></li>
+<li><a href="#a4-55"><span class="sb-nav-num">A13.55</span> Theorem: Oracle Inequality for Finite \(\mathcal{H}\) (In Expectation)</a></li>
+<li><a href="#a4-56"><span class="sb-nav-num">A13.56</span> Realizable PAC Bound for Finite \(\mathcal{H}\)</a></li>
+<li><a href="#a4-57"><span class="sb-nav-num">A13.57</span> Agnostic PAC Bound for Finite \(\mathcal{H}\)</a></li>
+<li><a href="#a4-58"><span class="sb-nav-num">A13.58</span> Why \(\log M\) and Not \(M\)?</a></li>
+<li><a href="#a4-59"><span class="sb-nav-num">A13.59</span> The Role of Uniform Convergence</a></li>
+<li><a href="#a4-60"><span class="sb-nav-num">A13.60</span> Example: Axis‑Aligned Rectangles (Discretized)Concrete Application</a></li>
+<li><a href="#a4-61"><span class="sb-nav-num">A13.61</span> Approximate ERMComputational Relaxation</a></li>
+<li><a href="#a4-62"><span class="sb-nav-num">A13.62</span> Plug‑In Estimator and Semi‑Parametric Approach</a></li>
+<li><a href="#a4-63"><span class="sb-nav-num">A13.63</span> Generative vs. Discriminative Models (Revisited)Connection to Plug‑In</a></li>
+<li><a href="#a4-64"><span class="sb-nav-num">A13.64</span> The Slow Rate \(O(1/\sqrt{n})\)Agnostic PAC Baseline</a></li>
+<li><a href="#a4-65"><span class="sb-nav-num">A13.65</span> Comparison Variable ReductionExcess Risk via \(Z_h\)</a></li>
+<li><a href="#a4-66"><span class="sb-nav-num">A13.66</span> The Empirical Process \(\sup_{h\in\mathcal{H}} |\widehat{R}_n(h) - R(h)|\)</a></li>
+<li><a href="#a4-67"><span class="sb-nav-num">A13.67</span> The General Loss Function Setting</a></li>
+<li><a href="#a4-68"><span class="sb-nav-num">A13.68</span> Uniform Deviation for General Loss: Bounded Differences Reduction</a></li>
+<li><a href="#a4-69"><span class="sb-nav-num">A13.69</span> The Empirical Measure Perspective</a></li>
+<li><a href="#a4-70"><span class="sb-nav-num">A13.70</span> Claim: ERM Is Consistent for Finite \(\mathcal{H}\)</a></li>
+<li><a href="#a4-71"><span class="sb-nav-num">A13.71</span> Finite‑Sample vs. Asymptotic GuaranteesPhilosophy</a></li>
+<li><a href="#a4-72"><span class="sb-nav-num">A13.72</span> Improper Learning and Larger Classes</a></li>
+<li><a href="#a4-73"><span class="sb-nav-num">A13.73</span> Covering Numbers for Finite Hypothesis SpacesNEW</a></li>
+<li><a href="#a4-74"><span class="sb-nav-num">A13.74</span> Metric Entropy and ComplexityNEW</a></li>
+<li><a href="#a4-75"><span class="sb-nav-num">A13.75</span> ERM CorollarySummary Statement</a></li>
+<li><a href="#a4-76"><span class="sb-nav-num">A13.76</span> The Union Bound: A Simple but Powerful ToolNEW standalone</a></li>
+<li><a href="#a4-77"><span class="sb-nav-num">A13.77</span> The Role of Noise in Learning Rates</a></li>
+<li><a href="#a4-78"><span class="sb-nav-num">A13.78</span> The Noiseless Case: \(\eta(X)\in\{0,1\}\)</a></li>
+<li><a href="#a4-79"><span class="sb-nav-num">A13.79</span> Theorem: Fast Rate \(O(\log M / n)\) in the Noiseless Case</a></li>
+<li><a href="#a4-80"><span class="sb-nav-num">A13.80</span> Interpretation: \(1/n\) vs. \(1/\sqrt{n}\) Rates</a></li>
+<li><a href="#a4-81"><span class="sb-nav-num">A13.81</span> Why Realizability is Necessary for Fast Rates (Without Noise Conditions)</a></li>
+<li><a href="#a4-82"><span class="sb-nav-num">A13.82</span> Definition: Massart's Noise ConditionHard Margin</a></li>
+<li><a href="#a4-83"><span class="sb-nav-num">A13.83</span> Key Relation: Excess Risk \(\ge 2\gamma \cdot\) Disagreement</a></li>
+<li><a href="#a4-84"><span class="sb-nav-num">A13.84</span> Theorem: Fast Rate under Massart's Condition</a></li>
+<li><a href="#a4-85"><span class="sb-nav-num">A13.85</span> Definition: Tsybakov (Mammen–Tsybakov) Noise ConditionSoft Margin</a></li>
+<li><a href="#a4-86"><span class="sb-nav-num">A13.86</span> Lemma: Disagreement Bounded by \(E(h)^{\frac{\alpha}{\alpha+1}}\) under Tsybakov</a></li>
+<li><a href="#a4-87"><span class="sb-nav-num">A13.87</span> Theorem: Interpolated Rate under Tsybakov Noise</a></li>
+<li><a href="#a4-88"><span class="sb-nav-num">A13.88</span> Interpolation of Rates: Summary</a></li>
+<li><a href="#a4-89"><span class="sb-nav-num">A13.89</span> Example: Tsybakov Noise with Satellite Imagery</a></li>
+<li><a href="#a4-90"><span class="sb-nav-num">A13.90</span> Adaptivity of ERM to Noise Level</a></li>
+<li><a href="#a4-91"><span class="sb-nav-num">A13.91</span> Connection: Fast Rates and Talagrand's InequalityAdvanced Concentration</a></li>
+<li><a href="#a4-92"><span class="sb-nav-num">A13.92</span> Margin Conditions in ClassificationNEW</a></li>
+<li><a href="#a4-93"><span class="sb-nav-num">A13.93</span> Bernstein's Inequality with Variance for Fast RatesNEW</a></li>
+<li><a href="#a4-94"><span class="sb-nav-num">A13.94</span> Self‑Bounding for Non‑Negative LossesNEW</a></li>
+<li><a href="#a4-95"><span class="sb-nav-num">A13.95</span> The Disagreement LemmaExplicitly Reinstated</a></li>
+<li><a href="#a4-96"><span class="sb-nav-num">A13.96</span> Fast Rate under Massart (Explicit Corollary)</a></li>
+<li><a href="#a4-97"><span class="sb-nav-num">A13.97</span> Motivation: Infinite Hypothesis ClassesWhy Finite Is Not Enough</a></li>
+<li><a href="#a4-98"><span class="sb-nav-num">A13.98</span> Restriction of \(\mathcal{H}\) to a Finite SetFrom Infinite to Finite</a></li>
+<li><a href="#a4-99"><span class="sb-nav-num">A13.99</span> Shattering</a></li>
+<li><a href="#a4-100"><span class="sb-nav-num">A13.100</span> VC Dimension: Definition</a></li>
+<li><a href="#a4-101"><span class="sb-nav-num">A13.101</span> Examples of VC Dimension: Axis‑Aligned Rectangles</a></li>
+<li><a href="#a4-102"><span class="sb-nav-num">A13.102</span> Examples of VC Dimension: Intervals on the Real LineNEW</a></li>
+<li><a href="#a4-103"><span class="sb-nav-num">A13.103</span> VC Dimension of Halfspaces: Proof that \(\operatorname{VCdim}=d+1\)</a></li>
+<li><a href="#a4-104"><span class="sb-nav-num">A13.104</span> VC Dimension of Rectangles in \(\mathbb{R}^d\): \(\operatorname{VCdim}=2d\)</a></li>
+<li><a href="#a4-105"><span class="sb-nav-num">A13.105</span> Convex Sets in \(\mathbb{R}^2\): Infinite VC Dimension</a></li>
+<li><a href="#a4-106"><span class="sb-nav-num">A13.106</span> Sine Functions: Parametric Class with Infinite VC Dimension</a></li>
+<li><a href="#a4-107"><span class="sb-nav-num">A13.107</span> The Growth Function (Shatter Coefficient) \(\Pi_{\mathcal{H}}(n)\)</a></li>
+<li><a href="#a4-108"><span class="sb-nav-num">A13.108</span> Lemma: Sauer–ShelahGrowth Function Bound</a></li>
+<li><a href="#a4-109"><span class="sb-nav-num">A13.109</span> VC Classes and the Empirical Measure</a></li>
+<li><a href="#a4-110"><span class="sb-nav-num">A13.110</span> Lemma: VC Dimension of \(\mathcal{A}\) Equals That of \(\mathcal{H}\)</a></li>
+<li><a href="#a4-111"><span class="sb-nav-num">A13.111</span> SymmetrizationGhost Sample Technique</a></li>
+<li><a href="#a4-112"><span class="sb-nav-num">A13.112</span> Rademacher VariablesDefinition and Role</a></li>
+<li><a href="#a4-113"><span class="sb-nav-num">A13.113</span> Theorem: VC Inequality (Expected Version)</a></li>
+<li><a href="#a4-114"><span class="sb-nav-num">A13.114</span> Theorem: VC Inequality (High Probability)</a></li>
+<li><a href="#a4-115"><span class="sb-nav-num">A13.115</span> Corollary: Agnostic ERM Oracle Inequality for VC Classes</a></li>
+<li><a href="#a4-116"><span class="sb-nav-num">A13.116</span> Structural Risk Minimization (SRM)</a></li>
+<li><a href="#a4-117"><span class="sb-nav-num">A13.117</span> Theorem: Fundamental Theorem of Statistical Learning</a></li>
+<li><a href="#a4-118"><span class="sb-nav-num">A13.118</span> VC Dimension and Occam's Razor</a></li>
+<li><a href="#a4-119"><span class="sb-nav-num">A13.119</span> Sample Complexity for VC Classes: Realizable Case</a></li>
+<li><a href="#a4-120"><span class="sb-nav-num">A13.120</span> Lower Bound on Sample Complexity for VC Classes</a></li>
+<li><a href="#a4-121"><span class="sb-nav-num">A13.121</span> The VC Inequality and Finite Classes: Connection</a></li>
+<li><a href="#a4-122"><span class="sb-nav-num">A13.122</span> Dudley's Entropy IntegralNEW</a></li>
+<li><a href="#a4-123"><span class="sb-nav-num">A13.123</span> Chaining and Metric EntropyNEW</a></li>
+<li><a href="#a4-124"><span class="sb-nav-num">A13.124</span> VCdim Halfspaces – Practical Implications</a></li>
+<li><a href="#a4-125"><span class="sb-nav-num">A13.125</span> Motivation: Beyond VC Theory</a></li>
+<li><a href="#a4-126"><span class="sb-nav-num">A13.126</span> Symmetrization for General Losses</a></li>
+<li><a href="#a4-127"><span class="sb-nav-num">A13.127</span> Definition: Empirical Rademacher Complexity</a></li>
+<li><a href="#a4-128"><span class="sb-nav-num">A13.128</span> Theorem: Generalization Bound via Rademacher Complexity</a></li>
+<li><a href="#a4-129"><span class="sb-nav-num">A13.129</span> Massart's Lemma (Finite Class Rademacher Bound)</a></li>
+<li><a href="#a4-130"><span class="sb-nav-num">A13.130</span> Rademacher Complexity of Finite Class</a></li>
+<li><a href="#a4-131"><span class="sb-nav-num">A13.131</span> Rademacher Complexity of Linear Classes</a></li>
+<li><a href="#a4-132"><span class="sb-nav-num">A13.132</span> Contraction Principle (Ledoux–Talagrand)</a></li>
+<li><a href="#a4-133"><span class="sb-nav-num">A13.133</span> Local Rademacher ComplexityNEW</a></li>
+<li><a href="#a4-134"><span class="sb-nav-num">A13.134</span> Critical Radius and Fast RatesNEW</a></li>
+<li><a href="#a4-135"><span class="sb-nav-num">A13.135</span> Rademacher Complexity and Kernel ClassesNEW</a></li>
+<li><a href="#a4-136"><span class="sb-nav-num">A13.136</span> Rademacher Complexity as a Data‑Dependent MeasureNEW</a></li>
+<li><a href="#a4-137"><span class="sb-nav-num">A13.137</span> Symmetrization: The Bridge to Rademacher ComplexityNEW</a></li>
+<li><a href="#a4-138"><span class="sb-nav-num">A13.138</span> Gaussian ComplexityNEW</a></li>
+<li><a href="#a4-139"><span class="sb-nav-num">A13.139</span> Khintchine's InequalityNEW</a></li>
+<li><a href="#a4-140"><span class="sb-nav-num">A13.140</span> Comparison of Rademacher and Gaussian ComplexitiesNEW</a></li>
+<li><a href="#a4-141"><span class="sb-nav-num">A13.141</span> The Contraction Principle and Lipschitz LossesNEW</a></li>
+<li><a href="#a4-142"><span class="sb-nav-num">A13.142</span> Uniform Bound via Rademacher Complexity – SummaryNEW</a></li>
+<li><a href="#a4-143"><span class="sb-nav-num">A13.143</span> The Empirical Process Viewpoint</a></li>
+<li><a href="#a4-144"><span class="sb-nav-num">A13.144</span> Uniform Law of Large Numbers (ULLN)NEW</a></li>
+<li><a href="#a4-145"><span class="sb-nav-num">A13.145</span> Glivenko–Cantelli ClassesNEW</a></li>
+<li><a href="#a4-146"><span class="sb-nav-num">A13.146</span> Donsker Classes and the Functional CLTNEW</a></li>
+<li><a href="#a4-147"><span class="sb-nav-num">A13.147</span> Weak Convergence of Empirical ProcessesNEW</a></li>
+<li><a href="#a4-148"><span class="sb-nav-num">A13.148</span> Concentration of Measure PhenomenonNEW</a></li>
+<li><a href="#a4-149"><span class="sb-nav-num">A13.149</span> Isoperimetric InequalitiesNEW</a></li>
+<li><a href="#a4-150"><span class="sb-nav-num">A13.150</span> Talagrand's InequalityNEW</a></li>
+<li><a href="#a4-151"><span class="sb-nav-num">A13.151</span> Bousquet's InequalityNEW</a></li>
+<li><a href="#a4-152"><span class="sb-nav-num">A13.152</span> Klein's InequalityNEW</a></li>
+<li><a href="#a4-153"><span class="sb-nav-num">A13.153</span> Local Empirical ProcessesNEW</a></li>
+<li><a href="#a4-154"><span class="sb-nav-num">A13.154</span> Strongly Mixing ProcessesNEW</a></li>
+<li><a href="#a4-155"><span class="sb-nav-num">A13.155</span> The Empirical Process \(\sup\) – RecapNEW</a></li>
+<li><a href="#a4-156"><span class="sb-nav-num">A13.156</span> Symmetrization RevisitedNEW</a></li>
+<li><a href="#a4-157"><span class="sb-nav-num">A13.157</span> Rademacher ProcessNEW</a></li>
+<li><a href="#a4-158"><span class="sb-nav-num">A13.158</span> Talagrand's Contraction Principle – DetailedNEW</a></li>
+<li><a href="#a4-159"><span class="sb-nav-num">A13.159</span> Penalized ERMNEW</a></li>
+<li><a href="#a4-160"><span class="sb-nav-num">A13.160</span> Model Selection via SRM (Detailed)NEW</a></li>
+<li><a href="#a4-161"><span class="sb-nav-num">A13.161</span> AIC and BIC from an SLT PerspectiveNEW</a></li>
+<li><a href="#a4-162"><span class="sb-nav-num">A13.162</span> Minimum Description Length (MDL) PrincipleNEW</a></li>
+<li><a href="#a4-163"><span class="sb-nav-num">A13.163</span> Occam's Razor in Statistical LearningNEW</a></li>
+<li><a href="#a4-164"><span class="sb-nav-num">A13.164</span> Regularization as a Means of Controlling ComplexityNEW</a></li>
+<li><a href="#a4-165"><span class="sb-nav-num">A13.165</span> Algorithmic Stability and GeneralizationNEW</a></li>
+<li><a href="#a4-166"><span class="sb-nav-num">A13.166</span> Leave‑One‑Out Cross‑ValidationNEW</a></li>
+<li><a href="#a4-167"><span class="sb-nav-num">A13.167</span> PAC‑Bayes FrameworkNEW</a></li>
+<li><a href="#a4-168"><span class="sb-nav-num">A13.168</span> PAC‑Bayes with Data‑Dependent PriorsNEW</a></li>
+<li><a href="#a4-169"><span class="sb-nav-num">A13.169</span> Information‑Theoretic Generalization BoundsNEW</a></li>
+<li><a href="#a4-170"><span class="sb-nav-num">A13.170</span> Mutual Information and GeneralizationNEW</a></li>
+<li><a href="#a4-171"><span class="sb-nav-num">A13.171</span> The Bias–Variance Decomposition in MLNEW</a></li>
+<li><a href="#a4-172"><span class="sb-nav-num">A13.172</span> The Bias–Complexity–Noise TrichotomyNEW</a></li>
+<li><a href="#a4-173"><span class="sb-nav-num">A13.173</span> The Oracle: A Benchmark for LearningNEW</a></li>
+<li><a href="#a4-174"><span class="sb-nav-num">A13.174</span> Why ERM is NaturalNEW</a></li>
+<li><a href="#a4-175"><span class="sb-nav-num">A13.175</span> Beyond Binary Classification: Multi‑class and Structured PredictionNEW</a></li>
+<li><a href="#a4-176"><span class="sb-nav-num">A13.176</span> The Squared Loss in Regression (and its non‑Lipschitz property)NEW</a></li>
+<li><a href="#a4-177"><span class="sb-nav-num">A13.177</span> The Hinge Loss and SVMNEW</a></li>
+<li><a href="#a4-178"><span class="sb-nav-num">A13.178</span> The Logistic Loss and Maximum LikelihoodNEW</a></li>
+<li><a href="#a4-179"><span class="sb-nav-num">A13.179</span> Convexity and Its Role in OptimizationNEW</a></li>
+<li><a href="#a4-180"><span class="sb-nav-num">A13.180</span> Kernel Methods and RKHSNEW</a></li>
+<li><a href="#a4-181"><span class="sb-nav-num">A13.181</span> Representer TheoremNEW</a></li>
+<li><a href="#a4-182"><span class="sb-nav-num">A13.182</span> Neural Networks and VC Dimension (Bounds)NEW</a></li>
+<li><a href="#a4-183"><span class="sb-nav-num">A13.183</span> Deep Learning and Generalization PuzzlesNEW</a></li>
+<li><a href="#a4-184"><span class="sb-nav-num">A13.184</span> Double Descent PhenomenonNEW</a></li>
+<li><a href="#a4-185"><span class="sb-nav-num">A13.185</span> Interpolation and OverparameterizationNEW</a></li>
+<li><a href="#a4-186"><span class="sb-nav-num">A13.186</span> Benign OverfittingNEW</a></li>
+<li><a href="#a4-187"><span class="sb-nav-num">A13.187</span> Parametric vs. Non‑parametric LearningNEW</a></li>
+<li><a href="#a4-188"><span class="sb-nav-num">A13.188</span> Universal Consistency and Stone's TheoremNEW</a></li>
+<li><a href="#a4-189"><span class="sb-nav-num">A13.189</span> Statistical Learning Theory vs. Classical StatisticsNEW</a></li>
+<li><a href="#a4-190"><span class="sb-nav-num">A13.190</span> Generalization: The Core Goal of LearningNEW</a></li>
+<li><a href="#a4-191"><span class="sb-nav-num">A13.191</span> Closing Remarks: The Road Ahead in Modern Learning TheoryNEW</a></li>
+<li><a href="#a4-192"><span class="sb-nav-num">A13.192</span> Motivation: Nonconvexity of the 0‑1 Loss and NP‑hardness of ERMNEW</a></li>
+<li><a href="#a4-193"><span class="sb-nav-num">A13.193</span> Definition: Convex Set and Convex Function (Formal Definitions)NEW</a></li>
+<li><a href="#a4-194"><span class="sb-nav-num">A13.194</span> The Spin Transform: Mapping Labels to \(\{-1,+1\}\) via \(Y\mapsto 2Y-1\)NEW</a></li>
+<li><a href="#a4-195"><span class="sb-nav-num">A13.195</span> Hard Classifiers (\(h:\mathcal{X}\to\{-1,+1\}\)) vs. Soft Classifiers (\(f:\mathcal{X}\to[-1,1]\))NEW</a></li>
+<li><a href="#a4-196"><span class="sb-nav-num">A13.196</span> Definition: Convex Surrogate Loss Function \(\phi:\mathbb{R}\to\mathbb{R}^+\) (Non‑decreasing, Upper Bounds \(\mathbf{1}(z>0)\), \(\phi(0)=1\))NEW</a></li>
+<li><a href="#a4-197"><span class="sb-nav-num">A13.197</span> The Hinge Loss: \(\phi(z)=\max(1+z,0)\)NEW</a></li>
+<li><a href="#a4-198"><span class="sb-nav-num">A13.198</span> The Exponential Loss: \(\phi(z)=\exp(z)\)NEW</a></li>
+<li><a href="#a4-199"><span class="sb-nav-num">A13.199</span> The Logistic Loss: \(\phi(z)=\log_2(1+e^{z})\)NEW</a></li>
+<li><a href="#a4-200"><span class="sb-nav-num">A13.200</span> Empirical \(\phi\)-Risk and Population \(\phi\)-RiskNEW</a></li>
+<li><a href="#a4-201"><span class="sb-nav-num">A13.201</span> Minimizing the \(\phi\)-Risk: Definition of \(f_\phi^* = \arg\min_f R_\phi(f)\)</a></li>
+<li><a href="#a4-202"><span class="sb-nav-num">A13.202</span> Conditional \(\phi\)-Risk and the Function \(H_\eta(\alpha) = \eta\,\phi(-\alpha) + (1-\eta)\,\phi(\alpha)\)</a></li>
+<li><a href="#a4-203"><span class="sb-nav-num">A13.203</span> Bayes Consistency of Convex Surrogates: Derivative ConditionNEW</a></li>
+<li><a href="#a4-204"><span class="sb-nav-num">A13.204</span> Zhang’s Lemma: Bridging Excess \(\phi\)-Risk to Excess Classification RiskNEW</a></li>
+<li><a href="#a4-205"><span class="sb-nav-num">A13.205</span> Zhang’s Lemma (Proof): Jensen’s Inequality and the Key InequalityNEW</a></li>
+<li><a href="#a4-206"><span class="sb-nav-num">A13.206</span> Calibration Constants for Hinge, Exponential, and Logistic LossesNEW</a></li>
+<li><a href="#a4-207"><span class="sb-nav-num">A13.207</span> Convex Relaxation Summary: From NP‑hard ERM to Efficient Convex OptimizationNEW</a></li>
+<li><a href="#a4-208"><span class="sb-nav-num">A13.208</span> The Epigraph Formulation: Rewriting \(\min f(x)\) as \(\min t\) subject to \((x,t)\in\operatorname{epi}(f)\)NEW</a></li>
+<li><a href="#a4-209"><span class="sb-nav-num">A13.209</span> Convex Hull Relaxation: \(\min_{x\in D} c^\top x = \min_{x\in\operatorname{conv}(D)} c^\top x\)NEW</a></li>
+<li><a href="#a4-210"><span class="sb-nav-num">A13.210</span> Definition: Subgradient and Subdifferential \(\partial f(x)\) (Global Linear Underestimators)NEW</a></li>
+<li><a href="#a4-211"><span class="sb-nav-num">A13.211</span> Theorem: Existence of Subgradients for All Convex Functions (Separating Hyperplanes)NEW</a></li>
+<li><a href="#a4-212"><span class="sb-nav-num">A13.212</span> Theorem: Local Minima are Global Minima for Convex Functions & Optimality Condition \(0\in\partial f(x)\)NEW</a></li>
+<li><a href="#a4-213"><span class="sb-nav-num">A13.213</span> First‑Order Taylor Expansion and the Negative Gradient Direction as the Steepest DescentNEW</a></li>
+<li><a href="#a4-214"><span class="sb-nav-num">A13.214</span> Algorithm: Gradient Descent (GD) for Unconstrained Convex MinimizationNEW</a></li>
+<li><a href="#a4-215"><span class="sb-nav-num">A13.215</span> Theorem: \(O(LR/\sqrt{k})\) Convergence Rate for \(L\)-Lipschitz Convex FunctionsNEW</a></li>
+<li><a href="#a4-216"><span class="sb-nav-num">A13.216</span> Step Size Schedules: Fixed \(\eta = R/(L\sqrt{k})\) vs. Decreasing \(\eta_s = G/\sqrt{s}\) (the \(\log k\) Penalty)NEW</a></li>
+<li><a href="#a4-217"><span class="sb-nav-num">A13.217</span> Removing the \(\log k\) Factor via Averaging over the Second Half of Iterates (from \(k/2\) to \(k\))NEW</a></li>
+<li><a href="#a4-218"><span class="sb-nav-num">A13.218</span> Definition: Projection onto a Closed Convex Set \(\pi(x)\) and its Variational Inequality CharacterizationNEW</a></li>
+<li><a href="#a4-219"><span class="sb-nav-num">A13.219</span> Uniqueness of the Projection (Proof by Contradiction)NEW</a></li>
+<li><a href="#a4-220"><span class="sb-nav-num">A13.220</span> Algorithm: Projected Gradient Descent (PGD) for Constrained Convex MinimizationNEW</a></li>
+<li><a href="#a4-221"><span class="sb-nav-num">A13.221</span> Theorem: \(O(LR/\sqrt{k})\) Convergence Rate for Projected Gradient DescentNEW</a></li>
+<li><a href="#a4-222"><span class="sb-nav-num">A13.222</span> Application: SVM – Computing the Lipschitz Constant \(L\) via Kernel Matrix Column NormsNEW</a></li>
+<li><a href="#a4-223"><span class="sb-nav-num">A13.223</span> Application: SVM – Computing the Diameter \(R\) via Kernel Eigenvalues \(\lambda_{\min}(K)\)NEW</a></li>
+<li><a href="#a4-224"><span class="sb-nav-num">A13.224</span> Application: SVM – Random Matrix Theory (Wishart) and Iteration ComplexityNEW</a></li>
+<li><a href="#a4-225"><span class="sb-nav-num">A13.225</span> Application: Boosting – \(\ell_1\) Constraint, Lipschitz Constant \(\sqrt{N}\), and Poor Iteration ComplexityNEW</a></li>
+<li><a href="#a4-226"><span class="sb-nav-num">A13.226</span> Motivation for Mirror Descent: Non‑Euclidean Geometry and the Need for \(\ell_1/\ell_\infty\) Dual SpacesNEW</a></li>
+<li><a href="#a4-227"><span class="sb-nav-num">A13.227</span> Definition: Dual Norm \(\|\cdot\|_*\) and \(\alpha\)-Strong Convexity with Respect to a NormNEW</a></li>
+<li><a href="#a4-228"><span class="sb-nav-num">A13.228</span> Definition: Bregman Divergence \(D_\Phi(y,x) = \Phi(y) - \Phi(x) - \nabla\Phi(x)^\top (y-x)\)NEW</a></li>
+<li><a href="#a4-229"><span class="sb-nav-num">A13.229</span> The Three‑Point Identity for Bregman DivergencesNEW</a></li>
+<li><a href="#a4-230"><span class="sb-nav-num">A13.230</span> Definition: Bregman Projection \(\pi_\Phi(x) = \arg\min_{z\in\mathcal{C}} D_\Phi(z,x)\) and Its Role in Mirror DescentNEW</a></li>
+<li><a href="#a4-231"><span class="sb-nav-num">A13.231</span> Limitation of Projected Gradient Descent: The Euclidean Ball Example and the Benefit of Mirror DescentNEW</a></li>
+<li><a href="#a4-232"><span class="sb-nav-num">A13.232</span> Geometric Intuition of Mirror Descent: Primal Space \(D\) vs. Dual Space \(D^*\) and the Mapping via \(\nabla\Phi(x)\)NEW</a></li>
+<li><a href="#a4-233"><span class="sb-nav-num">A13.233</span> Algorithm: Mirror Descent (Explicit Steps with \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta g_s\) and Bregman Projection)NEW</a></li>
+<li><a href="#a4-234"><span class="sb-nav-num">A13.234</span> Proof Step: Bounding \(D_\Phi(x_s, y_{s+1})\) using Strong Convexity, Hölder’s Inequality, and the Maximum of a QuadraticNEW</a></li>
+<li><a href="#a4-235"><span class="sb-nav-num">A13.235</span> Reformulation of Mirror Descent Update: \(x_{s+1} = \arg\min_{x\in\mathcal{C}} \{\eta g_s^\top x + D_\Phi(x, x_s)\}\) (Proximal View)NEW</a></li>
+<li><a href="#a4-236"><span class="sb-nav-num">A13.236</span> Example: Euclidean Setup (\(\Phi(x) = \frac{1}{2}\|x\|_2^2\)) Recovers Projected Gradient DescentNEW</a></li>
+<li><a href="#a4-237"><span class="sb-nav-num">A13.237</span> Example: Negative Entropy Potential \(\Phi(x) = \sum_i x_i \log x_i\) and the Multiplicative Weights UpdateNEW</a></li>
+<li><a href="#a4-238"><span class="sb-nav-num">A13.238</span> Bregman Divergence for Negative Entropy: \(D_\Phi(y,x) = \mathrm{KL}(y,x) + \sum_i (y_i - x_i)\)NEW</a></li>
+<li><a href="#a4-239"><span class="sb-nav-num">A13.239</span> Bregman Projection onto the Simplex \(\Delta_n\) for Negative Entropy: Simple RenormalizationNEW</a></li>
+<li><a href="#a4-240"><span class="sb-nav-num">A13.240</span> Strong Convexity of Negative Entropy w.r.t. \(\ell_1\) Norm via Pinsker’s Inequality (\(D_\Phi(y,x) \ge \frac{1}{2}\|x-y\|_1^2\))NEW</a></li>
+<li><a href="#a4-241"><span class="sb-nav-num">A13.241</span> Diameter \(R^2\) for Negative Entropy on the Simplex: \(R^2 = \max\Phi(x) - \min\Phi(x) = 0 - (-\log d) = \log d\)NEW</a></li>
+<li><a href="#a4-242"><span class="sb-nav-num">A13.242</span> Corollary: \(O(L^2 \log d / k)\) Convergence Rate for Mirror Descent under \(\ell_1\) Constraints and \(\ell_\infty\) Gradient BoundsNEW</a></li>
+<li><a href="#a4-243"><span class="sb-nav-num">A13.243</span> Application: Boosting with Mirror Descent – Exploiting \(\ell_\infty\) Bounds to Achieve \(O(L^2 \log N / k)\), Leading to \(k \approx n^2 \log N\) Iterations for \(1/n\) AccuracyNEW</a></li>
+<li><a href="#a4-244"><span class="sb-nav-num">A13.244</span> Other Potential Functions: \(\Phi(x) = \frac{1}{p}\|x\|_p^p\) with Strong Convexity w.r.t. \(\ell_1\) Norm (e.g., \(p = 1 + \frac{1}{\log d}\))NEW</a></li>
+<li><a href="#a4-245"><span class="sb-nav-num">A13.245</span> Stochastic Convex Optimization Setup: Random Functions \(x \mapsto \ell(x, Z)\) and the Goal of Minimizing \(f(x) = \mathbb{E}[\ell(x, Z)]\)NEW</a></li>
+<li><a href="#a4-246"><span class="sb-nav-num">A13.246</span> Examples: Boosting (Convex Surrogate), Linear Regression (Squared Loss), and Maximum Likelihood (KL Divergence Minimization)NEW</a></li>
+<li><a href="#a4-247"><span class="sb-nav-num">A13.247</span> External Randomization: Expressing Empirical Risk Minimization as \(\mathbb{E}_I[f_I(x)]\) with Artificial Uniform Index \(I\)NEW</a></li>
+<li><a href="#a4-248"><span class="sb-nav-num">A13.248</span> Critical Distinction: One Pass over True Data (Statistical Limit) vs. Multiple Passes over Artificial Data (Computational Iteration)NEW</a></li>
+<li><a href="#a4-249"><span class="sb-nav-num">A13.249</span> Algorithm: Stochastic Gradient Descent (SGD) with Unbiased Subgradient Estimates and Projection onto \(\mathcal{C}\)NEW</a></li>
+<li><a href="#a4-250"><span class="sb-nav-num">A13.250</span> Theorem: \(O(LR/\sqrt{k})\) Convergence Rate for SGD with Fixed Step Size \(\eta = R/(L\sqrt{k})\)NEW</a></li>
+<li><a href="#a4-251"><span class="sb-nav-num">A13.251</span> Proof of SGD Convergence: Telescoping Sum, Conditional Expectation, and the Variance Bound \(\mathbb{E}\|\tilde g\|^2 \le L^2\)NEW</a></li>
+<li><a href="#a4-252"><span class="sb-nav-num">A13.252</span> Algorithm: Stochastic Mirror Descent (SMD) Using \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta \tilde g_s\)NEW</a></li>
+<li><a href="#a4-253"><span class="sb-nav-num">A13.253</span> Theorem: \(O(L^2 R^2 / (\alpha k))\) Convergence Rate for Stochastic Mirror DescentNEW</a></li>
+<li><a href="#a4-254"><span class="sb-nav-num">A13.254</span> Proof of SMD: Derivation of the Key Inequality \(D_\Phi(x_s, y_{s+1}) \le \eta^2 \|\tilde g_s\|_*^2 / (2\alpha)\)NEW</a></li>
+<li><a href="#a4-255"><span class="sb-nav-num">A13.255</span> Algorithm: Stochastic Coordinate Descent (SCD) – Unbiased Gradient Estimate \(d \nabla_{I} f(x) e_I\) for Differentiable \(f\)NEW</a></li>
+<li><a href="#a4-256"><span class="sb-nav-num">A13.256</span> Rate for SCD: \(O(L R^2 d / k)\) and the Trade‑off between Update Cost and Iteration Complexity (Dimension Dependence)NEW</a></li>
+<li><a href="#a4-257"><span class="sb-nav-num">A13.257</span> Output Strategy: Averaging Iterates \(\bar x_k\) vs. Best Iterate \(x_k^\circ\) in Stochastic SettingsNEW</a></li>
+<li><a href="#a4-258"><span class="sb-nav-num">A13.258</span> Online Learning Framework: Sequential Decision Making vs. Batch LearningNEW</a></li>
+<li><a href="#a4-259"><span class="sb-nav-num">A13.259</span> Examples in Detail: Online Shortest Path (Edge Weights), Dynamic Pricing (Customer Valuations), Sequential Investment (Portfolios)NEW</a></li>
+<li><a href="#a4-260"><span class="sb-nav-num">A13.260</span> Statistical vs. Adversarial Models in Online Prediction (i.i.d. vs. Worst‑Case Sequences)NEW</a></li>
+<li><a href="#a4-261"><span class="sb-nav-num">A13.261</span> Prediction with Expert Advice: Action Set \(A\), Convex Hull, Loss Function \(\ell(a_t, z_t)\), and the Definition of Cumulative Regret \(R_n\)NEW</a></li>
+<li><a href="#a4-262"><span class="sb-nav-num">A13.262</span> Convex Combination of Experts: Playing \(p_t \in \Delta_K\) and the Linear Loss Form \(p_t^\top z_t\)NEW</a></li>
+<li><a href="#a4-263"><span class="sb-nav-num">A13.263</span> Follow the Leader (FTL): The Greedy Strategy \(p_t = \arg\min_{p\in\Delta_K} \sum_{s=1}^{t-1} p^\top z_s\) and its Linear Regret CounterexampleNEW</a></li>
+<li><a href="#a4-264"><span class="sb-nav-num">A13.264</span> Algorithm: Exponential Weights (EW) / Hedge – Update Rule \(p_{t+1,j} \propto p_{t,j} \exp(-\eta \ell(e_j, z_t))\) with Weights \(w_{t,j} = \exp(-\eta \sum_{s=1}^{t-1} \ell(e_j, z_s))\)NEW</a></li>
+<li><a href="#a4-265"><span class="sb-nav-num">A13.265</span> Theorem: EW Regret Bound \(R_n \le \frac{\log K}{\eta} + \frac{\eta n}{2}\) (Optimized to \(R_n \le \sqrt{2 n \log K}\))NEW</a></li>
+<li><a href="#a4-266"><span class="sb-nav-num">A13.266</span> Alternative Proof of EW Regret: Telescoping Sum \(\log(W_{t+1}/W_t)\), Hoeffding's Lemma, and Jensen's InequalityNEW</a></li>
+<li><a href="#a4-267"><span class="sb-nav-num">A13.267</span> Algorithm: Follow the Perturbed Leader (FPL) – Regularizing FTL with Uniform Perturbation \(\xi \sim \mathrm{Unif}([0,1/\eta]^K)\)NEW</a></li>
+<li><a href="#a4-268"><span class="sb-nav-num">A13.268</span> Oblivious Adversaries: The FPL Analysis Framework (Pre‑determined Adversarial Sequence \(z_t\))NEW</a></li>
+<li><a href="#a4-269"><span class="sb-nav-num">A13.269</span> Lemma: Be‑the‑Leader – The Inequality \(\sum_{t=1}^n \ell(p_t^*, z_t) \le \sum_{t=1}^n \ell(p_n^*, z_t)\) (Proof by Induction)NEW</a></li>
+<li><a href="#a4-270"><span class="sb-nav-num">A13.270</span> Theorem: FPL Expected Regret Bound \(\mathbb{E}[R_n] \le 2\sqrt{2 n K}\) (Proof via Box Geometry, Coupling, and the Shift \(\xi + z_t\))NEW</a></li>
                 </ul>
             </div>
             <div class="sb-section">
@@ -4333,16 +4593,276 @@ Return x̄_k = (1/k) ∑_{t=1}^k x_t  (or last iterate with averaging)
     <nav id="mobile-nav">
         <h3>Navigation</h3>
         <ul>
-            <li><a href="#a4-1">A4.1 — Linear Regression</a></li>
-            <li><a href="#a4-2">A4.2 — Logistic Regression</a></li>
-            <li><a href="#a4-3">A4.3 — Regularization</a></li>
-            <li><a href="#a4-4">A4.4 — Support Vector Machines</a></li>
-            <li><a href="#a4-5">A4.5 — Decision Trees</a></li>
-            <li><a href="#a4-6">A4.6 — Ensemble Methods</a></li>
-            <li><a href="#a4-7">A4.7 — Neural Networks</a></li>
-            <li><a href="#a4-8">A4.8 — Backpropagation</a></li>
-            <li><a href="#a4-9">A4.9 — PCA</a></li>
-            <li><a href="#a4-10">A4.10 — K‑Means Clustering</a></li>
+<li><a href="#a4-1"><span class="sb-nav-num">A13.1</span> The Binary Classification ProblemSetup</a></li>
+<li><a href="#a4-2"><span class="sb-nav-num">A13.2</span> The Supervised Learning ProtocolNEW</a></li>
+<li><a href="#a4-3"><span class="sb-nav-num">A13.3</span> Input Space, Label Space, and the Data Generating DistributionNEW</a></li>
+<li><a href="#a4-4"><span class="sb-nav-num">A13.4</span> The Regression Function $\eta$</a></li>
+<li><a href="#a4-5"><span class="sb-nav-num">A13.5</span> Classification Error (True Risk)</a></li>
+<li><a href="#a4-6"><span class="sb-nav-num">A13.6</span> Conditional Risk and Pointwise ErrorNEW</a></li>
+<li><a href="#a4-7"><span class="sb-nav-num">A13.7</span> The Bayes Classifier \(h^*\)Optimal Rule</a></li>
+<li><a href="#a4-8"><span class="sb-nav-num">A13.8</span> Bayes Risk \(R^*\)</a></li>
+<li><a href="#a4-9"><span class="sb-nav-num">A13.9</span> Excess Risk \(E(h)\)</a></li>
+<li><a href="#a4-10"><span class="sb-nav-num">A13.10</span> Theorem: Excess Risk Identity and Optimality of \(h^*\)</a></li>
+<li><a href="#a4-11"><span class="sb-nav-num">A13.11</span> Interpretation of the Excess Risk Identity</a></li>
+<li><a href="#a4-12"><span class="sb-nav-num">A13.12</span> The Comparison VariableAnalytic Tool</a></li>
+<li><a href="#a4-13"><span class="sb-nav-num">A13.13</span> Empirical Risk \(\widehat{R}_n(h)\)Training Error</a></li>
+<li><a href="#a4-14"><span class="sb-nav-num">A13.14</span> Claim: Unbiasedness of Empirical Risk</a></li>
+<li><a href="#a4-15"><span class="sb-nav-num">A13.15</span> Empirical Risk Minimizer (ERM) \(\widehat{h}_{\text{erm}}\)</a></li>
+<li><a href="#a4-16"><span class="sb-nav-num">A13.16</span> Overfitting: The Memorization Trap</a></li>
+<li><a href="#a4-17"><span class="sb-nav-num">A13.17</span> Learning ParadigmsComplete Overview</a></li>
+<li><a href="#a4-17"><span class="sb-nav-num">A13.17</span> Inductive Bias and the Hypothesis ClassCore Principle</a></li>
+<li><a href="#a4-18"><span class="sb-nav-num">A13.18</span> Oracle and Approximation ErrorBenchmark</a></li>
+<li><a href="#a4-19"><span class="sb-nav-num">A13.19</span> Oracle Inequality (General Form)Fundamental Decomposition</a></li>
+<li><a href="#a4-20"><span class="sb-nav-num">A13.20</span> Realizability Assumption</a></li>
+<li><a href="#a4-21"><span class="sb-nav-num">A13.21</span> No‑Free‑Lunch Theorem (I): Worst‑Case ErrorImpossibility</a></li>
+<li><a href="#a4-22"><span class="sb-nav-num">A13.22</span> No‑Free‑Lunch Theorem (II): Arbitrarily Slow RatesNo Uniform Rates</a></li>
+<li><a href="#a4-23"><span class="sb-nav-num">A13.23</span> PAC Learning Framework — Realizable Case</a></li>
+<li><a href="#a4-24"><span class="sb-nav-num">A13.24</span> PAC Learning Framework — Agnostic Case</a></li>
+<li><a href="#a4-25"><span class="sb-nav-num">A13.25</span> Bias–Complexity TradeoffThe Core Dilemma</a></li>
+<li><a href="#a4-26"><span class="sb-nav-num">A13.26</span> The Need for Assumptions: Generative vs. DiscriminativeNEW</a></li>
+<li><a href="#a4-27"><span class="sb-nav-num">A13.27</span> Why Concentration Inequalities?Motivation</a></li>
+<li><a href="#a4-28"><span class="sb-nav-num">A13.28</span> The Chernoff Bounding TechniqueExponential Moment Method</a></li>
+<li><a href="#a4-29"><span class="sb-nav-num">A13.29</span> Hoeffding's LemmaMGF of Bounded Variables</a></li>
+<li><a href="#a4-30"><span class="sb-nav-num">A13.30</span> Theorem: Hoeffding's Inequality (Sample Mean)</a></li>
+<li><a href="#a4-31"><span class="sb-nav-num">A13.31</span> Hoeffding's Theorem (General Form)Full Statement</a></li>
+<li><a href="#a4-32"><span class="sb-nav-num">A13.32</span> Corollary: Confidence Interval for a Single Classifier</a></li>
+<li><a href="#a4-33"><span class="sb-nav-num">A13.33</span> Corollary: Uniform Bound for Finite \(\mathcal{H}\) via Union Bound</a></li>
+<li><a href="#a4-34"><span class="sb-nav-num">A13.34</span> The Log‑Sum‑Exp Trick and Expectation Bound</a></li>
+<li><a href="#a4-35"><span class="sb-nav-num">A13.35</span> McDiarmid's Inequality (Bounded Differences)</a></li>
+<li><a href="#a4-36"><span class="sb-nav-num">A13.36</span> Martingales and Martingale DifferencesDependence</a></li>
+<li><a href="#a4-37"><span class="sb-nav-num">A13.37</span> Theorem: Azuma–Hoeffding Inequality</a></li>
+<li><a href="#a4-38"><span class="sb-nav-num">A13.38</span> Corollary: Bounded Differences for Uniform Deviations</a></li>
+<li><a href="#a4-39"><span class="sb-nav-num">A13.39</span> Note: Slow Rate is Unavoidable from Bounded Differences</a></li>
+<li><a href="#a4-40"><span class="sb-nav-num">A13.40</span> Variance of the Zero‑One Loss</a></li>
+<li><a href="#a4-41"><span class="sb-nav-num">A13.41</span> Variance Bound for the Comparison Variable</a></li>
+<li><a href="#a4-42"><span class="sb-nav-num">A13.42</span> Markov's InequalityBasic Tool</a></li>
+<li><a href="#a4-43"><span class="sb-nav-num">A13.43</span> Jensen's Inequality</a></li>
+<li><a href="#a4-44"><span class="sb-nav-num">A13.44</span> Theorem: Bernstein's InequalityVariance‑Aware</a></li>
+<li><a href="#a4-45"><span class="sb-nav-num">A13.45</span> Bernstein vs. Hoeffding: When to Use Which</a></li>
+<li><a href="#a4-46"><span class="sb-nav-num">A13.46</span> Corollary: Two‑Level Bernstein Bound (Self‑Bounding)</a></li>
+<li><a href="#a4-47"><span class="sb-nav-num">A13.47</span> Tower Property (Law of Total Expectation)</a></li>
+<li><a href="#a4-48"><span class="sb-nav-num">A13.48</span> The Self‑Bounding Inequality Technique</a></li>
+<li><a href="#a4-49"><span class="sb-nav-num">A13.49</span> The Sub‑Gaussian PropertyTail Behaviour</a></li>
+<li><a href="#a4-50"><span class="sb-nav-num">A13.50</span> Chebyshev's Inequality (Comparison)</a></li>
+<li><a href="#a4-51"><span class="sb-nav-num">A13.51</span> Cramér's Theorem and Large DeviationsNEW</a></li>
+<li><a href="#a4-53"><span class="sb-nav-num">A13.53</span> Setup: Finite Dictionary \(\mathcal{H}=\{h_1,\dots,h_M\}\)</a></li>
+<li><a href="#a4-54"><span class="sb-nav-num">A13.54</span> Theorem: Oracle Inequality for Finite \(\mathcal{H}\) (High Probability)</a></li>
+<li><a href="#a4-55"><span class="sb-nav-num">A13.55</span> Theorem: Oracle Inequality for Finite \(\mathcal{H}\) (In Expectation)</a></li>
+<li><a href="#a4-56"><span class="sb-nav-num">A13.56</span> Realizable PAC Bound for Finite \(\mathcal{H}\)</a></li>
+<li><a href="#a4-57"><span class="sb-nav-num">A13.57</span> Agnostic PAC Bound for Finite \(\mathcal{H}\)</a></li>
+<li><a href="#a4-58"><span class="sb-nav-num">A13.58</span> Why \(\log M\) and Not \(M\)?</a></li>
+<li><a href="#a4-59"><span class="sb-nav-num">A13.59</span> The Role of Uniform Convergence</a></li>
+<li><a href="#a4-60"><span class="sb-nav-num">A13.60</span> Example: Axis‑Aligned Rectangles (Discretized)Concrete Application</a></li>
+<li><a href="#a4-61"><span class="sb-nav-num">A13.61</span> Approximate ERMComputational Relaxation</a></li>
+<li><a href="#a4-62"><span class="sb-nav-num">A13.62</span> Plug‑In Estimator and Semi‑Parametric Approach</a></li>
+<li><a href="#a4-63"><span class="sb-nav-num">A13.63</span> Generative vs. Discriminative Models (Revisited)Connection to Plug‑In</a></li>
+<li><a href="#a4-64"><span class="sb-nav-num">A13.64</span> The Slow Rate \(O(1/\sqrt{n})\)Agnostic PAC Baseline</a></li>
+<li><a href="#a4-65"><span class="sb-nav-num">A13.65</span> Comparison Variable ReductionExcess Risk via \(Z_h\)</a></li>
+<li><a href="#a4-66"><span class="sb-nav-num">A13.66</span> The Empirical Process \(\sup_{h\in\mathcal{H}} |\widehat{R}_n(h) - R(h)|\)</a></li>
+<li><a href="#a4-67"><span class="sb-nav-num">A13.67</span> The General Loss Function Setting</a></li>
+<li><a href="#a4-68"><span class="sb-nav-num">A13.68</span> Uniform Deviation for General Loss: Bounded Differences Reduction</a></li>
+<li><a href="#a4-69"><span class="sb-nav-num">A13.69</span> The Empirical Measure Perspective</a></li>
+<li><a href="#a4-70"><span class="sb-nav-num">A13.70</span> Claim: ERM Is Consistent for Finite \(\mathcal{H}\)</a></li>
+<li><a href="#a4-71"><span class="sb-nav-num">A13.71</span> Finite‑Sample vs. Asymptotic GuaranteesPhilosophy</a></li>
+<li><a href="#a4-72"><span class="sb-nav-num">A13.72</span> Improper Learning and Larger Classes</a></li>
+<li><a href="#a4-73"><span class="sb-nav-num">A13.73</span> Covering Numbers for Finite Hypothesis SpacesNEW</a></li>
+<li><a href="#a4-74"><span class="sb-nav-num">A13.74</span> Metric Entropy and ComplexityNEW</a></li>
+<li><a href="#a4-75"><span class="sb-nav-num">A13.75</span> ERM CorollarySummary Statement</a></li>
+<li><a href="#a4-76"><span class="sb-nav-num">A13.76</span> The Union Bound: A Simple but Powerful ToolNEW standalone</a></li>
+<li><a href="#a4-77"><span class="sb-nav-num">A13.77</span> The Role of Noise in Learning Rates</a></li>
+<li><a href="#a4-78"><span class="sb-nav-num">A13.78</span> The Noiseless Case: \(\eta(X)\in\{0,1\}\)</a></li>
+<li><a href="#a4-79"><span class="sb-nav-num">A13.79</span> Theorem: Fast Rate \(O(\log M / n)\) in the Noiseless Case</a></li>
+<li><a href="#a4-80"><span class="sb-nav-num">A13.80</span> Interpretation: \(1/n\) vs. \(1/\sqrt{n}\) Rates</a></li>
+<li><a href="#a4-81"><span class="sb-nav-num">A13.81</span> Why Realizability is Necessary for Fast Rates (Without Noise Conditions)</a></li>
+<li><a href="#a4-82"><span class="sb-nav-num">A13.82</span> Definition: Massart's Noise ConditionHard Margin</a></li>
+<li><a href="#a4-83"><span class="sb-nav-num">A13.83</span> Key Relation: Excess Risk \(\ge 2\gamma \cdot\) Disagreement</a></li>
+<li><a href="#a4-84"><span class="sb-nav-num">A13.84</span> Theorem: Fast Rate under Massart's Condition</a></li>
+<li><a href="#a4-85"><span class="sb-nav-num">A13.85</span> Definition: Tsybakov (Mammen–Tsybakov) Noise ConditionSoft Margin</a></li>
+<li><a href="#a4-86"><span class="sb-nav-num">A13.86</span> Lemma: Disagreement Bounded by \(E(h)^{\frac{\alpha}{\alpha+1}}\) under Tsybakov</a></li>
+<li><a href="#a4-87"><span class="sb-nav-num">A13.87</span> Theorem: Interpolated Rate under Tsybakov Noise</a></li>
+<li><a href="#a4-88"><span class="sb-nav-num">A13.88</span> Interpolation of Rates: Summary</a></li>
+<li><a href="#a4-89"><span class="sb-nav-num">A13.89</span> Example: Tsybakov Noise with Satellite Imagery</a></li>
+<li><a href="#a4-90"><span class="sb-nav-num">A13.90</span> Adaptivity of ERM to Noise Level</a></li>
+<li><a href="#a4-91"><span class="sb-nav-num">A13.91</span> Connection: Fast Rates and Talagrand's InequalityAdvanced Concentration</a></li>
+<li><a href="#a4-92"><span class="sb-nav-num">A13.92</span> Margin Conditions in ClassificationNEW</a></li>
+<li><a href="#a4-93"><span class="sb-nav-num">A13.93</span> Bernstein's Inequality with Variance for Fast RatesNEW</a></li>
+<li><a href="#a4-94"><span class="sb-nav-num">A13.94</span> Self‑Bounding for Non‑Negative LossesNEW</a></li>
+<li><a href="#a4-95"><span class="sb-nav-num">A13.95</span> The Disagreement LemmaExplicitly Reinstated</a></li>
+<li><a href="#a4-96"><span class="sb-nav-num">A13.96</span> Fast Rate under Massart (Explicit Corollary)</a></li>
+<li><a href="#a4-97"><span class="sb-nav-num">A13.97</span> Motivation: Infinite Hypothesis ClassesWhy Finite Is Not Enough</a></li>
+<li><a href="#a4-98"><span class="sb-nav-num">A13.98</span> Restriction of \(\mathcal{H}\) to a Finite SetFrom Infinite to Finite</a></li>
+<li><a href="#a4-99"><span class="sb-nav-num">A13.99</span> Shattering</a></li>
+<li><a href="#a4-100"><span class="sb-nav-num">A13.100</span> VC Dimension: Definition</a></li>
+<li><a href="#a4-101"><span class="sb-nav-num">A13.101</span> Examples of VC Dimension: Axis‑Aligned Rectangles</a></li>
+<li><a href="#a4-102"><span class="sb-nav-num">A13.102</span> Examples of VC Dimension: Intervals on the Real LineNEW</a></li>
+<li><a href="#a4-103"><span class="sb-nav-num">A13.103</span> VC Dimension of Halfspaces: Proof that \(\operatorname{VCdim}=d+1\)</a></li>
+<li><a href="#a4-104"><span class="sb-nav-num">A13.104</span> VC Dimension of Rectangles in \(\mathbb{R}^d\): \(\operatorname{VCdim}=2d\)</a></li>
+<li><a href="#a4-105"><span class="sb-nav-num">A13.105</span> Convex Sets in \(\mathbb{R}^2\): Infinite VC Dimension</a></li>
+<li><a href="#a4-106"><span class="sb-nav-num">A13.106</span> Sine Functions: Parametric Class with Infinite VC Dimension</a></li>
+<li><a href="#a4-107"><span class="sb-nav-num">A13.107</span> The Growth Function (Shatter Coefficient) \(\Pi_{\mathcal{H}}(n)\)</a></li>
+<li><a href="#a4-108"><span class="sb-nav-num">A13.108</span> Lemma: Sauer–ShelahGrowth Function Bound</a></li>
+<li><a href="#a4-109"><span class="sb-nav-num">A13.109</span> VC Classes and the Empirical Measure</a></li>
+<li><a href="#a4-110"><span class="sb-nav-num">A13.110</span> Lemma: VC Dimension of \(\mathcal{A}\) Equals That of \(\mathcal{H}\)</a></li>
+<li><a href="#a4-111"><span class="sb-nav-num">A13.111</span> SymmetrizationGhost Sample Technique</a></li>
+<li><a href="#a4-112"><span class="sb-nav-num">A13.112</span> Rademacher VariablesDefinition and Role</a></li>
+<li><a href="#a4-113"><span class="sb-nav-num">A13.113</span> Theorem: VC Inequality (Expected Version)</a></li>
+<li><a href="#a4-114"><span class="sb-nav-num">A13.114</span> Theorem: VC Inequality (High Probability)</a></li>
+<li><a href="#a4-115"><span class="sb-nav-num">A13.115</span> Corollary: Agnostic ERM Oracle Inequality for VC Classes</a></li>
+<li><a href="#a4-116"><span class="sb-nav-num">A13.116</span> Structural Risk Minimization (SRM)</a></li>
+<li><a href="#a4-117"><span class="sb-nav-num">A13.117</span> Theorem: Fundamental Theorem of Statistical Learning</a></li>
+<li><a href="#a4-118"><span class="sb-nav-num">A13.118</span> VC Dimension and Occam's Razor</a></li>
+<li><a href="#a4-119"><span class="sb-nav-num">A13.119</span> Sample Complexity for VC Classes: Realizable Case</a></li>
+<li><a href="#a4-120"><span class="sb-nav-num">A13.120</span> Lower Bound on Sample Complexity for VC Classes</a></li>
+<li><a href="#a4-121"><span class="sb-nav-num">A13.121</span> The VC Inequality and Finite Classes: Connection</a></li>
+<li><a href="#a4-122"><span class="sb-nav-num">A13.122</span> Dudley's Entropy IntegralNEW</a></li>
+<li><a href="#a4-123"><span class="sb-nav-num">A13.123</span> Chaining and Metric EntropyNEW</a></li>
+<li><a href="#a4-124"><span class="sb-nav-num">A13.124</span> VCdim Halfspaces – Practical Implications</a></li>
+<li><a href="#a4-125"><span class="sb-nav-num">A13.125</span> Motivation: Beyond VC Theory</a></li>
+<li><a href="#a4-126"><span class="sb-nav-num">A13.126</span> Symmetrization for General Losses</a></li>
+<li><a href="#a4-127"><span class="sb-nav-num">A13.127</span> Definition: Empirical Rademacher Complexity</a></li>
+<li><a href="#a4-128"><span class="sb-nav-num">A13.128</span> Theorem: Generalization Bound via Rademacher Complexity</a></li>
+<li><a href="#a4-129"><span class="sb-nav-num">A13.129</span> Massart's Lemma (Finite Class Rademacher Bound)</a></li>
+<li><a href="#a4-130"><span class="sb-nav-num">A13.130</span> Rademacher Complexity of Finite Class</a></li>
+<li><a href="#a4-131"><span class="sb-nav-num">A13.131</span> Rademacher Complexity of Linear Classes</a></li>
+<li><a href="#a4-132"><span class="sb-nav-num">A13.132</span> Contraction Principle (Ledoux–Talagrand)</a></li>
+<li><a href="#a4-133"><span class="sb-nav-num">A13.133</span> Local Rademacher ComplexityNEW</a></li>
+<li><a href="#a4-134"><span class="sb-nav-num">A13.134</span> Critical Radius and Fast RatesNEW</a></li>
+<li><a href="#a4-135"><span class="sb-nav-num">A13.135</span> Rademacher Complexity and Kernel ClassesNEW</a></li>
+<li><a href="#a4-136"><span class="sb-nav-num">A13.136</span> Rademacher Complexity as a Data‑Dependent MeasureNEW</a></li>
+<li><a href="#a4-137"><span class="sb-nav-num">A13.137</span> Symmetrization: The Bridge to Rademacher ComplexityNEW</a></li>
+<li><a href="#a4-138"><span class="sb-nav-num">A13.138</span> Gaussian ComplexityNEW</a></li>
+<li><a href="#a4-139"><span class="sb-nav-num">A13.139</span> Khintchine's InequalityNEW</a></li>
+<li><a href="#a4-140"><span class="sb-nav-num">A13.140</span> Comparison of Rademacher and Gaussian ComplexitiesNEW</a></li>
+<li><a href="#a4-141"><span class="sb-nav-num">A13.141</span> The Contraction Principle and Lipschitz LossesNEW</a></li>
+<li><a href="#a4-142"><span class="sb-nav-num">A13.142</span> Uniform Bound via Rademacher Complexity – SummaryNEW</a></li>
+<li><a href="#a4-143"><span class="sb-nav-num">A13.143</span> The Empirical Process Viewpoint</a></li>
+<li><a href="#a4-144"><span class="sb-nav-num">A13.144</span> Uniform Law of Large Numbers (ULLN)NEW</a></li>
+<li><a href="#a4-145"><span class="sb-nav-num">A13.145</span> Glivenko–Cantelli ClassesNEW</a></li>
+<li><a href="#a4-146"><span class="sb-nav-num">A13.146</span> Donsker Classes and the Functional CLTNEW</a></li>
+<li><a href="#a4-147"><span class="sb-nav-num">A13.147</span> Weak Convergence of Empirical ProcessesNEW</a></li>
+<li><a href="#a4-148"><span class="sb-nav-num">A13.148</span> Concentration of Measure PhenomenonNEW</a></li>
+<li><a href="#a4-149"><span class="sb-nav-num">A13.149</span> Isoperimetric InequalitiesNEW</a></li>
+<li><a href="#a4-150"><span class="sb-nav-num">A13.150</span> Talagrand's InequalityNEW</a></li>
+<li><a href="#a4-151"><span class="sb-nav-num">A13.151</span> Bousquet's InequalityNEW</a></li>
+<li><a href="#a4-152"><span class="sb-nav-num">A13.152</span> Klein's InequalityNEW</a></li>
+<li><a href="#a4-153"><span class="sb-nav-num">A13.153</span> Local Empirical ProcessesNEW</a></li>
+<li><a href="#a4-154"><span class="sb-nav-num">A13.154</span> Strongly Mixing ProcessesNEW</a></li>
+<li><a href="#a4-155"><span class="sb-nav-num">A13.155</span> The Empirical Process \(\sup\) – RecapNEW</a></li>
+<li><a href="#a4-156"><span class="sb-nav-num">A13.156</span> Symmetrization RevisitedNEW</a></li>
+<li><a href="#a4-157"><span class="sb-nav-num">A13.157</span> Rademacher ProcessNEW</a></li>
+<li><a href="#a4-158"><span class="sb-nav-num">A13.158</span> Talagrand's Contraction Principle – DetailedNEW</a></li>
+<li><a href="#a4-159"><span class="sb-nav-num">A13.159</span> Penalized ERMNEW</a></li>
+<li><a href="#a4-160"><span class="sb-nav-num">A13.160</span> Model Selection via SRM (Detailed)NEW</a></li>
+<li><a href="#a4-161"><span class="sb-nav-num">A13.161</span> AIC and BIC from an SLT PerspectiveNEW</a></li>
+<li><a href="#a4-162"><span class="sb-nav-num">A13.162</span> Minimum Description Length (MDL) PrincipleNEW</a></li>
+<li><a href="#a4-163"><span class="sb-nav-num">A13.163</span> Occam's Razor in Statistical LearningNEW</a></li>
+<li><a href="#a4-164"><span class="sb-nav-num">A13.164</span> Regularization as a Means of Controlling ComplexityNEW</a></li>
+<li><a href="#a4-165"><span class="sb-nav-num">A13.165</span> Algorithmic Stability and GeneralizationNEW</a></li>
+<li><a href="#a4-166"><span class="sb-nav-num">A13.166</span> Leave‑One‑Out Cross‑ValidationNEW</a></li>
+<li><a href="#a4-167"><span class="sb-nav-num">A13.167</span> PAC‑Bayes FrameworkNEW</a></li>
+<li><a href="#a4-168"><span class="sb-nav-num">A13.168</span> PAC‑Bayes with Data‑Dependent PriorsNEW</a></li>
+<li><a href="#a4-169"><span class="sb-nav-num">A13.169</span> Information‑Theoretic Generalization BoundsNEW</a></li>
+<li><a href="#a4-170"><span class="sb-nav-num">A13.170</span> Mutual Information and GeneralizationNEW</a></li>
+<li><a href="#a4-171"><span class="sb-nav-num">A13.171</span> The Bias–Variance Decomposition in MLNEW</a></li>
+<li><a href="#a4-172"><span class="sb-nav-num">A13.172</span> The Bias–Complexity–Noise TrichotomyNEW</a></li>
+<li><a href="#a4-173"><span class="sb-nav-num">A13.173</span> The Oracle: A Benchmark for LearningNEW</a></li>
+<li><a href="#a4-174"><span class="sb-nav-num">A13.174</span> Why ERM is NaturalNEW</a></li>
+<li><a href="#a4-175"><span class="sb-nav-num">A13.175</span> Beyond Binary Classification: Multi‑class and Structured PredictionNEW</a></li>
+<li><a href="#a4-176"><span class="sb-nav-num">A13.176</span> The Squared Loss in Regression (and its non‑Lipschitz property)NEW</a></li>
+<li><a href="#a4-177"><span class="sb-nav-num">A13.177</span> The Hinge Loss and SVMNEW</a></li>
+<li><a href="#a4-178"><span class="sb-nav-num">A13.178</span> The Logistic Loss and Maximum LikelihoodNEW</a></li>
+<li><a href="#a4-179"><span class="sb-nav-num">A13.179</span> Convexity and Its Role in OptimizationNEW</a></li>
+<li><a href="#a4-180"><span class="sb-nav-num">A13.180</span> Kernel Methods and RKHSNEW</a></li>
+<li><a href="#a4-181"><span class="sb-nav-num">A13.181</span> Representer TheoremNEW</a></li>
+<li><a href="#a4-182"><span class="sb-nav-num">A13.182</span> Neural Networks and VC Dimension (Bounds)NEW</a></li>
+<li><a href="#a4-183"><span class="sb-nav-num">A13.183</span> Deep Learning and Generalization PuzzlesNEW</a></li>
+<li><a href="#a4-184"><span class="sb-nav-num">A13.184</span> Double Descent PhenomenonNEW</a></li>
+<li><a href="#a4-185"><span class="sb-nav-num">A13.185</span> Interpolation and OverparameterizationNEW</a></li>
+<li><a href="#a4-186"><span class="sb-nav-num">A13.186</span> Benign OverfittingNEW</a></li>
+<li><a href="#a4-187"><span class="sb-nav-num">A13.187</span> Parametric vs. Non‑parametric LearningNEW</a></li>
+<li><a href="#a4-188"><span class="sb-nav-num">A13.188</span> Universal Consistency and Stone's TheoremNEW</a></li>
+<li><a href="#a4-189"><span class="sb-nav-num">A13.189</span> Statistical Learning Theory vs. Classical StatisticsNEW</a></li>
+<li><a href="#a4-190"><span class="sb-nav-num">A13.190</span> Generalization: The Core Goal of LearningNEW</a></li>
+<li><a href="#a4-191"><span class="sb-nav-num">A13.191</span> Closing Remarks: The Road Ahead in Modern Learning TheoryNEW</a></li>
+<li><a href="#a4-192"><span class="sb-nav-num">A13.192</span> Motivation: Nonconvexity of the 0‑1 Loss and NP‑hardness of ERMNEW</a></li>
+<li><a href="#a4-193"><span class="sb-nav-num">A13.193</span> Definition: Convex Set and Convex Function (Formal Definitions)NEW</a></li>
+<li><a href="#a4-194"><span class="sb-nav-num">A13.194</span> The Spin Transform: Mapping Labels to \(\{-1,+1\}\) via \(Y\mapsto 2Y-1\)NEW</a></li>
+<li><a href="#a4-195"><span class="sb-nav-num">A13.195</span> Hard Classifiers (\(h:\mathcal{X}\to\{-1,+1\}\)) vs. Soft Classifiers (\(f:\mathcal{X}\to[-1,1]\))NEW</a></li>
+<li><a href="#a4-196"><span class="sb-nav-num">A13.196</span> Definition: Convex Surrogate Loss Function \(\phi:\mathbb{R}\to\mathbb{R}^+\) (Non‑decreasing, Upper Bounds \(\mathbf{1}(z>0)\), \(\phi(0)=1\))NEW</a></li>
+<li><a href="#a4-197"><span class="sb-nav-num">A13.197</span> The Hinge Loss: \(\phi(z)=\max(1+z,0)\)NEW</a></li>
+<li><a href="#a4-198"><span class="sb-nav-num">A13.198</span> The Exponential Loss: \(\phi(z)=\exp(z)\)NEW</a></li>
+<li><a href="#a4-199"><span class="sb-nav-num">A13.199</span> The Logistic Loss: \(\phi(z)=\log_2(1+e^{z})\)NEW</a></li>
+<li><a href="#a4-200"><span class="sb-nav-num">A13.200</span> Empirical \(\phi\)-Risk and Population \(\phi\)-RiskNEW</a></li>
+<li><a href="#a4-201"><span class="sb-nav-num">A13.201</span> Minimizing the \(\phi\)-Risk: Definition of \(f_\phi^* = \arg\min_f R_\phi(f)\)</a></li>
+<li><a href="#a4-202"><span class="sb-nav-num">A13.202</span> Conditional \(\phi\)-Risk and the Function \(H_\eta(\alpha) = \eta\,\phi(-\alpha) + (1-\eta)\,\phi(\alpha)\)</a></li>
+<li><a href="#a4-203"><span class="sb-nav-num">A13.203</span> Bayes Consistency of Convex Surrogates: Derivative ConditionNEW</a></li>
+<li><a href="#a4-204"><span class="sb-nav-num">A13.204</span> Zhang’s Lemma: Bridging Excess \(\phi\)-Risk to Excess Classification RiskNEW</a></li>
+<li><a href="#a4-205"><span class="sb-nav-num">A13.205</span> Zhang’s Lemma (Proof): Jensen’s Inequality and the Key InequalityNEW</a></li>
+<li><a href="#a4-206"><span class="sb-nav-num">A13.206</span> Calibration Constants for Hinge, Exponential, and Logistic LossesNEW</a></li>
+<li><a href="#a4-207"><span class="sb-nav-num">A13.207</span> Convex Relaxation Summary: From NP‑hard ERM to Efficient Convex OptimizationNEW</a></li>
+<li><a href="#a4-208"><span class="sb-nav-num">A13.208</span> The Epigraph Formulation: Rewriting \(\min f(x)\) as \(\min t\) subject to \((x,t)\in\operatorname{epi}(f)\)NEW</a></li>
+<li><a href="#a4-209"><span class="sb-nav-num">A13.209</span> Convex Hull Relaxation: \(\min_{x\in D} c^\top x = \min_{x\in\operatorname{conv}(D)} c^\top x\)NEW</a></li>
+<li><a href="#a4-210"><span class="sb-nav-num">A13.210</span> Definition: Subgradient and Subdifferential \(\partial f(x)\) (Global Linear Underestimators)NEW</a></li>
+<li><a href="#a4-211"><span class="sb-nav-num">A13.211</span> Theorem: Existence of Subgradients for All Convex Functions (Separating Hyperplanes)NEW</a></li>
+<li><a href="#a4-212"><span class="sb-nav-num">A13.212</span> Theorem: Local Minima are Global Minima for Convex Functions & Optimality Condition \(0\in\partial f(x)\)NEW</a></li>
+<li><a href="#a4-213"><span class="sb-nav-num">A13.213</span> First‑Order Taylor Expansion and the Negative Gradient Direction as the Steepest DescentNEW</a></li>
+<li><a href="#a4-214"><span class="sb-nav-num">A13.214</span> Algorithm: Gradient Descent (GD) for Unconstrained Convex MinimizationNEW</a></li>
+<li><a href="#a4-215"><span class="sb-nav-num">A13.215</span> Theorem: \(O(LR/\sqrt{k})\) Convergence Rate for \(L\)-Lipschitz Convex FunctionsNEW</a></li>
+<li><a href="#a4-216"><span class="sb-nav-num">A13.216</span> Step Size Schedules: Fixed \(\eta = R/(L\sqrt{k})\) vs. Decreasing \(\eta_s = G/\sqrt{s}\) (the \(\log k\) Penalty)NEW</a></li>
+<li><a href="#a4-217"><span class="sb-nav-num">A13.217</span> Removing the \(\log k\) Factor via Averaging over the Second Half of Iterates (from \(k/2\) to \(k\))NEW</a></li>
+<li><a href="#a4-218"><span class="sb-nav-num">A13.218</span> Definition: Projection onto a Closed Convex Set \(\pi(x)\) and its Variational Inequality CharacterizationNEW</a></li>
+<li><a href="#a4-219"><span class="sb-nav-num">A13.219</span> Uniqueness of the Projection (Proof by Contradiction)NEW</a></li>
+<li><a href="#a4-220"><span class="sb-nav-num">A13.220</span> Algorithm: Projected Gradient Descent (PGD) for Constrained Convex MinimizationNEW</a></li>
+<li><a href="#a4-221"><span class="sb-nav-num">A13.221</span> Theorem: \(O(LR/\sqrt{k})\) Convergence Rate for Projected Gradient DescentNEW</a></li>
+<li><a href="#a4-222"><span class="sb-nav-num">A13.222</span> Application: SVM – Computing the Lipschitz Constant \(L\) via Kernel Matrix Column NormsNEW</a></li>
+<li><a href="#a4-223"><span class="sb-nav-num">A13.223</span> Application: SVM – Computing the Diameter \(R\) via Kernel Eigenvalues \(\lambda_{\min}(K)\)NEW</a></li>
+<li><a href="#a4-224"><span class="sb-nav-num">A13.224</span> Application: SVM – Random Matrix Theory (Wishart) and Iteration ComplexityNEW</a></li>
+<li><a href="#a4-225"><span class="sb-nav-num">A13.225</span> Application: Boosting – \(\ell_1\) Constraint, Lipschitz Constant \(\sqrt{N}\), and Poor Iteration ComplexityNEW</a></li>
+<li><a href="#a4-226"><span class="sb-nav-num">A13.226</span> Motivation for Mirror Descent: Non‑Euclidean Geometry and the Need for \(\ell_1/\ell_\infty\) Dual SpacesNEW</a></li>
+<li><a href="#a4-227"><span class="sb-nav-num">A13.227</span> Definition: Dual Norm \(\|\cdot\|_*\) and \(\alpha\)-Strong Convexity with Respect to a NormNEW</a></li>
+<li><a href="#a4-228"><span class="sb-nav-num">A13.228</span> Definition: Bregman Divergence \(D_\Phi(y,x) = \Phi(y) - \Phi(x) - \nabla\Phi(x)^\top (y-x)\)NEW</a></li>
+<li><a href="#a4-229"><span class="sb-nav-num">A13.229</span> The Three‑Point Identity for Bregman DivergencesNEW</a></li>
+<li><a href="#a4-230"><span class="sb-nav-num">A13.230</span> Definition: Bregman Projection \(\pi_\Phi(x) = \arg\min_{z\in\mathcal{C}} D_\Phi(z,x)\) and Its Role in Mirror DescentNEW</a></li>
+<li><a href="#a4-231"><span class="sb-nav-num">A13.231</span> Limitation of Projected Gradient Descent: The Euclidean Ball Example and the Benefit of Mirror DescentNEW</a></li>
+<li><a href="#a4-232"><span class="sb-nav-num">A13.232</span> Geometric Intuition of Mirror Descent: Primal Space \(D\) vs. Dual Space \(D^*\) and the Mapping via \(\nabla\Phi(x)\)NEW</a></li>
+<li><a href="#a4-233"><span class="sb-nav-num">A13.233</span> Algorithm: Mirror Descent (Explicit Steps with \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta g_s\) and Bregman Projection)NEW</a></li>
+<li><a href="#a4-234"><span class="sb-nav-num">A13.234</span> Proof Step: Bounding \(D_\Phi(x_s, y_{s+1})\) using Strong Convexity, Hölder’s Inequality, and the Maximum of a QuadraticNEW</a></li>
+<li><a href="#a4-235"><span class="sb-nav-num">A13.235</span> Reformulation of Mirror Descent Update: \(x_{s+1} = \arg\min_{x\in\mathcal{C}} \{\eta g_s^\top x + D_\Phi(x, x_s)\}\) (Proximal View)NEW</a></li>
+<li><a href="#a4-236"><span class="sb-nav-num">A13.236</span> Example: Euclidean Setup (\(\Phi(x) = \frac{1}{2}\|x\|_2^2\)) Recovers Projected Gradient DescentNEW</a></li>
+<li><a href="#a4-237"><span class="sb-nav-num">A13.237</span> Example: Negative Entropy Potential \(\Phi(x) = \sum_i x_i \log x_i\) and the Multiplicative Weights UpdateNEW</a></li>
+<li><a href="#a4-238"><span class="sb-nav-num">A13.238</span> Bregman Divergence for Negative Entropy: \(D_\Phi(y,x) = \mathrm{KL}(y,x) + \sum_i (y_i - x_i)\)NEW</a></li>
+<li><a href="#a4-239"><span class="sb-nav-num">A13.239</span> Bregman Projection onto the Simplex \(\Delta_n\) for Negative Entropy: Simple RenormalizationNEW</a></li>
+<li><a href="#a4-240"><span class="sb-nav-num">A13.240</span> Strong Convexity of Negative Entropy w.r.t. \(\ell_1\) Norm via Pinsker’s Inequality (\(D_\Phi(y,x) \ge \frac{1}{2}\|x-y\|_1^2\))NEW</a></li>
+<li><a href="#a4-241"><span class="sb-nav-num">A13.241</span> Diameter \(R^2\) for Negative Entropy on the Simplex: \(R^2 = \max\Phi(x) - \min\Phi(x) = 0 - (-\log d) = \log d\)NEW</a></li>
+<li><a href="#a4-242"><span class="sb-nav-num">A13.242</span> Corollary: \(O(L^2 \log d / k)\) Convergence Rate for Mirror Descent under \(\ell_1\) Constraints and \(\ell_\infty\) Gradient BoundsNEW</a></li>
+<li><a href="#a4-243"><span class="sb-nav-num">A13.243</span> Application: Boosting with Mirror Descent – Exploiting \(\ell_\infty\) Bounds to Achieve \(O(L^2 \log N / k)\), Leading to \(k \approx n^2 \log N\) Iterations for \(1/n\) AccuracyNEW</a></li>
+<li><a href="#a4-244"><span class="sb-nav-num">A13.244</span> Other Potential Functions: \(\Phi(x) = \frac{1}{p}\|x\|_p^p\) with Strong Convexity w.r.t. \(\ell_1\) Norm (e.g., \(p = 1 + \frac{1}{\log d}\))NEW</a></li>
+<li><a href="#a4-245"><span class="sb-nav-num">A13.245</span> Stochastic Convex Optimization Setup: Random Functions \(x \mapsto \ell(x, Z)\) and the Goal of Minimizing \(f(x) = \mathbb{E}[\ell(x, Z)]\)NEW</a></li>
+<li><a href="#a4-246"><span class="sb-nav-num">A13.246</span> Examples: Boosting (Convex Surrogate), Linear Regression (Squared Loss), and Maximum Likelihood (KL Divergence Minimization)NEW</a></li>
+<li><a href="#a4-247"><span class="sb-nav-num">A13.247</span> External Randomization: Expressing Empirical Risk Minimization as \(\mathbb{E}_I[f_I(x)]\) with Artificial Uniform Index \(I\)NEW</a></li>
+<li><a href="#a4-248"><span class="sb-nav-num">A13.248</span> Critical Distinction: One Pass over True Data (Statistical Limit) vs. Multiple Passes over Artificial Data (Computational Iteration)NEW</a></li>
+<li><a href="#a4-249"><span class="sb-nav-num">A13.249</span> Algorithm: Stochastic Gradient Descent (SGD) with Unbiased Subgradient Estimates and Projection onto \(\mathcal{C}\)NEW</a></li>
+<li><a href="#a4-250"><span class="sb-nav-num">A13.250</span> Theorem: \(O(LR/\sqrt{k})\) Convergence Rate for SGD with Fixed Step Size \(\eta = R/(L\sqrt{k})\)NEW</a></li>
+<li><a href="#a4-251"><span class="sb-nav-num">A13.251</span> Proof of SGD Convergence: Telescoping Sum, Conditional Expectation, and the Variance Bound \(\mathbb{E}\|\tilde g\|^2 \le L^2\)NEW</a></li>
+<li><a href="#a4-252"><span class="sb-nav-num">A13.252</span> Algorithm: Stochastic Mirror Descent (SMD) Using \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta \tilde g_s\)NEW</a></li>
+<li><a href="#a4-253"><span class="sb-nav-num">A13.253</span> Theorem: \(O(L^2 R^2 / (\alpha k))\) Convergence Rate for Stochastic Mirror DescentNEW</a></li>
+<li><a href="#a4-254"><span class="sb-nav-num">A13.254</span> Proof of SMD: Derivation of the Key Inequality \(D_\Phi(x_s, y_{s+1}) \le \eta^2 \|\tilde g_s\|_*^2 / (2\alpha)\)NEW</a></li>
+<li><a href="#a4-255"><span class="sb-nav-num">A13.255</span> Algorithm: Stochastic Coordinate Descent (SCD) – Unbiased Gradient Estimate \(d \nabla_{I} f(x) e_I\) for Differentiable \(f\)NEW</a></li>
+<li><a href="#a4-256"><span class="sb-nav-num">A13.256</span> Rate for SCD: \(O(L R^2 d / k)\) and the Trade‑off between Update Cost and Iteration Complexity (Dimension Dependence)NEW</a></li>
+<li><a href="#a4-257"><span class="sb-nav-num">A13.257</span> Output Strategy: Averaging Iterates \(\bar x_k\) vs. Best Iterate \(x_k^\circ\) in Stochastic SettingsNEW</a></li>
+<li><a href="#a4-258"><span class="sb-nav-num">A13.258</span> Online Learning Framework: Sequential Decision Making vs. Batch LearningNEW</a></li>
+<li><a href="#a4-259"><span class="sb-nav-num">A13.259</span> Examples in Detail: Online Shortest Path (Edge Weights), Dynamic Pricing (Customer Valuations), Sequential Investment (Portfolios)NEW</a></li>
+<li><a href="#a4-260"><span class="sb-nav-num">A13.260</span> Statistical vs. Adversarial Models in Online Prediction (i.i.d. vs. Worst‑Case Sequences)NEW</a></li>
+<li><a href="#a4-261"><span class="sb-nav-num">A13.261</span> Prediction with Expert Advice: Action Set \(A\), Convex Hull, Loss Function \(\ell(a_t, z_t)\), and the Definition of Cumulative Regret \(R_n\)NEW</a></li>
+<li><a href="#a4-262"><span class="sb-nav-num">A13.262</span> Convex Combination of Experts: Playing \(p_t \in \Delta_K\) and the Linear Loss Form \(p_t^\top z_t\)NEW</a></li>
+<li><a href="#a4-263"><span class="sb-nav-num">A13.263</span> Follow the Leader (FTL): The Greedy Strategy \(p_t = \arg\min_{p\in\Delta_K} \sum_{s=1}^{t-1} p^\top z_s\) and its Linear Regret CounterexampleNEW</a></li>
+<li><a href="#a4-264"><span class="sb-nav-num">A13.264</span> Algorithm: Exponential Weights (EW) / Hedge – Update Rule \(p_{t+1,j} \propto p_{t,j} \exp(-\eta \ell(e_j, z_t))\) with Weights \(w_{t,j} = \exp(-\eta \sum_{s=1}^{t-1} \ell(e_j, z_s))\)NEW</a></li>
+<li><a href="#a4-265"><span class="sb-nav-num">A13.265</span> Theorem: EW Regret Bound \(R_n \le \frac{\log K}{\eta} + \frac{\eta n}{2}\) (Optimized to \(R_n \le \sqrt{2 n \log K}\))NEW</a></li>
+<li><a href="#a4-266"><span class="sb-nav-num">A13.266</span> Alternative Proof of EW Regret: Telescoping Sum \(\log(W_{t+1}/W_t)\), Hoeffding's Lemma, and Jensen's InequalityNEW</a></li>
+<li><a href="#a4-267"><span class="sb-nav-num">A13.267</span> Algorithm: Follow the Perturbed Leader (FPL) – Regularizing FTL with Uniform Perturbation \(\xi \sim \mathrm{Unif}([0,1/\eta]^K)\)NEW</a></li>
+<li><a href="#a4-268"><span class="sb-nav-num">A13.268</span> Oblivious Adversaries: The FPL Analysis Framework (Pre‑determined Adversarial Sequence \(z_t\))NEW</a></li>
+<li><a href="#a4-269"><span class="sb-nav-num">A13.269</span> Lemma: Be‑the‑Leader – The Inequality \(\sum_{t=1}^n \ell(p_t^*, z_t) \le \sum_{t=1}^n \ell(p_n^*, z_t)\) (Proof by Induction)NEW</a></li>
+<li><a href="#a4-270"><span class="sb-nav-num">A13.270</span> Theorem: FPL Expected Regret Bound \(\mathbb{E}[R_n] \le 2\sqrt{2 n K}\) (Proof via Box Geometry, Coupling, and the Shift \(\xi + z_t\))NEW</a></li>
         </ul>
     </nav>
 
