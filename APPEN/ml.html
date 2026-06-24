@@ -24,8 +24,7 @@
             --paper3: #d4b463;
             --ink: #0b0014;
             --ink2: #1e0a2e;
-            --ink3: #3a1e4e;
-            --ink4: #6a4a7a;
+            --ink3: #3a1e4e;            --ink4: #6a4a7a;
             --ink5: #b09cc6;
             --rule: rgba(11, 0, 20, 0.18);
             --rule2: rgba(11, 0, 20, 0.10);
@@ -57,7 +56,6 @@
             --tag-ml-color: #4b0082;
         }
         [data-theme="dark"] {
-            
             --paper: #0a0c0a;
             --paper2: #131512;
             --paper3: #1c1f1a;
@@ -95,77 +93,841 @@
             --tag-ml-border: rgba(153, 85, 255, 0.32);
             --tag-ml-color: #9955ff;
         }
-        *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;font-size:16px}
-        body{background:var(--paper);color:var(--ink);font-family:'EB Garamond',Georgia,'Times New Roman',serif;overflow-x:hidden;line-height:1.6;transition:background .22s ease,color .22s ease;max-width:100vw}
-        ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--paper2)}::-webkit-scrollbar-thumb{background:var(--ink5)}
-        .frontmatter{background:var(--fm-bg);color:var(--fm-text);position:relative;overflow:hidden;max-width:100vw}
-        .frontmatter::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 6px,rgba(255,255,255,0.018) 6px,rgba(255,255,255,0.018) 7px);pointer-events:none}
-        .fm-rule-top{height:3px;background:var(--fm-rule)}
-        .fm-series-bar{border-bottom:1px solid var(--fm-border);padding:.55rem 3rem;display:flex;justify-content:space-between;align-items:center;font-family:'Source Sans 3',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.58);flex-wrap:wrap;gap:.4rem}
-        .fm-body{max-width:1080px;margin:0 auto;padding:3.5rem 3rem 3rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:end;position:relative}
-        .fm-eyebrow{font-family:'Source Sans 3',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--fm-accent);margin-bottom:1.1rem}
-        .fm-title{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:500;font-style:italic;line-height:1.04;letter-spacing:-.015em;color:var(--fm-text);margin-bottom:.85rem;overflow-wrap:break-word;word-break:break-word}
-        .fm-title em{font-style:normal;font-weight:400;color:var(--fm-muted)}
-        .fm-subtitle{font-family:'Source Sans 3',sans-serif;font-size:.9rem;font-weight:300;color:rgba(255,255,255,.62);line-height:1.75;max-width:58ch}
-        .fm-meta{display:flex;flex-direction:column;gap:.85rem;font-family:'Source Code Pro',monospace;font-size:.62rem;min-width:200px;border-left:1px solid var(--fm-border);padding-left:2rem}
-        .fm-meta-row{display:flex;flex-direction:column;gap:.15rem}
-        .fm-meta-label{color:rgba(255,255,255,.40);letter-spacing:.16em;text-transform:uppercase;font-size:.52rem}
-        .fm-meta-value{color:rgba(255,255,255,.90);overflow-wrap:break-word}
-        .fm-rule-bot{height:1px;background:var(--fm-border);margin:0 3rem}
-        .fm-folio-bar{padding:.55rem 3rem;display:flex;justify-content:space-between;font-family:'Source Code Pro',monospace;font-size:.58rem;color:rgba(255,255,255,.38);letter-spacing:.08em;flex-wrap:wrap;gap:.4rem}
-        .theme-toggle{position:absolute;top:0;right:0;padding:.9rem 3rem 0 0;display:flex;align-items:center;gap:.55rem;z-index:10}
-        .toggle-label{font-family:'Source Sans 3',sans-serif;font-size:.6rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--fm-muted);user-select:none}
-        .toggle-btn{width:40px;height:20px;background:var(--toggle-bg);border:1px solid rgba(255,255,255,.14);border-radius:10px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
-        .toggle-btn::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.7);transition:transform .22s cubic-bezier(.4,0,.2,1)}
-        [data-theme="dark"] .toggle-btn::after{transform:translateX(20px)}[data-theme="dark"] .toggle-btn{background:rgba(255,255,255,.12)}
-        .page{max-width:1080px;margin:0 auto;padding:0 3rem 6rem;display:grid;grid-template-columns:1fr 268px;gap:5rem;align-items:start}
-        .content{padding-top:3.5rem;max-width:100%;min-width:0}
-        .breadcrumb{display:flex;align-items:center;gap:.55rem;margin-bottom:2rem;font-family:'Source Sans 3',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);flex-wrap:wrap;overflow-wrap:break-word}
-        .breadcrumb a{color:var(--crimson);text-decoration:none}.breadcrumb a:hover{color:var(--crimson2);text-decoration:underline}
-        .breadcrumb .sep{color:var(--ink5);font-weight:400}.breadcrumb .current{color:var(--ink2)}
-        .ml-tag{display:inline-block;font-family:'Source Sans 3',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:var(--tag-ml-bg);color:var(--tag-ml-color);border:1px solid var(--tag-ml-border);border-radius:3px;padding:.15rem .45rem;margin-left:.6rem;vertical-align:middle;flex-shrink:0}
-        .section-block{margin-bottom:3rem;scroll-margin-top:2rem;max-width:100%}
-        .section-heading{display:flex;align-items:baseline;gap:1rem;margin-bottom:1rem;padding-bottom:.55rem;border-bottom:1px solid var(--rule);flex-wrap:wrap}
-        .section-num-large{font-family:'Source Code Pro',monospace;font-size:1.05rem;font-weight:500;color:var(--crimson);letter-spacing:.04em;flex-shrink:0;min-width:3.6rem}
-        .section-title-large{font-family:'EB Garamond',Georgia,serif;font-size:1.6rem;font-weight:500;color:var(--ink);line-height:1.2;overflow-wrap:break-word}
-        .section-body{font-family:'Source Sans 3',sans-serif;font-size:.88rem;font-weight:400;color:var(--ink2);line-height:1.85;overflow-wrap:break-word;word-break:break-word}
-        .section-body p{margin-bottom:1rem}.section-body strong{color:var(--ink);font-weight:600}
-        .section-body ol,.section-body ul{margin:.6rem 0 1.2rem 1.5rem}.section-body ol li,.section-body ul li{margin-bottom:.35rem;padding-left:.3rem}
-        .intro-note{background:var(--callout-bg);border-left:3px solid var(--callout-border);padding:1.1rem 1.4rem;margin-bottom:2.6rem;font-family:'Source Sans 3',sans-serif;font-size:.84rem;color:var(--ink2);line-height:1.8;border-radius:0 6px 6px 0;overflow-wrap:break-word}
-        .intro-note strong{color:var(--crimson);font-weight:600}
-        .equation-block{background:var(--eq-bg);border:1px solid var(--eq-border);border-radius:5px;padding:1.1rem 1.3rem;margin:1rem 0 1.2rem;font-family:'STIX Two Math','Latin Modern Math','Cambria Math',serif;font-size:.94rem;font-weight:400;font-style:italic;color:var(--ink);overflow-x:auto;overflow-y:hidden;line-height:1.95;letter-spacing:.02em;max-width:100%}
-        .equation-block.multiline{white-space:normal;line-height:2.2;overflow-x:visible;word-break:break-word}
-        .var-def-list{list-style:none;margin:.6rem 0 1.4rem;border-top:1px solid var(--rule3);max-width:100%}
-        .var-def-item{display:flex;gap:.75rem;padding:.38rem 0;border-bottom:1px solid var(--rule3);font-family:'Source Sans 3',sans-serif;font-size:.78rem;font-weight:400;color:var(--ink3);line-height:1.55;align-items:baseline;flex-wrap:wrap}
-        .var-symbol{font-family:'STIX Two Math','Latin Modern Math','Cambria Math',serif;font-weight:500;font-style:italic;color:var(--crimson);min-width:4.6rem;flex-shrink:0;font-size:.82rem;letter-spacing:.03em;text-align:right;overflow-wrap:break-word}
-        .var-desc{flex:1;color:var(--ink2);min-width:0;overflow-wrap:break-word}
-        .sidebar{padding-top:3.5rem;overflow-y:auto;max-height:100vh;position:sticky;top:0}
-        .sb-section{margin-bottom:2.6rem;max-width:100%}
-        .sb-heading{font-family:'Source Sans 3',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);margin-bottom:.9rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule);overflow-wrap:break-word}
-        .sb-body{font-family:'Source Sans 3',sans-serif;font-size:.82rem;color:var(--ink3);line-height:1.75;overflow-wrap:break-word}
-        .sb-body p{margin-bottom:.65rem}.sb-body strong{color:var(--ink2);font-weight:600}
-        .sb-nav-list{list-style:none;display:flex;flex-direction:column;max-width:100%}
-        .sb-nav-list li{border-bottom:1px solid var(--rule3)}
-        .sb-nav-list a{display:block;padding:.55rem 0;font-family:'Source Sans 3',sans-serif;font-size:.78rem;font-weight:400;color:var(--ink3);text-decoration:none;transition:color .16s;overflow-wrap:break-word;word-break:break-word;line-height:1.5}
-        .sb-nav-list a:hover{color:var(--crimson)}
-        .sb-nav-num{font-family:'Source Code Pro',monospace;font-size:.6rem;color:var(--crimson);margin-right:.4rem}
-        footer{background:var(--paper2);border-top:2px solid var(--ink);max-width:100vw}
-        .ft-inner{max-width:1080px;margin:0 auto;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
-        .ft-title{font-family:'EB Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink2);overflow-wrap:break-word}
-        .ft-right{font-family:'Source Sans 3',sans-serif;font-size:.68rem;color:var(--ink4);letter-spacing:.04em;overflow-wrap:break-word}
-        #hamburger-btn{display:none;position:fixed;top:15px;left:15px;z-index:1001;background:#333;color:white;border:none;font-size:24px;padding:8px 12px;border-radius:5px;cursor:pointer}
-        #mobile-nav{display:none;position:fixed;top:0;left:0;height:100%;width:280px;max-width:80vw;background:#f5f5f5;box-shadow:2px 0 10px rgba(0,0,0,.3);z-index:1000;overflow-y:auto;padding:20px;transition:transform .3s ease;transform:translateX(-100%)}
-        [data-theme="dark"] #mobile-nav{background:#1a0a26;color:#f4eeff}[data-theme="dark"] #mobile-nav a{color:#b266ff}
-        #mobile-nav.open{transform:translateX(0)}
-        #mobile-nav h3{margin-top:0;color:#333;font-family:'Source Sans 3',sans-serif;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}[data-theme="dark"] #mobile-nav h3{color:#f4eeff}
-        #mobile-nav ul{list-style:none;padding:0;margin:0}#mobile-nav li{margin:5px 0}
-        #mobile-nav a{text-decoration:none;color:#6a0dad;font-size:15px;font-family:'Source Sans 3',sans-serif;display:block;padding:.35rem 0}#mobile-nav a:hover{text-decoration:underline}
-        #nav-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:999}
-        @media (max-width:768px){#hamburger-btn{display:block}#mobile-nav{display:block}}
-        @media(max-width:820px){.page{grid-template-columns:1fr;gap:0}.sidebar{border-top:2px solid var(--ink);padding-top:2.5rem;max-width:100%;max-height:none;position:static}.var-symbol{min-width:3.8rem;font-size:.74rem}.equation-block{font-size:.84rem;padding:.95rem 1rem}.sb-nav-list a{font-size:.82rem;padding:.6rem 0}}
-        @media(max-width:680px){.page{padding:0 1.5rem 4rem}.fm-body{grid-template-columns:1fr;gap:1.5rem;padding:2.5rem 1.5rem 2rem}.fm-meta{border-left:none;border-top:1px solid var(--fm-border);padding-left:0;padding-top:1.25rem;min-width:0}.fm-rule-bot{margin:0 1.5rem}.fm-folio-bar{padding:.55rem 1.5rem}.fm-series-bar{padding:.55rem 1.5rem;font-size:.58rem;letter-spacing:.14em}.ft-inner{padding:1.2rem 1.5rem;flex-direction:column;align-items:flex-start;gap:.4rem}.theme-toggle{padding:.7rem 1.5rem 0 0}.section-num-large{min-width:2.8rem;font-size:.9rem}.section-title-large{font-size:1.3rem}.equation-block{font-size:.78rem;padding:.8rem .75rem}.equation-block.multiline{white-space:normal}.var-symbol{min-width:3.2rem;font-size:.7rem;text-align:left}.var-def-item{gap:.4rem}.sb-nav-list a{font-size:.8rem;padding:.55rem 0;line-height:1.5}.sb-heading{font-size:.58rem;letter-spacing:.16em}.breadcrumb{font-size:.58rem;letter-spacing:.08em;gap:.35rem}}
-        @media(max-width:400px){.page{padding:0 1rem 3rem}.fm-body{padding:2rem 1rem 1.5rem}.fm-rule-bot{margin:0 1rem}.fm-folio-bar{padding:.45rem 1rem}.fm-series-bar{padding:.45rem 1rem;font-size:.52rem;letter-spacing:.1em}.theme-toggle{padding:.5rem 1rem 0 0}.ft-inner{padding:1rem 1rem}.section-num-large{min-width:2.2rem;font-size:.78rem}.section-title-large{font-size:1.15rem}.equation-block{font-size:.72rem;padding:.65rem .6rem;border-radius:3px}.var-symbol{min-width:2.6rem;font-size:.66rem;text-align:left}.var-desc{font-size:.72rem}.sb-nav-list a{font-size:.76rem;padding:.5rem 0}.breadcrumb{font-size:.54rem;letter-spacing:.04em}.intro-note{padding:.85rem 1rem;font-size:.76rem}}
-        @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+        /* ── RESET ── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+            overflow-x: hidden;   /* keep body from scrolling horizontally */
+            line-height: 1.6;
+            transition: background 0.22s ease, color 0.22s ease;
+            max-width: 100vw;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--paper2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--ink5);
+        }
+
+        /* ── FRONTMATTER ── */
+        .frontmatter {
+            background: var(--fm-bg);
+            color: var(--fm-text);
+            position: relative;
+            overflow: hidden;
+            max-width: 100vw;
+        }
+        .frontmatter::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 6px,
+                    rgba(255, 255, 255, 0.012) 6px,
+                    rgba(255, 255, 255, 0.012) 7px);
+            pointer-events: none;
+        }
+        .fm-rule-top {
+            height: 3px;
+            background: var(--fm-rule);
+        }
+        .fm-series-bar {
+            border-bottom: 1px solid var(--fm-border);
+            padding: .55rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .65rem;
+            font-weight: 600;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.58);
+            flex-wrap: wrap;
+            gap: .4rem;
+        }
+        .fm-body {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 3.5rem 3rem 3rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 3rem;
+            align-items: end;
+            position: relative;
+        }
+        .fm-eyebrow {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .26em;
+            text-transform: uppercase;
+            color: var(--fm-accent);
+            margin-bottom: 1.1rem;
+        }
+        .fm-title {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+            font-weight: 500;
+            font-style: italic;
+            line-height: 1.04;
+            letter-spacing: -.015em;
+            color: var(--fm-text);
+            margin-bottom: .85rem;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+        .fm-title em {
+            font-style: normal;
+            font-weight: 400;
+            color: var(--fm-muted);
+        }
+        .fm-subtitle {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .9rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, .62);
+            line-height: 1.75;
+            max-width: 58ch;
+        }
+        .fm-meta {
+            display: flex;
+            flex-direction: column;
+            gap: .85rem;
+            font-family: 'Source Code Pro', monospace;
+            font-size: .62rem;
+            min-width: 200px;
+            border-left: 1px solid var(--fm-border);
+            padding-left: 2rem;
+        }
+        .fm-meta-row {
+            display: flex;
+            flex-direction: column;
+            gap: .15rem;
+        }
+        .fm-meta-label {
+            color: rgba(255, 255, 255, .40);
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            font-size: .52rem;
+        }
+        .fm-meta-value {
+            color: rgba(255, 255, 255, .90);
+            overflow-wrap: break-word;
+        }
+        .fm-rule-bot {
+            height: 1px;
+            background: var(--fm-border);
+            margin: 0 3rem;
+        }
+        .fm-folio-bar {
+            padding: .55rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Source Code Pro', monospace;
+            font-size: .58rem;
+            color: rgba(255, 255, 255, .38);
+            letter-spacing: .08em;
+            flex-wrap: wrap;
+            gap: .4rem;
+        }
+
+        /* ── THEME TOGGLE ── */
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: .9rem 3rem 0 0;
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            z-index: 10;
+        }
+        .toggle-label {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .6rem;
+            font-weight: 600;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--fm-muted);
+            user-select: none;
+        }
+        .toggle-btn {
+            width: 40px;
+            height: 20px;
+            background: var(--toggle-bg);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: background .2s;
+            flex-shrink: 0;
+        }
+        .toggle-btn::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            transition: transform .22s cubic-bezier(.4, 0, .2, 1);
+        }
+        [data-theme="dark"] .toggle-btn::after {
+            transform: translateX(20px);
+        }
+        [data-theme="dark"] .toggle-btn {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* ── PAGE BODY ── */
+        .page {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 3rem 6rem;
+            display: grid;
+            grid-template-columns: 1fr 268px;
+            gap: 5rem;
+            align-items: start;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .content {
+            padding-top: 3.5rem;
+            max-width: 100%;
+            min-width: 0;
+            /* no horizontal scroll on the whole content column */
+            overflow-x: hidden;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            margin-bottom: 2rem;
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .62rem;
+            font-weight: 600;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--ink4);
+            flex-wrap: wrap;
+            overflow-wrap: break-word;
+        }
+        .breadcrumb a {
+            color: var(--crimson);
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            color: var(--crimson2);
+            text-decoration: underline;
+        }
+        .breadcrumb .sep {
+            color: var(--ink5);
+            font-weight: 400;
+        }
+        .breadcrumb .current {
+            color: var(--ink2);
+        }
+
+        .section-block {
+            margin-bottom: 3rem;
+            scroll-margin-top: 2rem;
+            max-width: 100%;
+        }
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: .55rem;
+            border-bottom: 1px solid var(--rule);
+            flex-wrap: wrap;
+            max-width: 100%;
+            box-sizing: border-box;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            /* allow horizontal scroll if a single word is too long */
+            overflow-x: auto;
+        }
+        .section-num-large {
+            font-family: 'Source Code Pro', monospace;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--crimson);
+            letter-spacing: .04em;
+            flex-shrink: 0;
+            min-width: 3.6rem;
+            max-width: 100%;
+            box-sizing: border-box;
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .section-title-large {
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--ink);
+            line-height: 1.2;
+            overflow-wrap: break-word;
+        }
+        .section-body {
+            font-family: 'Source Sans 3', system-ui, sans-serif;
+            font-size: .88rem;
+            font-weight: 400;
+            color: var(--ink2);
+            line-height: 1.85;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            /* paragraphs and lists can scroll horizontally if needed */
+            overflow-x: auto;
+        }
+        .section-body p {
+            margin-bottom: 1rem;
+            /* keep individual paragraphs from scrolling unnecessarily – they inherit overflow-x: auto from parent, but will only show scroll if content overflows */
+        }
+        .section-body strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .intro-note {
+            background: var(--callout-bg);
+            border-left: 3px solid var(--callout-border);
+            padding: 1.1rem 1.4rem;
+            margin-bottom: 2.6rem;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .84rem;
+            color: var(--ink2);
+            line-height: 1.8;
+            border-radius: 0 6px 6px 0;
+            overflow-wrap: break-word;
+            overflow-x: auto;   /* intro note can scroll if text overflows */
+        }
+        .intro-note strong {
+            color: var(--crimson);
+            font-weight: 600;
+        }
+        .equation {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        ol {
+            max-width: 100%;
+            box-sizing: border-box;
+            padding-left: 20px;
+            overflow-x: auto;   /* numbered lists can scroll if items overflow */
+        }
+
+        li {
+            max-width: 100%;
+            box-sizing: border-box;
+            word-break: break-word;
+        }
+
+        /* Equation block – already has horizontal scroll for long equations */
+        .equation-block {
+            background: var(--eq-bg);
+            border: 1px solid var(--eq-border);
+            border-radius: 5px;
+            padding: 1.1rem 1.3rem;
+            margin: 1rem 0 1.2rem;
+            font-family: 'STIX Two Math', 'Latin Modern Math', 'Cambria Math', serif;
+            font-size: .94rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--ink);
+            overflow-x: auto;
+            overflow-y: hidden;
+            line-height: 1.95;
+            letter-spacing: .02em;
+            white-space: nowrap;
+            max-width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+        .equation-block.multiline {
+            white-space: normal;
+            line-height: 2.2;
+            overflow-x: visible;
+            word-break: break-word;
+        }
+
+        .var-def-list {
+            list-style: none;
+            margin: .6rem 0 1.4rem;
+            border-top: 1px solid var(--rule3);
+            max-width: 100%;
+            overflow-x: auto;   /* variable definition list can scroll */
+        }
+        .var-def-item {
+            display: flex;
+            gap: .75rem;
+            padding: .38rem 0;
+            border-bottom: 1px solid var(--rule3);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .78rem;
+            font-weight: 400;
+            color: var(--ink3);
+            line-height: 1.55;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+        .var-symbol {
+            font-family: 'STIX Two Math', 'Latin Modern Math', 'Cambria Math', serif;
+            font-weight: 500;
+            font-style: italic;
+            color: var(--crimson);
+            min-width: 4.6rem;
+            flex-shrink: 0;
+            font-size: .82rem;
+            letter-spacing: .03em;
+            text-align: right;
+            overflow-wrap: break-word;
+        }
+        .var-desc {
+            flex: 1;
+            color: var(--ink2);
+            min-width: 0;
+            overflow-wrap: break-word;
+        }
+
+        .conceptual-note {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .72rem;
+            font-weight: 400;
+            color: var(--ink4);
+            font-style: italic;
+            margin-top: .5rem;
+            padding: .4rem .6rem;
+            background: var(--section-bg);
+            border-radius: 3px;
+            display: inline-block;
+            max-width: 100%;
+            overflow-wrap: break-word;
+            overflow-x: auto;   /* note can scroll if needed */
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            overflow-y: auto;
+            max-height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+        .sb-section {
+            margin-bottom: 2.6rem;
+            max-width: 100%;
+        }
+        .sb-heading {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin-bottom: .9rem;
+            padding-bottom: .4rem;
+            border-bottom: 1px solid var(--rule);
+            overflow-wrap: break-word;
+            overflow-x: auto;   /* sidebar heading can scroll */
+        }
+        .sb-body {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .82rem;
+            color: var(--ink3);
+            line-height: 1.75;
+            overflow-wrap: break-word;
+            overflow-x: auto;   /* sidebar body can scroll */
+        }
+        .sb-body p {
+            margin-bottom: .65rem;
+        }
+        .sb-body strong {
+            color: var(--ink2);
+            font-weight: 600;
+        }
+        .sb-nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            max-width: 100%;
+        }
+        .sb-nav-list li {
+            border-bottom: 1px solid var(--rule3);
+        }
+        .sb-nav-list a {
+            display: block;
+            padding: .55rem 0;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .78rem;
+            font-weight: 400;
+            color: var(--ink3);
+            text-decoration: none;
+            transition: color .16s;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+        .sb-nav-list a:hover {
+            color: var(--crimson);
+        }
+        .sb-nav-num {
+            font-family: 'Source Code Pro', monospace;
+            font-size: .6rem;
+            color: var(--crimson);
+            margin-right: .4rem;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--paper2);
+            border-top: 2px solid var(--ink);
+            max-width: 100vw;
+        }
+        .ft-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+        .ft-title {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--ink2);
+            overflow-wrap: break-word;
+        }
+        .ft-right {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: .68rem;
+            color: var(--ink4);
+            letter-spacing: .04em;
+            overflow-wrap: break-word;
+        }
+
+        /* ── HAMBURGER BUTTON ── */
+        #hamburger-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #333;
+            color: white;
+            border: none;
+            font-size: 24px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* ── MOBILE NAVIGATION ── */
+        #mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 280px;
+            max-width: 80vw;
+            background: #f5f5f5;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            overflow-y: auto;
+            overflow-x: hidden;          /* whole menu does NOT scroll horizontally */
+            padding: 20px;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+
+        #mobile-nav.open {
+            transform: translateX(0);
+        }
+
+        #mobile-nav h3 {
+            margin-top: 0;
+            color: #333;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            max-width: 100%;
+        }
+
+        #mobile-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-width: 100%;
+        }
+
+        /* each list item can scroll horizontally only if its content truly overflows */
+        #mobile-nav li {
+            margin: 5px 0;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #mobile-nav a {
+            text-decoration: none;
+            color: #007acc;
+            font-size: 16px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            display: inline-block;
+            max-width: 100%;
+            line-height: 1.5;
+        }
+
+        #mobile-nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Overlay behind the sidebar */
+        #nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+        }
+
+        /* Show the hamburger button and sidebar on mobile */
+        @media (max-width: 768px) {
+            #hamburger-btn {
+                display: block;
+            }
+            #mobile-nav {
+                display: block;
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:820px) {
+            .page {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .sidebar {
+                border-top: 2px solid var(--ink);
+                padding-top: 2.5rem;
+                max-width: 100%;
+            }
+            .var-symbol {
+                min-width: 3.8rem;
+                font-size: .74rem;
+            }
+            .equation-block {
+                font-size: .84rem;
+                padding: .95rem 1rem;
+            }
+            .sb-nav-list a {
+                font-size: .82rem;
+                padding: .6rem 0;
+            }
+        }
+        @media(max-width:680px) {
+            .page {
+                padding: 0 1.5rem 4rem;
+            }
+            .fm-body {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 2.5rem 1.5rem 2rem;
+            }
+            .fm-meta {
+                border-left: none;
+                border-top: 1px solid var(--fm-border);
+                padding-left: 0;
+                padding-top: 1.25rem;
+                min-width: 0;
+            }
+            .fm-rule-bot {
+                margin: 0 1.5rem;
+            }
+            .fm-folio-bar {
+                padding: .55rem 1.5rem;
+            }
+            .fm-series-bar {
+                padding: .55rem 1.5rem;
+                font-size: .58rem;
+                letter-spacing: .14em;
+            }
+            .ft-inner {
+                padding: 1.2rem 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: .4rem;
+            }
+            .theme-toggle {
+                padding: .7rem 1.5rem 0 0;
+            }
+            .section-num-large {
+                min-width: 2.8rem;
+                font-size: .9rem;
+            }
+            .section-title-large {
+                font-size: 1.3rem;
+            }
+            .equation-block {
+                font-size: .78rem;
+                padding: .8rem .75rem;
+            }
+            .equation-block.multiline {
+                white-space: normal;
+            }
+            .var-symbol {
+                min-width: 3.2rem;
+                font-size: .7rem;
+                text-align: left;
+            }
+            .var-def-item {
+                gap: .4rem;
+            }
+            .sb-nav-list a {
+                font-size: .8rem;
+                padding: .55rem 0;
+                line-height: 1.5;
+            }
+            .sb-heading {
+                font-size: .58rem;
+                letter-spacing: .16em;
+            }
+            .breadcrumb {
+                font-size: .58rem;
+                letter-spacing: .08em;
+                gap: .35rem;
+            }
+        }
+        @media(max-width:400px) {
+            .page {
+                padding: 0 1rem 3rem;
+            }
+            .fm-body {
+                padding: 2rem 1rem 1.5rem;
+            }
+            .fm-rule-bot {
+                margin: 0 1rem;
+            }
+            .fm-folio-bar {
+                padding: .45rem 1rem;
+            }
+            .fm-series-bar {
+                padding: .45rem 1rem;
+                font-size: .52rem;
+                letter-spacing: .1em;
+            }
+            .theme-toggle {
+                padding: .5rem 1rem 0 0;
+            }
+            .ft-inner {
+                padding: 1rem 1rem;
+            }
+            .section-num-large {
+                min-width: 2.2rem;
+                font-size: .78rem;
+            }
+            .section-title-large {
+                font-size: 1.15rem;
+            }
+            .equation-block {
+                font-size: .72rem;
+                padding: .65rem .6rem;
+                border-radius: 3px;
+            }
+            .var-symbol {
+                min-width: 2.6rem;
+                font-size: .66rem;
+                text-align: left;
+            }
+            .var-desc {
+                font-size: .72rem;
+            }
+            .sb-nav-list a {
+                font-size: .76rem;
+                padding: .5rem 0;
+            }
+            .breadcrumb {
+                font-size: .54rem;
+                letter-spacing: .04em;
+            }
+            .intro-note {
+                padding: .85rem 1rem;
+                font-size: .76rem;
+            }
+        }
+        @media(prefers-reduced-motion:reduce) {
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
+        }
+
+        /* ✅ For very small screens, keep the page from scrolling globally,
+           but allow individual content blocks to scroll when needed */
+        @media screen and (max-width: 480px) {
+            /* Only body and html get overflow-x hidden – not every element */
+            html, body {
+                overflow-x: hidden;
+                max-width: 100%;
+            }
+            /* Ensure content sections can still scroll horizontally */
+            .section-body,
+            .section-heading,
+            .intro-note,
+            .equation-block,
+            .var-def-list,
+            ol,
+            .conceptual-note {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+            /* Keep the mobile menu items scrollable as before */
+            #mobile-nav li {
+                overflow-x: auto !important;
+                white-space: normal !important;
+            }
+            #mobile-nav a,
+            #mobile-nav h3 {
+                white-space: normal !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2371,6 +3133,1160 @@
   </div>
 </div>
 
+<!-- A4.175 -->
+<div class="section-block" id="a4-175">
+  <div class="section-heading"><span class="section-num-large">A4.175</span><h2 class="section-title-large">Beyond Binary Classification: Multi‑class and Structured Prediction <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>In <strong>multi‑class classification</strong> the label set is \(\mathcal{Y}=\{1,\dots,K\}\) with \(K>2\). The 0‑1 loss generalises directly: \(\ell(y',y)=\mathbf{1}_{y'\neq y}\). The Bayes classifier assigns the class with maximum posterior probability. The analogue of the VC dimension is the <strong>Natarajan dimension</strong> (or graph dimension), which reduces to the VC dimension when \(K=2\). Finite Natarajan dimension is necessary and sufficient for PAC learnability, and uniform convergence bounds involve \(\sqrt{\text{Natarajan}/n}\).</p>
+    <p><strong>Structured prediction</strong> deals with exponentially large output spaces (e.g., sequences, trees, graphs) where the 0‑1 loss is too harsh. One defines a feature map \(\Phi(x,y)\) and learns a scoring function \(f(x,y)=\langle w,\Phi(x,y)\rangle\). Prediction is \(\arg\max_y f(x,y)\), often solved by dynamic programming or message passing. The generalisation theory relies on the <strong>structural SVM</strong> or <strong>conditional random fields</strong>, using Rademacher complexity of the scoring class and exploiting the output structure (e.g., via factor graphs) to obtain dimension‑free bounds. The key is that label dependencies reduce the effective capacity compared to a naive multi‑class view.</p>
+  </div>
+</div>
+
+<!-- A4.176 -->
+<div class="section-block" id="a4-176">
+  <div class="section-heading"><span class="section-num-large">A4.176</span><h2 class="section-title-large">The Squared Loss in Regression (and its non‑Lipschitz property) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For regression with \(\mathcal{Y}=\mathbb{R}\), the squared loss \(\ell(y',y)=(y'-y)^2\) is the most common choice. The true risk \(R(h)=\mathbb{E}[(h(X)-Y)^2]\) is minimised by the conditional mean \(\eta(x)=\mathbb{E}[Y\mid X=x]\). The excess risk takes the clean form \(R(h)-R^* = \mathbb{E}[(h(X)-\eta(X))^2]\).</p>
+    <p>However, the squared loss is <strong>not globally Lipschitz</strong>: the derivative grows with the error size. This means the standard contraction principle (A4.132) does not directly apply to unbounded problems. To obtain generalisation bounds one must either:</p>
+    <ul>
+      <li>Assume the outputs and the functions are uniformly bounded (so that the loss is Lipschitz on the bounded domain), or</li>
+      <li>Use moment conditions and extended concentration inequalities (e.g., Bernstein for unbounded variables) combined with truncation arguments.</li>
+    </ul>
+    <p>Under boundedness, the Rademacher complexity of the squared loss class can be bounded via the Lipschitz property on the range, giving bounds similar to classification. For linear regression with \(\ell_2\) regularisation (ridge), the excess risk scales as \(O(d/n)\) in low dimensions, and a bias–variance decomposition (A4.171) cleanly separates approximation and estimation errors.</p>
+  </div>
+</div>
+
+<!-- A4.177 -->
+<div class="section-block" id="a4-177">
+  <div class="section-heading"><span class="section-num-large">A4.177</span><h2 class="section-title-large">The Hinge Loss and SVM <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>The <strong>hinge loss</strong> for binary classification with labels \(y\in\{-1,1\}\) is \(\ell(y\, f(x)) = \max(0, 1 - y f(x))\). It is a convex, 1‑Lipschitz upper bound on the 0‑1 loss. Minimising the regularised empirical hinge loss gives the <strong>Support Vector Machine (SVM)</strong>:</p>
+    <div class="equation">$$\min_{f\in\mathcal{H}_K} \frac{\lambda}{2}\|f\|_{\mathcal{H}_K}^2 + \frac{1}{n}\sum_{i=1}^n \max(0, 1 - y_i f(x_i)).$$</div>
+    <p>Because the hinge loss is Lipschitz with constant 1, the contraction principle (A4.132) applies: the Rademacher complexity of the loss class is at most that of the function class \(\mathcal{H}_K\). For an RKHS with bounded kernel, the complexity is \(O(1/(\gamma\sqrt{n}))\) where \(\gamma = 1/\|f\|\) is the margin. The resulting generalisation bound is</p>
+    <div class="equation">$$R_{\text{0-1}}(h) \le \frac{1}{n}\sum_{i=1}^n \mathbf{1}_{y_i f(x_i)<1} + O\!\left(\frac{1}{\gamma\sqrt{n}}\right),$$</div>
+    <p>showing that a large margin (small norm) directly improves the guarantee. This dimension‑free margin bound explains the effectiveness of SVMs in high‑dimensional spaces.</p>
+  </div>
+</div>
+
+<!-- A4.178 -->
+<div class="section-block" id="a4-178">
+  <div class="section-heading"><span class="section-num-large">A4.178</span><h2 class="section-title-large">The Logistic Loss and Maximum Likelihood <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>The <strong>logistic loss</strong> is \(\ell(y\, f(x)) = \log(1 + e^{-y f(x)})\) for \(y\in\{-1,1\}\). It arises from maximum likelihood in a logistic regression model where \(\mathbb{P}(Y=1\mid X=x) = \sigma(f(x))\) and \(\sigma(z)=1/(1+e^{-z})\). The loss is convex and 1‑Lipschitz, making it amenable to Rademacher bounds.</p>
+    <p>A crucial property is <strong>calibration</strong>: the logistic loss is a proper surrogate for the 0‑1 loss. For any measurable \(f\),</p>
+    <div class="equation">$$R_{\text{0-1}}(\operatorname{sign}(f)) - R^* \le C\sqrt{R_{\text{logistic}}(f) - R_{\text{logistic}}^*}.$$</div>
+    <p>Thus, minimising the logistic excess risk also reduces the classification error. When combined with an \(\ell_2\) penalty (logistic ridge regression) or in an RKHS, one obtains oracle inequalities showing that the logistic estimator adapts to the noise level and can achieve fast rates under low‑noise conditions. The logistic loss is a canonical example of a <strong>convex surrogate</strong> that both enables efficient optimisation and preserves statistical optimality.</p>
+  </div>
+</div>
+
+<!-- A4.179 -->
+<div class="section-block" id="a4-179">
+  <div class="section-heading"><span class="section-num-large">A4.179</span><h2 class="section-title-large">Convexity and Its Role in Optimization <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Convexity</strong> of the empirical risk (or of the regularised objective) guarantees that any local minimum is global, and that gradient‑based methods converge to the optimum at well‑understood rates. For a convex, \(L\)-smooth objective, gradient descent achieves an excess optimisation error of \(O(1/t)\); for a \(\mu\)-strongly convex function, the rate improves to linear convergence \(O(e^{-\mu t / L})\).</p>
+    <p>In statistical learning, convexity is desirable because:</p>
+    <ul>
+      <li>It makes the optimisation problem tractable even in high dimensions.</li>
+      <li>Convex surrogate losses (hinge, logistic, squared hinge) provide a tight upper bound on the 0‑1 loss and are calibrated.</li>
+      <li>The representer theorem (A4.181) often reduces an infinite‑dimensional convex problem to a finite‑dimensional one.</li>
+    </ul>
+    <p>However, convexity is not a strict requirement: non‑convex objectives (e.g., neural networks) can also be optimised successfully in practice, but the theoretical analysis of generalisation must then rely on other properties (implicit bias, stability, margin). Convexity remains the gold standard for algorithms with provable guarantees.</p>
+  </div>
+</div>
+
+<!-- A4.180 -->
+<div class="section-block" id="a4-180">
+  <div class="section-heading"><span class="section-num-large">A4.180</span><h2 class="section-title-large">Kernel Methods and RKHS <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>A <strong>reproducing kernel Hilbert space (RKHS)</strong> is a Hilbert space of functions \(\mathcal{H}_K\) equipped with a positive definite kernel \(K:\mathcal{X}\times\mathcal{X}\to\mathbb{R}\) satisfying \(\langle f, K(x,\cdot)\rangle_{\mathcal{H}_K} = f(x)\) for all \(f\in\mathcal{H}_K\). Kernel methods learn functions of the form \(f(x) = \sum_{i=1}^n \alpha_i K(x_i, x)\).</p>
+    <p>The Rademacher complexity of the ball \(\{f\in\mathcal{H}_K : \|f\|_{\mathcal{H}_K} \le B\}\) can be bounded by \(\frac{B}{n}\sqrt{\sum_{i=1}^n K(x_i,x_i)}\). For bounded kernels (e.g., Gaussian RBF with \(K(x,x)\le 1\)), this becomes \(O(B/\sqrt{n})\), completely independent of the (possibly infinite) feature dimension. This dimension‑free property is the statistical basis for the success of kernel SVMs, kernel ridge regression, and Gaussian processes. The kernel trick allows computing inner products implicitly without constructing feature maps, enabling flexible non‑linear learning with strong theoretical guarantees.</p>
+  </div>
+</div>
+
+<!-- A4.181 -->
+<div class="section-block" id="a4-181">
+  <div class="section-heading"><span class="section-num-large">A4.181</span><h2 class="section-title-large">Representer Theorem <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="theorem-box">
+      <p><strong>Representer Theorem.</strong> Let \(\mathcal{H}_K\) be an RKHS with kernel \(K\), and consider the regularised empirical risk minimisation problem</p>
+      <div class="equation">$$\min_{f\in\mathcal{H}_K} \frac{1}{n}\sum_{i=1}^n \ell(y_i, f(x_i)) + \lambda \|f\|_{\mathcal{H}_K}^2.$$</div>
+      <p>Any minimiser \(\hat f\) can be written as a finite linear combination \(\hat f(x) = \sum_{i=1}^n \alpha_i K(x_i, x)\) for some \(\alpha_i\in\mathbb{R}\).</p>
+    </div>
+    <p>The proof decomposes any \(f\) into a component in the span of the kernel functions at the training points and an orthogonal part. The orthogonal part contributes nothing to the data fit term but increases the norm, so at the optimum it must vanish. The representer theorem reduces an infinite‑dimensional optimisation to a finite \(n\)-dimensional problem, making kernel methods computationally feasible. For SVMs (hinge loss), the solution is sparse (many \(\alpha_i=0\), the support vectors); for squared loss or logistic loss, the solution is typically dense.</p>
+  </div>
+</div>
+
+<!-- A4.182 -->
+<div class="section-block" id="a4-182">
+  <div class="section-heading"><span class="section-num-large">A4.182</span><h2 class="section-title-large">Neural Networks and VC Dimension (Bounds) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Feed‑forward neural networks with threshold (or sigmoid) activations have finite VC dimension. For a network with \(W\) total weights (parameters) and piecewise‑polynomial activations (e.g., ReLU), the VC dimension is \(O(W \cdot L \log W)\) where \(L\) is the number of layers. For threshold gates, classical bounds give \(O(W \log W)\).</p>
+    <p>While these bounds are finite, they are typically far too large to explain the generalisation of modern overparameterized networks that have many more parameters than training examples. For example, a network with millions of weights would require millions of examples according to a naive VC bound, yet in practice such networks generalise well with much less data. This discrepancy motivated the development of <strong>norm‑based</strong> capacity measures: spectral norm, path norm, and margin‑based Rademacher complexity, which can be much smaller for networks trained with gradient descent. The VC dimension thus provides a worst‑case upper bound, but tighter data‑dependent and algorithm‑dependent bounds are needed to capture the true generalisation behaviour of deep learning.</p>
+  </div>
+</div>
+
+<!-- A4.183 -->
+<div class="section-block" id="a4-183">
+  <div class="section-heading"><span class="section-num-large">A4.183</span><h2 class="section-title-large">Deep Learning and Generalization Puzzles <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Deep neural networks challenge the classical understanding of generalisation. Key observations include:</p>
+    <ul>
+      <li><strong>Perfect fit of random labels:</strong> Overparameterized networks can achieve zero training error on randomly labelled data, yet they generalise well on correctly labelled data. This indicates that the hypothesis class is large enough to shatter any training set, so classical VC bounds give no guarantee.</li>
+      <li><strong>Implicit bias of SGD:</strong> Stochastic gradient descent with small learning rate and no explicit regularisation converges to solutions with low complexity (e.g., minimum \(\ell_2\) norm for linear models, low spectral norm for deep linear networks). The optimisation algorithm itself acts as a capacity control.</li>
+      <li><strong>Flat minima and margin:</strong> The solutions found by SGD often lie in wide basins of the loss landscape and have large margins in function space. PAC‑Bayes bounds and margin theory suggest that such solutions generalise better.</li>
+    </ul>
+    <p>These puzzles have spurred new theoretical directions: information‑theoretic bounds, compression‑based arguments, and the study of the double descent phenomenon. The emerging picture is that generalisation in deep learning is not determined by the raw number of parameters, but by the interplay of data structure, optimisation dynamics, and the architecture’s implicit bias.</p>
+  </div>
+</div>
+
+<!-- A4.184 -->
+<div class="section-block" id="a4-184">
+  <div class="section-heading"><span class="section-num-large">A4.184</span><h2 class="section-title-large">Double Descent Phenomenon <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Classical bias–variance tradeoff predicts a U‑shaped test error curve as model complexity increases. The <strong>double descent</strong> phenomenon, observed in deep networks, kernel machines, and even linear models, shows a more nuanced behaviour:</p>
+    <ul>
+      <li>As the number of parameters increases, test error first decreases (classical regime).</li>
+      <li>Near the interpolation threshold (where the model just fits the training data perfectly), the test error peaks.</li>
+      <li>Beyond the interpolation threshold, as the model becomes <em>overparameterized</em>, the test error decreases again, often below the peak and sometimes below the initial optimal point.</li>
+    </ul>
+    <p>This behaviour cannot be explained by classical capacity measures that blow up at the interpolation point. For linear regression with minimum‑norm least‑squares, the double descent can be rigorously analysed: the risk peaks when the number of features \(p\) equals the sample size \(n\), then drops for \(p>n\). The effect is linked to the <strong>implicit regularisation</strong> of the minimum‑norm interpolator and to the spectral properties of the feature covariance. Double descent reveals that “more parameters” can be helpful even when the model can perfectly fit noise, challenging the traditional overfitting narrative.</p>
+  </div>
+</div>
+
+<!-- A4.185 -->
+<div class="section-block" id="a4-185">
+  <div class="section-heading"><span class="section-num-large">A4.185</span><h2 class="section-title-large">Interpolation and Overparameterization <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Interpolation</strong> refers to a model achieving exactly zero training error. In the classical underparameterized regime, interpolation leads to severe overfitting because there is a unique interpolating function that typically has poor generalisation. In the <strong>overparameterized</strong> regime, there are many interpolating solutions, and the algorithm’s choice among them determines generalisation.</p>
+    <p>For overparameterized linear regression, the minimum‑norm interpolator (obtained by gradient descent from zero initialisation) can have small test error even when the number of features far exceeds the sample size, provided the signal aligns with the high‑variance directions of the data. The phenomenon of <strong>benign overfitting</strong> characterises when this happens: essentially, the effective rank of the covariance matrix and the signal‑to‑noise ratio must satisfy certain conditions.</p>
+    <p>In deep learning, overparameterization plus implicit bias of SGD leads to solutions that interpolate the training data but also have large margins or low complexity in appropriate norms, explaining their excellent generalisation. The theory of overparameterized models has reshaped our understanding: capacity alone does not govern generalisation; the combination of model, algorithm, and data structure is what matters.</p>
+  </div>
+</div>
+
+<!-- A4.186 -->
+<div class="section-block" id="a4-186">
+  <div class="section-heading"><span class="section-num-large">A4.186</span><h2 class="section-title-large">Benign Overfitting <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Benign overfitting</strong> occurs when a predictor fits the training data perfectly (zero empirical risk) yet still achieves near‑optimal test error. This contrasts with the classical view that interpolation leads to catastrophic overfitting. The phenomenon is possible in overparameterized regimes where many interpolating solutions exist and the learning algorithm’s implicit bias selects one with good generalisation properties.</p>
+    <p>For linear regression, the minimum‑norm interpolator has risk bounded by a decomposition involving the effective rank of the covariance matrix and the signal‑to‑noise ratio. Specifically, if the eigenvalues of the feature covariance decay appropriately and the true regression vector aligns with high‑variance directions, the excess risk can be small despite perfect fitting of noisy training labels. In neural networks, benign overfitting is facilitated by large margins and flat minima. The theory redefines “overfitting” as not necessarily harmful; the key is whether the interpolation aligns with the underlying low‑dimensional structure of the problem.</p>
+  </div>
+</div>
+
+<!-- A4.187 -->
+<div class="section-block" id="a4-187">
+  <div class="section-heading"><span class="section-num-large">A4.187</span><h2 class="section-title-large">Parametric vs. Non‑parametric Learning <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>A <strong>parametric</strong> model has a fixed, finite number of parameters (e.g., linear regression, logistic regression, finite mixture models). Its capacity does not grow with the sample size. Guarantees typically involve rates like \(O(d/n)\) for excess risk under squared loss, or \(O(\sqrt{d/n})\) in the agnostic case. Parametric models are computationally efficient but vulnerable to model misspecification if the true function does not lie in the class.</p>
+    <p>A <strong>non‑parametric</strong> model allows the complexity to grow with \(n\) (e.g., histograms, kernel density estimators, smoothing splines, nearest neighbours). The hypothesis class is infinite‑dimensional, but learning is still possible because the effective complexity is controlled by a smoothness parameter or a bandwidth. Rates for non‑parametric methods are typically slower, e.g., \(O(n^{-\frac{2\beta}{2\beta+d}})\) for a Hölder‑smooth function of order \(\beta\) in \(d\) dimensions, as given by Stone’s theorem (A4.188). The distinction between parametric and non‑parametric is blurred by modern overparameterized models (neural networks) that act as adaptive non‑parametric estimators.</p>
+  </div>
+</div>
+
+<!-- A4.188 -->
+<div class="section-block" id="a4-188">
+  <div class="section-heading"><span class="section-num-large">A4.188</span><h2 class="section-title-large">Universal Consistency and Stone's Theorem <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>A learning algorithm is <strong>universally consistent</strong> if for any distribution \(P_{X,Y}\), its risk converges to the Bayes risk in probability as the sample size grows: \(R(h_n) \to R^*\) in probability. This requires the hypothesis class to be dense in the space of all functions (in a suitable sense) but with proper regularisation to avoid overfitting.</p>
+    <div class="theorem-box">
+      <p><strong>Stone's Theorem (1977).</strong> For non‑parametric regression, estimators such as kernel regression, nearest neighbours, and series expansions can be universally consistent provided the bandwidth / number of neighbours / number of basis functions are chosen appropriately depending on \(n\). For classification, consistent rules exist if the regression function \(\eta(x)\) is estimable. In particular, there exist universally consistent classifiers that make no prior smoothness assumptions, yet the rate at which the risk converges may be arbitrarily slow (no‑free‑lunch, A4.22).</p>
+    </div>
+    <p>Stone’s theorem establishes that “learning is possible” in a very general sense, but uniform rates require smoothness or margin conditions. The theory of universal consistency thus delineates the boundary between the possible (consistency) and the achievable in practice (fast rates).</p>
+  </div>
+</div>
+
+<!-- A4.189 -->
+<div class="section-block" id="a4-189">
+  <div class="section-heading"><span class="section-num-large">A4.189</span><h2 class="section-title-large">Statistical Learning Theory vs. Classical Statistics <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Statistical learning theory (SLT) and classical statistics share the goal of making inferences from data, but they differ in emphasis. Classical statistics often focuses on parametric models with a small number of parameters, using asymptotic approximations and tests for model correctness. SLT emphasises <strong>distribution‑free</strong> guarantees, finite‑sample bounds, and the analysis of algorithms that minimise empirical risk over potentially large hypothesis classes. Instead of assuming a true data‑generating model, SLT assesses performance by the <strong>excess risk</strong> compared to the best predictor in a given class, even if that class is misspecified.</p>
+    <p>Over time the boundaries have blurred: modern statistics embraces non‑parametric methods, model selection, and high‑dimensional asymptotics, while machine learning incorporates probabilistic modelling and uncertainty quantification. The intersection of the two fields—statistical learning theory—provides a coherent language to describe the generalisation ability of both classical and modern algorithms, from linear regression to deep networks.</p>
+  </div>
+</div>
+
+<!-- A4.190 -->
+<div class="section-block" id="a4-190">
+  <div class="section-heading"><span class="section-num-large">A4.190</span><h2 class="section-title-large">Generalization: The Core Goal of Learning <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Generalisation</strong> is the ability of a learning algorithm to perform accurately on new, previously unseen examples. In the PAC framework, this is formalised as the requirement that \(R(h_n) \le \epsilon\) with high probability after seeing \(n\) examples. All the theory developed in this sequence—VC dimension, Rademacher complexity, oracle inequalities, margin bounds, noise conditions, and stability—aims to quantify when and how fast generalisation happens.</p>
+    <p>Generalisation is not guaranteed by low training error alone; it requires an appropriate inductive bias, encoded in the hypothesis class or the learning algorithm. The no‑free‑lunch theorems (A4.21–A4.22) show that without restriction, learning is impossible. The central achievement of SLT is to identify the complexity measures that govern generalisation and to provide explicit, non‑asymptotic bounds. This transforms a philosophical puzzle into a precise mathematical discipline.</p>
+  </div>
+</div>
+
+<!-- A4.191 -->
+<div class="section-block" id="a4-191">
+  <div class="section-heading"><span class="section-num-large">A4.191</span><h2 class="section-title-large">Closing Remarks: The Road Ahead in Modern Learning Theory <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Statistical learning theory has expanded far beyond the classical VC and Rademacher frameworks. Current frontiers include:</p>
+    <ul>
+      <li><strong>Deep learning theory:</strong> Understanding how overparameterized networks generalise through implicit bias, kernel regime (NTK), and feature learning.</li>
+      <li><strong>Distribution shift and causality:</strong> Generalisation under train‑test distribution mismatch (domain adaptation), invariant prediction, and the integration of causal reasoning.</li>
+      <li><strong>Large‑scale and federated learning:</strong> Generalisation with limited communication, privacy constraints, and heterogeneous data.</li>
+      <li><strong>Self‑supervised and foundation models:</strong> Theoretical underpinnings of pretraining on massive unlabelled data and emergent abilities.</li>
+      <li><strong>Robustness and fairness:</strong> Adversarial robustness, worst‑group performance, and algorithmic fairness as aspects of generalisation under different risk measures.</li>
+    </ul>
+    <p>The tools developed in these notes—concentration inequalities, capacity measures, localisation—remain essential, but they are being adapted and extended to meet the challenges of modern machine learning. The road ahead lies at the intersection of statistics, optimisation, and information theory.</p>
+  </div>
+</div>
+
+<!-- A4.192 -->
+<div class="section-block" id="a4-192">
+  <div class="section-heading"><span class="section-num-large">A4.192</span><h2 class="section-title-large">Motivation: Nonconvexity of the 0‑1 Loss and NP‑hardness of ERM <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Minimising the empirical 0‑1 risk \(\widehat{R}_n(h) = \frac{1}{n}\sum_{i=1}^n \mathbf{1}_{h(x_i)\neq y_i}\) over a hypothesis class \(\mathcal{H}\) is computationally intractable for most classes of interest. Even for linear classifiers in \(\mathbb{R}^d\), the ERM problem is NP‑hard in the worst case (unless the data are linearly separable). The 0‑1 loss is non‑convex, discontinuous, and its minimisation is a combinatorial problem.</p>
+    <p>This motivates the use of <strong>convex surrogate loss functions</strong>. Instead of minimising the 0‑1 loss directly, one minimises a convex function \(\phi\) that upper‑bounds the 0‑1 loss. For instance, \(\phi(z) = \log(1+e^{-z})\) (logistic), \(\phi(z) = \max(0, 1-z)\) (hinge). These surrogate losses lead to computationally tractable optimisation (convex programs) while preserving the statistical properties: calibration ensures that a small excess surrogate risk implies a small excess 0‑1 risk. The trade‑off between computational efficiency and statistical accuracy is a central theme in modern machine learning.</p>
+  </div>
+</div>
+
+<!-- A4.193 -->
+<div class="section-block" id="a4-193">
+  <div class="section-heading"><span class="section-num-large">A4.193</span><h2 class="section-title-large">Definition: Convex Set and Convex Function (Formal Definitions) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="definition-box">
+      <p><strong>Convex set.</strong> A set \(C\subseteq\mathbb{R}^d\) is convex if for all \(x,y\in C\) and \(\theta\in[0,1]\), \(\theta x + (1-\theta)y \in C\).</p>
+      <p><strong>Convex function.</strong> A function \(f:\mathbb{R}^d\to\mathbb{R}\) is convex if its domain is convex and for all \(x,y\) and \(\theta\in[0,1]\),</p>
+      <div class="equation">$$f(\theta x + (1-\theta)y) \le \theta f(x) + (1-\theta) f(y).$$</div>
+      <p>Equivalently, the epigraph of \(f\) is a convex set, or the Hessian (if it exists) is positive semidefinite everywhere.</p>
+    </div>
+    <p>Convexity is essential for efficient optimisation because any local minimum is global, and gradient‑based methods converge to the optimum. Many surrogate losses (logistic, hinge, squared hinge) are convex in the linear predictor \(w^\top x\), making regularised ERM a convex optimisation problem.</p>
+  </div>
+</div>
+
+<!-- A4.194 -->
+<div class="section-block" id="a4-194">
+  <div class="section-heading"><span class="section-num-large">A4.194</span><h2 class="section-title-large">The Spin Transform: Mapping Labels to \(\{-1,+1\}\) via \(Y\mapsto 2Y-1\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For binary classification with labels originally in \(\{0,1\}\), it is often mathematically convenient to map them to \(\{-1,+1\}\) using the <strong>spin transform</strong>:</p>
+    <div class="equation">$$\tilde{Y} = 2Y - 1 \in \{-1, +1\}.$$</div>
+    <p>Under this mapping, the 0‑1 loss becomes \(\mathbf{1}_{\tilde{Y} h(x) \le 0}\). A margin‑based predictor \(f(x)\) then classifies according to \(\operatorname{sign}(f(x))\), and the product \(\tilde{Y} f(x) > 0\) indicates a correct prediction. Many surrogate losses are expressed in terms of the margin \(z = y f(x)\): hinge \(\max(0,1-z)\), logistic \(\log(1+e^{-z})\), exponential \(e^{-z}\). The spin transform simplifies formulas and aligns classification with the geometric concept of halfspaces in \(\mathbb{R}^d\). It also unifies the treatment of hard classifiers (\(h:\mathcal{X}\to\{-1,+1\}\)) and real‑valued classifiers (\(f:\mathcal{X}\to\mathbb{R}\)) whose sign gives the prediction.</p>
+  </div>
+</div>
+
+<!-- A4.195 -->
+<div class="section-block" id="a4-195">
+  <div class="section-heading"><span class="section-num-large">A4.195</span><h2 class="section-title-large">Hard Classifiers (\(h:\mathcal{X}\to\{-1,+1\}\)) vs. Soft Classifiers (\(f:\mathcal{X}\to[-1,1]\)) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>A <strong>hard classifier</strong> directly outputs a binary decision: \(h(x)\in\{-1,+1\}\). It is the object of interest for the 0‑1 loss. However, learning with the 0‑1 loss is computationally hard (A4.192), so one often learns a <strong>soft classifier</strong> (or scoring function) \(f:\mathcal{X}\to[-1,1]\) (or \(\mathbb{R}\)), where the sign of \(f(x)\) yields the prediction. The absolute value \(|f(x)|\) can be interpreted as a confidence or margin.</p>
+    <p>Using a soft classifier enables smooth, convex surrogate losses applied to the margin \(y f(x)\). The final decision rule is obtained by thresholding: \(h_f(x) = \operatorname{sign}(f(x))\). Generalisation bounds for soft classifiers often involve the margin \(\gamma = \min_i y_i f(x_i)\), and larger margins lead to better guarantees. The relationship between the excess surrogate risk and the excess 0‑1 risk is given by calibration theory. Thus, the soft/hard distinction separates the optimisation problem from the evaluation metric.</p>
+  </div>
+</div>
+
+<!-- A4.196 -->
+<div class="section-block" id="a4-196">
+  <div class="section-heading"><span class="section-num-large">A4.196</span><h2 class="section-title-large">Definition: Convex Surrogate Loss Function \(\phi:\mathbb{R}\to\mathbb{R}^+\) (Non‑decreasing, Upper Bounds \(\mathbf{1}(z>0)\), \(\phi(0)=1\)) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="definition-box">
+      <p>A <strong>convex surrogate loss</strong> is a convex function \(\phi:\mathbb{R}\to[0,\infty)\) satisfying:</p>
+      <ul>
+        <li><strong>Upper bound on 0‑1 loss:</strong> \(\mathbf{1}_{\{z \le 0\}} \le \phi(z)\) for all \(z\). (Sometimes formulated with label \(y\) and margin \(y f(x)\): \(\mathbf{1}_{y f(x)\le 0} \le \phi(y f(x))\).)</li>
+        <li><strong>Normalization:</strong> \(\phi(0)=1\), so that the loss at zero margin matches the 0‑1 loss at the decision boundary.</li>
+        <li><strong>Monotonicity:</strong> \(\phi\) is non‑increasing? Actually, it should be non‑increasing in the margin \(z = y f(x)\), i.e., larger margin means smaller loss. Typically, \(\phi(z)\) is non‑increasing for \(z\le 0\) and may be increasing again or constant. For hinge loss \(\phi(z)=\max(0,1-z)\), it is non‑increasing for \(z<1\). For logistic \(\phi(z)=\log(1+e^{-z})\), it is strictly decreasing everywhere. The precise condition is \(\phi(z) \ge \mathbf{1}_{z\le 0}\).</li>
+      </ul>
+    </div>
+    <p>Common examples: hinge \(\phi(z)=\max(0,1-z)\), logistic \(\phi(z)=\log(1+e^{-z})\), exponential \(\phi(z)=e^{-z}\), squared hinge \(\phi(z)=(\max(0,1-z))^2\). These convex surrogates make empirical risk minimisation computationally tractable while providing statistical calibration guarantees: a small excess surrogate risk translates into a small excess classification risk.</p>
+  </div>
+</div>
+
+
+<!-- A4.197 -->
+<div class="section-block" id="a4-197">
+  <div class="section-heading"><span class="section-num-large">A4.197</span><h2 class="section-title-large">The Hinge Loss: \(\phi(z)=\max(1+z,0)\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>With labels in \(\{-1,+1\}\) and a real‑valued predictor \(f(x)\), the margin is \(y f(x)\). To unify notation, one often works with the argument \(z = -y f(x)\). A mistake occurs when \(y f(x) \le 0\) i.e. \(z \ge 0\). The <strong>hinge loss</strong> is defined as</p>
+    <div class="equation">$$\phi(z) = \max(1+z,\, 0).$$</div>
+    <p>It satisfies \(\mathbf{1}_{z \ge 0} \le \phi(z)\) for all \(z\) (since for \(z\ge0\), \(\phi(z)\ge 1\), and for \(z<0\), \(\phi(z)=0\)). The hinge loss is convex, 1‑Lipschitz, and piecewise linear. It is the loss minimised by the Support Vector Machine (SVM) after regularisation. Because it is an upper bound on the 0‑1 loss, minimising the empirical hinge risk provides a computationally tractable surrogate for classification.</p>
+    <p>For a margin \(y f(x)\), the hinge loss is \(\max(0,\, 1 - y f(x))\). The two conventions are equivalent via the relation \(z = -y f(x)\). The function is non‑increasing for \(z \le -1\) (i.e., margin \(\ge 1\)) and increases linearly thereafter.</p>
+  </div>
+</div>
+
+<!-- A4.198 -->
+<div class="section-block" id="a4-198">
+  <div class="section-heading"><span class="section-num-large">A4.198</span><h2 class="section-title-large">The Exponential Loss: \(\phi(z)=\exp(z)\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>The <strong>exponential loss</strong> is defined as \(\phi(z) = e^{z}\) for \(z = -y f(x)\). For a correct classification with margin \(y f(x) > 0\), \(z<0\) and the loss is less than 1, decaying exponentially; for a misclassification (\(z\ge 0\)), the loss is at least 1 and grows rapidly. The exponential loss satisfies \(\mathbf{1}_{z\ge 0} \le e^z\).</p>
+    <p>It is the loss function underlying the AdaBoost algorithm: AdaBoost can be viewed as coordinate descent on the exponential loss. Although convex, the exponential loss is not Lipschitz globally, which makes it sensitive to outliers and label noise. It heavily penalises large negative margins. The exponential loss is <strong>calibrated</strong>—its population minimiser yields the Bayes classifier—but its fast growth can lead to overemphasis on misclassified examples, motivating more robust surrogates like logistic loss.</p>
+  </div>
+</div>
+
+<!-- A4.199 -->
+<div class="section-block" id="a4-199">
+  <div class="section-heading"><span class="section-num-large">A4.199</span><h2 class="section-title-large">The Logistic Loss: \(\phi(z)=\log_2(1+e^{z})\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>With the same parametrisation \(z = -y f(x)\), the <strong>logistic loss</strong> (in base 2) is</p>
+    <div class="equation">$$\phi(z) = \log_2\!\bigl(1 + e^{z}\bigr).$$</div>
+    <p>Using natural log, it is \(\ln(1+e^z)\); the base‑2 version simply scales by a constant. The loss is convex, smooth, and strictly decreasing for all \(z\). It satisfies \(\mathbf{1}_{z\ge 0} \le \phi(z)\) (with \(\phi(0)=1\) in base 2; in natural log it would be \(\ln 2\), so re‑scaling ensures the inequality holds at the boundary).</p>
+    <p>The logistic loss corresponds to maximum likelihood in a logistic regression model where \(\mathbb{P}(Y=+1\mid X=x) = 1/(1+e^{-f(x)})\). It is a canonical <strong>proper</strong> loss: the minimiser of the population logistic risk is exactly the log‑odds \(f^*(x) = \log\frac{\eta(x)}{1-\eta(x)}\). The logistic loss is Lipschitz (with constant 1 under suitable scaling) and well‑calibrated. It is widely used in logistic regression and neural networks.</p>
+  </div>
+</div>
+
+<!-- A4.200 -->
+<div class="section-block" id="a4-200">
+  <div class="section-heading"><span class="section-num-large">A4.200</span><h2 class="section-title-large">Empirical \(\phi\)-Risk and Population \(\phi\)-Risk <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For a soft classifier \(f:\mathcal{X}\to\mathbb{R}\) and a surrogate loss \(\phi\), the <strong>population \(\phi\)-risk</strong> is</p>
+    <div class="equation">$$R_\phi(f) = \mathbb{E}_{(X,Y)}\!\bigl[\phi(-Y f(X))\bigr].$$</div>
+    <p>Given a sample \(S = ((X_1,Y_1),\dots,(X_n,Y_n))\) with labels in \(\{-1,+1\}\), the <strong>empirical \(\phi\)-risk</strong> is</p>
+    <div class="equation">$$\widehat{R}_{n,\phi}(f) = \frac{1}{n}\sum_{i=1}^n \phi(-Y_i f(X_i)).$$</div>
+    <p>The minimiser of the population \(\phi\)-risk (over all measurable functions) is denoted \(f_\phi^*\). The goal of a surrogate‑loss‑based learner is to minimise the empirical \(\phi\)-risk (possibly with regularisation) to obtain \(\hat f\), and then output the hard classifier \(h_{\hat f}(x) = \operatorname{sign}(\hat f(x))\). The key question is whether a small excess \(\phi\)-risk \(R_\phi(\hat f) - R_\phi(f_\phi^*)\) guarantees a small excess classification risk \(R_{0-1}(\operatorname{sign}(\hat f)) - R^*\).</p>
+  </div>
+</div>
+
+<!-- A4.201 -->
+<div class="section-block" id="a4-201">
+  <div class="section-heading"><span class="section-num-large">A4.201</span><h2 class="section-title-large">Minimizing the \(\phi\)-Risk: Definition of \(f_\phi^* = \arg\min_f R_\phi(f)\)</h2></div>
+  <div class="section-body">
+    <p>The minimiser of the population \(\phi\)-risk over all measurable functions \(f:\mathcal{X}\to\mathbb{R}\) can be found pointwise by minimising the conditional risk. For a fixed \(x\), let \(\eta(x) = \mathbb{P}(Y=+1\mid X=x)\). The conditional \(\phi\)-risk of predicting \(\alpha = f(x)\) is</p>
+    <div class="equation">$$H_{\eta(x)}(\alpha) = \eta(x)\,\phi(-\alpha) + (1-\eta(x))\,\phi(\alpha).$$</div>
+    <p>Thus \(f_\phi^*(x)\) is any minimiser of \(\alpha \mapsto H_{\eta(x)}(\alpha)\). For convex, calibrated surrogates, this minimiser is unique for \(\eta(x)\neq 1/2\) and its sign matches the Bayes classifier. For the logistic loss, \(f_\phi^*(x) = \log\frac{\eta(x)}{1-\eta(x)}\). For the hinge loss, any \(\alpha\) in \([-1,1]\) is a minimiser when \(\eta(x)=1/2\), but the sign is correct. For the exponential loss, \(f_\phi^*(x) = \frac{1}{2}\log\frac{\eta(x)}{1-\eta(x)}\). In all cases, \(\operatorname{sign}(f_\phi^*(x)) = \operatorname{sign}(\eta(x)-1/2)\), so thresholding at zero yields the Bayes classifier.</p>
+  </div>
+</div>
+
+<!-- A4.202 -->
+<div class="section-block" id="a4-202">
+  <div class="section-heading"><span class="section-num-large">A4.202</span><h2 class="section-title-large">Conditional \(\phi\)-Risk and the Function \(H_\eta(\alpha) = \eta\,\phi(-\alpha) + (1-\eta)\,\phi(\alpha)\)</h2></div>
+  <div class="section-body">
+    <p>For a given \(\eta\in[0,1]\), the function \(H_\eta(\alpha)\) gives the expected surrogate loss when the true conditional probability is \(\eta\) and the prediction is \(\alpha\). This function captures all information about the surrogate’s behaviour. The overall \(\phi\)-risk can be written as</p>
+    <div class="equation">$$R_\phi(f) = \mathbb{E}_X\!\bigl[H_{\eta(X)}(f(X))\bigr].$$</div>
+    <p>Minimising \(R_\phi\) pointwise for each \(x\) is equivalent to minimising \(H_{\eta(x)}(\alpha)\) over \(\alpha\). The minimal value is \(H_{\eta(x)}^* = \inf_\alpha H_{\eta(x)}(\alpha)\). The excess \(\phi\)-risk then decomposes as \(\mathbb{E}_X[H_{\eta(X)}(f(X)) - H_{\eta(X)}^*]\). The function \(H_\eta\) is convex in \(\alpha\) (since \(\phi\) is convex) and its derivative (when \(\phi\) is smooth) is \(-\eta\,\phi'(-\alpha) + (1-\eta)\,\phi'(\alpha)\). Setting the derivative to zero yields the minimiser.</p>
+  </div>
+</div>
+
+<!-- A4.203 -->
+<div class="section-block" id="a4-203">
+  <div class="section-heading"><span class="section-num-large">A4.203</span><h2 class="section-title-large">Bayes Consistency of Convex Surrogates: Derivative Condition <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>A convex surrogate \(\phi\) is <strong>Bayes consistent</strong> (or classification‑calibrated) if the minimiser \(f_\phi^*\) satisfies \(\operatorname{sign}(f_\phi^*(x)) = \operatorname{sign}(\eta(x)-1/2)\) for all \(\eta\neq 1/2\). This guarantees that the optimal surrogate‑based classifier coincides with the Bayes classifier.</p>
+    <p>For a differentiable \(\phi\), the minimiser of \(H_\eta(\alpha)\) satisfies the first‑order condition</p>
+    <div class="equation">$$-\eta\,\phi'(-\alpha) + (1-\eta)\,\phi'(\alpha) = 0 \quad\Longleftrightarrow\quad \frac{\phi'(\alpha)}{\phi'(-\alpha)} = \frac{\eta}{1-\eta}.$$</div>
+    <p>For the minimiser to have the correct sign, we need that \(\alpha > 0\) when \(\eta > 1/2\) and \(\alpha < 0\) when \(\eta < 1/2\). This requires \(\phi'\) to be such that the ratio \(\phi'(\alpha)/\phi'(-\alpha)\) is increasing in \(\alpha\) and passes through 1 at \(\alpha=0\). For the logistic loss \(\phi(z)=\ln(1+e^z)\), \(\phi'(z)=e^z/(1+e^z)\) and \(\phi'(0)=1/2\); the condition yields \(\alpha = \ln\frac{\eta}{1-\eta}\), which indeed has the same sign as \(\eta-1/2\). The hinge loss is not differentiable at \(-1\), but its subgradient yields any \(\alpha\in[-1,1]\) for \(\eta=1/2\), and for \(\eta\neq 1/2\), the minimiser is \(\alpha = \operatorname{sign}(\eta-1/2)\) (clipped to \([-1,1]\)), still giving correct sign. The exponential loss also satisfies the sign condition.</p>
+  </div>
+</div>
+
+<!-- A4.204 -->
+<div class="section-block" id="a4-204">
+  <div class="section-heading"><span class="section-num-large">A4.204</span><h2 class="section-title-large">Zhang’s Lemma: Bridging Excess \(\phi\)-Risk to Excess Classification Risk <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="lemma-box">
+      <p><strong>Zhang’s Lemma (2004).</strong> Let \(\phi\) be a convex loss that is classification‑calibrated. Then there exists a non‑decreasing function \(\psi:[0,\infty)\to[0,\infty)\) with \(\psi(0)=0\) and \(\psi\) continuous at 0, such that for any measurable \(f\) and any distribution,</p>
+      <div class="equation">$$R_{0-1}(\operatorname{sign}(f)) - R^* \le \psi\!\bigl(R_\phi(f) - R_\phi^*\bigr).$$</div>
+      <p>Furthermore, for the specific cases of hinge, exponential, and logistic losses, explicit forms of \(\psi\) can be given, often with a square‑root dependence: \(\psi(t) \le C\sqrt{t}\).</p>
+    </div>
+    <p>This lemma is the central calibration result. It shows that if an algorithm achieves a small excess surrogate risk, then the resulting classifier has a small excess 0‑1 risk. The shape of \(\psi\) determines the rate: for hinge loss, \(\psi(t)=t\); for logistic and exponential, \(\psi(t) \le C\sqrt{t}\). Thus, an excess \(\phi\)-risk of \(\epsilon\) translates to an excess classification risk of at most \(\epsilon\) (fast) or \(C\sqrt{\epsilon}\). Combined with oracle inequalities on the surrogate risk, Zhang’s lemma yields the final classification bound.</p>
+  </div>
+</div>
+
+<!-- A4.205 -->
+<div class="section-block" id="a4-205">
+  <div class="section-heading"><span class="section-num-large">A4.205</span><h2 class="section-title-large">Zhang’s Lemma (Proof): Jensen’s Inequality and the Key Inequality <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>The proof of Zhang’s lemma proceeds by conditioning on \(X=x\). For any \(\eta\in[0,1]\) and any \(\alpha\in\mathbb{R}\), define the excess conditional \(\phi\)-risk:</p>
+    <div class="equation">$$\Delta H_\eta(\alpha) = H_\eta(\alpha) - \inf_{\alpha'} H_\eta(\alpha').$$</div>
+    <p>If \(\operatorname{sign}(\alpha) \neq \operatorname{sign}(\eta-1/2)\) (a classification mistake), then one can show that \(\Delta H_\eta(\alpha) \ge c > 0\) for some positive constant depending only on \(\eta\). More precisely, define</p>
+    <div class="equation">$$\psi_\eta(t) = \inf\{ \Delta H_\eta(\alpha) : \operatorname{sign}(\alpha) \neq \operatorname{sign}(\eta-1/2), \, \alpha\in\mathbb{R} \text{ with } \ldots \}.$$</div>
+    <p>Actually, the standard proof uses the following: for any \(\alpha\) with wrong sign, \(H_\eta(\alpha) \ge H_\eta(0) \ge 1\) (for losses normalized so that \(\phi(0)=1\)). Then, by convexity of \(H_\eta\), one obtains a linear relation between the excess conditional risk and the 0‑1 mistake at that \(\eta\). Integrating over \(X\) yields the global inequality. The function \(\psi\) is essentially \(\psi(t) = \sup_{\eta} [ \mathbf{1}_{\text{wrong sign}} \text{ given } \Delta H_\eta(\alpha)\le t ]\). For hinge loss, \(\psi(t)=t\); for exponential and logistic, \(\psi(t) \le \sqrt{2t}\) (up to constants).</p>
+  </div>
+</div>
+
+<!-- A4.206 -->
+<div class="section-block" id="a4-206">
+  <div class="section-heading"><span class="section-num-large">A4.206</span><h2 class="section-title-large">Calibration Constants for Hinge, Exponential, and Logistic Losses <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>The calibration function \(\psi\) in Zhang’s lemma can be characterised explicitly for common losses:</p>
+    <ul>
+      <li><strong>Hinge loss:</strong> \(\psi(t) = t\). This gives a perfect transfer: excess \(\phi\)-risk translates linearly to excess classification risk. This is the best possible calibration and explains why the SVM margin bound directly controls classification error.</li>
+      <li><strong>Logistic loss (natural base):</strong> \(\psi(t) \le \sqrt{2t}\). For the base‑2 version, constants adjust. The square‑root dependence arises because the logistic loss is smooth and has quadratic behaviour near the optimum. Consequently, an excess logistic risk of \(\epsilon\) yields an excess 0‑1 risk of at most \(\sqrt{2\epsilon}\).</li>
+      <li><strong>Exponential loss:</strong> \(\psi(t) \le \sqrt{2t}\) as well, similar to logistic. However, the exponential loss is more aggressive on large negative margins, which can be beneficial in boosting but detrimental under label noise.</li>
+    </ul>
+    <p>These calibration constants are essential for converting oracle inequalities on the surrogate risk into final PAC bounds for the classifier. They also highlight the trade‑off between computational ease (hinge) and statistical efficiency under various noise regimes.</p>
+  </div>
+</div>
+
+<!-- A4.207 -->
+<div class="section-block" id="a4-207">
+  <div class="section-heading"><span class="section-num-large">A4.207</span><h2 class="section-title-large">Convex Relaxation Summary: From NP‑hard ERM to Efficient Convex Optimization <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>The journey from the intractable 0‑1 loss to computationally efficient algorithms can be summarised as follows:</p>
+    <ol>
+      <li><strong>ERM with 0‑1 loss</strong> is NP‑hard for linear classifiers and many other classes; the loss is non‑convex, discontinuous, and its optimisation is combinatorial.</li>
+      <li>Introduce a <strong>convex surrogate loss</strong> \(\phi\) that upper bounds the 0‑1 loss (after appropriate scaling) and is convex and Lipschitz (or smooth). Common choices: hinge, exponential, logistic.</li>
+      <li>Minimise the <strong>empirical \(\phi\)-risk</strong> (possibly with regularisation) to obtain \(\hat f\). This is a convex optimisation problem solvable in polynomial time.</li>
+      <li>Prove a <strong>calibration inequality</strong> (Zhang’s lemma) linking excess \(\phi\)-risk to excess classification risk: \(R_{0-1}(\operatorname{sign}(\hat f)) - R^* \le \psi(R_\phi(\hat f) - R_\phi^*)\).</li>
+      <li>Apply <strong>Rademacher complexity or VC bounds</strong> to control the excess \(\phi\)-risk of the regularised empirical minimiser, yielding an oracle inequality for the surrogate.</li>
+      <li>Combine to obtain a <strong>PAC guarantee</strong> for the final classifier.</li>
+    </ol>
+    <p>This convex relaxation framework has been remarkably successful, underpinning SVMs, logistic regression, boosting, and many other algorithms. It illustrates a central theme of statistical learning theory: computational tractability and statistical efficiency can be achieved simultaneously through careful design of the learning objective.</p>
+  </div>
+</div>
+
+<!-- A4.208 -->
+<div class="section-block" id="a4-208">
+  <div class="section-heading"><span class="section-num-large">A4.208</span><h2 class="section-title-large">The Epigraph Formulation: Rewriting \(\min f(x)\) as \(\min t\) subject to \((x,t)\in\operatorname{epi}(f)\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Any unconstrained optimisation problem \(\min_{x} f(x)\) can be recast as a constrained problem in one extra variable using the <strong>epigraph</strong> of \(f\), defined as \(\operatorname{epi}(f) = \{(x,t) \mid f(x) \le t\}\). Then</p>
+    <div class="equation">$$\min_{x\in\mathbb{R}^d} f(x) \;=\; \min_{(x,t)\in\mathbb{R}^{d+1}} \bigl\{ t \mid f(x) \le t \bigr\} \;=\; \min_{(x,t)\in\operatorname{epi}(f)} t.$$</div>
+    <p>This equivalence is trivial but powerful: if \(f\) is convex, \(\operatorname{epi}(f)\) is a convex set, and the problem becomes minimising a linear function over a convex set. This is the bridge between convex functions and convex sets, and it underpins many duality results. The optimal value is the same, and an optimal \((x^*,t^*)\) satisfies \(t^* = f(x^*)\).</p>
+  </div>
+</div>
+
+<!-- A4.209 -->
+<div class="section-block" id="a4-209">
+  <div class="section-heading"><span class="section-num-large">A4.209</span><h2 class="section-title-large">Convex Hull Relaxation: \(\min_{x\in D} c^\top x = \min_{x\in\operatorname{conv}(D)} c^\top x\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Minimising a linear function over a set \(D\) is equivalent to minimising over its convex hull. Formally, for any \(D\subseteq\mathbb{R}^d\) and any vector \(c\),</p>
+    <div class="equation">$$\inf_{x\in D} c^\top x = \inf_{x\in\operatorname{conv}(D)} c^\top x.$$</div>
+    <p><strong>Proof sketch.</strong> The inequality \(\ge\) is trivial because \(D\subseteq\operatorname{conv}(D)\). For the reverse, any point in \(\operatorname{conv}(D)\) is a convex combination \(\sum_i \theta_i x_i\) with \(x_i\in D\). Then \(c^\top(\sum \theta_i x_i) = \sum \theta_i (c^\top x_i) \ge \min_i (c^\top x_i) \ge \inf_{x\in D} c^\top x\). Hence, the minimum over the convex hull cannot be smaller than the minimum over the original set. This fact is fundamental in integer programming (LP relaxation) and in proving that hard margin SVM with hinge loss can be studied via convex analysis of the convex hull of feasible points.</p>
+  </div>
+</div>
+
+<!-- A4.210 -->
+<div class="section-block" id="a4-210">
+  <div class="section-heading"><span class="section-num-large">A4.210</span><h2 class="section-title-large">Definition: Subgradient and Subdifferential \(\partial f(x)\) (Global Linear Underestimators) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="definition-box">
+      <p>Let \(f:\mathbb{R}^d\to\mathbb{R}\) be a convex function. A vector \(g\in\mathbb{R}^d\) is a <strong>subgradient</strong> of \(f\) at \(x\) if for all \(y\),</p>
+      <div class="equation">$$f(y) \ge f(x) + g^\top (y-x).$$</div>
+      <p>The <strong>subdifferential</strong> \(\partial f(x)\) is the set of all subgradients at \(x\). If \(f\) is differentiable at \(x\), then \(\partial f(x) = \{\nabla f(x)\}\).</p>
+    </div>
+    <p>Geometrically, a subgradient defines an affine function that globally underestimates \(f\) and touches it at \(x\). Subgradients exist everywhere for convex functions (see A4.211), and they are the natural generalisation of the gradient for non‑smooth convex optimisation. They are central to the analysis of SVM (hinge loss), Lasso, and other non‑smooth empirical risk minimisation problems.</p>
+  </div>
+</div>
+
+<!-- A4.211 -->
+<div class="section-block" id="a4-211">
+  <div class="section-heading"><span class="section-num-large">A4.211</span><h2 class="section-title-large">Theorem: Existence of Subgradients for All Convex Functions (Separating Hyperplanes) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="theorem-box">
+      <p><strong>Theorem.</strong> Let \(f:\mathbb{R}^d\to\mathbb{R}\) be a convex function and \(x\) a point in the interior of its domain. Then \(\partial f(x)\) is non‑empty.</p>
+    </div>
+    <p><strong>Proof idea.</strong> Consider the epigraph \(\operatorname{epi}(f)\), a convex set. The point \((x,f(x))\) lies on its boundary. By the supporting hyperplane theorem, there exists a non‑zero vector \((g,-1)\) (or \((g,-\beta)\)) defining a hyperplane that supports the epigraph at \((x,f(x))\). Normalising, this yields a vector \(g\) such that for all \(y\), \(f(y) \ge f(x) + g^\top(y-x)\), which is exactly the subgradient inequality. This geometric argument shows that subgradients exist at all interior points. At boundary points, subgradients may also exist under mild conditions (e.g., the function is continuous).</p>
+  </div>
+</div>
+
+<!-- A4.212 -->
+<div class="section-block" id="a4-212">
+  <div class="section-heading"><span class="section-num-large">A4.212</span><h2 class="section-title-large">Theorem: Local Minima are Global Minima for Convex Functions &amp; Optimality Condition \(0\in\partial f(x)\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="theorem-box">
+      <p><strong>Properties of convex functions.</strong></p>
+      <ol>
+        <li><strong>Local minima are global:</strong> If \(f\) is convex and \(x^*\) is a local minimum, then \(f(x^*)\le f(x)\) for all \(x\). Proof: For any \(y\), take a convex combination \((1-\theta)x^* + \theta y\) near \(x^*\) and use convexity.</li>
+        <li><strong>First‑order optimality condition:</strong> A point \(x^*\) is a global minimiser of a convex function \(f\) if and only if \(0 \in \partial f(x^*)\). This follows directly from the subgradient inequality: for all \(y\), \(f(y) \ge f(x^*) + 0^\top(y-x^*) = f(x^*)\).</li>
+      </ol>
+    </div>
+    <p>These properties make convex optimisation tractable: any algorithm that finds a point where \(0\in\partial f\) (or \(\|\nabla f\|\) small) has found a global optimum. There is no danger of spurious local minima, which is a major difference from non‑convex problems.</p>
+  </div>
+</div>
+
+<!-- A4.213 -->
+<div class="section-block" id="a4-213">
+  <div class="section-heading"><span class="section-num-large">A4.213</span><h2 class="section-title-large">First‑Order Taylor Expansion and the Negative Gradient Direction as the Steepest Descent <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For a differentiable function \(f\), the first‑order Taylor expansion around \(x\) gives \(f(x - \eta g) \approx f(x) - \eta \nabla f(x)^\top g\). For a fixed step size \(\eta\), the direction that minimises this linear approximation under a unit norm constraint \(\|g\|=1\) is \(g = \nabla f(x)/\|\nabla f(x)\|\). Thus, the <strong>negative gradient</strong> is the direction of steepest local decrease, justifying the gradient descent update:</p>
+    <div class="equation">$$x_{k+1} = x_k - \eta_k \nabla f(x_k).$$</div>
+    <p>This geometric intuition holds in the Euclidean norm; changing the norm yields different “steepest descent” directions (e.g., coordinate descent under \(\ell_1\) norm). In convex optimisation, gradient descent with appropriate step sizes converges to the global optimum.</p>
+  </div>
+</div>
+
+<!-- A4.214 -->
+<div class="section-block" id="a4-214">
+  <div class="section-heading"><span class="section-num-large">A4.214</span><h2 class="section-title-large">Algorithm: Gradient Descent (GD) for Unconstrained Convex Minimization <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Gradient descent</strong> solves \(\min_{x} f(x)\) iteratively:</p>
+    <pre>
+Initialise x_0 arbitrarily.
+For k = 0,1,2,...:
+    Compute g_k = ∇f(x_k)
+    Choose step size η_k > 0
+    Update x_{k+1} = x_k - η_k g_k
+End
+    </pre>
+    <p>The step size \(\eta_k\) can be fixed, decreasing, or chosen via line search. For convex \(f\) with Lipschitz gradient or Lipschitz function value (non‑smooth), precise rates are known (see A4.215). For smooth and strongly convex functions, linear convergence is achieved.</p>
+  </div>
+</div>
+
+<!-- A4.215 -->
+<div class="section-block" id="a4-215">
+  <div class="section-heading"><span class="section-num-large">A4.215</span><h2 class="section-title-large">Theorem: \(O(LR/\sqrt{k})\) Convergence Rate for \(L\)-Lipschitz Convex Functions <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="theorem-box">
+      <p><strong>Convergence of subgradient descent.</strong> Let \(f\) be convex and \(L\)-Lipschitz on a set containing the ball of radius \(R\) around the optimum \(x^*\), i.e., \(\|g\|\le L\) for all subgradients. Run subgradient descent with constant step size \(\eta_t = \frac{R}{L\sqrt{k}}\) for \(k\) iterations, starting from \(x_0\) with \(\|x_0-x^*\|\le R\). Then the average iterate \(\bar x_k = \frac{1}{k}\sum_{t=1}^k x_t\) (or the best iterate) satisfies</p>
+      <div class="equation">$$f(\bar x_k) - f(x^*) \le \frac{LR}{\sqrt{k}}.$$</div>
+    </div>
+    <p><strong>Proof.</strong> Let \(g_t\in\partial f(x_t)\). From the update and convexity:</p>
+    <div class="equation">$$\|x_{t+1}-x^*\|^2 = \|x_t - \eta_t g_t - x^*\|^2 = \|x_t-x^*\|^2 - 2\eta_t g_t^\top(x_t-x^*) + \eta_t^2\|g_t\|^2.$$</div>
+    <p>Using \(f(x_t)-f(x^*) \le g_t^\top(x_t-x^*)\) (subgradient inequality) and \(\|g_t\|\le L\), we get</p>
+    <div class="equation">$$2\eta_t\bigl(f(x_t)-f(x^*)\bigr) \le \|x_t-x^*\|^2 - \|x_{t+1}-x^*\|^2 + \eta_t^2 L^2.$$</div>
+    <p>Summing from \(t=0\) to \(k-1\) and telescoping yields</p>
+    <div class="equation">$$2\sum_{t=0}^{k-1} \eta_t\bigl(f(x_t)-f(x^*)\bigr) \le \|x_0-x^*\|^2 + L^2\sum_{t=0}^{k-1} \eta_t^2.$$</div>
+    <p>With \(\eta_t = \frac{R}{L\sqrt{k}}\), we obtain \(2\frac{R}{L\sqrt{k}}\sum(f(x_t)-f(x^*)) \le R^2 + k\cdot\frac{R^2}{k} = 2R^2\). Hence \(\frac{1}{k}\sum f(x_t) - f(x^*) \le \frac{LR}{\sqrt{k}}\). Convexity gives \(f(\bar x_k)\le\frac{1}{k}\sum f(x_t)\).</p>
+  </div>
+</div>
+
+<!-- A4.216 -->
+<div class="section-block" id="a4-216">
+  <div class="section-heading"><span class="section-num-large">A4.216</span><h2 class="section-title-large">Step Size Schedules: Fixed \(\eta = R/(L\sqrt{k})\) vs. Decreasing \(\eta_s = G/\sqrt{s}\) (the \(\log k\) Penalty) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Two common step size rules for subgradient descent:</p>
+    <ul>
+      <li><strong>Fixed \(\eta_t = \frac{R}{L\sqrt{k}}\) for a preset total number of iterations \(k\).</strong> This gives the \(O(LR/\sqrt{k})\) guarantee but requires knowing the total iterations in advance. It is optimal for the worst case.</li>
+      <li><strong>Decreasing \(\eta_t = \frac{R}{L\sqrt{t}}\).</strong> This adapts automatically to running indefinitely. The analysis with telescoping sum introduces a \(\log k\) factor: \(f(\bar x_k)-f(x^*) = O(LR \frac{\log k}{\sqrt{k}})\).</li>
+    </ul>
+    <p>The logarithmic penalty from the decreasing schedule is often acceptable, but the next section shows how to remove it by averaging only the second half of the iterates.</p>
+  </div>
+</div>
+
+<!-- A4.217 -->
+<div class="section-block" id="a4-217">
+  <div class="section-heading"><span class="section-num-large">A4.217</span><h2 class="section-title-large">Removing the \(\log k\) Factor via Averaging over the Second Half of Iterates (from \(k/2\) to \(k\)) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>If we run decreasing step sizes \(\eta_t = \frac{R}{L\sqrt{t}}\) but only average the iterates from \(t=k/2\) to \(k\), the logarithmic factor disappears. The intuition is that the larger step sizes in early iterations contribute the log‑factor, while later steps are all small and stable. By discarding the first half, we get a guarantee of \(O(LR/\sqrt{k})\) without a log factor, without needing to pre‑specify the total number of iterations. The proof splits the sum and uses \(\sum_{t=k/2}^k \eta_t^2 \approx \sum \frac{1}{t} \approx O(1/k)\) with a constant, not a log, and the initial distance \(R\) still bounds the early terms. This trick makes adaptive step sizes fully competitive with the fixed horizon schedule.</p>
+  </div>
+</div>
+
+<!-- A4.218 -->
+<div class="section-block" id="a4-218">
+  <div class="section-heading"><span class="section-num-large">A4.218</span><h2 class="section-title-large">Definition: Projection onto a Closed Convex Set \(\pi(x)\) and its Variational Inequality Characterization <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="definition-box">
+      <p>For a closed convex set \(\mathcal{C}\subseteq\mathbb{R}^d\), the <strong>projection</strong> of \(x\) onto \(\mathcal{C}\) is the unique point \(\pi_{\mathcal{C}}(x)\) satisfying</p>
+      <div class="equation">$$\pi_{\mathcal{C}}(x) = \arg\min_{z\in\mathcal{C}} \|x-z\|.$$</div>
+      <p>The projection is characterised by the <strong>variational inequality</strong>:</p>
+      <div class="equation">$$\langle \pi_{\mathcal{C}}(x) - x,\; \pi_{\mathcal{C}}(x) - z \rangle \le 0 \quad\text{for all } z\in\mathcal{C}.$$</div>
+    </div>
+    <p>Geometrically, the vector from the projection to \(x\) forms an acute angle with any other point in the set, meaning the projection is the closest point. Equivalently, \(\pi_{\mathcal{C}}(x)\) is the unique solution to \(\langle x - \pi_{\mathcal{C}}(x), z - \pi_{\mathcal{C}}(x)\rangle \le 0\). This inequality is fundamental in projected gradient descent, used to solve constrained optimisation problems \(\min_{x\in\mathcal{C}} f(x)\), and for algorithms like SVM with convex constraints.</p>
+  </div>
+</div>
+<!-- A4.219 -->
+<div class="section-block" id="a4-219">
+  <div class="section-heading"><span class="section-num-large">A4.219</span><h2 class="section-title-large">Uniqueness of the Projection (Proof by Contradiction) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For a closed convex set \(\mathcal{C}\subseteq\mathbb{R}^d\), the projection \(\pi_{\mathcal{C}}(x)\) is the unique point in \(\mathcal{C}\) that minimises the distance to \(x\). Uniqueness follows from the strict convexity of the Euclidean norm and the convexity of \(\mathcal{C}\).</p>
+    <p><strong>Proof by contradiction.</strong> Suppose \(z_1\neq z_2\) both minimise \(\|x-z\|\) over \(\mathcal{C}\) and let \(r = \|x-z_1\| = \|x-z_2\|\). By convexity, \(\bar z = \frac{1}{2}(z_1+z_2)\in\mathcal{C}\). By the parallelogram law,</p>
+    <div class="equation">$$\|x-\bar z\|^2 = \left\|\frac{x-z_1}{2} + \frac{x-z_2}{2}\right\|^2 = \frac{1}{2}\|x-z_1\|^2 + \frac{1}{2}\|x-z_2\|^2 - \frac{1}{4}\|z_1-z_2\|^2 = r^2 - \frac{1}{4}\|z_1-z_2\|^2 < r^2.$$</div>
+    <p>Thus \(\bar z\) is strictly closer to \(x\) than \(z_1\), contradicting minimality. Hence the projection is unique. This uniqueness is essential for defining projected gradient descent and for the variational inequality characterisation.</p>
+  </div>
+</div>
+
+<!-- A4.220 -->
+<div class="section-block" id="a4-220">
+  <div class="section-heading"><span class="section-num-large">A4.220</span><h2 class="section-title-large">Algorithm: Projected Gradient Descent (PGD) for Constrained Convex Minimization <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Projected gradient descent</strong> solves \(\min_{x\in\mathcal{C}} f(x)\) for a convex function \(f\) and a closed convex set \(\mathcal{C}\) by alternating a gradient step and a projection:</p>
+    <pre>
+Initialise x_0 ∈ C.
+For k = 0,1,2,...:
+    Compute g_k ∈ ∂f(x_k)
+    Choose step size η_k > 0
+    Set y_{k+1} = x_k - η_k g_k
+    Project onto C: x_{k+1} = π_C(y_{k+1})
+End
+    </pre>
+    <p>The projection step ensures feasibility: \(x_{k+1}\in\mathcal{C}\). The analysis mirrors the unconstrained case but uses the variational inequality (A4.218) to show that the projection does not increase the distance to the optimum. PGD is the standard method for constrained convex ERM (e.g., SVM with norm constraints, Lasso with \(\ell_1\) ball).</p>
+  </div>
+</div>
+
+<!-- A4.221 -->
+<div class="section-block" id="a4-221">
+  <div class="section-heading"><span class="section-num-large">A4.221</span><h2 class="section-title-large">Theorem: \(O(LR/\sqrt{k})\) Convergence Rate for Projected Gradient Descent <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="theorem-box">
+      <p><strong>Convergence of PGD.</strong> Let \(f\) be convex and \(L\)-Lipschitz on \(\mathcal{C}\), and let \(\operatorname{diam}(\mathcal{C}) \le R\). Run PGD with constant step size \(\eta = \frac{R}{L\sqrt{k}}\) for \(k\) iterations. Then the average iterate \(\bar x_k = \frac{1}{k}\sum_{t=1}^k x_t\) satisfies</p>
+      <div class="equation">$$f(\bar x_k) - f(x^*) \le \frac{LR}{\sqrt{k}}.$$</div>
+    </div>
+    <p><strong>Proof sketch.</strong> The projection step is non‑expansive: \(\|\pi_{\mathcal{C}}(y)-x^*\| \le \|y-x^*\|\). Using this and the subgradient inequality, one obtains the same recurrence as in the unconstrained case:</p>
+    <div class="equation">$$\|x_{t+1}-x^*\|^2 \le \|x_t-x^*\|^2 - 2\eta_t (f(x_t)-f(x^*)) + \eta_t^2 L^2.$$</div>
+    <p>Telescoping the sum and averaging gives the \(O(LR/\sqrt{k})\) bound. The projection introduces no extra cost in the convergence rate; it just keeps the iterates inside the feasible set.</p>
+  </div>
+</div>
+
+<!-- A4.222 -->
+<div class="section-block" id="a4-222">
+  <div class="section-heading"><span class="section-num-large">A4.222</span><h2 class="section-title-large">Application: SVM – Computing the Lipschitz Constant \(L\) via Kernel Matrix Column Norms <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For SVM with hinge loss and a kernel \(K\), we learn \(f(x) = \sum_{j=1}^n \alpha_j K(x_j, x)\) by minimising over \(\alpha\) in a convex set. The objective is \(F(\alpha) = \frac{1}{n}\sum_{i=1}^n \max(0, 1 - y_i (K\alpha)_i) + \frac{\lambda}{2} \alpha^\top K \alpha\). To apply subgradient descent, we need the Lipschitz constant \(L\) of the hinge loss part with respect to \(\alpha\). The subgradient of the empirical hinge risk with respect to \(\alpha\) has norm bounded by the maximum \(\ell_2\) norm of the columns of the kernel matrix: each term contributes at most the norm of the \(i\)-th column of \(K\) (since \(|\partial \max(0,1-z)| \le 1\)). Thus, \(L = \max_i \|K_{:,i}\|_2 = \max_i \sqrt{K_{ii}} = \max_i \sqrt{K(x_i,x_i)}\). For the Gaussian kernel, \(K(x_i,x_i)=1\), so \(L=1\). The regulariser’s gradient \(2\lambda K\alpha\) adds a smooth term; the Lipschitz constant of the full objective can be bounded accordingly.</p>
+  </div>
+</div>
+
+<!-- A4.223 -->
+<div class="section-block" id="a4-223">
+  <div class="section-heading"><span class="section-num-large">A4.223</span><h2 class="section-title-large">Application: SVM – Computing the Diameter \(R\) via Kernel Eigenvalues \(\lambda_{\min}(K)\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>In projected subgradient descent for SVM, the feasible set is often a norm ball \(\mathcal{C} = \{\alpha : \alpha^\top K \alpha \le B^2\}\) or an \(\ell_2\) ball in feature space. The diameter \(R = \max_{\alpha,\beta\in\mathcal{C}} \|\alpha-\beta\|_2\). For the constraint \(\alpha^\top K \alpha \le B^2\), we can bound the diameter of the feasible set in \(\ell_2\): if \(\lambda_{\min}(K) > 0\), then for any \(\alpha\) in the set, \(\|\alpha\|_2 \le B/\sqrt{\lambda_{\min}(K)}\), so \(R \le 2B/\sqrt{\lambda_{\min}(K)}\). If the kernel is strictly positive definite, \(\lambda_{\min}(K)>0\); for a Gaussian kernel on distinct points, the kernel matrix has full rank but eigenvalues can be very small, making \(R\) large. Regularisation ensures a lower bound on the effective curvature. The iteration complexity \(O(LR/\sqrt{k})\) then depends on the condition number via \(\lambda_{\min}(K)\).</p>
+  </div>
+</div>
+
+<!-- A4.224 -->
+<div class="section-block" id="a4-224">
+  <div class="section-heading"><span class="section-num-large">A4.224</span><h2 class="section-title-large">Application: SVM – Random Matrix Theory (Wishart) and Iteration Complexity <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For a kernel derived from inner products of random features (e.g., Gaussian random projections), the kernel matrix \(K\) behaves like a Wishart matrix. Random matrix theory (Marchenko–Pastur) predicts that the eigenvalues are supported in \([\lambda_{-},\lambda_{+}]\) with \(\lambda_{-} \approx (1-\sqrt{c})^2\) where \(c = n/d\) is the aspect ratio. Thus, for a large number of random features \(d \gg n\), the smallest eigenvalue is bounded away from zero, giving a bounded diameter \(R\). Combined with \(L=1\) (for Gaussian kernel), the iteration complexity \(O(LR/\sqrt{k})\) becomes \(O(1/\sqrt{k})\) with a moderate constant. This explains why random feature approximations to kernel SVM are computationally efficient: the condition number is well‑behaved, and the subgradient method converges in a predictable number of iterations.</p>
+  </div>
+</div>
+
+<!-- A4.225 -->
+<div class="section-block" id="a4-225">
+  <div class="section-heading"><span class="section-num-large">A4.225</span><h2 class="section-title-large">Application: Boosting – \(\ell_1\) Constraint, Lipschitz Constant \(\sqrt{N}\), and Poor Iteration Complexity <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Boosting algorithms (e.g., AdaBoost with coordinate descent) can be cast as minimising a convex loss (exponential or logistic) over the simplex \(\Delta_N = \{\alpha\in\mathbb{R}^N : \alpha_i \ge 0, \sum \alpha_i = 1\}\), where \(N\) is the number of weak learners. The \(\ell_1\) diameter of the simplex is \(2\). However, the Lipschitz constant \(L\) with respect to \(\ell_2\) norm is large: the gradient of the loss with respect to \(\alpha\) can have norm up to \(\sqrt{N}\) (by Cauchy–Schwarz). Thus, the subgradient descent guarantee \(O(LR/\sqrt{k})\) becomes \(O(\sqrt{N/k})\), which is poor when \(N\) is large. This motivates the use of non‑Euclidean methods (mirror descent with entropy) that exploit the \(\ell_1\) geometry, where the diameter measured in \(\ell_1\) is \(2\) and the Lipschitz constant in the dual \(\ell_\infty\) norm is \(1\), giving a rate \(O(\sqrt{\log N / k})\)—exponentially better in \(N\).</p>
+  </div>
+</div>
+
+<!-- A4.226 -->
+<div class="section-block" id="a4-226">
+  <div class="section-heading"><span class="section-num-large">A4.226</span><h2 class="section-title-large">Motivation for Mirror Descent: Non‑Euclidean Geometry and the Need for \(\ell_1/\ell_\infty\) Dual Spaces <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Standard gradient descent is tuned to the Euclidean (\(\ell_2\)) geometry: it uses the squared Euclidean distance as a measure of progress. In many problems, the feasible set is naturally suited to a different norm—for instance, the simplex is an \(\ell_1\) ball, and the Lipschitz constant is measured in \(\ell_\infty\). Using Euclidean projections onto the simplex is possible but computationally expensive, and the resulting iteration complexity is suboptimal (large \(L\) in \(\ell_2\)). <strong>Mirror descent</strong> generalises gradient descent to arbitrary geometries by replacing the Euclidean distance with a <strong>Bregman divergence</strong> derived from a strongly convex <strong>mirror map</strong> \(\Phi\). This allows the algorithm to exploit the duality between \(\ell_1\) and \(\ell_\infty\), dramatically improving the dimension dependence from \(\sqrt{N}\) to \(\sqrt{\log N}\). Mirror descent is the foundation for the exponentiated gradient algorithm, boosting, and many online learning algorithms.</p>
+  </div>
+</div>
+
+<!-- A4.227 -->
+<div class="section-block" id="a4-227">
+  <div class="section-heading"><span class="section-num-large">A4.227</span><h2 class="section-title-large">Definition: Dual Norm \(\|\cdot\|_*\) and \(\alpha\)-Strong Convexity with Respect to a Norm <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="definition-box">
+      <p>The <strong>dual norm</strong> of a norm \(\|\cdot\|\) on \(\mathbb{R}^d\) is defined by</p>
+      <div class="equation">$$\|y\|_* = \sup_{\|x\|\le 1} \langle y, x \rangle.$$</div>
+      <p>For example, the dual of \(\ell_1\) is \(\ell_\infty\), the dual of \(\ell_2\) is \(\ell_2\), and the dual of \(\ell_p\) is \(\ell_q\) with \(1/p+1/q=1\).</p>
+      <p>A function \(\Phi:\mathcal{D}\to\mathbb{R}\) is <strong>\(\alpha\)-strongly convex</strong> with respect to a norm \(\|\cdot\|\) if for all \(x,y\),</p>
+      <div class="equation">$$\Phi(y) \ge \Phi(x) + \nabla\Phi(x)^\top (y-x) + \frac{\alpha}{2}\|y-x\|^2.$$</div>
+    </div>
+    <p>Strong convexity is the key property of the mirror map; it ensures that the Bregman divergence dominates the squared norm distance, enabling convergence proofs.</p>
+  </div>
+</div>
+
+<!-- A4.228 -->
+<div class="section-block" id="a4-228">
+  <div class="section-heading"><span class="section-num-large">A4.228</span><h2 class="section-title-large">Definition: Bregman Divergence \(D_\Phi(y,x) = \Phi(y) - \Phi(x) - \nabla\Phi(x)^\top (y-x)\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="definition-box">
+      <p>For a strictly convex and differentiable function \(\Phi\) defined on a convex set \(\mathcal{D}\), the <strong>Bregman divergence</strong> between \(y\) and \(x\) is</p>
+      <div class="equation">$$D_\Phi(y,x) = \Phi(y) - \Phi(x) - \nabla\Phi(x)^\top (y-x).$$</div>
+      <p>It measures the error of the linear approximation of \(\Phi\) at \(x\) evaluated at \(y\). It is non‑negative, convex in \(y\), and zero iff \(x=y\). Unlike a metric, it is not symmetric and does not satisfy the triangle inequality. Examples: for \(\Phi(x)=\frac{1}{2}\|x\|_2^2\), \(D_\Phi(y,x)=\frac{1}{2}\|y-x\|_2^2\); for \(\Phi(x)=\sum x_i \log x_i\) (negative entropy on the simplex), \(D_\Phi(y,x)=\sum y_i \log(y_i/x_i)\) (KL divergence).</p>
+    </div>
+    <p>Bregman divergence is the natural notion of distance for mirror descent, replacing the squared Euclidean norm in the update step and in the convergence analysis.</p>
+  </div>
+</div>
+
+<!-- A4.229 -->
+<div class="section-block" id="a4-229">
+  <div class="section-heading"><span class="section-num-large">A4.229</span><h2 class="section-title-large">The Three‑Point Identity for Bregman Divergences <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="lemma-box">
+      <p><strong>Three‑Point Identity.</strong> For any \(x,y,z\) in the domain of \(\Phi\),</p>
+      <div class="equation">$$(\nabla\Phi(x) - \nabla\Phi(y))^\top (x - z) = D_\Phi(x,y) + D_\Phi(z,x) - D_\Phi(z,y).$$</div>
+    </div>
+    <p><strong>Proof.</strong> Expand the left‑hand side using the definition of Bregman divergence:</p>
+    <div class="equation">$$(\nabla\Phi(x)-\nabla\Phi(y))^\top(x-z) = \bigl(\Phi(x)-\Phi(z)-D_\Phi(z,x)\bigr) - \bigl(\Phi(y)-\Phi(z)-D_\Phi(z,y)\bigr) - \bigl(\Phi(x)-\Phi(y)-D_\Phi(y,x)\bigr) + D_\Phi(y,x)?$$</div>
+    <p>A cleaner direct verification: write each term using \(\Phi\) and cancel. The identity is the generalisation of the Euclidean law of cosines to Bregman divergences. It is the key algebraic tool in the analysis of mirror descent, allowing telescoping sums with Bregman divergences in place of squared norms.</p>
+  </div>
+</div>
+
+<!-- A4.230 -->
+<div class="section-block" id="a4-230">
+  <div class="section-heading"><span class="section-num-large">A4.230</span><h2 class="section-title-large">Definition: Bregman Projection \(\pi_\Phi(x) = \arg\min_{z\in\mathcal{C}} D_\Phi(z,x)\) and Its Role in Mirror Descent <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="definition-box">
+      <p>For a closed convex set \(\mathcal{C}\) and a strictly convex, differentiable function \(\Phi\) (the <strong>mirror map</strong>), the <strong>Bregman projection</strong> of \(x\) onto \(\mathcal{C}\) is</p>
+      <div class="equation">$$\pi_{\mathcal{C}}^{\Phi}(x) = \arg\min_{z\in\mathcal{C}} D_\Phi(z, x).$$</div>
+      <p>When \(\Phi(x)=\frac{1}{2}\|x\|_2^2\), this reduces to the Euclidean projection \(\pi_{\mathcal{C}}(x)\). In general, the Bregman projection generalises the notion of orthogonal projection to non‑Euclidean geometries induced by \(\Phi\). It is well‑defined and unique because \(D_\Phi(z,x)\) is strictly convex in \(z\).</p>
+    </div>
+    <p>In <strong>mirror descent</strong> (A4.233), after a gradient step in the dual space, one maps back to the primal feasible set using the Bregman projection. The variational inequality for Bregman projections replaces the Euclidean one (A4.218) and is central to the convergence proof.</p>
+  </div>
+</div>
+
+<!-- A4.231 -->
+<div class="section-block" id="a4-231">
+  <div class="section-heading"><span class="section-num-large">A4.231</span><h2 class="section-title-large">Limitation of Projected Gradient Descent: The Euclidean Ball Example and the Benefit of Mirror Descent <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Consider minimising a convex function over the \(\ell_1\) ball of radius \(R\) in \(\mathbb{R}^n\). The Lipschitz constant of a typical loss gradient measured in \(\ell_\infty\) norm may be \(O(1)\), but measured in \(\ell_2\) norm it can be as large as \(\sqrt{n}\) (since \(\|g\|_2 \le \sqrt{n}\|g\|_\infty\)). Projected gradient descent using Euclidean projections onto the \(\ell_1\) ball yields an iteration complexity bound of \(O(LR/\sqrt{k}) = O(\sqrt{n}R/\sqrt{k})\), which scales poorly with dimension.</p>
+    <p>Mirror descent with the negative entropy mirror map \(\Phi(x)=\sum x_i\log x_i\) and the \(\ell_1\) norm geometry transforms the gradient into the dual \(\ell_\infty\) norm, where the Lipschitz constant remains \(O(1)\). The diameter of the simplex measured in \(\ell_1\) is \(2\), so the convergence rate becomes \(O(\sqrt{\log n / k})\)—exponentially better in \(n\). This dimension‑free improvement is the primary motivation for using non‑Euclidean methods in high‑dimensional problems such as boosting and online learning over the simplex.</p>
+  </div>
+</div>
+
+<!-- A4.232 -->
+<div class="section-block" id="a4-232">
+  <div class="section-heading"><span class="section-num-large">A4.232</span><h2 class="section-title-large">Geometric Intuition of Mirror Descent: Primal Space \(D\) vs. Dual Space \(D^*\) and the Mapping via \(\nabla\Phi(x)\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Mirror descent operates in two spaces:</p>
+    <ul>
+      <li>The <strong>primal space</strong> \(\mathcal{X}\) where the original variables \(x\) live, equipped with a norm \(\|\cdot\|\) and a convex feasible set \(\mathcal{C}\).</li>
+      <li>The <strong>dual space</strong> \(\mathcal{X}^*\) where gradients (subgradients) reside, equipped with the dual norm \(\|\cdot\|_*\).</li>
+    </ul>
+    <p>The mirror map \(\Phi: \mathcal{D}\to\mathbb{R}\) (strongly convex on \(\mathcal{D}\supseteq\mathcal{C}\)) defines a one‑to‑one mapping \(\nabla\Phi: \mathcal{D}\to\mathcal{X}^*\). The gradient descent step is performed in the dual space: \(\theta_{s+1} = \nabla\Phi(x_s) - \eta g_s\), where \(g_s\in\partial f(x_s)\). Then one maps back via the inverse \((\nabla\Phi)^{-1}\) to obtain a primal point \(y_{s+1} = (\nabla\Phi)^{-1}(\theta_{s+1})\), and finally projects onto \(\mathcal{C}\) using the Bregman divergence. This decouples the non‑Euclidean geometry (captured by \(\Phi\)) from the function’s smoothness properties, allowing optimal rates in the appropriate norm.</p>
+  </div>
+</div>
+
+<!-- A4.233 -->
+<div class="section-block" id="a4-233">
+  <div class="section-heading"><span class="section-num-large">A4.233</span><h2 class="section-title-large">Algorithm: Mirror Descent (Explicit Steps with \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta g_s\) and Bregman Projection) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Mirror descent</strong> solves \(\min_{x\in\mathcal{C}} f(x)\) iteratively as follows:</p>
+    <ol>
+      <li>Initialise \(x_0 \in \mathcal{C}\).</li>
+      <li>For \(s = 0,1,2,\dots\):
+        <ul>
+          <li>Compute a subgradient \(g_s \in \partial f(x_s)\).</li>
+          <li>Dual update: \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta_s g_s\), where \(\eta_s>0\) is the step size.</li>
+          <li>Primal recovery: \(y_{s+1} = (\nabla\Phi)^{-1}(\nabla\Phi(y_{s+1}))\). (For standard \(\Phi\) this is explicit.)</li>
+          <li>Bregman projection: \(x_{s+1} = \arg\min_{x\in\mathcal{C}} D_\Phi(x, y_{s+1})\).</li>
+        </ul>
+      </li>
+    </ol>
+    <p>If \(\Phi\) is chosen as \(\frac{1}{2}\|x\|_2^2\), the dual update becomes \(y_{s+1} = x_s - \eta_s g_s\), and the Bregman projection is Euclidean projection, recovering projected gradient descent. For the negative entropy \(\Phi(x)=\sum x_i\log x_i\), the dual update gives a multiplicative rule, and the Bregman projection onto the simplex is simple renormalisation (A4.239).</p>
+  </div>
+</div>
+
+<!-- A4.234 -->
+<div class="section-block" id="a4-234">
+  <div class="section-heading"><span class="section-num-large">A4.234</span><h2 class="section-title-large">Proof Step: Bounding \(D_\Phi(x_s, y_{s+1})\) using Strong Convexity, Hölder’s Inequality, and the Maximum of a Quadratic <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>In the convergence analysis of mirror descent, a crucial step bounds the Bregman divergence between \(x_s\) and the intermediate point \(y_{s+1}\). Using the dual update \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta g_s\) and the strong convexity of \(\Phi\) with respect to \(\|\cdot\|\) (coefficient \(\alpha\)), we have</p>
+    <div class="equation">$$D_\Phi(x_s, y_{s+1}) = \Phi(x_s) - \Phi(y_{s+1}) - \nabla\Phi(y_{s+1})^\top (x_s - y_{s+1}).$$</div>
+    <p>Applying the definition of strong convexity \(\Phi(x_s) \ge \Phi(y_{s+1}) + \nabla\Phi(y_{s+1})^\top(x_s-y_{s+1}) + \frac{\alpha}{2}\|x_s-y_{s+1}\|^2\) and rearranging, one obtains</p>
+    <div class="equation">$$D_\Phi(x_s, y_{s+1}) \ge \frac{\alpha}{2}\|x_s-y_{s+1}\|^2.$$</div>
+    <p>On the other hand, by Hölder’s inequality, \(\eta g_s^\top (x_s - y_{s+1}) \le \eta \|g_s\|_* \|x_s - y_{s+1}\|\). From the update relation \(\nabla\Phi(y_{s+1})-\nabla\Phi(x_s) = -\eta g_s\), one can also derive an upper bound on \(D_\Phi(x_s, y_{s+1})\) via the three‑point identity (A4.229), leading after algebraic manipulations to a term of the form \(a\|x_s-y_{s+1}\| - \frac{\alpha}{2}\|x_s-y_{s+1}\|^2\) which is maximised by choosing the optimal \(\|x_s-y_{s+1}\|\). The elementary inequality \(a t - \frac{\alpha}{2}t^2 \le \frac{a^2}{2\alpha}\) for any \(t\ge 0\) then gives the bound \(D_\Phi(x_s, y_{s+1}) \le \frac{\eta^2}{2\alpha}\|g_s\|_*^2\). This inequality is the key to telescoping the Bregman divergences and obtaining the convergence rate.</p>
+  </div>
+</div>
+
+<!-- A4.235 -->
+<div class="section-block" id="a4-235">
+  <div class="section-heading"><span class="section-num-large">A4.235</span><h2 class="section-title-large">Reformulation of Mirror Descent Update: \(x_{s+1} = \arg\min_{x\in\mathcal{C}} \{\eta g_s^\top x + D_\Phi(x, x_s)\}\) (Proximal View) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>The mirror descent update can be written as a single <strong>proximal</strong> (or Bregman proximal) step. Starting from the dual update and the definition of Bregman projection, one can show that</p>
+    <div class="equation">$$x_{s+1} = \arg\min_{x\in\mathcal{C}} \Bigl\{ \eta_s g_s^\top x + D_\Phi(x, x_s) \Bigr\}.$$</div>
+    <p>Indeed, the optimality condition for this minimisation is \(\nabla\Phi(x_{s+1}) = \nabla\Phi(x_s) - \eta_s g_s + \nu\), where \(\nu\) is a normal cone term that enforces the constraint. This matches exactly the mirror descent update with the Bregman projection absorbing the constraint. This proximal formulation unifies mirror descent with other first‑order methods: it penalises moving far from \(x_s\) in the Bregman sense, while simultaneously minimising the local linear approximation of \(f\). When \(\Phi = \frac{1}{2}\|\cdot\|_2^2\), it recovers the standard proximal gradient descent update.</p>
+  </div>
+</div>
+
+<!-- A4.236 -->
+<div class="section-block" id="a4-236">
+  <div class="section-heading"><span class="section-num-large">A4.236</span><h2 class="section-title-large">Example: Euclidean Setup (\(\Phi(x) = \frac{1}{2}\|x\|_2^2\)) Recovers Projected Gradient Descent <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Choose \(\Phi(x) = \frac{1}{2}\|x\|_2^2\). Then \(\nabla\Phi(x)=x\), and the Bregman divergence is \(D_\Phi(y,x)=\frac{1}{2}\|y-x\|_2^2\). The mirror descent update:</p>
+    <ol>
+      <li>Dual: \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta_s g_s \;\Longrightarrow\; y_{s+1} = x_s - \eta_s g_s\).</li>
+      <li>Primal projection: \(x_{s+1} = \arg\min_{x\in\mathcal{C}} D_\Phi(x, y_{s+1}) = \arg\min_{x\in\mathcal{C}} \frac{1}{2}\|x - y_{s+1}\|_2^2 = \pi_{\mathcal{C}}(y_{s+1})\).</li>
+    </ol>
+    <p>Thus mirror descent coincides exactly with projected subgradient descent. The strong convexity parameter of \(\Phi\) with respect to \(\|\cdot\|_2\) is \(\alpha=1\), giving the bound \(D_\Phi(x_s,y_{s+1}) \le \frac{\eta^2}{2}\|g_s\|_2^2\), and the standard \(O(LR/\sqrt{k})\) rate follows.</p>
+  </div>
+</div>
+
+<!-- A4.237 -->
+<div class="section-block" id="a4-237">
+  <div class="section-heading"><span class="section-num-large">A4.237</span><h2 class="section-title-large">Example: Negative Entropy Potential \(\Phi(x) = \sum_i x_i \log x_i\) and the Multiplicative Weights Update <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For optimisation over the simplex \(\Delta_n = \{x\ge 0, \sum_i x_i=1\}\), a natural mirror map is the negative entropy: \(\Phi(x) = \sum_{i=1}^n x_i \log x_i\) (with domain \(x>0\), extended continuously to the boundary). Its gradient is \(\nabla\Phi(x) = (1+\log x_1,\dots,1+\log x_n)\), so the dual update \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta g_s\) becomes</p>
+    <div class="equation">$$1+\log(y_{s+1,i}) = 1+\log(x_{s,i}) - \eta g_{s,i} \;\Longrightarrow\; y_{s+1,i} = x_{s,i} \exp(-\eta g_{s,i}).$$</div>
+    <p>Thus each coordinate is scaled multiplicatively by the exponentiated negative gradient. This is the <strong>exponentiated gradient</strong> or <strong>multiplicative weights</strong> update. The subsequent Bregman projection onto the simplex (A4.239) simply normalises: \(x_{s+1} = y_{s+1} / \|y_{s+1}\|_1\). This algorithm is central to boosting (AdaBoost), online learning (Hedge, Weighted Majority), and solving zero‑sum games.</p>
+  </div>
+</div>
+
+<!-- A4.238 -->
+<div class="section-block" id="a4-238">
+  <div class="section-heading"><span class="section-num-large">A4.238</span><h2 class="section-title-large">Bregman Divergence for Negative Entropy: \(D_\Phi(y,x) = \mathrm{KL}(y,x) + \sum_i (y_i - x_i)\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For \(\Phi(x)=\sum_i x_i\log x_i\), the Bregman divergence is</p>
+    <div class="equation">$$D_\Phi(y,x) = \sum_i y_i\log y_i - \sum_i x_i\log x_i - \sum_i (1+\log x_i)(y_i-x_i) = \sum_i y_i\log\frac{y_i}{x_i} - \sum_i(y_i-x_i).$$</div>
+    <p>If both \(x\) and \(y\) lie on the simplex (\(\sum_i x_i = \sum_i y_i = 1\)), the last term vanishes, and the divergence reduces to the <strong>Kullback–Leibler divergence</strong>: \(D_\Phi(y,x) = \sum_i y_i \log(y_i/x_i) = \mathrm{KL}(y\|x)\). Thus, for probability vectors, the Bregman projection with respect to negative entropy is exactly information projection: find the point in the constraint set that is closest in KL divergence. This connection to information theory makes mirror descent especially well‑suited to problems over the simplex, and the analysis relies on Pinsker’s inequality to relate KL divergence to the \(\ell_1\) norm.</p>
+  </div>
+</div>
+
+<!-- A4.239 -->
+<div class="section-block" id="a4-239">
+  <div class="section-heading"><span class="section-num-large">A4.239</span><h2 class="section-title-large">Bregman Projection onto the Simplex \(\Delta_n\) for Negative Entropy: Simple Renormalization <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For the negative entropy \(\Phi\), the Bregman projection of a positive vector \(y\) onto the simplex \(\Delta_n\) has a closed form. We solve</p>
+    <div class="equation">$$\min_{x\in\Delta_n} D_\Phi(x, y) = \min_{x\ge 0,\;\sum_i x_i=1} \sum_i \left( x_i\log\frac{x_i}{y_i} - x_i + y_i \right).$$</div>
+    <p>By introducing a Lagrange multiplier for the sum constraint, one obtains the optimality condition \(1+\log x_i - \log y_i - \lambda = 0\) for all \(i\), giving \(x_i \propto y_i\). The normalisation constraint then forces \(x_i = y_i / \sum_j y_j\). Thus, the Bregman projection onto the simplex is simply <strong>renormalisation</strong>:</p>
+    <div class="equation">$$\pi_{\Delta_n}^\Phi(y) = \frac{y}{\|y\|_1}.$$</div>
+    <p>This simplicity makes the negative entropy mirror map extremely computationally attractive: after the multiplicative update, a single normalisation step maintains feasibility.</p>
+  </div>
+</div>
+
+<!-- A4.240 -->
+<div class="section-block" id="a4-240">
+  <div class="section-heading"><span class="section-num-large">A4.240</span><h2 class="section-title-large">Strong Convexity of Negative Entropy w.r.t. \(\ell_1\) Norm via Pinsker’s Inequality (\(D_\Phi(y,x) \ge \frac{1}{2}\|x-y\|_1^2\)) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="lemma-box">
+      <p><strong>Pinsker’s inequality.</strong> For any two probability vectors \(p,q\) in \(\Delta_n\),</p>
+      <div class="equation">$$\mathrm{KL}(p\|q) \ge \frac{1}{2}\|p-q\|_1^2.$$</div>
+      <p>Since for points on the simplex \(D_\Phi(p,q) = \mathrm{KL}(p\|q)\), this directly implies that the negative entropy mirror map \(\Phi\) is <strong>\(1\)-strongly convex</strong> with respect to the \(\ell_1\) norm on the simplex.</p>
+    </div>
+    <p>This is the key geometric property that gives mirror descent with negative entropy its dimension‑independent convergence rate. The Lipschitz constant of the loss gradient measured in the dual \(\ell_\infty\) norm is often \(O(1)\) (e.g., for boosting), and the diameter of the simplex in \(\ell_1\) is \(2\). Combined with the \(1\)-strong convexity, the mirror descent bound becomes \(O(\sqrt{\log n / k})\) (the \(\log n\) arises from the dual norm of the gradient, which can be bounded by the maximum coordinate). Pinsker’s inequality thus bridges the Bregman divergence, KL divergence, and the \(\ell_1\) norm, completing the analysis.</p>
+  </div>
+</div>
+
+
+<!-- A4.241 -->
+<div class="section-block" id="a4-241">
+  <div class="section-heading"><span class="section-num-large">A4.241</span><h2 class="section-title-large">Diameter \(R^2\) for Negative Entropy on the Simplex: \(R^2 = \max\Phi(x) - \min\Phi(x) = 0 - (-\log d) = \log d\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For mirror descent with negative entropy \(\Phi(x)=\sum_{i=1}^d x_i\log x_i\) on the simplex \(\Delta_d\), the quantity \(R^2\) that bounds the initial Bregman divergence to the optimum is</p>
+    <div class="equation">$$R^2 = \max_{x\in\Delta_d}\Phi(x) - \min_{x\in\Delta_d}\Phi(x).$$</div>
+    <p>The maximum of \(\Phi\) on the simplex is \(0\) (attained at any vertex, where one coordinate is \(1\) and the rest \(0\), with limit \(0\log 0 = 0\)). The minimum is achieved at the uniform distribution \(x_i = 1/d\), giving \(\Phi(1/d,\dots,1/d) = \sum_i (1/d)\log(1/d) = -\log d\). Hence</p>
+    <div class="equation">$$R^2 = 0 - (-\log d) = \log d.$$</div>
+    <p>Thus, for any starting point \(x_0\in\Delta_d\) and optimum \(x^*\), we have \(D_\Phi(x^*,x_0) \le \log d\). This dimension‑dependent (but logarithmic) bound enters the mirror descent convergence rate as the complexity measure, replacing the Euclidean diameter.</p>
+  </div>
+</div>
+
+<!-- A4.242 -->
+<div class="section-block" id="a4-242">
+  <div class="section-heading"><span class="section-num-large">A4.242</span><h2 class="section-title-large">Corollary: \(O(L^2 \log d / k)\) Convergence Rate for Mirror Descent under \(\ell_1\) Constraints and \(\ell_\infty\) Gradient Bounds <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Under the following conditions:</p>
+    <ul>
+      <li>The feasible set is the simplex \(\Delta_d\) (an \(\ell_1\) ball).</li>
+      <li>The subgradients of the loss are bounded in \(\ell_\infty\) norm: \(\|g\|_\infty \le L\) for all \(g\in\partial f(x)\), \(x\in\Delta_d\).</li>
+      <li>The mirror map is the negative entropy, which is \(1\)-strongly convex with respect to \(\|\cdot\|_1\) on \(\Delta_d\) (by Pinsker's inequality).</li>
+    </ul>
+    <p>Mirror descent with step size chosen appropriately achieves, after \(k\) iterations,</p>
+    <div class="equation">$$f(\bar x_k) - f(x^*) \le C \sqrt{\frac{L^2 \log d}{k}}.$$</div>
+    <p>The bound depends only logarithmically on the dimension \(d\), which is exponentially better than the \(O(L\sqrt{d/k})\) Euclidean bound that would result from the \(\ell_2\) Lipschitz constant blowing up to \(\sqrt{d}L\). This rate is obtained by combining the general mirror descent guarantee with \(R^2 = \log d\) and the dual norm bound \(\|g\|_* = \|g\|_\infty \le L\).</p>
+  </div>
+</div>
+
+<!-- A4.243 -->
+<div class="section-block" id="a4-243">
+  <div class="section-heading"><span class="section-num-large">A4.243</span><h2 class="section-title-large">Application: Boosting with Mirror Descent – Exploiting \(\ell_\infty\) Bounds to Achieve \(O(L^2 \log N / k)\), Leading to \(k \approx n^2 \log N\) Iterations for \(1/n\) Accuracy <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Boosting (e.g., AdaBoost) minimises a convex surrogate loss (exponential or logistic) over the simplex of size \(N\) (the number of weak learners). The gradient with respect to the weight vector \(\alpha\) has each coordinate bounded by a constant (typically \(L=1\)), so the \(\ell_\infty\) norm of the subgradient is \(O(1)\). Mirror descent with negative entropy thus yields the rate \(f(\bar\alpha_k) - f^* \le C \sqrt{\frac{\log N}{k}}\). To achieve excess risk \(\epsilon = 1/n\), we need \(k \approx \frac{\log N}{\epsilon^2} = n^2 \log N\) iterations. In contrast, projected subgradient descent with Euclidean distance would require \(k \approx N n^2\) iterations due to the \(\ell_2\) Lipschitz constant of order \(\sqrt{N}\). The exponential improvement in dimension makes mirror descent the method of choice for boosting and other large‑scale problems over the simplex.</p>
+  </div>
+</div>
+
+<!-- A4.244 -->
+<div class="section-block" id="a4-244">
+  <div class="section-heading"><span class="section-num-large">A4.244</span><h2 class="section-title-large">Other Potential Functions: \(\Phi(x) = \frac{1}{p}\|x\|_p^p\) with Strong Convexity w.r.t. \(\ell_1\) Norm (e.g., \(p = 1 + \frac{1}{\log d}\)) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Negative entropy is not the only choice for \(\ell_1\) geometry. The family of potentials \(\Phi(x) = \frac{1}{p}\|x\|_p^p\) for \(p>1\) is strongly convex with respect to the \(\ell_1\) norm when \(p\) is close to \(1\). Specifically, for \(p = 1 + \frac{1}{\log d}\), \(\Phi\) is strongly convex on the \(\ell_1\) ball with parameter roughly \(1/(2\log d)\). The Bregman divergence then behaves similarly to the squared \(\ell_2\) distance but adapted to the \(\ell_1\) geometry. The resulting mirror descent algorithm—called \(p\)-norm mirror descent—achieves a convergence rate of \(O(\sqrt{L^2 \log d / k})\) when the gradients are bounded in \(\ell_\infty\), matching the rate of the entropy-based method up to constants. This shows that many potential functions can be used to exploit the geometry, and the choice may be guided by computational simplicity (e.g., closed‑form Bregman projections).</p>
+  </div>
+</div>
+
+<!-- A4.245 -->
+<div class="section-block" id="a4-245">
+  <div class="section-heading"><span class="section-num-large">A4.245</span><h2 class="section-title-large">Stochastic Convex Optimization Setup: Random Functions \(x \mapsto \ell(x, Z)\) and the Goal of Minimizing \(f(x) = \mathbb{E}[\ell(x, Z)]\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>In <strong>stochastic convex optimisation</strong>, the objective is an expectation over a random variable \(Z\):</p>
+    <div class="equation">$$f(x) = \mathbb{E}_{Z\sim\mathcal{D}}[\ell(x, Z)],$$</div>
+    <p>where \(\ell(\cdot, z)\) is convex in \(x\) for every \(z\), and the feasible set is a closed convex set \(\mathcal{C}\). The learner does not have direct access to \(f(x)\) or its gradient; at each iteration, it draws an independent sample \(Z_t\) from \(\mathcal{D}\) and receives a subgradient \(g_t \in \partial_x \ell(x_t, Z_t)\), which is an unbiased estimate of a subgradient of \(f\): \(\mathbb{E}[g_t \mid x_t] \in \partial f(x_t)\). The goal is to generate a sequence \(x_t\) such that the expected function value \(\mathbb{E}[f(\bar x_k)]\) approaches \(\min_\mathcal{C} f(x)\). This setting encompasses empirical risk minimisation when the data distribution is the empirical distribution of a finite training set.</p>
+  </div>
+</div>
+
+<!-- A4.246 -->
+<div class="section-block" id="a4-246">
+  <div class="section-heading"><span class="section-num-large">A4.246</span><h2 class="section-title-large">Examples: Boosting (Convex Surrogate), Linear Regression (Squared Loss), and Maximum Likelihood (KL Divergence Minimization) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Many learning problems are instances of stochastic convex optimisation:</p>
+    <ul>
+      <li><strong>Boosting:</strong> Minimise \(\frac{1}{n}\sum_{i=1}^n \phi(-y_i h_\alpha(x_i))\) over \(\alpha\) in the simplex. Here \(Z\) is the index \(i\) of a training example, and \(\ell(\alpha, i) = \phi(-y_i h_\alpha(x_i))\).</li>
+      <li><strong>Linear regression:</strong> Minimise \(\frac{1}{n}\sum_{i=1}^n (y_i - w^\top x_i)^2\) over \(w\). The loss \(\ell(w, (x_i,y_i)) = \frac{1}{2}(y_i - w^\top x_i)^2\) (or with an additional regulariser). The stochastic gradient is \(-(y_i - w^\top x_i)x_i\).</li>
+      <li><strong>Maximum likelihood:</strong> Minimising the negative log‑likelihood \(-\frac{1}{n}\sum_{i=1}^n \log p(x_i; \theta)\) corresponds to KL divergence minimisation between the empirical distribution and the model. Each term is \(\ell(\theta, x_i)\).</li>
+    </ul>
+    <p>In all cases, stochastic gradient methods use one or a mini‑batch of examples per iteration, enabling scalability to large datasets.</p>
+  </div>
+</div>
+
+<!-- A4.247 -->
+<div class="section-block" id="a4-247">
+  <div class="section-heading"><span class="section-num-large">A4.247</span><h2 class="section-title-large">External Randomization: Expressing Empirical Risk Minimization as \(\mathbb{E}_I[f_I(x)]\) with Artificial Uniform Index \(I\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For a finite training set of size \(n\), the empirical risk \( \frac{1}{n}\sum_{i=1}^n \ell(h(x_i), y_i) \) can be written as an expectation over a uniformly random index \(I \in \{1,\dots,n\}\):</p>
+    <div class="equation">$$\widehat{R}_n(x) = \mathbb{E}_{I\sim\mathrm{Unif}\{1,\dots,n\}}\!\bigl[ \ell(h(x_{I}), y_{I}) \bigr].$$</div>
+    <p>This <strong>external randomization</strong> transforms the deterministic sum into a stochastic objective. At each iteration of stochastic gradient descent, one draws \(I_t\) uniformly and uses the subgradient of the \(I_t\)-th loss term. This provides an unbiased estimate of the full empirical gradient. The analysis of SGD then bounds the optimisation error in terms of the number of iterations, which is decoupled from \(n\). Multiple passes over the data (epochs) correspond to drawing indices with replacement, which is equivalent to the i.i.d. stochastic setting with \(\mathcal{D}\) being the empirical distribution.</p>
+  </div>
+</div>
+
+<!-- A4.248 -->
+<div class="section-block" id="a4-248">
+  <div class="section-heading"><span class="section-num-large">A4.248</span><h2 class="section-title-large">Critical Distinction: One Pass over True Data (Statistical Limit) vs. Multiple Passes over Artificial Data (Computational Iteration) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>In statistical learning theory, the <strong>statistical limit</strong> refers to the number of fresh training examples drawn from the population distribution required to achieve a target excess risk. This is typically a one‑pass setting: each example is used once and then discarded. In contrast, when optimising an empirical risk over a finite dataset, we often perform <strong>multiple passes</strong> (epochs) over the same data, which amounts to minimising the empirical risk to high precision. The number of computational iterations (SGD steps) can exceed the sample size \(n\). While this does not improve the statistical generalisation bound beyond the irreducible estimation error, it can reduce the optimisation error to be negligible compared to the statistical error. The theory separates these two aspects: optimisation error (how close we get to the minimiser of the empirical risk) and generalisation error (how close the empirical minimiser is to the true risk).</p>
+  </div>
+</div>
+
+<!-- A4.249 -->
+<div class="section-block" id="a4-249">
+  <div class="section-heading"><span class="section-num-large">A4.249</span><h2 class="section-title-large">Algorithm: Stochastic Gradient Descent (SGD) with Unbiased Subgradient Estimates and Projection onto \(\mathcal{C}\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Stochastic Gradient Descent (SGD)</strong> solves \(\min_{x\in\mathcal{C}} f(x) = \mathbb{E}[\ell(x,Z)]\) as follows:</p>
+    <pre>
+Initialise x_0 ∈ C.
+For t = 0,1,2,...,k-1:
+    Sample Z_t ~ D independent of past.
+    Obtain g_t ∈ ∂_x ℓ(x_t, Z_t)   (unbiased: E[g_t | x_t] ∈ ∂f(x_t))
+    Choose step size η_t > 0.
+    Update x_{t+1} = π_C( x_t - η_t g_t )
+End
+Return x̄_k = (1/k) ∑_{t=1}^k x_t  (or last iterate with averaging)
+    </pre>
+    <p>The projection \(\pi_{\mathcal{C}}\) is the Euclidean projection (or a Bregman projection if using mirror descent). This algorithm applies to both population risk minimisation (when samples are drawn from the true distribution) and empirical risk minimisation (by setting \(\mathcal{D}\) to the empirical distribution and sampling with replacement).</p>
+  </div>
+</div>
+
+<!-- A4.250 -->
+<div class="section-block" id="a4-250">
+  <div class="section-heading"><span class="section-num-large">A4.250</span><h2 class="section-title-large">Theorem: \(O(LR/\sqrt{k})\) Convergence Rate for SGD with Fixed Step Size \(\eta = R/(L\sqrt{k})\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="theorem-box">
+      <p><strong>Theorem (SGD convergence).</strong> Assume \(f\) is convex on \(\mathcal{C}\), \(\mathbb{E}[g_t\mid x_t]\in\partial f(x_t)\), and for all \(t\), \(\|g_t\|_* \le L\) almost surely (or \(\mathbb{E}[\|g_t\|_*^2\mid x_t]\le L^2\)). Let \(x^*\in\arg\min_{x\in\mathcal{C}} f(x)\) and suppose \(\|x_0-x^*\| \le R\). Then with constant step size \(\eta_t = \eta = \frac{R}{L\sqrt{k}}\) for all \(t\), the averaged iterate \(\bar x_k = \frac{1}{k}\sum_{t=1}^k x_t\) satisfies</p>
+      <div class="equation">$$\mathbb{E}[f(\bar x_k) - f(x^*)] \le \frac{LR}{\sqrt{k}}.$$</div>
+    </div>
+    <p>The expectation is over the random draws \(Z_0,\dots,Z_{k-1}\). This matches the deterministic projected subgradient rate, but now the gradient is noisy; the step size must be carefully controlled to balance progress and noise variance.</p>
+  </div>
+</div>
+
+<!-- A4.251 -->
+<div class="section-block" id="a4-251">
+  <div class="section-heading"><span class="section-num-large">A4.251</span><h2 class="section-title-large">Proof of SGD Convergence: Telescoping Sum, Conditional Expectation, and the Variance Bound \(\mathbb{E}\|\tilde g\|^2 \le L^2\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Proof sketch.</strong> As in the deterministic case, for any \(x^*\in\mathcal{C}\),</p>
+    <div class="equation">$$\begin{aligned}
+    \|x_{t+1}-x^*\|^2 &= \|\pi_{\mathcal{C}}(x_t - \eta g_t) - x^*\|^2 \\
+    &\le \|x_t - \eta g_t - x^*\|^2 \\
+    &= \|x_t - x^*\|^2 - 2\eta g_t^\top(x_t - x^*) + \eta^2\|g_t\|^2.
+    \end{aligned}$$</div>
+    <p>Take conditional expectation \(\mathbb{E}[\cdot\mid x_t]\). By unbiasedness, \(\mathbb{E}[g_t\mid x_t] = \tilde g_t \in \partial f(x_t)\). The subgradient inequality gives \(\tilde g_t^\top(x_t - x^*) \ge f(x_t) - f(x^*)\). Also, by the variance bound, \(\mathbb{E}[\|g_t\|^2 \mid x_t] \le L^2\). Thus,</p>
+    <div class="equation">$$\mathbb{E}[\|x_{t+1}-x^*\|^2 \mid x_t] \le \|x_t - x^*\|^2 - 2\eta (f(x_t)-f(x^*)) + \eta^2 L^2.$$</div>
+    <p>Rearrange and take total expectation:</p>
+    <div class="equation">$$2\eta\,\mathbb{E}[f(x_t)-f(x^*)] \le \mathbb{E}\|x_t - x^*\|^2 - \mathbb{E}\|x_{t+1}-x^*\|^2 + \eta^2 L^2.$$</div>
+    <p>Summing from \(t=0\) to \(k-1\) yields a telescoping bound:</p>
+    <div class="equation">$$2\eta\sum_{t=0}^{k-1} \mathbb{E}[f(x_t)-f(x^*)] \le \mathbb{E}\|x_0 - x^*\|^2 + k\eta^2 L^2 \le R^2 + k\eta^2 L^2.$$</div>
+    <p>By convexity, \(f(\bar x_k) \le \frac{1}{k}\sum_{t=1}^k f(x_t)\). With the choice \(\eta = \frac{R}{L\sqrt{k}}\), the right‑hand side becomes \(R^2 + k\cdot \frac{R^2}{k} = 2R^2\), so \(\mathbb{E}[f(\bar x_k)-f(x^*)] \le \frac{R^2}{2\eta k} = \frac{LR}{2\sqrt{k}}\). Adjusting constants yields the claimed \(O(LR/\sqrt{k})\) bound.</p>
+  </div>
+</div>
+
+<!-- A4.252 -->
+<div class="section-block" id="a4-252">
+  <div class="section-heading"><span class="section-num-large">A4.252</span><h2 class="section-title-large">Algorithm: Stochastic Mirror Descent (SMD) Using \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta \tilde g_s\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Stochastic Mirror Descent (SMD)</strong> extends mirror descent to stochastic optimisation where we only have access to an unbiased subgradient estimate \(\tilde g_s\) of \(\nabla f(x_s)\) (or a subgradient of \(\ell(\cdot, Z_s)\)). The update is identical to deterministic mirror descent but with a noisy gradient:</p>
+    <ol>
+      <li>At iteration \(s\), draw an i.i.d. sample \(Z_s\) and compute \(\tilde g_s \in \partial_x \ell(x_s, Z_s)\) satisfying \(\mathbb{E}[\tilde g_s \mid x_s] \in \partial f(x_s)\).</li>
+      <li>Dual update: \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta_s \tilde g_s\).</li>
+      <li>Recover \(y_{s+1} = (\nabla\Phi)^{-1}(\nabla\Phi(y_{s+1}))\).</li>
+      <li>Bregman projection: \(x_{s+1} = \arg\min_{x\in\mathcal{C}} D_\Phi(x, y_{s+1})\).</li>
+    </ol>
+    <p>When \(\Phi(x)=\frac{1}{2}\|x\|_2^2\), this recovers stochastic projected gradient descent. When \(\Phi(x)=\sum x_i \log x_i\), it yields exponentiated stochastic gradient. The stochastic noise is managed by averaging and appropriate step size schedules.</p>
+  </div>
+</div>
+
+<!-- A4.253 -->
+<div class="section-block" id="a4-253">
+  <div class="section-heading"><span class="section-num-large">A4.253</span><h2 class="section-title-large">Theorem: \(O(L^2 R^2 / (\alpha k))\) Convergence Rate for Stochastic Mirror Descent <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="theorem-box">
+      <p><strong>Theorem (SMD convergence).</strong> Let \(f\) be convex on \(\mathcal{C}\), \(\Phi\) be \(\alpha\)-strongly convex w.r.t. norm \(\|\cdot\|\) on \(\mathcal{C}\), and the stochastic subgradients satisfy \(\mathbb{E}[\|\tilde g_s\|_*^2 \mid x_s] \le L^2\). Choose constant step size \(\eta = \frac{\alpha R}{L}\sqrt{\frac{1}{k}}\) where \(D_\Phi(x^*,x_0)\le R^2\). Then the averaged iterate \(\bar x_k = \frac{1}{k}\sum_{s=1}^k x_s\) satisfies</p>
+      <div class="equation">$$\mathbb{E}[f(\bar x_k) - f(x^*)] \le \frac{2 L R}{\sqrt{\alpha k}}.$$</div>
+    </div>
+    <p>If the gradient variance is bounded by \(\sigma^2\) (i.e., \(\mathbb{E}[\|\tilde g_s - \mathbb{E}[\tilde g_s]\|_*^2]\le\sigma^2\)), the bound can be refined to \(O\left(\frac{LR}{\sqrt{\alpha k}} + \frac{\sigma R}{\sqrt{\alpha k}}\right)\). The rate matches the deterministic mirror descent rate up to constants, with the noise absorbed by the step size scaling.</p>
+  </div>
+</div>
+
+<!-- A4.254 -->
+<div class="section-block" id="a4-254">
+  <div class="section-heading"><span class="section-num-large">A4.254</span><h2 class="section-title-large">Proof of SMD: Derivation of the Key Inequality \(D_\Phi(x_s, y_{s+1}) \le \eta^2 \|\tilde g_s\|_*^2 / (2\alpha)\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>The key step in proving SMD convergence is bounding the Bregman divergence between the primal point \(x_s\) and the intermediate dual‑mapped point \(y_{s+1}\). From the update \(\nabla\Phi(y_{s+1}) - \nabla\Phi(x_s) = -\eta \tilde g_s\) and the definition of Bregman divergence, using the three‑point identity (A4.229) with \(x=x_s\), \(y=y_{s+1}\), \(z=x_s\) (or via direct manipulation) we have</p>
+    <div class="equation">$$D_\Phi(x_s, y_{s+1}) = \Phi(x_s) - \Phi(y_{s+1}) - \nabla\Phi(y_{s+1})^\top (x_s - y_{s+1}).$$</div>
+    <p>Using \(\nabla\Phi(y_{s+1}) = \nabla\Phi(x_s) - \eta \tilde g_s\), we rewrite:</p>
+    <div class="equation">$$D_\Phi(x_s, y_{s+1}) = \Phi(x_s) - \Phi(y_{s+1}) - (\nabla\Phi(x_s) - \eta \tilde g_s)^\top (x_s - y_{s+1}) = D_\Phi(x_s, y_{s+1})?$$</div>
+    <p>Wait, this becomes circular; a standard derivation uses the strong convexity of \(\Phi\). By \(\alpha\)-strong convexity, \(\Phi(y_{s+1}) \ge \Phi(x_s) + \nabla\Phi(x_s)^\top(y_{s+1}-x_s) + \frac{\alpha}{2}\|y_{s+1}-x_s\|^2\). Hence</p>
+    <div class="equation">$$D_\Phi(x_s, y_{s+1}) = \Phi(x_s) - \Phi(y_{s+1}) - \nabla\Phi(y_{s+1})^\top(x_s-y_{s+1}) \le -\frac{\alpha}{2}\|x_s-y_{s+1}\|^2 + (\nabla\Phi(x_s)-\nabla\Phi(y_{s+1}))^\top(x_s-y_{s+1}).$$</div>
+    <p>But \(\nabla\Phi(x_s)-\nabla\Phi(y_{s+1}) = \eta \tilde g_s\). Thus</p>
+    <div class="equation">$$D_\Phi(x_s, y_{s+1}) \le \eta \tilde g_s^\top (x_s - y_{s+1}) - \frac{\alpha}{2}\|x_s-y_{s+1}\|^2.$$</div>
+    <p>By Hölder's inequality, \(\eta \tilde g_s^\top (x_s-y_{s+1}) \le \eta \|\tilde g_s\|_* \|x_s-y_{s+1}\| \le \frac{\eta^2}{2\alpha}\|\tilde g_s\|_*^2 + \frac{\alpha}{2}\|x_s-y_{s+1}\|^2\) (using \(ab \le \frac{a^2}{2\alpha} + \frac{\alpha}{2}b^2\)). Plugging back, the \(\frac{\alpha}{2}\|x_s-y_{s+1}\|^2\) terms cancel, yielding</p>
+    <div class="equation">$$D_\Phi(x_s, y_{s+1}) \le \frac{\eta^2}{2\alpha}\|\tilde g_s\|_*^2.$$</div>
+    <p>This inequality bounds the progress in the dual space. Combined with a telescoping sum of Bregman divergences and the projection step (which does not increase Bregman divergence to \(x^*\)), we obtain the convergence rate.</p>
+  </div>
+</div>
+
+<!-- A4.255 -->
+<div class="section-block" id="a4-255">
+  <div class="section-heading"><span class="section-num-large">A4.255</span><h2 class="section-title-large">Algorithm: Stochastic Coordinate Descent (SCD) – Unbiased Gradient Estimate \(d \nabla_{I} f(x) e_I\) for Differentiable \(f\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Stochastic Coordinate Descent (SCD)</strong> exploits coordinate‑wise structure when computing a full gradient is expensive but a single coordinate gradient is cheap. For a differentiable function \(f:\mathbb{R}^d\to\mathbb{R}\), at each iteration, pick a coordinate index \(I \in \{1,\dots,d\}\) uniformly at random. The stochastic gradient is</p>
+    <div class="equation">$$\tilde g = d \cdot \frac{\partial f(x)}{\partial x_I} \, e_I,$$</div>
+    <p>where \(e_I\) is the \(I\)-th standard basis vector. This is an unbiased estimate of \(\nabla f(x)\): \(\mathbb{E}_I[\tilde g] = \sum_{i=1}^d \frac{1}{d} \cdot d \cdot \frac{\partial f}{\partial x_i} e_i = \nabla f(x)\). The factor \(d\) compensates for the probability \(1/d\) of selecting coordinate \(i\). The algorithm then takes a step \(x_{t+1} = x_t - \eta \tilde g\) (or with projection). SCD is especially effective when coordinate gradients are cheap (e.g., sparse data in SVMs, Lasso) and when the Lipschitz constant per coordinate is uniform.</p>
+  </div>
+</div>
+
+<!-- A4.256 -->
+<div class="section-block" id="a4-256">
+  <div class="section-heading"><span class="section-num-large">A4.256</span><h2 class="section-title-large">Rate for SCD: \(O(L R^2 d / k)\) and the Trade‑off between Update Cost and Iteration Complexity (Dimension Dependence) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>For a convex, \(L\)-Lipschitz function with respect to \(\|\cdot\|_2\) (so coordinate‑wise Lipschitz constant \(L_i \le L\)), and a bounded feasible set of diameter \(R\), SCD with step size \(\eta = \frac{R}{L\sqrt{dk}}\) achieves</p>
+    <div class="equation">$$\mathbb{E}[f(\bar x_k) - f(x^*)] \le \frac{LR\sqrt{d}}{\sqrt{k}}.$$</div>
+    <p>Equivalently, to achieve accuracy \(\epsilon\), \(k \approx L^2 R^2 d / \epsilon^2\) iterations are needed. This is a factor \(d\) worse in iteration count compared to full gradient descent (\(O(1/\epsilon^2)\) for stochastic). However, each SCD iteration updates only one coordinate and costs \(O(1)\) (if a coordinate gradient can be computed in \(O(1)\)), while full gradient descent costs \(O(d)\). Thus the total work to reach accuracy \(\epsilon\) is roughly \(O(d \cdot k_{\text{SCD}}) = O(d^2 / \epsilon^2)\) vs. \(O(d / \epsilon^2)\) for full gradient descent—a factor \(d\) worse. For very large \(d\) where coordinate‑wise operations are much cheaper than full gradients, SCD can be competitive. In practice, SCD shines when the data are sparse and coordinate gradients are \(O(\text{nnz}/d)\) on average.</p>
+  </div>
+</div>
+
+<!-- A4.257 -->
+<div class="section-block" id="a4-257">
+  <div class="section-heading"><span class="section-num-large">A4.257</span><h2 class="section-title-large">Output Strategy: Averaging Iterates \(\bar x_k\) vs. Best Iterate \(x_k^\circ\) in Stochastic Settings <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>In stochastic optimisation, the true function \(f\) is unknown (only stochastic estimates are available). Thus, one cannot directly select the best iterate based on function value (as one might with a validation set). Two common strategies for the final output are:</p>
+    <ul>
+      <li><strong>Averaging</strong> \(\bar x_k = \frac{1}{k}\sum_{t=1}^k x_t\): By convexity, \(f(\bar x_k) \le \frac{1}{k}\sum_{t=1}^k f(x_t)\). This is the standard choice for both deterministic and stochastic convergence proofs, and it yields an \(O(1/\sqrt{k})\) guarantee. It requires storing all iterates or updating a running average.</li>
+      <li><strong>Single random iterate</strong> or <strong>final iterate</strong>: Under some conditions (e.g., strong convexity, decreasing step sizes), the last iterate also converges, but the rate may be slower. In practice, using the average or the last iterate both work; averaging is theoretically more robust because it dampens oscillations caused by noise.</li>
+    </ul>
+    <p>For non‑convex problems, averaging is less meaningful, and one often reports the best iterate on a validation set or uses Polyak averaging (average of recent iterates). The choice of output strategy is crucial to guarantee the theoretical rate.</p>
+  </div>
+</div>
+
+<!-- A4.258 -->
+<div class="section-block" id="a4-258">
+  <div class="section-heading"><span class="section-num-large">A4.258</span><h2 class="section-title-large">Online Learning Framework: Sequential Decision Making vs. Batch Learning <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>In <strong>online learning</strong>, data arrive in a stream, and the learner must make a prediction at each step before seeing the true label (or loss). The framework contrasts with batch learning, where a fixed training set is available upfront. Online learning models many real‑world tasks:</p>
+    <ul>
+      <li><strong>Online shortest path:</strong> At each time step, a route is chosen for a vehicle; afterwards, edge weights (travel times) are revealed.</li>
+      <li><strong>Dynamic pricing:</strong> A seller sets a price for each arriving customer, then learns whether the customer buys.</li>
+      <li><strong>Sequential investment:</strong> An investor allocates wealth among assets each day, then observes returns.</li>
+    </ul>
+    <p>The performance metric is <strong>regret</strong>: the difference between the cumulative loss of the learner and the loss of the best fixed decision in hindsight. The goal is to achieve sublinear regret \(R_n = o(n)\), meaning the average performance approaches that of the optimal fixed strategy.</p>
+  </div>
+</div>
+
+<!-- A4.259 -->
+<div class="section-block" id="a4-259">
+  <div class="section-heading"><span class="section-num-large">A4.259</span><h2 class="section-title-large">Examples in Detail: Online Shortest Path (Edge Weights), Dynamic Pricing (Customer Valuations), Sequential Investment (Portfolios) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Online shortest path:</strong> A graph with edges \(e\in E\). At each round \(t\), the learner chooses a path \(P_t\) from a set of allowed paths. Then a weight vector \(w_t \in [0,1]^{|E|}\) is revealed. The loss is \(\sum_{e\in P_t} w_t(e)\). The regret is measured against the best fixed path in hindsight. This can be modeled as a linear optimisation problem over a convex set: the path set is discretized, or one works in the flow polytope and uses online linear optimisation.</p>
+    <p><strong>Dynamic pricing:</strong> Each customer has a valuation \(v_t\) drawn from an unknown distribution. The seller posts a price \(p_t\). If \(p_t \le v_t\), the sale occurs and the reward is \(p_t\); otherwise, it's 0 (or penalty). The loss (negative revenue) is \(-\text{revenue}\). The regret compares to the best fixed price. The feedback is partial (only the outcome of the chosen price). This is a bandit problem.</p>
+    <p><strong>Sequential investment (portfolio):</strong> There are \(d\) assets. Each day \(t\), the investor chooses a distribution \(p_t \in \Delta_d\) of wealth across assets. Then a return vector \(r_t \in \mathbb{R}_+^d\) is observed. The wealth multiplies by \(p_t^\top r_t\). This is equivalent to maximising log‑wealth, which is an online convex optimisation problem with the negative logarithm of the return.</p>
+  </div>
+</div>
+
+<!-- A4.260 -->
+<div class="section-block" id="a4-260">
+  <div class="section-heading"><span class="section-num-large">A4.260</span><h2 class="section-title-large">Statistical vs. Adversarial Models in Online Prediction (i.i.d. vs. Worst‑Case Sequences) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>Online learning can be analysed under two different models for the data:</p>
+    <ul>
+      <li><strong>Statistical (stochastic) model:</strong> The data pairs \((x_t, y_t)\) are drawn i.i.d. from a fixed distribution. In this setting, online algorithms can be converted to batch learners via online‑to‑batch conversions, and the regret is related to the generalisation error. For example, SGD is an online algorithm; its online regret bound implies a batch generalisation bound after averaging.</li>
+      <li><strong>Adversarial model:</strong> No distributional assumption; the sequence of losses can be chosen arbitrarily, possibly depending on the learner's past decisions (oblivious adversary) or even adaptively. This worst‑case view leads to minimax regret bounds. Algorithms like Hedge (multiplicative weights) achieve \(O(\sqrt{T \log K})\) regret against an oblivious adversary, which is optimal. The adversarial model is more robust but yields slower rates than the stochastic case (where \(O(\log T)\) regret is possible).</li>
+    </ul>
+    <p>This distinction mirrors the difference between agnostic PAC learning (distribution‑free, worst‑case) and the realizable/low‑noise statistical setting.</p>
+  </div>
+</div>
+
+<!-- A4.261 -->
+<div class="section-block" id="a4-261">
+  <div class="section-heading"><span class="section-num-large">A4.261</span><h2 class="section-title-large">Prediction with Expert Advice: Action Set \(A\), Convex Hull, Loss Function \(\ell(a_t, z_t)\), and the Definition of Cumulative Regret \(R_n\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>In the <strong>prediction with expert advice</strong> framework, there is a set of \(K\) experts. At each round \(t\), the learner chooses a probability distribution \(p_t \in \Delta_K\) over experts (or directly an action \(a_t\)). Then a loss vector \(z_t \in [0,1]^K\) is revealed, where \(z_t(i)\) is the loss of expert \(i\) at time \(t\). The learner's loss is either the realised loss of a randomly sampled expert (expected loss \(p_t^\top z_t\)) or the loss of the convex combination itself. The <strong>cumulative regret</strong> after \(n\) rounds is</p>
+    <div class="equation">$$R_n = \sum_{t=1}^n p_t^\top z_t - \min_{i\in\{1,\dots,K\}} \sum_{t=1}^n z_t(i).$$</div>
+    <p>The goal is to guarantee that \(R_n\) grows sublinearly in \(n\), i.e., \(R_n = o(n)\). If the losses are convex in the action, one may consider a continuous action set \(A\) (e.g., a convex set in \(\mathbb{R}^d\)) and define regret against the best action in \(A\). This general framework unifies many online algorithms.</p>
+  </div>
+</div>
+
+<!-- A4.262 -->
+<div class="section-block" id="a4-262">
+  <div class="section-heading"><span class="section-num-large">A4.262</span><h2 class="section-title-large">Convex Combination of Experts: Playing \(p_t \in \Delta_K\) and the Linear Loss Form \(p_t^\top z_t\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>When the learner plays a mixed strategy \(p_t \in \Delta_K\) and incurs the expected loss \(\ell(p_t, z_t) = p_t^\top z_t\), the loss is linear in \(p_t\). This formulation allows the use of convex optimisation tools. The regret then becomes</p>
+    <div class="equation">$$R_n = \sum_{t=1}^n p_t^\top z_t - \min_{p\in\Delta_K} \sum_{t=1}^n p^\top z_t,$$</div>
+    <p>since the minimizer of a linear function over the simplex is a vertex—one of the experts. Thus, competing against the best convex combination is equivalent to competing against the best single expert. Algorithms like Hedge (exponentiated gradient) maintain \(p_t\) and update multiplicatively: \(p_{t+1}(i) \propto p_t(i) \exp(-\eta z_t(i))\). This update is precisely online mirror descent with negative entropy over the simplex, achieving regret \(O(\sqrt{T \log K})\).</p>
+  </div>
+</div>
+
+<!-- A4.263 -->
+<div class="section-block" id="a4-263">
+  <div class="section-heading"><span class="section-num-large">A4.263</span><h2 class="section-title-large">Follow the Leader (FTL): The Greedy Strategy \(p_t = \arg\min_{p\in\Delta_K} \sum_{s=1}^{t-1} p^\top z_s\) and its Linear Regret Counterexample <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>The simplest online learning strategy is <strong>Follow the Leader (FTL)</strong>: at each round \(t\), play the point that would have minimised the cumulative loss on the past \(t-1\) rounds:</p>
+    <div class="equation">$$p_t = \arg\min_{p\in\Delta_K} \sum_{s=1}^{t-1} p^\top z_s.$$</div>
+    <p>Because the objective is linear in \(p\), the minimiser is a vertex of the simplex, i.e., one of the \(K\) experts. FTL seems reasonable—use what has worked best so far—but it can suffer linear regret in adversarial settings. A classic counterexample: let \(K=2\) and the loss vectors alternate as \(z_1=(1,0), z_2=(0,1), z_3=(1,0), z_4=(0,1),\dots\). FTL will keep switching to the expert with zero loss on the previous round, incurring a loss of 1 every round, while the best fixed expert in hindsight has cumulative loss about \(n/2\). The regret of FTL is roughly \(n/2\), i.e., linear. This instability arises because FTL overreacts to the most recent observation. To fix this, we must add regularisation or perturbation.</p>
+  </div>
+</div>
+
+<!-- A4.264 -->
+<div class="section-block" id="a4-264">
+  <div class="section-heading"><span class="section-num-large">A4.264</span><h2 class="section-title-large">Algorithm: Exponential Weights (EW) / Hedge – Update Rule \(p_{t+1,j} \propto p_{t,j} \exp(-\eta \ell(e_j, z_t))\) with Weights \(w_{t,j} = \exp(-\eta \sum_{s=1}^{t-1} \ell(e_j, z_s))\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>The <strong>Exponential Weights (Hedge)</strong> algorithm maintains a probability distribution over \(K\) experts. Starting with uniform \(p_1 = (1/K,\dots,1/K)\), at each round \(t\):</p>
+    <ul>
+      <li>Play expert \(j\) with probability \(p_{t,j}\) (or play the convex combination).</li>
+      <li>Observe loss vector \(z_t \in [0,1]^K\) (loss of each expert).</li>
+      <li>Update weights multiplicatively: \(w_{t+1,j} = w_{t,j} \cdot \exp(-\eta z_{t,j})\), where \(\eta>0\) is a learning rate.</li>
+      <li>Renormalise: \(p_{t+1,j} = w_{t+1,j} / \sum_{i=1}^K w_{t+1,i}\).</li>
+    </ul>
+    <p>Equivalently, the weight of expert \(j\) at time \(t\) is \(w_{t,j} = \exp(-\eta \sum_{s=1}^{t-1} z_{s,j})\), i.e., exponential cumulative loss. The probability of selecting expert \(j\) is proportional to this weight. This algorithm is a special case of online mirror descent with negative entropy over the simplex, and it is also known as the Hedge algorithm in the context of prediction with expert advice.</p>
+  </div>
+</div>
+
+<!-- A4.265 -->
+<div class="section-block" id="a4-265">
+  <div class="section-heading"><span class="section-num-large">A4.265</span><h2 class="section-title-large">Theorem: EW Regret Bound \(R_n \le \frac{\log K}{\eta} + \frac{\eta n}{2}\) (Optimized to \(R_n \le \sqrt{2 n \log K}\)) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="theorem-box">
+      <p><strong>Hedge Regret Bound.</strong> For any sequence of loss vectors \(z_t \in [0,1]^K\) and any \(\eta > 0\), the cumulative expected regret of Hedge satisfies</p>
+      <div class="equation">$$\sum_{t=1}^n p_t^\top z_t - \min_{j} \sum_{t=1}^n z_{t,j} \le \frac{\log K}{\eta} + \frac{\eta n}{2}.$$</div>
+      <p>With the optimal choice \(\eta = \sqrt{\frac{2\log K}{n}}\), the bound becomes \(R_n \le \sqrt{2 n \log K}\).</p>
+    </div>
+    <p>Thus, the average regret per round is at most \(\sqrt{2\log K / n}\), which tends to zero, i.e., sublinear regret. The bound shows that the number of experts \(K\) only affects the regret logarithmically.</p>
+  </div>
+</div>
+
+<!-- A4.266 -->
+<div class="section-block" id="a4-266">
+  <div class="section-heading"><span class="section-num-large">A4.266</span><h2 class="section-title-large">Alternative Proof of EW Regret: Telescoping Sum \(\log(W_{t+1}/W_t)\), Hoeffding's Lemma, and Jensen's Inequality <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>An elegant proof of the Hedge regret bound proceeds by tracking the total weight \(W_t = \sum_{j=1}^K w_{t,j}\). Initially \(W_1 = K\). After round \(t\),</p>
+    <div class="equation">$$W_{t+1} = \sum_j w_{t,j} e^{-\eta z_{t,j}} = W_t \sum_j p_{t,j} e^{-\eta z_{t,j}}.$$</div>
+    <p>Using Hoeffding's lemma (A4.29) for the random variable \(Z\) taking value \(z_{t,j}\) with probability \(p_{t,j}\), and bounded in \([0,1]\), we have</p>
+    <div class="equation">$$\mathbb{E}[e^{-\eta Z}] \le \exp\!\left(-\eta \mathbb{E}[Z] + \frac{\eta^2}{8}\right).$$</div>
+    <p>Hence \(W_{t+1} \le W_t \exp(-\eta\, p_t^\top z_t + \eta^2/8)\). Telescoping over \(t=1,\dots,n\) gives</p>
+    <div class="equation">$$W_{n+1} \le K \exp\!\left(-\eta \sum_{t=1}^n p_t^\top z_t + \frac{n\eta^2}{8}\right).$$</div>
+    <p>On the other hand, for any expert \(j\), \(W_{n+1} \ge w_{n+1,j} = \exp(-\eta \sum_{t=1}^n z_{t,j})\). Combining these inequalities and taking logs yields</p>
+    <div class="equation">$$\sum_{t=1}^n p_t^\top z_t - \sum_{t=1}^n z_{t,j} \le \frac{\log K}{\eta} + \frac{\eta n}{8}.$$</div>
+    <p>The constant \(\frac{1}{8}\) replaces the \(\frac{1}{2}\) from the mirror descent proof (due to the tighter Hoeffding inequality for the exponential compared to the quadratic bound from strong convexity). In practice, the difference is minor.</p>
+  </div>
+</div>
+
+<!-- A4.267 -->
+<div class="section-block" id="a4-267">
+  <div class="section-heading"><span class="section-num-large">A4.267</span><h2 class="section-title-large">Algorithm: Follow the Perturbed Leader (FPL) – Regularizing FTL with Uniform Perturbation \(\xi \sim \mathrm{Unif}([0,1/\eta]^K)\) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p><strong>Follow the Perturbed Leader (FPL)</strong> overcomes the instability of FTL by adding random noise to the cumulative losses before selecting the leader. In round \(t\), the algorithm:</p>
+    <ol>
+      <li>Draws a random perturbation vector \(\xi \in \mathbb{R}^K\) whose coordinates are independent uniform on \([0, 1/\eta]\). (Sometimes the distribution is chosen as Laplace or exponential for tighter analysis.)</li>
+      <li>Chooses the expert that minimises the perturbed cumulative loss: \(p_t = \arg\min_{j} \bigl( \sum_{s=1}^{t-1} z_{s,j} + \xi_j \bigr)\). (As a pure action; the mixed version plays one expert.)</li>
+    </ol>
+    <p>The perturbation acts as a regulariser: it prevents the algorithm from switching too rapidly in response to a single round's loss, because an expert must beat not only the past but also the noise. FPL is a randomised algorithm; its expected regret against an oblivious adversary is bounded. The analysis uses a clever coupling argument: the cumulative loss of FPL is compared to the best fixed expert in hindsight plus the perturbation gap.</p>
+  </div>
+</div>
+
+<!-- A4.268 -->
+<div class="section-block" id="a4-268">
+  <div class="section-heading"><span class="section-num-large">A4.268</span><h2 class="section-title-large">Oblivious Adversaries: The FPL Analysis Framework (Pre‑determined Adversarial Sequence \(z_t\)) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <p>In the <strong>oblivious adversary</strong> model, the entire sequence of loss vectors \(z_1,\dots,z_n\) is chosen before the game begins, without observing the learner’s randomisation. This is a weaker adversary than the adaptive one, but it is the standard setting for FPL analysis. Because the adversary does not see the randomness, the perturbation is independent of the sequence. The expected regret is analysed by comparing the loss of FPL to that of the best expert in hindsight. For FPL with uniform perturbation, a key insight is that the expected loss of the perturbed leader is close to the expected loss of the true leader (the best expert), with an additional cost proportional to the perturbation magnitude. The analysis uses a lemma known as "Be‑the‑Leader" (A4.269) and properties of the perturbation distribution.</p>
+  </div>
+</div>
+
+<!-- A4.269 -->
+<div class="section-block" id="a4-269">
+  <div class="section-heading"><span class="section-num-large">A4.269</span><h2 class="section-title-large">Lemma: Be‑the‑Leader – The Inequality \(\sum_{t=1}^n \ell(p_t^*, z_t) \le \sum_{t=1}^n \ell(p_n^*, z_t)\) (Proof by Induction) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="lemma-box">
+      <p><strong>Be‑the‑Leader Lemma.</strong> For any sequence of loss functions \(\ell(\cdot, z_t)\) (not necessarily linear), define \(p_t^* = \arg\min_{p} \sum_{s=1}^{t-1} \ell(p, z_s)\) (the FTL choice at time \(t\)) and let \(p_n^*\) be the overall hindsight optimum for the sum of all losses. Then</p>
+      <div class="equation">$$\sum_{t=1}^n \ell(p_t^*, z_t) \le \sum_{t=1}^n \ell(p_n^*, z_t).$$</div>
+    </div>
+    <p><strong>Proof by induction.</strong> For \(n=1\), \(p_1^*\) is arbitrary (minimiser over empty set), and the inequality holds trivially with the same argument. Assume true for \(n-1\). Then for sequence of length \(n\),</p>
+    <div class="equation">$$\sum_{t=1}^n \ell(p_t^*, z_t) = \sum_{t=1}^{n-1} \ell(p_t^*, z_t) + \ell(p_n^*, z_n) \le \sum_{t=1}^{n-1} \ell(p_{n-1}^*, z_t) + \ell(p_n^*, z_n) \quad\text{(by induction)}$$</div>
+    <p>where \(p_{n-1}^*\) is the FTL optimum for the first \(n-1\) losses. Since \(p_{n-1}^*\) minimises \(\sum_{t=1}^{n-1} \ell(p, z_t)\), it is at most as good as \(p_n^*\) on those \(n-1\) losses. Hence \(\sum_{t=1}^{n-1} \ell(p_{n-1}^*, z_t) \le \sum_{t=1}^{n-1} \ell(p_n^*, z_t)\). Adding \(\ell(p_n^*, z_n)\) to both sides yields the desired inequality for \(n\). This lemma shows that if we could always use the current round's FTL (which uses past data only), its cumulative loss is at most the cumulative loss of the offline optimum—the algorithm that plays the same fixed action at every round. This is counter‑intuitive but true because the offline optimum is not tailored to the particular round. The lemma is used in the analysis of FPL to bound the expected loss of the actual FTL (which uses perturbation) relative to the offline optimum.</p>
+  </div>
+</div>
+
+<!-- A4.270 -->
+<div class="section-block" id="a4-270">
+  <div class="section-heading"><span class="section-num-large">A4.270</span><h2 class="section-title-large">Theorem: FPL Expected Regret Bound \(\mathbb{E}[R_n] \le 2\sqrt{2 n K}\) (Proof via Box Geometry, Coupling, and the Shift \(\xi + z_t\)) <span class="ml-tag">NEW</span></h2></div>
+  <div class="section-body">
+    <div class="theorem-box">
+      <p><strong>FPL Expected Regret.</strong> For any sequence of loss vectors \(z_t \in [0,1]^K\) and perturbation parameter \(\eta = \sqrt{2K/n}\), the expected cumulative regret of FPL (with uniform perturbation \(\xi_j \sim U[0,1/\eta]\) i.i.d.) satisfies</p>
+      <div class="equation">$$\mathbb{E}[R_n] \le 2\sqrt{2 n K}.$$</div>
+    </div>
+    <p><strong>Proof idea (box geometry).</strong> Let \(L_t(j) = \sum_{s=1}^{t-1} z_{s,j}\) be the cumulative loss before round \(t\). FPL chooses \(j_t = \arg\min_j (L_t(j) + \xi_j)\). By the Be‑the‑Leader lemma (applied to the perturbed sequence \(\tilde z_t(j) = z_t(j) + \xi_j - \xi_j'\) where \(\xi'\) is a fresh sample?—the standard proof is more involved). A cleaner approach: the expected regret of FPL can be bounded by the sum over \(t\) of the probability that the best expert is not chosen plus the perturbation cost. Using the fact that the perturbation is uniform in a box of side \(1/\eta\), one can show that the expected number of leader changes is small. The classic bound for FPL with uniform perturbation and losses bounded by \(L=1\) is \(\mathbb{E}[R_n] \le \frac{K}{\eta} + \eta n\). Optimising \(\eta = \sqrt{K/n}\) gives \(\mathbb{E}[R_n] \le 2\sqrt{n K}\). The constant 2 may be adjusted; the original Kalai–Vempala bound is \(\mathbb{E}[R_n] \le 2\sqrt{2 n K}\) for \(L=1\) with a specific perturbation. The key geometric idea is that the perturbed leader is the minimiser of a random shifted objective; the probability that two experts swap as leader is bounded by \(\eta\) times the total variation distance, which is \(O(\eta)\). Summing over \(K\) experts yields the \(K/\eta\) term.</p>
+  </div>
+</div>
         </main>
 
         <aside class="sidebar">
