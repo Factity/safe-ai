@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Latent Stack — Transformer Internals Lab</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 <style>
 :root{
   --bg:#07020a; --bg2:#0d0310; --bg3:#140415; --panel:#0c0310; --panel2:#160518;
@@ -12,6 +21,46 @@
   --cyan:#ff3d8a; --cyan2:#ff6fae; --amber:#ff8c42; --violet:#b14aff; --rose:#ff5252; --lime:#5eff9e;
     --text: #f5d9e8;      /* was #faf9f9 */
   --muted: #6b4a5e;  --dimmer:#2a1024;
+              --bpe-bg: #07020a;
+            --bpe-bg2: #0d0310;
+            --bpe-bg3: #140415;
+            --bpe-panel: #0c0310;
+            --bpe-panel2: #160518;
+            --bpe-border: rgba(255, 90, 160, .12);
+            --bpe-border2: rgba(255, 90, 160, .2);
+            --bpe-cyan: #ff3d8a;
+            --bpe-cyan2: #ff6fae;
+            --bpe-amber: #ff8c42;
+            --bpe-violet: #b14aff;
+            --bpe-rose: #ff5252;
+            --bpe-lime: #5eff9e;
+            --bpe-text: #f5d9e8;
+            --bpe-muted: #6b4a5e;
+            --bpe-dimmer: #2a1024;
+            --bpe-disp: 'Space Grotesk', sans-serif;
+            --bpe-mono: 'JetBrains Mono', monospace;
+            --bpe-body: 'IBM Plex Mono', monospace;
+            --bpe-math: 'DM Mono', monospace;
+                     --vec-bg: #07020a;
+            --vec-bg2: #0d0310;
+            --vec-bg3: #140415;
+            --vec-panel: #0c0310;
+            --vec-panel2: #160518;
+            --vec-border: rgba(255, 90, 160, .12);
+            --vec-border2: rgba(255, 90, 160, .2);
+            --vec-cyan: #ff3d8a;
+            --vec-cyan2: #ff6fae;
+            --vec-amber: #ff8c42;
+            --vec-violet: #b14aff;
+            --vec-rose: #ff5252;
+            --vec-lime: #5eff9e;
+            --vec-text: #f5d9e8;
+            --vec-muted: #6b4a5e;
+            --vec-dimmer: #2a1024;
+            --vec-disp: 'Space Grotesk', sans-serif;
+            --vec-mono: 'JetBrains Mono', monospace;
+            --vec-body: 'IBM Plex Mono', monospace;
+            --vec-math: 'DM Mono', monospace;
   --disp:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace; --body:'IBM Plex Mono',monospace; --math:'DM Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -235,6 +284,119 @@ footer{border-top:1px solid var(--border);padding:3.6rem 3.5rem 2rem;position:re
   text-align:center;pointer-events:none;
 }
 
+        /* All outer classes prefixed with bpe- */
+        .bpe-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: var(--bpe-body);
+            background: var(--bpe-bg);
+            color: var(--bpe-text);
+            padding: 20px 16px;
+            min-height: auto;
+            border-radius: 12px;
+        }
+
+        .bpe-heading {
+            font-family: var(--bpe-disp);
+            font-weight: 600;
+            font-size: 1.2rem;
+            letter-spacing: 0.02em;
+            color: var(--bpe-text);
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        #bpe-canvas {
+            border: 2px solid var(--bpe-border2);
+            border-radius: 10px;
+            background: var(--bpe-bg2);
+            display: block;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 0 40px rgba(255, 60, 140, 0.06), 0 0 80px rgba(177, 74, 255, 0.04);
+        }
+
+        .bpe-step-desc {
+            margin-top: 8px;
+            height: 1.4em;
+            font-weight: 600;
+            font-family: var(--bpe-disp);
+            font-size: 0.9rem;
+            color: var(--bpe-amber);
+            text-align: center;
+            letter-spacing: 0.01em;
+            transition: color 0.3s;
+        }
+
+        .bpe-controls {
+            margin: 8px 0;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .bpe-btn {
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: var(--bpe-cyan);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-family: var(--bpe-disp);
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 12px rgba(255, 60, 140, 0.25);
+        }
+        .bpe-btn:hover {
+            background: var(--bpe-cyan2);
+            box-shadow: 0 4px 20px rgba(255, 60, 140, 0.4);
+            transform: translateY(-1px);
+        }
+        .bpe-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 8px rgba(255, 60, 140, 0.3);
+        }
+        .bpe-btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+            background: var(--bpe-muted);
+        }
+
+        #bpe-reset-btn {
+            background: transparent;
+            border: 1.5px solid var(--bpe-border2);
+            color: var(--bpe-text);
+            box-shadow: none;
+        }
+        #bpe-reset-btn:hover {
+            background: var(--bpe-panel2);
+            border-color: var(--bpe-cyan2);
+            box-shadow: 0 0 16px rgba(255, 60, 140, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .bpe-info {
+            max-width: 660px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--bpe-muted);
+            line-height: 1.5;
+            margin-top: 4px;
+            font-family: var(--bpe-body);
+        }
+        .bpe-info strong {
+            color: var(--bpe-text);
+            font-weight: 500;
+        }
+        .bpe-info p {
+            margin: 2px 0;
+        }
 
 /* ═══════════════════════════════════════════
    CODE & SYNTAX HIGHLIGHTING
@@ -507,6 +669,140 @@ code {
 .cta-input::placeholder {
   color: #cccccc !important;
 }
+
+.reveal.added-note dl {
+  margin: 1.6em 0;
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.reveal.added-note dt {
+  display: inline;
+  font-weight: 700;
+}
+
+.reveal.added-note dt::after {
+  content: " — ";
+  font-weight: 400;
+}
+
+.reveal.added-note dd {
+  display: inline;
+  margin-left: 0;
+}
+
+.reveal.added-note dd::after {
+  content: "";
+  display: block;
+  margin-bottom: 0.6em;
+}
+
+
+        .vec-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: var(--vec-body);
+            background: var(--vec-bg);
+            color: var(--vec-text);
+            padding: 20px 16px;
+            border-radius: 12px;
+            min-height: auto;
+        }
+
+        .vec-heading {
+            font-family: var(--vec-disp);
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: 0.02em;
+            color: var(--vec-text);
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        #vec-canvas {
+            border: 2px solid var(--vec-border2);
+            border-radius: 10px;
+            background: var(--vec-bg2);
+            display: block;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 0 40px rgba(255, 60, 140, 0.06), 0 0 80px rgba(177, 74, 255, 0.04);
+        }
+
+        .vec-step-desc {
+            margin-top: 8px;
+            height: 1.4em;
+            font-weight: 600;
+            font-family: var(--vec-disp);
+            font-size: 0.9rem;
+            color: var(--vec-amber);
+            text-align: center;
+            letter-spacing: 0.01em;
+            transition: color 0.3s;
+        }
+
+        .vec-controls {
+            margin: 8px 0;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .vec-btn {
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: var(--vec-cyan);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-family: var(--vec-disp);
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 12px rgba(255, 60, 140, 0.25);
+        }
+        .vec-btn:hover {
+            background: var(--vec-cyan2);
+            box-shadow: 0 4px 20px rgba(255, 60, 140, 0.4);
+            transform: translateY(-1px);
+        }
+        .vec-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 8px rgba(255, 60, 140, 0.3);
+        }
+        .vec-btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+            background: var(--vec-muted);
+        }
+
+        #vec-reset-btn {
+            background: transparent;
+            border: 1.5px solid var(--vec-border2);
+            color: var(--vec-text);
+            box-shadow: none;
+        }
+        #vec-reset-btn:hover {
+            background: var(--vec-panel2);
+            border-color: var(--vec-cyan2);
+            box-shadow: 0 0 16px rgba(255, 60, 140, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .vec-info {
+            max-width: 660px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--vec-muted);
+            line-height: 1.5;
+            margin-top: 4px;
+            font-family: var(--vec-body);
+        }
 </style>
 </head>
 <body>
@@ -621,16 +917,174 @@ code {
         <li>It's always good to have a basic grip on linear algebra and matrices first — <a href="https://factity.github.io/safe-ai/APPEN/Linearalgebra.html" target="_blank" rel="noopener">my linear algebra guide</a></li>
       </ul>
     </div>
+
+
+      
     <div class="reveal">
       <p class="section-label">Layer 01 · Input Representation</p>
-      <h2 class="section-title">GENERATING <span>TOKEN EMBEDDINGS</span></h2>
+      <h2 class="section-title">GENERATING <span>TOKENS </span></h2>
       </div>
 
     <div class="reveal added-block">
       <h3 class="subsection-title">Before the vectors: tokenization</h3>
-      <p>A transformer block can only take matrices as input, so the first real question is what representation of raw text actually conveys its essence. We start by dividing text into chunks called <strong>tokens</strong>. The obvious first guess is to split on words — older NLP pipelines did exactly that — but that captures less nuance than we'd like, and it isn't free: it's a trade-off between vocabulary size and sequence length, and both heavily affect a model's cost and capability.</p>
-      <p>Split word-by-word and the vocabulary explodes the moment you account for misspellings, inflected forms, and out-of-vocabulary words. Drop all the way to character- or byte-level and the vocabulary shrinks to a tidy 256 bytes — but the sequence length balloons to roughly four times the word-level length, and any single character carries too little information on its own, pushing that burden onto later layers.</p>
-      <p>GPT-3's 50,257-token vocabulary is chosen to sit precisely at that sweet spot: the model can process roughly 4× more text in the same context window than a character-level model would allow, while still representing any possible Unicode string without ever needing an <code>&lt;UNK&gt;</code> token — and it also helps with reconstructing word boundaries.</p>
+      <p>A transformer block can only take matrices as input, so the first real question is what representation of raw text actually conveys its essence. We start by dividing text into chunks called <strong>tokens</strong>. The obvious first guess is to split based on words — older NLP pipelines did exactly that — but that captures less nuance than we'd like, and it isn't free: it's a trade-off between vocabulary size and sequence length, and both heavily affect a model's cost and capability.
+Wait a minute …. Before we jump ahead of ourselves let us establish some definitions first so that we are all on the same page. Definition alert !!! 
+        
+        <a href="#definitions">Jump to Definitions</a>   </p>
+     
+        
+
+        
+        
+        
+        
+        <p>Split word-by-word and the vocabulary explodes the moment you account for misspellings, inflected forms, and out-of-vocabulary words. Drop all the way to character- or byte-level and the vocabulary shrinks to a tidy 256 bytes — but the sequence length balloons to roughly four times the word-level length, and any single character carries too little information on its own, pushing that burden onto later layers.</p>
+      <p>GPT-3's 50,257-token vocabulary is chosen to sit precisely at that sweet spot: the model can process roughly 4× more text in the same context window than a character-level model would allow, while still representing any possible Unicode string without ever needing an <code>&lt;UNK&gt;</code> token — and it also helps with reconstructing word boundaries.
+    
+      I have built a simple tool you can play around with which tells you how different sentences are split and which token represents a particular number in the vocab: <a href="https://flask-production-477c.up.railway.app/" target="_blank" rel="noopener">Tokenization Tool</a>  </p> </div>
+
+
+
+
+<div class="reveal added-block">
+  <h3 class="subsection-title">Byte‑pair encoding – mathematical formulation</h3>
+  <p>GPT-3 uses a <strong>byte-level byte-pair encoding (BPE)</strong> it operates on raw bytes (UTF-8), which naturally handles any Unicode text, and it pre‑splits text with a regex before merging. The tokenization process has two stages. The tokenizer is defined by a fixed regular expression pre‑splitter, an ordered list of merge rules \(\mathcal{M}\), and a vocabulary \(\mathcal{V}\).</p>
+
+  <h4>Training</h4>
+  <ol class="algo-steps">
+    <li>
+      <strong>Pre‑tokenization.</strong> The corpus is split into a multiset of chunks \(C = \{c_1, c_2, \dots\}\) using the regex pattern.<br>
+      Each chunk \(c\) is converted to a byte sequence \(\mathbf{b} = (b_1,\dots,b_\ell),\ b_i \in \{0,\dots,255\}\).
+    </li>
+    <li>
+      <strong>Initial vocabulary.</strong> \(\mathcal{V}_0 = \{0,1,\dots,255\}\). Every token is a single byte.
+    </li>
+    <li>
+      For \(k = 1\) to \(N\) (with \(N = 50\,000\)):
+      <ul>
+        <li>Count frequencies of all adjacent token pairs \((p,q)\) across all current token sequences.</li>
+        <li>Choose the most frequent pair:
+          \[
+          (p_k, q_k) = \arg\max_{(p,q)} \text{freq}(p,q).
+          \]
+        </li>
+        <li>Create a new token \(r_k = 255 + k\) and update the vocabulary:
+          \[
+          \mathcal{V}_k = \mathcal{V}_{k-1} \cup \{r_k\}.
+          \]
+        </li>
+        <li>Apply the merge: in every token sequence, replace every occurrence of the contiguous pair \((p_k,q_k)\) by \(r_k\).</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Final vocabulary.</strong> \(\mathcal{V} = \mathcal{V}_0 \cup \{r_1,\dots,r_N\} \cup \{\texttt{<|endoftext|>}\}\), with \(|\mathcal{V}| = 50\,257\).
+    </li>
+    <li>
+      <strong>Merge rule list.</strong> The ordered list
+      \[
+      \mathcal{M} = \big((p_1,q_1)\to r_1,\; (p_2,q_2)\to r_2,\; \dots,\; (p_N,q_N)\to r_N\big)
+      \]
+      is the sole parameter that defines encoding and decoding.
+    </li>
+  </ol>
+
+  <h4>Encoding a new text string \(s\)</h4>
+  <ol class="algo-steps">
+    <li>
+      <strong>Regex split.</strong> \(s \mapsto (c_1, c_2, \dots, c_m)\).
+    </li>
+    <li>
+      <strong>Byte encode each chunk.</strong> \(c_j \mapsto \mathbf{b}^{(j)} = (b_1^{(j)},\dots,b_{\ell_j}^{(j)}),\ b_i^{(j)} \in \{0,\dots,255\}\).
+    </li>
+    <li>
+      <strong>Apply merge list.</strong> For each chunk’s byte sequence \(\mathbf{t} \gets \mathbf{b}^{(j)}\), iterate through \(\mathcal{M}\) in order:
+      \[
+      \text{for } (p,q)\to r \text{ in } \mathcal{M},\ \text{replace every leftmost occurrence of } (p,q) \text{ in } \mathbf{t} \text{ by } r.
+      \]
+      This yields a sequence of tokens from \(\mathcal{V}\).
+    </li>
+    <li>
+      <strong>Concatenate chunk token sequences.</strong> The final token list is the input to the transformer.
+    </li>
+  </ol>
+  <p>Formally, the encoder is a deterministic function \(\operatorname{encode}: \Sigma^* \to \mathcal{V}^*\) where \(\Sigma\) is the set of Unicode characters.</p>
+
+  <h4>Decoding</h4>
+  <p>Given a sequence \((t_1,\dots,t_k),\ t_i \in \mathcal{V}\):</p>
+  <ol class="algo-steps">
+    <li>Recursively expand each token \(t_i\) by reversing the merge rules (if \(t_i = r_k\), replace it by \((p_k,q_k)\)) until only bytes remain.</li>
+    <li>Concatenate all resulting bytes and decode the UTF‑8 byte stream: \(\operatorname{decode}: \mathcal{V}^* \to \Sigma^*\).</li>
+  </ol>
+</div>
+
+
+
+
+
+      
+    <div class="reveal added-block">
+      <h3 class="subsection-title">Other tokenization schemes in use</h3>
+      <div class="table-scroll">
+      <table class="ref-table">
+        <thead><tr><th>Scheme</th><th>How it works</th><th>Used by</th></tr></thead>
+        <tbody>
+          <tr><td>Byte-pair encoding (BPE)</td><td>Starts from characters/bytes, iteratively merges the most frequent adjacent pair. Byte-level variants guarantee no out-of-vocabulary tokens.</td><td>GPT, LLaMA, Mistral, Falcon</td></tr>
+          <tr><td>WordPiece</td><td>Similar to BPE, but merges are chosen by a language-model likelihood objective rather than pure frequency</td><td>BERT</td></tr>
+          <tr><td>Unigram LM (SentencePiece)</td><td>Treats tokenization as probabilistic segmentation, choosing a vocabulary that maximizes corpus likelihood under a unigram model</td><td>T5 and others</td></tr>
+          <tr><td>SentencePiece</td><td>A library implementing BPE or Unigram directly over a raw character stream — no word pre-tokenization, handy for languages without spaces</td><td>Multiple model families</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>Choosing a vocabulary and a tokenization scheme is still a tricky, mostly iterative and intuition-driven craft. It's also worth noting that tokenization has been used as a method for jailbreaking LLMs  via adversarial inputs, and that certain anomalous "glitch tokens" cause undocumented failures in GPT-style models — some break determinism even at temperature zero. <a href="https://www.lesswrong.com/posts/aPeJE8bSo6rAFoLqg" target="_blank" rel="noopener">Further reading here.</a> As we'll see later, the architecture is built around maximizing the probability of the next token rather than chasing a single ground truth — so the model is always giving its best approximation for the next possible word</p>
+    </div>
+       <!-- The whole component wrapped in a scoped container -->
+    <div class="bpe-container">
+      <p> The below tool illustrates how the merges will be carried out. we took a simple sequences run runner and the appropriate merging is illustrated below click on next step until embeddings appear</p>
+      <br>  
+      <h2 class="bpe-heading">BPE Encoding → Embedding Lookup</h2>
+        <canvas id="bpe-canvas" width="660" height="500"></canvas>
+        <div class="bpe-step-desc" id="bpe-description">Click <b>Next Step</b> to begin</div>
+        <div class="bpe-controls">
+            <button class="bpe-btn" id="bpe-next-btn">Next Step</button>
+            <button class="bpe-btn" id="bpe-reset-btn">Reset</button>
+        </div>
+        <div class="bpe-info">
+            <p><strong>New string:</strong> "run runner" &nbsp;(split into "run" and " runner")</p>
+            <p><strong>Merge list 𝒜:</strong> (114,117)→256, (256,110)→257, (257,32)→258, (258,114)→259, (259,117)→260, (260,110)→261</p>
+            <p><strong>After encoding:</strong> each token ID looks up a 4‑dim embedding vector from the matrix.</p>
+        </div>
+    </div>
+</section>
+<!-- L02 POSITIONAL ENCODING -->
+<section class="section" id="l02" data-layer="2" data-layer-label="Positional Encoding" style="background:var(--bg2)">
+  
+  
+  
+  <div class="section-inner">
+    <div class="reveal">
+      <p class="section-label">Layer 02 · Order Injection</p>
+      <h2 class="section-title">Encoding <span>Scheme</span></h2>
+
+<div class="reveal added-block">
+      <h3 class="subsection-title">Why geometry, not just lookup</h3>
+      <p>Once tokens exist, each is mapped to a vector via a learned embedding matrix W<sub>e</sub> ∈ ℝ<sup>V×d</sup> — one column per vocabulary entry which are intialized randomly in the begining and fine tuned entirely through training process. GPT-3 embeds into 12,288 dimensions and each of the directions in that space has real semantic content rather than arbitrary coordinates.</p>
+     
+     <p>if we map these embeddings to a higher dimensional space and subtract the embedding for Paris from France, then add that difference to Tokyo; the resulting vector lands remarkably close to Japan. This suggests the model has implicitly learned a direction that encodes the relationship “is the capital city of,” allowing it to recover a country from its capital as neatly as it recovers a queen from a king.</p>
+         <div class="vec-container">
+        <h2 class="vec-heading">Vector Arithmetic: Paris – France + Tokyo ≈ Japan</h2>
+        <canvas id="vec-canvas" width="660" height="460"></canvas>
+        <div class="vec-step-desc" id="vec-description">Click <b>Next Step</b> to explore the analogy</div>
+        <div class="vec-controls">
+            <button class="vec-btn" id="vec-next-btn">Next Step</button>
+            <button class="vec-btn" id="vec-reset-btn">Reset</button>
+        </div>
+        <div class="vec-info">
+            <p><strong>Embedding space (2D projection)</strong> — France, Paris, Tokyo, Japan are word vectors.<br>
+            The direction <em>France − Paris</em> captures "capital‑country" relationship. Adding it to Tokyo yields a point remarkably close to Japan.</p>
+        </div>
+    </div>
+     
+      <p>Dot products give a way to measure this quantitatively: geometrically, a dot product is positive when two vectors point in similar directions, near zero when they're roughly perpendicular, and negative when they point apart. Taking the difference between the embeddings of <em>cats</em> and <em>cat</em> gives something like a "plurality direction" — dotting it against plural nouns scores consistently higher than against their singular counterparts, and dotting it against the embeddings for the numerals 1, 2, 3… gives steadily increasing values, as if plurality itself were a quantity the model can measure.</p>
     </div>
 
         <div class="canvas-frame reveal">
@@ -646,48 +1100,11 @@ code {
       <div class="legend-item"><div class="legend-dot" style="background:#5eff9e"></div>Numbers / Quantities</div>
       <div class="legend-item"><div class="legend-dot" style="background:#ff5252"></div>Punctuation / Control</div>
     </div>
-    <div class="math-block reveal">
-      <div class="math-line">E(x<sub>t</sub>) = W<sub>e</sub>[x<sub>t</sub>] &nbsp;·&nbsp; W<sub>e</sub> ∈ ℝ<sup>V×d</sup></div>
-      <div class="math-line">h<sub>0</sub> = E(x<sub>t</sub>) + P(t)</div>
-      <p class="math-note">The embedding lookup plus a positional term produces h₀ — the first hidden state every decoder block operates on.</p>
-    </div>
+
+
     <div class="reveal added-block">
-      <h3 class="subsection-title">Byte-pair encoding, mechanically</h3>
-      <p>GPT-3 uses a subword tokenization method called <strong>byte-pair encoding (BPE)</strong>, and it works on bytes rather than Unicode characters directly:</p>
-      <ol class="algo-steps">
-        <li><strong>Byte encode.</strong> Raw input text is encoded as a UTF-8 byte sequence, so every character becomes 1–4 bytes — even characters outside the base vocabulary stay representable.</li>
-        <li><strong>Iteratively merge.</strong> Starting from the 256 possible byte values, the most frequent adjacent byte pair is repeatedly merged into a new token, producing new entries in the vocabulary.</li>
-        <li><strong>Apply the fixed merge list.</strong> A fixed, ordered list of merge rules is then applied to byte sequences to yield subwords — which can be a single character, a full word, or several characters at once.</li>
-        <li><strong>Map to integer ids.</strong> The final byte tokens are mapped to integer ids. GPT-3's vocabulary size of 50,257 is exactly 50,000 learned merges + the 256 base bytes + one special end-of-text token.</li>
-      </ol>
-      <p>Written more formally: start with a training corpus as a multiset of words {w₁, w₂, w₃, …}, each carrying an end-of-word marker. In practice, GPT's tokenizer instead uses a fixed regular expression to pre-split raw text into chunks before any merging happens:</p>
-      <pre class="code-block"><code>r"""'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""</code></pre>
-      <p>Encoding then runs <em>regex split → byte-encode → apply learned merges (word encode) → integer ids</em>. Decoding reverses it: <em>ids → merged byte tokens → byte-decode → concatenated UTF-8 string</em>. (A companion tool for visualizing exactly how a sentence splits under this regex and merge list — link pending.)</p>
-    </div>
-    <div class="reveal added-block">
-      <h3 class="subsection-title">Other tokenization schemes in use</h3>
-      <div class="table-scroll">
-      <table class="ref-table">
-        <thead><tr><th>Scheme</th><th>How it works</th><th>Used by</th></tr></thead>
-        <tbody>
-          <tr><td>Byte-pair encoding (BPE)</td><td>Starts from characters/bytes, iteratively merges the most frequent adjacent pair. Byte-level variants guarantee no out-of-vocabulary tokens.</td><td>GPT, LLaMA, Mistral, Falcon</td></tr>
-          <tr><td>WordPiece</td><td>Similar to BPE, but merges are chosen by a language-model likelihood objective rather than pure frequency</td><td>BERT</td></tr>
-          <tr><td>Unigram LM (SentencePiece)</td><td>Treats tokenization as probabilistic segmentation, choosing a vocabulary that maximizes corpus likelihood under a unigram model</td><td>T5 and others</td></tr>
-          <tr><td>SentencePiece</td><td>A library implementing BPE or Unigram directly over a raw character stream — no word pre-tokenization, handy for languages without spaces</td><td>Multiple model families</td></tr>
-        </tbody>
-      </table>
-      </div>
-      <p>Choosing a vocabulary and a tokenization scheme is still a tricky, mostly iterative and intuition-driven craft. It's also worth knowing tokenization has been used as a vector for jailbreaking LLMs via adversarial inputs, and that certain anomalous "glitch tokens" cause undocumented failures in GPT-style models — some break determinism even at temperature zero. <a href="https://www.lesswrong.com/posts/aPeJE8bSo6rAFoLqg" target="_blank" rel="noopener">Further reading here.</a> As we'll see later, the architecture is built around maximizing the probability of the next token rather than chasing a single ground truth — so the model is always giving its best approximation, never a certainty.</p>
-    </div>
-    <div class="reveal added-block">
-      <h3 class="subsection-title">Why geometry, not just lookup</h3>
-      <p>Once tokens exist, each is mapped to a vector via a learned embedding matrix W<sub>e</sub> ∈ ℝ<sup>V×d</sup> — one column per vocabulary entry, random at initialization, tuned entirely through training. GPT-3 embeds into 12,288 dimensions, and directions in that space end up carrying real semantic content rather than arbitrary coordinates.</p>
-      <p>A classic illustration: the vector difference between <em>man</em> and <em>woman</em> points in roughly the same direction as the difference between <em>king</em> and <em>queen</em>, as if the model dedicated a direction to gender. Similarly, subtracting <em>Germany</em>'s embedding from <em>Italy</em>'s and adding the result to <em>Hitler</em> lands close to <em>Mussolini</em>; subtracting <em>Japan</em> from <em>Germany</em> and adding it to <em>sushi</em> lands near <em>bratwurst</em>. These arithmetic relationships aren't perfect — real embeddings are messier than toy examples suggest — but they hint at directions simultaneously encoding nationality, gender, and other concepts.</p>
-      <p>Dot products give a way to measure this quantitatively: geometrically, a dot product is positive when two vectors point in similar directions, near zero when they're roughly perpendicular, and negative when they point apart. Taking the difference between the embeddings of <em>cats</em> and <em>cat</em> gives something like a "plurality direction" — dotting it against plural nouns scores consistently higher than against their singular counterparts, and dotting it against the embeddings for the numerals 1, 2, 3… gives steadily increasing values, as if plurality itself were a quantity the model can measure.</p>
-    </div>
-    <div class="reveal added-block">
-      <h3 class="subsection-title">Embeddings beyond text</h3>
-      <p>Tokenizing and embedding isn't unique to language — a sequence of tokens is a generic enough representation that many different data types can be tokenized and fed straight into a transformer, rather than requiring a bespoke architecture per modality (CNNs for images, RNNs for sequences, DeepSets for sets, and so on). That also means you don't need handcrafted architectures for mixing modalities — everything can just become one big set of tokens.</p>
+      <h3 class="subsection-title">Embeddings in different Modalities</h3>
+      <p>Tokenizing and embedding isn't unique to language — a sequence of tokens is a generic enough representation that many different data types can be tokenized and fed straight into a transformer, rather than requiring a bespoke architecture per modality (CNNs for images, RNNs for sequences, DeepSets for sets, and so on). That also means you don't need handcrafted architectures for mixing modalities — everything can just become one big set of tokens. Below table contains some of the most popular endoing scheme for some popular models for different use cases</p>
       <div class="table-scroll">
       <table class="ref-table">
         <thead><tr><th>Embedding type</th><th>Modality</th><th>Description</th><th>Used by</th></tr></thead>
@@ -724,8 +1141,73 @@ code {
 
 
     <div class="reveal added-block" style="color: var(--text);">
+  <h3 class="subsection-title" style="color: var(--cyan);">From tokens to vectors – two embedding algorithms</h3>
+
+  <!-- ==================== Algorithm 1: Token Embedding ==================== -->
+  <div class="algo-block" style="background: var(--panel); margin: 1em 0;">
+    <h4 style="color: var(--amber); margin-top: 0;">Algorithm 1 · Token (regular) embedding</h4>
+    <p><strong>Learned parameter:</strong> \(\mathbf{W}_e \in \mathbb{R}^{V \times d_{\text{model}}}\) – one row per vocabulary entry.</p>
+    <ol>
+      <li><strong>Input:</strong> Token indices \(\mathbf{x} \in \{1,\dots,V\}^{B \times T}\) (\(B\) batch, \(T\) sequence length).</li>
+      <li>For each index \(x_{b,t}\), perform a table look‑up: <br>
+          \(\mathbf{t}_{b,t} \leftarrow \text{row } x_{b,t} \text{ of } \mathbf{W}_e\).
+      </li>
+      <li>Scale all token vectors by \(\sqrt{d_{\text{model}}}\) (GPT‑2 and later): <br>
+          \(\mathbf{t}_{b,t} \leftarrow \mathbf{t}_{b,t} \cdot \sqrt{d_{\text{model}}}\).
+      </li>
+      <li><strong>Output:</strong> Tensor \(\mathbf{T} \in \mathbb{R}^{B \times T \times d_{\text{model}}}\).</li>
+    </ol>
+    <pre class="code-block" style="background-color: var(--bg3); color: var(--text); border: 1px solid var(--border2);">
+<code><span style="color: var(--cyan2);">token_ids</span> = <span style="color: var(--cyan2);">x</span>                                    <span style="color: var(--muted);"># (batch, seq_len)</span>
+<span style="color: var(--cyan2);">tok_vec</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">token_embedding</span>(<span style="color: var(--cyan2);">token_ids</span>)        <span style="color: var(--muted);"># lookup &amp; shape (B, T, d_model)</span>
+<span style="color: var(--cyan2);">tok_vec</span> = <span style="color: var(--cyan2);">tok_vec</span> * <span style="color: var(--cyan2);">math.sqrt(</span><span style="color: var(--rose);">self</span>.d_model<span style="color: var(--cyan2);">)</span>  <span style="color: var(--muted);"># scaling</span>
+</code></pre>
+  </div>
+
+  <!-- ==================== Algorithm 2: Positional Embedding ==================== -->
+  <div class="algo-block" style="background: var(--panel);   margin: 1em 0;">
+    <h4 style="color: var(--violet); margin-top: 0;">Algorithm 2 · Learned absolute positional embedding</h4>
+    <p><strong>Learned parameter:</strong> \(\mathbf{W}_p \in \mathbb{R}^{T_{\max} \times d_{\text{model}}}\) – one row per absolute position up to \(T_{\max}\).</p>
+    <ol>
+      <li><strong>Input:</strong> Sequence length \(T\) (implicit from token_ids).</li>
+      <li>Generate a vector of position indices \(\mathbf{pos} = [0, 1, \dots, T-1]\).</li>
+      <li>For each position \(pos_t\), look up the corresponding row: <br>
+          \(\mathbf{p}_t \leftarrow \text{row } pos_t \text{ of } \mathbf{W}_p\).
+      </li>
+      <li><strong>Output:</strong> Tensor \(\mathbf{P} \in \mathbb{R}^{T \times d_{\text{model}}}\) (broadcastable over batch).</li>
+    </ol>
+    <pre class="code-block" style="background-color: var(--bg3); color: var(--text); border: 1px ">
+<code><span style="color: var(--cyan2);">positions</span> = <span style="color: var(--violet);">torch</span>.<span style="color: var(--amber);">arange</span>(<span style="color: var(--cyan2);">seq_len</span>, device=<span style="color: var(--cyan2);">x</span>.device)   <span style="color: var(--muted);"># (T,)</span>
+<span style="color: var(--cyan2);">pos_vec</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">position_embedding</span>(<span style="color: var(--cyan2);">positions</span>)     <span style="color: var(--muted);"># (T, d_model), broadcasts over batch</span>
+</code></pre>
+  </div>
+
+  <!-- ==================== Combination ==================== -->
+  <h4 style="color: var(--cyan);">Putting them together</h4>
+  <p style="background-color: var(--panel); color: var(--text); border-left: 3px ">
+    The token and positional embeddings are summed element‑wise and then regularised with dropout to form the initial hidden state:
+    \[
+    \mathbf{h}_0 = \text{Dropout}\bigl( \mathbf{T} + \mathbf{P} \bigr) \qquad \in \mathbb{R}^{B \times T \times d_{\text{model}}}
+    \]
+    This combined tensor is the first input fed to the transformer decoder blocks, where context‑dependent meaning finally emerges.
+  </p>
+  <pre class="code-block" style="background-color: var(--bg3); color: var(--text); border: 1px solid var(--border2);">
+<code><span style="color: var(--cyan2);">hidden_state</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">embed_dropout</span>(<span style="color: var(--cyan2);">tok_vec</span> + <span style="color: var(--cyan2);">pos_vec</span>)  <span style="color: var(--muted);"># h_0, shape (B, T, d_model)</span>
+</code></pre>
+</div>
+    <div class="math-block reveal">
+      <div class="math-line">E(x<sub>t</sub>) = W<sub>e</sub>[x<sub>t</sub>] &nbsp;·&nbsp; W<sub>e</sub> ∈ ℝ<sup>V×d</sup></div>
+      <div class="math-line">h<sub>0</sub> = E(x<sub>t</sub>) + P(t)</div>
+      <p class="math-note">The embedding lookup plus a positional term produces h₀ — the first hidden state every decoder block operates on.</p>
+    </div>
+
+    <div class="reveal added-block" style="color: var(--text);">
   <h3 class="subsection-title" style="color: var(--cyan);">From tokens to vectors, formally</h3>
   <p style="color: var(--text);">Input: a sequence of token indices <code style="color: var(--amber);">x ∈ {1, …, V}^(B×T)</code>, with sequence length T ≤ the model's max context T<sub>max</sub>. Token embeddings come from a lookup table W<sub>e</sub> ∈ ℝ<sup>V×d</sup>; a learned, absolute position embedding table W<sub>p</sub> ∈ ℝ<sup>T_max×d</sup> is added on top. The two are broadcast-summed and passed through dropout to form h₀ — the first hidden state the decoder blocks actually operate on.</p>
+  
+  
+  
+  
   <pre class="code-block" style="color: var(--text);"><code>
 <span style="color: var(--muted);"># Embedding lookup — the very first step of the forward pass</span>
 <span style="color: var(--muted);"># token_embedding:    (vocab_size, d_model)   — one row per vocabulary entry</span>
@@ -738,14 +1220,7 @@ code {
 </code></pre>
   <p style="color: var(--text);">A vector that starts life as the embedding of a single word only encodes that word in isolation — it's the job of every layer that follows to let it soak up much richer, context-dependent meaning than any individual token could carry alone.</p>
 </div>
-  </div>
-</section>
-<!-- L02 POSITIONAL ENCODING -->
-<section class="section" id="l02" data-layer="2" data-layer-label="Positional Encoding" style="background:var(--bg2)">
-  <div class="section-inner">
-    <div class="reveal">
-      <p class="section-label">Layer 02 · Order Injection</p>
-      <h2 class="section-title">POSITIONAL <span>ENCODING</span></h2>
+
       <p class="section-desc">Attention has no inherent sense of order, so sinusoidal signals at geometrically increasing wavelengths are added to every embedding — letting the model recover relative and absolute position from phase alone.</p>
     </div>
     <div class="canvas-frame reveal">
@@ -796,11 +1271,6 @@ code {
 <span style="color: var(--cyan2);">pos_vec</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">position_embedding</span>(<span style="color: var(--cyan2);">positions</span>)         <span style="color: var(--muted);"># (seq_len, d_model), broadcasts over batch</span>
 <span style="color: var(--cyan2);">hidden_state</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">embed_dropout</span>(<span style="color: var(--cyan2);">tok_vec</span> + <span style="color: var(--lime);">pos_vec</span>)  <span style="color: var(--muted);"># this is h_0</span>
 </code></pre>
-  <p style="background-color: var(--panel2); color: var(--text); border-top: 1px dashed var(--border);">
-    A vector that starts life as the embedding of a single word only encodes that word in isolation — it's the job 
-    of every layer that follows to let it soak up much richer, context-dependent meaning than any individual token 
-    could carry alone.
-  </p>
 </div>
   </div>
 </section>
@@ -1292,6 +1762,121 @@ for step in range(max_iters):
     </div>
   </div>
 </section>
+
+<div class="reveal added-note" id="definitions">
+  <p class="note-kicker">Some of the Key Definitions</p>
+  <dl>
+    <dt>Transformer</dt>
+    <dd>A particular kind of neural network design that uses attention to process sequences. It is the basis from which most of the variants of language models emerged.
+      <br><em>Math:</em> Maps an input sequence \(\mathbf{x}\) to a prediction \(\hat{\mathbf{y}}\) by stacking attention and feed‑forward layers. Minimises loss \(L\) between \(\hat{\mathbf{y}}\) and target \(\mathbf{y}\).</dd>
+    <br>
+
+    <dt>GPT</dt>
+    <dd>An acronym for Generative Pretrained Transformer. It is a family of models with a certain special kind of transformer architecture.
+      <br><em>Math:</em> A decoder‑only transformer that uses a causal mask \(\text{Mask}\) to prevent attending to future tokens.</dd>
+    <br>
+
+    <dt>Back propagation</dt>
+    <dd>The standard algorithm for deep learning that adjusts all of the model parameters based on the loss calculated from the training text.
+      <br><em>Math:</em> Computes gradients \(\frac{\partial L}{\partial \theta}\) for all parameters \(\theta\) and updates them via a gradient‑descent step.</dd>
+    <br>
+
+    <dt>Token</dt>
+    <dd>A small chunk of text. It may or may not be semantically correct; we do not bother.
+      <br><em>Math:</em> Represented by a one‑hot vector \(\mathbf{e}_i \in \{0,1\}^V\), where \(i\) is the token index in the vocabulary.</dd>
+    <br>
+
+    <dt>Embedding</dt>
+    <dd>The process of turning a token into a vector: a list of numbers that try to capture some form of information regarding the text.
+      <br><em>Math:</em> An embedding matrix \(\mathbf{E} \in \mathbb{R}^{V \times d_{\text{model}}}\) (also denoted \(W_e\)) maps the one‑hot token to a dense vector: \(\mathbf{x}_i = \mathbf{E}^\top \mathbf{e}_i\).</dd>
+    <br>
+
+    <dt>Vectors</dt>
+    <dd>An ordered list of numbers that points to a point in n‑dimensional space (v<sub>n</sub>).
+      <br><em>Math:</em> Usually written in bold: \(\mathbf{v} = (v_1, v_2, \dots, v_n)\).</dd>
+    <br>
+
+    <dt>Dot product</dt>
+    <dd>A way of capturing the product of two vectors that measures how much the two vectors point in the same direction.
+      <br><em>Math:</em> \(\mathbf{u} \cdot \mathbf{v} = \sum_{i=1}^n u_i v_i = \|\mathbf{u}\|\|\mathbf{v}\|\cos\theta\).</dd>
+    <br>
+
+    <dt>Vocabulary</dt>
+    <dd>The fixed set of all tokens that the model knows about. For GPT‑3 this set contains about fifty thousand items.
+      <br><em>Math:</em> Size denoted by \(V\).</dd>
+    <br>
+
+    <dt>Attention block</dt>
+    <dd>The place where all the information about the embedding vectors gets exchanged.
+      <br><em>Math:</em> Computes queries \(\mathbf{q}_i\), keys \(\mathbf{k}_i\), values \(\mathbf{v}_i\) via learned weight matrices \(W_Q, W_K, W_V\). The scaled dot‑product attention is \(\operatorname{Attention}(Q,K,V) = \operatorname{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}} + \text{Mask}\right)V\), where \(Q,K,V\) are matrices of queries, keys, values. Multi‑head attention concatenates \(h\) such heads and projects with \(W_O\).</dd>
+    <br>
+
+    <dt>Multi layer perceptron</dt>
+    <dd>A stage where every vector is processed independently by the same simple network. Here weights are tuned with back propagation to find the optimal ones.
+      <br><em>Math:</em> The feed‑forward network (FFN): \(\operatorname{FFN}(\mathbf{h}) = \operatorname{GELU}(\mathbf{h}\mathbf{W}_1 + \mathbf{b}_1)\mathbf{W}_2 + \mathbf{b}_2\), with \(\mathbf{W}_1, \mathbf{W}_2\) weight matrices and \(\mathbf{b}_1, \mathbf{b}_2\) biases.</dd>
+    <br>
+
+    <dt>Context size</dt>
+    <dd>The maximum number of tokens the model can look at once.
+      <br><em>Math:</em> Denoted \(N_{\text{ctx}}\).</dd>
+    <br>
+
+    <dt>Unembedding matrix</dt>
+    <dd>A table of numbers that maps the final, context‑rich vector back into a score for every possible token in the vocabulary.
+      <br><em>Math:</em> \(W_U \in \mathbb{R}^{d_{\text{model}} \times V}\) (often tied to the embedding matrix). The output logits are \(\mathbf{z} = \mathbf{h}_{\text{last}} W_U\).</dd>
+    <br>
+
+    <dt>Logit</dt>
+    <dd>One of the raw, unnormalised scores produced by the unembedding matrix before they are turned into probabilities.
+      <br><em>Math:</em> The \(i\)‑th logit \(z_i\) for the \(i\)‑th vocabulary token; the vector of all logits is \(\mathbf{z} = (z_1, \dots, z_V)\).</dd>
+    <br>
+
+    <dt>Softmax</dt>
+    <dd>A function that converts an arbitrary list of numbers into a proper probability distribution, where all values lie between zero and one and add up to one. (The activation function used inside the network is GELU, a smooth variant of ReLU.)
+      <br><em>Math:</em> \(\operatorname{softmax}(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^V e^{z_j}}.\)</dd>
+    <br>
+
+    <dt>Temperature</dt>
+    <dd>A single number that adjusts the softmax distribution. Higher values make the distribution more even and exploratory; lower values make it more concentrated on the most likely token.
+      <br><em>Math:</em> The probabilities become \(\mathbf{p} = \operatorname{softmax}(\mathbf{z}/T)\).</dd>
+    <br>
+
+    <dt>System prompt</dt>
+    <dd>A predefined context given to the model before the real prompt is passed. It establishes the format of the output, any language changes, the tone of the response, and similar characteristics.
+      <br><em>Math:</em> Prepended to the input sequence \(\mathbf{x}\); the model conditions all predictions on this fixed prefix.</dd>
+    <br>
+
+    <dt>Fine‑tuning</dt>
+    <dd>An extra round of training on a more specific dataset, after the initial pretraining, to adapt the model to a particular task.
+      <br><em>Math:</em> Additional training that minimises the loss \(L\) on a task‑specific dataset, updating all or some of the parameters \(\theta\).</dd>
+    <br>
+
+    <dt>Weight</dt>
+    <dd>One of the many adjustable numbers inside the model that control how information is transformed. Weights are learned from data during training.
+      <br><em>Math:</em> An element of a weight matrix, e.g., \(W_Q, W_K, W_V, W_O, \mathbf{W}_1, \mathbf{W}_2\).</dd>
+    <br>
+
+    <dt>Parameter</dt>
+    <dd>Another name for a weight; any number inside the model that is tuned during training.
+      <br><em>Math:</em> The full set of parameters is often denoted by \(\theta\), encompassing all weights and biases (e.g., \(\gamma, \beta\) in layer norm).</dd>
+    <br>
+
+    <dt>Tensor</dt>
+    <dd>A generic term for a multi‑dimensional grid of numbers, such as a list of vectors or a stack of matrices.
+      <br><em>Math:</em> Examples: the layer‑wise hidden state \(\mathbf{H}^{(l)} \in \mathbb{R}^{N_{\text{ctx}} \times d_{\text{model}}}\), or the attention weight tensor \(\mathbf{A}\) of shape \(h \times N_{\text{ctx}} \times N_{\text{ctx}}\).</dd>
+    <br>
+          <dt>Jailbreaking LLMs</dt>
+    <dd>The practice of carefully designing prompts that trick a language model into ignoring its safety rules and producing harmful or restricted outputs.
+      <br><em>Math:</em> Finding an adversarial input \(\tilde{\mathbf{x}}\) such that the model assigns high probability to a disallowed target \(\mathbf{y}_{\text{bad}}\), i.e. \(\mathbf{p}(\mathbf{y}_{\text{bad}} \mid \tilde{\mathbf{x}})\) is large, despite the model being fine‑tuned to minimise such probabilities.</dd>
+    <br>
+    <dt>Adversarial Inputs</dt>
+    <dd>Inputs deliberately altered with small, often invisible perturbations that cause a machine‑learning model to make mistakes or produce unintended outputs. In language models, these are crafted prompts that reliably trigger harmful or restricted completions.
+      <br><em>Math:</em> Given an original input \(\mathbf{x}\), an adversarial version \(\tilde{\mathbf{x}} = \mathbf{x} + \delta\) is found such that the model’s prediction \(\hat{\mathbf{y}}(\tilde{\mathbf{x}})\) is dangerously wrong, or the probability of a harmful target \(\mathbf{y}_{\text{bad}}\) becomes high: \(\mathbf{p}(\mathbf{y}_{\text{bad}} \mid \tilde{\mathbf{x}}) \gg \mathbf{p}(\mathbf{y}_{\text{bad}} \mid \mathbf{x})\), often while keeping \(\delta\) almost imperceptible to a human.</dd>
+    <br>
+      
+  </dl>
+</div>
+
 </div>
 </div>
 <!-- ══════════════ END LAB LAYOUT ══════════════ -->
@@ -3291,7 +3876,650 @@ document.querySelectorAll('.reveal').forEach(el=>{
             animProgress = 1;
             requestAnimationFrame(animate);
         })();
+(function() {
+            // All DOM references use the new scoped IDs
+            const canvas = document.getElementById('bpe-canvas');
+            const ctx = canvas.getContext('2d');
+            const descDiv = document.getElementById('bpe-description');
+            const nextBtn = document.getElementById('bpe-next-btn');
+            const resetBtn = document.getElementById('bpe-reset-btn');
 
+            // ---- Color scheme (matches the CSS variables exactly) ----
+            const C = {
+                bg: '#07020a',
+                bg2: '#0d0310',
+                bg3: '#140415',
+                panel: '#0c0310',
+                panel2: '#160518',
+                border: 'rgba(255,90,160,.12)',
+                border2: 'rgba(255,90,160,.25)',
+                cyan: '#ff3d8a',
+                cyan2: '#ff6fae',
+                amber: '#ff8c42',
+                violet: '#b14aff',
+                rose: '#ff5252',
+                lime: '#5eff9e',
+                text: '#f5d9e8',
+                muted: '#6b4a5e',
+                dimmer: '#2a1024',
+            };
+
+            // ---- Data (unchanged logic) ----
+            const chunks = [
+                { text: 'run', bytes: [114, 117, 110] },
+                { text: ' runner', bytes: [32, 114, 117, 110, 110, 101, 114] },
+            ];
+
+            const mergeList = [
+                { pair: [114, 117], newId: 256 },
+                { pair: [256, 110], newId: 257 },
+                { pair: [257, 32], newId: 258 },
+                { pair: [258, 114], newId: 259 },
+                { pair: [259, 117], newId: 260 },
+                { pair: [260, 110], newId: 261 },
+            ];
+
+            const embeddingDim = 4;
+            const embeddingMatrix = {
+                114: [0.12, -0.45, 0.78, -0.33],
+                117: [0.55, 0.21, -0.90, 0.44],
+                110: [0.33, 0.67, -0.12, -0.88],
+                32: [-0.21, -0.56, 0.44, 0.71],
+                101: [0.05, -0.11, 0.23, 0.89],
+                256: [0.41, -0.31, 0.58, -0.19],
+                257: [0.22, 0.83, -0.45, 0.60],
+                258: [0.74, -0.22, 0.35, -0.91],
+                259: [0.61, 0.42, -0.71, 0.28],
+                260: [0.88, -0.17, 0.49, 0.63],
+                261: [0.39, 0.52, -0.64, -0.77],
+            };
+            const visibleTokens = [114, 117, 110, 32, 101, 256, 257, 258, 259, 260, 261];
+
+            function tokensFromBytes(bytes) {
+                return bytes.map(b => ({ id: b, isByte: true, byte: b }));
+            }
+
+            function applyMergeRule(seq, p, q, newId) {
+                const result = [];
+                let i = 0;
+                while (i < seq.length) {
+                    if (i < seq.length - 1 && seq[i].id === p && seq[i + 1].id === q) {
+                        result.push({ id: newId, isByte: false, components: [p, q] });
+                        i += 2;
+                    } else {
+                        result.push(seq[i]);
+                        i++;
+                    }
+                }
+                return result;
+            }
+
+            function computeEncoding() {
+                const steps = [];
+                const initialSeqChunks = chunks.map(chunk => tokensFromBytes(chunk.bytes));
+                const fullInitial = initialSeqChunks.flat();
+                steps.push({
+                    type: 'encoding',
+                    seq: fullInitial.map(t => ({ ...t })),
+                    desc: 'After regex split & byte encoding: each byte is a token (0–255).',
+                    highlight: null,
+                });
+
+                let currentSeq = fullInitial.map(t => ({ ...t }));
+                for (const rule of mergeList) {
+                    const { pair: [p, q], newId } = rule;
+                    currentSeq = applyMergeRule(currentSeq, p, q, newId);
+                    steps.push({
+                        type: 'encoding',
+                        seq: currentSeq.map(t => ({ ...t })),
+                        desc: `Apply merge (${p}, ${q}) → ${newId}.`,
+                        mergedPair: [p, q],
+                    });
+                }
+                steps.push({
+                    type: 'encoding',
+                    seq: currentSeq.map(t => ({ ...t })),
+                    desc: 'Final token sequence after encoding.',
+                    isFinal: true,
+                });
+                return steps;
+            }
+
+            const encodingSteps = computeEncoding();
+            const finalSeq = encodingSteps[encodingSteps.length - 1].seq;
+            const finalTokenIds = finalSeq.map(t => t.id);
+
+            const embeddingSteps = [];
+            embeddingSteps.push({
+                type: 'embedding_intro',
+                desc: 'Encoding complete. Now converting tokens to embeddings using the lookup table.',
+            });
+            for (let i = 0; i < finalTokenIds.length; i++) {
+                embeddingSteps.push({
+                    type: 'embedding_token',
+                    tokenIdx: i,
+                    tokenId: finalTokenIds[i],
+                    desc: `Look up token ${finalTokenIds[i]} (position ${i}) in embedding matrix.`,
+                });
+            }
+            embeddingSteps.push({
+                type: 'embedding_done',
+                desc: 'Embedding sequence ready. Input to Transformer.',
+            });
+
+            const allSteps = [...encodingSteps, ...embeddingSteps];
+            let stepIdx = 0;
+            let isAnimating = false;
+
+            function getByteChar(byteVal) {
+                if (byteVal === 32) return '␣';
+                if (byteVal >= 33 && byteVal <= 126) return String.fromCharCode(byteVal);
+                return '';
+            }
+
+            function drawTokenSequence(seq, highlightPairIndices, highlightSingleIdx, topY) {
+                const startX = 24,
+                    boxW = 40,
+                    boxH = 32,
+                    gap = 5;
+                const maxPerRow = Math.floor((canvas.width - 2 * startX) / (boxW + gap));
+
+                ctx.save();
+                ctx.fillStyle = C.muted;
+                ctx.font = "11px 'Space Grotesk', sans-serif";
+                ctx.textAlign = 'left';
+                ctx.fillText('Token sequence (IDs)', startX, topY - 6);
+
+                seq.forEach((token, i) => {
+                    const col = i % maxPerRow;
+                    const row = Math.floor(i / maxPerRow);
+                    const x = startX + col * (boxW + gap);
+                    const y = topY + row * (boxH + 8);
+
+                    let fillColor = token.isByte ? C.cyan : C.amber;
+                    if (highlightPairIndices && (i === highlightPairIndices[0] || i === highlightPairIndices[1])) {
+                        fillColor = C.violet;
+                    }
+                    if (highlightSingleIdx !== undefined && i === highlightSingleIdx) {
+                        fillColor = C.violet;
+                    }
+
+                    ctx.fillStyle = fillColor;
+                    ctx.globalAlpha = 0.82;
+                    ctx.fillRect(x, y, boxW, boxH);
+                    ctx.globalAlpha = 1;
+                    ctx.strokeStyle = C.border2;
+                    ctx.lineWidth = 1.2;
+                    ctx.strokeRect(x, y, boxW, boxH);
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = "bold 13px 'JetBrains Mono', monospace";
+                    ctx.textAlign = 'center';
+                    ctx.fillText(token.id, x + boxW / 2, y + boxH / 2 + 4);
+
+                    if (token.isByte && token.byte !== undefined) {
+                        const ch = getByteChar(token.byte);
+                        if (ch) {
+                            ctx.fillStyle = C.muted;
+                            ctx.font = "10px 'IBM Plex Mono', monospace";
+                            ctx.fillText(ch, x + boxW / 2, y + boxH + 13);
+                        }
+                    }
+                });
+                ctx.restore();
+            }
+
+            function drawEmbeddingTable(highlightTokenId, topY) {
+                const tableX = 18,
+                    colWidth = 44,
+                    rowHeight = 19;
+                const tableStartY = topY;
+
+                ctx.save();
+                ctx.fillStyle = C.muted;
+                ctx.font = "11px 'Space Grotesk', sans-serif";
+                ctx.textAlign = 'left';
+                ctx.fillText('Embedding matrix (subset)', tableX, tableStartY - 6);
+
+                const headerY = tableStartY + 4;
+                ctx.fillStyle = C.muted;
+                ctx.font = "10px 'JetBrains Mono', monospace";
+                ctx.fillText('ID \\ dim', tableX + 4, headerY + 12);
+                for (let d = 0; d < embeddingDim; d++) {
+                    ctx.fillText('d' + d, tableX + 68 + d * colWidth, headerY + 12);
+                }
+
+                ctx.strokeStyle = C.border;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(tableX, headerY + 18);
+                ctx.lineTo(tableX + 68 + embeddingDim * colWidth + 8, headerY + 18);
+                ctx.stroke();
+
+                visibleTokens.forEach((tid, rowIdx) => {
+                    const y = headerY + 22 + rowIdx * rowHeight;
+                    const isHighlighted = highlightTokenId !== null && tid === highlightTokenId;
+                    ctx.fillStyle = isHighlighted ? 'rgba(177,74,255,0.18)' : (rowIdx % 2 === 0 ? C.panel : C.bg3);
+                    ctx.fillRect(tableX, y, 68 + embeddingDim * colWidth + 8, rowHeight);
+                    ctx.strokeStyle = C.border;
+                    ctx.lineWidth = 0.5;
+                    ctx.strokeRect(tableX, y, 68 + embeddingDim * colWidth + 8, rowHeight);
+
+                    ctx.fillStyle = isHighlighted ? C.violet : C.text;
+                    ctx.font = "bold 11px 'JetBrains Mono', monospace";
+                    ctx.textAlign = 'left';
+                    ctx.fillText(tid, tableX + 4, y + 13);
+
+                    const vec = embeddingMatrix[tid] || [0, 0, 0, 0];
+                    ctx.font = "10px 'DM Mono', monospace";
+                    vec.forEach((val, d) => {
+                        ctx.fillStyle = isHighlighted ? C.violet : C.text;
+                        ctx.globalAlpha = isHighlighted ? 1 : 0.8;
+                        ctx.fillText(val.toFixed(2), tableX + 68 + d * colWidth, y + 13);
+                        ctx.globalAlpha = 1;
+                    });
+                });
+
+                ctx.restore();
+                return headerY + 22 + visibleTokens.length * rowHeight + 8;
+            }
+
+            function drawVectorChart(tokenId, chartX, chartY) {
+                if (!tokenId || !embeddingMatrix[tokenId]) return;
+                const vec = embeddingMatrix[tokenId];
+
+                ctx.save();
+                ctx.fillStyle = C.text;
+                ctx.font = "12px 'Space Grotesk', sans-serif";
+                ctx.textAlign = 'left';
+                ctx.fillText('Embedding for token ' + tokenId + ':', chartX, chartY - 4);
+
+                const barWidth = 28,
+                    barMaxHeight = 52,
+                    barGap = 14,
+                    barStartY = chartY + 28;
+                const totalWidth = embeddingDim * (barWidth + barGap) - barGap;
+                const startBX = chartX + Math.max(0, (180 - totalWidth) / 2);
+
+                vec.forEach((val, d) => {
+                    const barHeight = Math.abs(val) * 55;
+                    const x = startBX + d * (barWidth + barGap);
+                    const yTop = barStartY - (val >= 0 ? barHeight : 0);
+                    ctx.fillStyle = val >= 0 ? C.lime : C.rose;
+                    ctx.globalAlpha = 0.85;
+                    ctx.fillRect(x, yTop, barWidth, barHeight);
+                    ctx.globalAlpha = 1;
+
+                    ctx.fillStyle = C.text;
+                    ctx.font = "9px 'JetBrains Mono', monospace";
+                    ctx.textAlign = 'center';
+                    ctx.fillText(val.toFixed(2), x + barWidth / 2, barStartY + 14);
+                    ctx.fillStyle = C.muted;
+                    ctx.fillText('d' + d, x + barWidth / 2, yTop - 5);
+                });
+
+                const summaryY = barStartY + 36;
+                ctx.fillStyle = C.text;
+                ctx.font = "11px 'IBM Plex Mono', monospace";
+                ctx.textAlign = 'left';
+                ctx.fillText('→  [' + vec.map(v => v.toFixed(2)).join(', ') + ']', chartX, summaryY);
+                ctx.restore();
+            }
+
+            function updateDisplay() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = C.bg2;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const step = allSteps[stepIdx];
+                const seqTopY = 28;
+
+                if (step.type === 'encoding') {
+                    drawTokenSequence(step.seq, step.mergedPair || null, undefined, seqTopY);
+                    if (stepIdx === 0) {
+                        ctx.fillStyle = C.muted;
+                        ctx.font = "10px 'IBM Plex Mono', monospace";
+                        ctx.textAlign = 'left';
+                        ctx.fillText('Blue-pink = byte token (0–255)  |  Orange = merged token (≥256)', 24, canvas.height - 22);
+                    }
+                    if (step.isFinal) {
+                        ctx.fillStyle = C.lime;
+                        ctx.font = "11px 'Space Grotesk', sans-serif";
+                        ctx.textAlign = 'left';
+                        ctx.fillText('✓ Final encoded sequence — ready for embedding lookup', 24, canvas.height - 22);
+                    }
+                } else {
+                    let highlightIdx = undefined;
+                    let highlightTid = null;
+                    if (step.type === 'embedding_token') {
+                        highlightIdx = step.tokenIdx;
+                        highlightTid = step.tokenId;
+                    }
+                    drawTokenSequence(finalSeq, null, highlightIdx, seqTopY);
+                    const tableTopY = 100;
+                    drawEmbeddingTable(highlightTid, tableTopY);
+                    if (highlightTid !== null) {
+                        drawVectorChart(highlightTid, 420, tableTopY + 8);
+                    } else if (step.type === 'embedding_done') {
+                        ctx.fillStyle = C.lime;
+                        ctx.font = "12px 'Space Grotesk', sans-serif";
+                        ctx.textAlign = 'left';
+                        ctx.fillText('✓ All tokens embedded. Sequence ready for Transformer input.', 24, canvas.height - 20);
+                    }
+                }
+
+                descDiv.textContent = 'Step ' + stepIdx + ': ' + step.desc;
+                nextBtn.disabled = stepIdx >= allSteps.length - 1 || isAnimating;
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (isAnimating) return;
+                if (stepIdx >= allSteps.length - 1) return;
+
+                const currentStep = allSteps[stepIdx];
+                const nextStep = allSteps[stepIdx + 1];
+
+                if (nextStep.type === 'encoding' && nextStep.mergedPair) {
+                    const [p, q] = nextStep.mergedPair;
+                    const seq = currentStep.seq;
+                    let highlightIdx = null;
+                    for (let i = 0; i < seq.length - 1; i++) {
+                        if (seq[i].id === p && seq[i + 1].id === q) {
+                            highlightIdx = [i, i + 1];
+                            break;
+                        }
+                    }
+                    if (highlightIdx) {
+                        isAnimating = true;
+                        nextBtn.disabled = true;
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = C.bg2;
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        drawTokenSequence(seq, highlightIdx, undefined, 28);
+                        descDiv.textContent = 'Merging (' + p + ', ' + q + ') → ' + nextStep.newId + ' ...';
+                        ctx.fillStyle = C.violet;
+                        ctx.font = "11px 'Space Grotesk', sans-serif";
+                        ctx.textAlign = 'left';
+                        ctx.fillText('⧗ Merging highlighted pair...', 24, canvas.height - 22);
+
+                        setTimeout(() => {
+                            stepIdx++;
+                            isAnimating = false;
+                            updateDisplay();
+                        }, 650);
+                        return;
+                    }
+                }
+
+                stepIdx++;
+                updateDisplay();
+            });
+
+            resetBtn.addEventListener('click', () => {
+                stepIdx = 0;
+                isAnimating = false;
+                updateDisplay();
+            });
+
+            updateDisplay();
+        })();
+
+
+                (function() {
+            const canvas = document.getElementById('vec-canvas');
+            const ctx = canvas.getContext('2d');
+            const descDiv = document.getElementById('vec-description');
+            const nextBtn = document.getElementById('vec-next-btn');
+            const resetBtn = document.getElementById('vec-reset-btn');
+
+            // Color palette (matches CSS variables)
+            const C = {
+                bg: '#07020a', bg2: '#0d0310', bg3: '#140415',
+                panel: '#0c0310', panel2: '#160518',
+                border: 'rgba(255,90,160,.12)', border2: 'rgba(255,90,160,.25)',
+                cyan: '#ff3d8a', cyan2: '#ff6fae', amber: '#ff8c42',
+                violet: '#b14aff', rose: '#ff5252', lime: '#5eff9e',
+                text: '#f5d9e8', muted: '#6b4a5e', dimmer: '#2a1024'
+            };
+
+            // ---- 2D embeddings (simulated, normalized to [0,1] range) ----
+            const embeddings = {
+                Paris:   { vec: [0.22, 0.62], color: C.cyan,   label: 'Paris' },
+                France:  { vec: [0.72, 0.18], color: C.amber,  label: 'France' },
+                Tokyo:   { vec: [0.32, 0.42], color: C.lime,   label: 'Tokyo' },
+                Japan:   { vec: [0.78, 0.06], color: C.violet, label: 'Japan' }
+            };
+
+            // Compute capital direction = France - Paris
+            const franceVec = embeddings.France.vec;
+            const parisVec = embeddings.Paris.vec;
+            const capitalDirection = [
+                franceVec[0] - parisVec[0],
+                franceVec[1] - parisVec[1]
+            ];
+
+            // Predicted country = Tokyo + capitalDirection
+            const tokyoVec = embeddings.Tokyo.vec;
+            const predictedVec = [
+                tokyoVec[0] + capitalDirection[0],
+                tokyoVec[1] + capitalDirection[1]
+            ];
+
+            // Actual Japan vector for comparison
+            const japanVec = embeddings.Japan.vec;
+
+            // Canvas coordinate transformation
+            const marginLeft = 70, marginRight = 40, marginTop = 40, marginBottom = 50;
+            const plotWidth = canvas.width - marginLeft - marginRight;
+            const plotHeight = canvas.height - marginTop - marginBottom;
+
+            function toCanvasX(val) { return marginLeft + val * plotWidth; }
+            function toCanvasY(val) { return canvas.height - marginBottom - val * plotHeight; }
+
+            // ---- Drawing helpers ----
+            function drawAxes() {
+                ctx.save();
+                ctx.strokeStyle = C.muted;
+                ctx.lineWidth = 1;
+                ctx.globalAlpha = 0.5;
+                // X axis
+                ctx.beginPath();
+                ctx.moveTo(marginLeft, toCanvasY(0));
+                ctx.lineTo(marginLeft + plotWidth, toCanvasY(0));
+                ctx.stroke();
+                // Y axis
+                ctx.beginPath();
+                ctx.moveTo(marginLeft, toCanvasY(0));
+                ctx.lineTo(marginLeft, toCanvasY(1));
+                ctx.stroke();
+                // Grid lines
+                ctx.strokeStyle = C.dimmer;
+                ctx.lineWidth = 0.6;
+                for (let i = 0.1; i <= 0.9; i += 0.1) {
+                    // vertical
+                    ctx.beginPath();
+                    ctx.moveTo(toCanvasX(i), toCanvasY(0));
+                    ctx.lineTo(toCanvasX(i), toCanvasY(1));
+                    ctx.stroke();
+                    // horizontal
+                    ctx.beginPath();
+                    ctx.moveTo(marginLeft, toCanvasY(i));
+                    ctx.lineTo(marginLeft + plotWidth, toCanvasY(i));
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+
+            function drawPoint(vec, color, label, radius = 6) {
+                const cx = toCanvasX(vec[0]);
+                const cy = toCanvasY(vec[1]);
+                ctx.save();
+                // Glow
+                ctx.shadowColor = color;
+                ctx.shadowBlur = 10;
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                // Label
+                ctx.fillStyle = '#fff';
+                ctx.font = "bold 12px 'Space Grotesk', sans-serif";
+                ctx.textAlign = 'center';
+                ctx.fillText(label, cx, cy - 14);
+                ctx.restore();
+            }
+
+            function drawArrow(fromVec, toVec, color, dash = false, lineWidth = 2) {
+                const x1 = toCanvasX(fromVec[0]), y1 = toCanvasY(fromVec[1]);
+                const x2 = toCanvasX(toVec[0]), y2 = toCanvasY(toVec[1]);
+                ctx.save();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth;
+                if (dash) ctx.setLineDash([6, 4]);
+                // Arrow line
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                // Arrowhead
+                const angle = Math.atan2(y2 - y1, x2 - x1);
+                const headLen = 8;
+                ctx.setLineDash([]);
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(x2, y2);
+                ctx.lineTo(
+                    x2 - headLen * Math.cos(angle - Math.PI / 6),
+                    y2 - headLen * Math.sin(angle - Math.PI / 6)
+                );
+                ctx.lineTo(
+                    x2 - headLen * Math.cos(angle + Math.PI / 6),
+                    y2 - headLen * Math.sin(angle + Math.PI / 6)
+                );
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            function drawDistanceLine(p1, p2, color, label = '') {
+                const x1 = toCanvasX(p1[0]), y1 = toCanvasY(p1[1]);
+                const x2 = toCanvasX(p2[0]), y2 = toCanvasY(p2[1]);
+                ctx.save();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                if (label) {
+                    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+                    ctx.fillStyle = color;
+                    ctx.font = "11px 'IBM Plex Mono', monospace";
+                    ctx.textAlign = 'center';
+                    ctx.fillText(label, mx + 10, my - 8);
+                }
+                ctx.restore();
+            }
+
+            // ---- Steps definition ----
+            const steps = [
+                {
+                    desc: 'Initial word embeddings: France, Paris, Tokyo, Japan (2D projection).',
+                    draw: function() {
+                        drawAxes();
+                        for (let word in embeddings) {
+                            const { vec, color, label } = embeddings[word];
+                            drawPoint(vec, color, label);
+                        }
+                    }
+                },
+                {
+                    desc: 'Compute vector France − Paris. This direction encodes "capital → country".',
+                    draw: function() {
+                        drawAxes();
+                        // Draw all points but dim others slightly? We'll keep them.
+                        drawPoint(parisVec, embeddings.Paris.color, 'Paris');
+                        drawPoint(franceVec, embeddings.France.color, 'France');
+                        drawPoint(tokyoVec, embeddings.Tokyo.color, 'Tokyo', 5);
+                        drawPoint(japanVec, embeddings.Japan.color, 'Japan', 5);
+                        // Arrow from Paris to France
+                        drawArrow(parisVec, franceVec, C.amber, false, 2.5);
+                        // Label on arrow
+                        const mx = (parisVec[0] + franceVec[0]) / 2;
+                        const my = (parisVec[1] + franceVec[1]) / 2;
+                        ctx.fillStyle = C.amber;
+                        ctx.font = "bold 11px 'Space Grotesk', sans-serif";
+                        ctx.textAlign = 'center';
+                        ctx.fillText('France − Paris', toCanvasX(mx) + 14, toCanvasY(my) - 10);
+                    }
+                },
+                {
+                    desc: 'Add the capital direction to Tokyo: Tokyo + (France − Paris) → predicted country.',
+                    draw: function() {
+                        drawAxes();
+                        drawPoint(parisVec, embeddings.Paris.color, 'Paris', 5);
+                        drawPoint(franceVec, embeddings.France.color, 'France', 5);
+                        drawPoint(tokyoVec, embeddings.Tokyo.color, 'Tokyo');
+                        drawPoint(japanVec, embeddings.Japan.color, 'Japan', 5);
+                        // Capital direction dashed from Paris to France
+                        drawArrow(parisVec, franceVec, C.amber, true, 1.8);
+                        // Vector from Tokyo to predicted
+                        drawArrow(tokyoVec, predictedVec, C.rose, false, 2.5);
+                        // Predicted point
+                        drawPoint(predictedVec, C.rose, 'Predicted', 6);
+                        ctx.fillStyle = C.rose;
+                        ctx.font = "bold 11px 'Space Grotesk', sans-serif";
+                        ctx.textAlign = 'center';
+                        const pmx = (tokyoVec[0] + predictedVec[0]) / 2;
+                        const pmy = (tokyoVec[1] + predictedVec[1]) / 2;
+                        ctx.fillText('Tokyo + (Fr−Pa)', toCanvasX(pmx) + 20, toCanvasY(pmy) - 12);
+                    }
+                },
+                {
+                    desc: 'Result: predicted point lands remarkably close to Japan. Capital‑country relation learned implicitly.',
+                    draw: function() {
+                        drawAxes();
+                        drawPoint(parisVec, embeddings.Paris.color, 'Paris', 5);
+                        drawPoint(franceVec, embeddings.France.color, 'France', 5);
+                        drawPoint(tokyoVec, embeddings.Tokyo.color, 'Tokyo');
+                        drawPoint(japanVec, embeddings.Japan.color, 'Japan');
+                        drawPoint(predictedVec, C.rose, 'Predicted', 5);
+                        // Show distance between predicted and Japan
+                        drawDistanceLine(predictedVec, japanVec, C.lime, '≈ 0.07');
+                        // Highlight arrow from Tokyo to predicted faintly
+                        drawArrow(tokyoVec, predictedVec, C.rose, true, 1.5);
+                    }
+                }
+            ];
+
+            let currentStep = 0;
+
+            function updateDisplay() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = C.bg2;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                steps[currentStep].draw();
+                descDiv.innerHTML = `<b>Step ${currentStep+1}/${steps.length}</b>: ${steps[currentStep].desc}`;
+                nextBtn.disabled = (currentStep >= steps.length - 1);
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    updateDisplay();
+                }
+            });
+
+            resetBtn.addEventListener('click', () => {
+                currentStep = 0;
+                updateDisplay();
+            });
+
+            // Initial draw
+            updateDisplay();
+        })();
 </script>
 </body>
 </html>
