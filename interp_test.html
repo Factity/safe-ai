@@ -83,6 +83,15 @@
     --att-mono:'JetBrains Mono',monospace;
     --att-body:'IBM Plex Mono',monospace;
     --att-hand:'Kalam',cursive;
+                --lns-bg: #0d0310;
+            --lns-surface: #140415;
+            --lns-border: rgba(255, 90, 160, 0.2);
+            --lns-text: #f5d9e8;
+            --lns-muted: #6b4a5e;
+            --lns-amber: #ff8c42;
+            --lns-cyan: #ff3d8a;
+            --lns-lime: #5eff9e;
+            --lns-rose: #ff5252;
   --disp:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace; --body:'IBM Plex Mono',monospace; --math:'DM Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -1230,6 +1239,196 @@ code {
   @media (prefers-reduced-motion: reduce){
     .gptA-eq span[id], .gptA-tok, .gptA-btn, .gptA-dot { transition:none !important; }
   }
+
+          .lns-simple-wrap {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--lns-bg);
+            color: var(--lns-text);
+            border: 1px solid var(--lns-border);
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .lns-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 0.02em;
+            color: var(--lns-text);
+            text-transform: uppercase;
+        }
+
+        .lns-tokens {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .lns-token-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            padding: 6px 14px;
+            border: 1px solid var(--lns-border);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--lns-muted);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .lns-token-btn:hover {
+            border-color: var(--lns-cyan);
+            color: var(--lns-text);
+        }
+
+        .lns-token-btn.lns-active {
+            background: var(--lns-amber);
+            border-color: var(--lns-amber);
+            color: #0d0310;
+            font-weight: 700;
+        }
+
+        .lns-bar-area {
+            background: var(--lns-surface);
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .lns-bar-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 16px;
+            height: 100px;
+            position: relative;
+        }
+
+        .lns-bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40px;
+        }
+
+        .lns-bar {
+            width: 100%;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s ease, background-color 0.3s ease;
+            min-height: 2px;
+        }
+
+        .lns-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            margin-top: 4px;
+            color: var(--lns-muted);
+            text-align: center;
+        }
+
+        .lns-bar-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--lns-text);
+            margin-top: 2px;
+        }
+
+        .lns-step-desc {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--lns-text);
+            text-align: center;
+            min-height: 2.4em;
+        }
+
+        .lns-step-desc b {
+            color: var(--lns-amber);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .lns-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .lns-btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 6px 14px;
+            border: 1px solid var(--lns-border);
+            background: transparent;
+            color: var(--lns-text);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .lns-btn:hover:not(:disabled) {
+            border-color: var(--lns-cyan);
+            color: var(--lns-cyan);
+        }
+
+        .lns-btn:disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
+
+        .lns-step-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .lns-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--lns-muted);
+            border: none;
+            cursor: pointer;
+        }
+
+        .lns-dot.lns-dot-active {
+            background: var(--lns-amber);
+            box-shadow: 0 0 8px var(--lns-amber);
+        }
+
+        .lns-equation {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--lns-muted);
+        }
+
+        .lns-equation span {
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .lns-equation span.lns-highlight {
+            background: var(--lns-amber);
+            color: #0d0310;
+            font-weight: 700;
+        }
+
+        @media (max-width: 400px) {
+            .lns-bar-wrapper {
+                width: 30px;
+            }
+            .lns-bar-row {
+                gap: 8px;
+            }
+        }
 </style>
 </head>
 <body>
@@ -1644,35 +1843,19 @@ we use 2 different methods to generate embeddings one to capture the position.
     </div>
   </div>
 </div>
+
+
+
+
     <div class="math-block reveal">
       <div class="math-line">E(x<sub>t</sub>) = W<sub>e</sub>[x<sub>t</sub>] &nbsp;·&nbsp; W<sub>e</sub> ∈ ℝ<sup>V×d</sup></div>
       <div class="math-line">h<sub>0</sub> = E(x<sub>t</sub>) + P(t)</div>
-      <p class="math-note">The embedding lookup plus a positional term produces h₀ — the first hidden state every decoder block operates on.</p>
-    </div>
-
-    <div class="reveal added-block" style="color: var(--text);">
-  <h3 class="subsection-title" style="color: var(--cyan);">From tokens to vectors, formally</h3>
-  <p style="color: var(--text);">Input: a sequence of token indices <code style="color: var(--amber);">x ∈ {1, …, V}^(B×T)</code>, with sequence length T ≤ the model's max context T<sub>max</sub>. Token embeddings come from a lookup table W<sub>e</sub> ∈ ℝ<sup>V×d</sup>; a learned, absolute position embedding table W<sub>p</sub> ∈ ℝ<sup>T_max×d</sup> is added on top. The two are broadcast-summed and passed through dropout to form h₀ — the first hidden state the decoder blocks actually operate on.</p>
-  
-  
-  
-  
-  <pre class="code-block" style="color: var(--text);"><code>
-<span style="color: var(--muted);"># Embedding lookup — the very first step of the forward pass</span>
-<span style="color: var(--muted);"># token_embedding:    (vocab_size, d_model)   — one row per vocabulary entry</span>
-<span style="color: var(--muted);"># position_embedding: (max_seq_len, d_model)  — one row per sequence position</span>
-<span style="color: var(--cyan2);">token_ids</span> = <span style="color: var(--cyan2);">x</span>                                        <span style="color: var(--muted);"># (batch, seq_len) integer ids</span>
-<span style="color: var(--cyan2);">positions</span> = <span style="color: var(--violet);">torch</span>.<span style="color: var(--amber);">arange</span>(<span style="color: var(--cyan2);">seq_len</span>, device=<span style="color: var(--cyan2);">x</span>.device)   <span style="color: var(--muted);"># (seq_len,)</span>
-<span style="color: var(--cyan2);">tok_vec</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">token_embedding</span>(<span style="color: var(--cyan2);">token_ids</span>)            <span style="color: var(--muted);"># (batch, seq_len, d_model)</span>
-<span style="color: var(--cyan2);">pos_vec</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">position_embedding</span>(<span style="color: var(--cyan2);">positions</span>)         <span style="color: var(--muted);"># (seq_len, d_model), broadcasts over batch</span>
-<span style="color: var(--cyan2);">hidden_state</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">embed_dropout</span>(<span style="color: var(--cyan2);">tok_vec</span> + <span style="color: var(--cyan2);">pos_vec</span>)  <span style="color: var(--muted);"># this is h_0</span>
-</code></pre>
-  <p style="color: var(--text);">A vector that starts life as the embedding of a single word only encodes that word in isolation — it's the job of every layer that follows to let it soak up much richer, context-dependent meaning than any individual token could carry alone.</p>
-</div>
-
-      <p class="section-desc">Attention has no inherent sense of order, so sinusoidal signals at geometrically increasing wavelengths are added to every embedding — letting the model recover relative and absolute position from phase alone.</p>
+      </div>
     </div>
     <div class="canvas-frame reveal">
+      <br>
+       <p class="section-desc">Attention has no inherent sense of order, so sinusoidal signals at geometrically increasing wavelengths are added to every embedding — letting the model recover relative and absolute position from phase alone.</p>
+    
       <span class="frame-tag">SIN / COS · 2i / d_model</span>
       <span class="frame-tag right">POS 0 – 64</span>
       <div class="corner-dec bl"></div><div class="corner-dec br"></div>
@@ -1699,44 +1882,79 @@ we use 2 different methods to generate embeddings one to capture the position.
       </div>
     </div>
 
+    <div class="reveal added-block" style="color: var(--text);">
 
-    <div class="reveal added-block" style="background-color: var(--bg); color: var(--text); border: 2px solid var(--border);">
-  <h3 class="subsection-title" style="color: var(--cyan);">From tokens to vectors, formally</h3>
-  <p style="background-color: var(--panel); color: var(--text); border-left: 3px solid var(--border2);">
-    Input: a sequence of token indices 
-    <code style="background-color: var(--bg2); color: var(--amber);">x ∈ {1, …, V}^(B×T)</code>, 
-    with sequence length T ≤ the model's max context T<sub>max</sub>. Token embeddings come from a lookup table 
-    W<sub>e</sub> ∈ ℝ<sup>V×d</sup>; a learned, absolute position embedding table 
-    W<sub>p</sub> ∈ ℝ<sup>T_max×d</sup> is added on top. The two are broadcast-summed and passed through 
-    dropout to form h₀ — the first hidden state the decoder blocks actually operate on.
-  </p>
-  <pre class="code-block" style="background-color: var(--bg3); color: var(--text); border: 1px solid var(--border2);">
-<code><span style="color: var(--muted);"># Embedding lookup — the very first step of the forward pass</span>
-<span style="color: var(--dimmer);"># token_embedding:    (vocab_size, d_model)   — one row per vocabulary entry</span>
-<span style="color: var(--dimmer);"># position_embedding: (max_seq_len, d_model)  — one row per sequence position</span>
+  
+  
+  <pre class="code-block" style="color: var(--text);"><code>
+<span style="color: var(--muted);"># Embedding lookup — the very first step of the forward pass</span>
+<span style="color: var(--muted);"># token_embedding:    (vocab_size, d_model)   — one row per vocabulary entry</span>
+<span style="color: var(--muted);"># position_embedding: (max_seq_len, d_model)  — one row per sequence position</span>
 <span style="color: var(--cyan2);">token_ids</span> = <span style="color: var(--cyan2);">x</span>                                        <span style="color: var(--muted);"># (batch, seq_len) integer ids</span>
 <span style="color: var(--cyan2);">positions</span> = <span style="color: var(--violet);">torch</span>.<span style="color: var(--amber);">arange</span>(<span style="color: var(--cyan2);">seq_len</span>, device=<span style="color: var(--cyan2);">x</span>.device)   <span style="color: var(--muted);"># (seq_len,)</span>
 <span style="color: var(--cyan2);">tok_vec</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">token_embedding</span>(<span style="color: var(--cyan2);">token_ids</span>)            <span style="color: var(--muted);"># (batch, seq_len, d_model)</span>
 <span style="color: var(--cyan2);">pos_vec</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">position_embedding</span>(<span style="color: var(--cyan2);">positions</span>)         <span style="color: var(--muted);"># (seq_len, d_model), broadcasts over batch</span>
-<span style="color: var(--cyan2);">hidden_state</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">embed_dropout</span>(<span style="color: var(--cyan2);">tok_vec</span> + <span style="color: var(--lime);">pos_vec</span>)  <span style="color: var(--muted);"># this is h_0</span>
+<span style="color: var(--cyan2);">hidden_state</span> = <span style="color: var(--rose);">self</span>.<span style="color: var(--amber);">embed_dropout</span>(<span style="color: var(--cyan2);">tok_vec</span> + <span style="color: var(--cyan2);">pos_vec</span>)  <span style="color: var(--muted);"># this is h_0</span>
 </code></pre>
-</div>
+  </div>
+
+    
+
   </div>
 </section>
 
+<section class="section" id="l03" data-layer="3" data-layer-label="Layer Normalization" style="background:var(--bg2)">
+  
 
+    <p class="section-label">Layer 03 · Normalization</p>
+      <h2 class="section-title">Vector <span>Normalization</span></h2>
+
+    <p>
+      The generated embeddings are normalized before passing onto the attention block. The normalization helps get all the embeddings onto a similar scale. 
+      the below illustration can help you understand. click on a word and see how the embeeding of a word gets normalized for simplicity we made most of the vector lengths shorter. But the process remains the same mean is calculated and subtracted from the vector and divided by the square root of e+ standard deviation squared. The e term here helps with division by zero error.
+    </p>
+    </p>
+     <div class="lns-simple-wrap">
+        <div class="lns-title">Layer Normalization</div>
+
+        <!-- Token selector -->
+        <div class="lns-tokens" id="lns-tokens"></div>
+
+        <!-- Bar chart -->
+        <div class="lns-bar-area">
+            <div class="lns-bar-row" id="lns-bars"></div>
+            <div class="lns-step-desc" id="lns-desc"></div>
+        </div>
+
+        <!-- Equation highlight (simplified) -->
+        <div class="lns-equation" id="lns-eq">
+            <span id="eq-y">y</span> = <span id="eq-gamma">γ</span> ⊙ <span id="eq-xhat">x̂</span> + <span id="eq-beta">β</span>
+            &nbsp; with &nbsp;
+            <span id="eq-xhat2">x̂</span> = (<span id="eq-xmu">x−μ</span>) / <span id="eq-sqrt">√(σ²+ε)</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="lns-controls">
+            <button class="lns-btn" id="lns-prev">← Prev</button>
+            <div class="lns-step-dots" id="lns-dots"></div>
+            <button class="lns-btn" id="lns-next">Next →</button>
+        </div>
+    </div>
+    
+  </p>
+</section>
 
 <!-- L03 SELF ATTENTION -->
-<section class="section" id="l03" data-layer="3" data-layer-label="Self-Attention">
+<section class="section" id="l04" data-layer="4" data-layer-label="Self-Attention">
   <div class="section-inner">
     <div class="reveal">
       <p class="section-label">Layer 03 · Scaled Dot-Product Attention</p>
       <h2 class="section-title">SELF-<span>ATTENTION</span></h2>
-      <p class="section-desc">Queries and Keys are dotted, scaled, masked, and passed through softmax to produce an attention matrix — each row a probability distribution over which previous tokens the current token should listen to. The pattern reshapes per head.</p>
+      <p class="section-desc">After the layer normalization step is done the embeddings get passed onto the attention block. This is probabaly the phase that defines the classic transformer architecture and distinguishes from rest of the neural nets.</p>
     </div>
 
     <div class="reveal added-block">
-  <h3 class="subsection-title">Attention mechanism in GPT‑2 – mathematical formulation</h3>
+  <h3 class="subsection-title">Attention mechanism </h3>
   <p>
     GPT‑2 uses <strong>multi‑head causal self‑attention</strong> in every decoder block.
     For a given layer, the input is the hidden state <strong>h ∈ ℝ<sup>B×T×d</sup></strong>,
@@ -3587,8 +3805,8 @@ document.querySelectorAll('.reveal').forEach(el=>{
             const COMP_SECTION_MAP = {
                 embed: 'l01',
                 pos: 'l02',
-                ln1: 'l04',
-                attn: 'l03',
+                ln1: 'l03',
+                attn: 'l04',
                 add1: 'l06',
                 ln2: 'l04',
                 ffn: 'l05',
@@ -5612,6 +5830,203 @@ document.querySelectorAll('.reveal').forEach(el=>{
   renderRail();
   updateAll();
 })();
+
+
+        (function() {
+            // ---- Model parameters ----
+            const d = 4;
+            const epsilon = 0.001;
+            const tokens = ["The", "cat", "sat", "on", "the", "mat"];
+            const inputVectors = {
+                "The": [0.8, 0.1, 0.3, 0.5],
+                "cat": [0.2, 0.9, 0.4, 0.1],
+                "sat": [0.5, 0.5, 0.7, 0.3],
+                "on": [0.3, 0.2, 0.8, 0.6],
+                "the": [0.7, 0.15, 0.25, 0.45],
+                "mat": [0.4, 0.7, 0.5, 0.2]
+            };
+            const gamma = [1.2, 0.8, 1.0, 1.5];
+            const beta = [-0.1, 0.2, 0.0, 0.1];
+
+            function mean(v) { return v.reduce((s, x) => s + x, 0) / v.length; }
+
+            function variance(v, mu) { return v.reduce((s, x) => s + (x - mu) ** 2, 0) / v.length; }
+
+            function layerNorm(x) {
+                const mu = mean(x);
+                const sigma2 = variance(x, mu);
+                const std = Math.sqrt(sigma2 + epsilon);
+                const x_hat = x.map(v => (v - mu) / std);
+                const y = x_hat.map((v, i) => gamma[i] * v + beta[i]);
+                return { mu, sigma2, std, x_hat, y };
+            }
+
+            // Precompute for all tokens
+            const lnCache = {};
+            tokens.forEach(t => { lnCache[t] = layerNorm(inputVectors[t]); });
+
+            // ---- State ----
+            let currentToken = "cat";
+            let step = 0;
+            const totalSteps = 4;
+
+            // Which vector to display at each step
+            function getVectorForStep(tok, step) {
+                const ln = lnCache[tok];
+                const x = inputVectors[tok];
+                switch (step) {
+                    case 0:
+                        return { vec: x, label: 'x (input)', color: 'var(--lns-amber)' };
+                    case 1:
+                        return { vec: x.map(v => v - ln.mu), label: 'x − μ (centered)', color: 'var(--lns-cyan)' };
+                    case 2:
+                        return { vec: ln.x_hat, label: 'x̂ (normalized)', color: 'var(--lns-lime)' };
+                    case 3:
+                        return { vec: ln.y, label: 'y = γ⊙x̂+β (output)', color: '#fff' };
+                    default:
+                        return { vec: x, label: 'x', color: 'var(--lns-amber)' };
+                }
+            }
+
+            // ---- DOM elements ----
+            const tokenContainer = document.getElementById('lns-tokens');
+            const barsContainer = document.getElementById('lns-bars');
+            const descEl = document.getElementById('lns-desc');
+            const prevBtn = document.getElementById('lns-prev');
+            const nextBtn = document.getElementById('lns-next');
+            const dotsContainer = document.getElementById('lns-dots');
+            const eqSpans = {
+                y: document.getElementById('eq-y'),
+                gamma: document.getElementById('eq-gamma'),
+                xhat: document.getElementById('eq-xhat'),
+                beta: document.getElementById('eq-beta'),
+                xhat2: document.getElementById('eq-xhat2'),
+                xmu: document.getElementById('eq-xmu'),
+                sqrt: document.getElementById('eq-sqrt'),
+            };
+
+            // ---- Render functions ----
+            function renderTokens() {
+                tokenContainer.innerHTML = tokens.map(t =>
+                    `<button class="lns-token-btn${t === currentToken ? ' lns-active' : ''}">${t}</button>`
+                ).join('');
+            }
+
+            function renderBars() {
+                const { vec, label, color } = getVectorForStep(currentToken, step);
+                const maxAbs = Math.max(...vec.map(Math.abs), 0.5);
+                const barMaxHeight = 70;
+                barsContainer.innerHTML = vec.map((val, i) => {
+                    const height = (Math.abs(val) / maxAbs) * barMaxHeight;
+                    const barColor = val >= 0 ? 'var(--lns-lime)' : 'var(--lns-rose)';
+                    return `
+                    <div class="lns-bar-wrapper">
+                      <div class="lns-bar" style="height:${height}px; background:${barColor};"></div>
+                      <span class="lns-bar-label">d${i}</span>
+                      <span class="lns-bar-value">${val.toFixed(2)}</span>
+                    </div>`;
+                }).join('');
+                // Also set the label above the bar row (via a small title)
+                const titleEl = document.createElement('div');
+                titleEl.style.textAlign = 'center';
+                titleEl.style.fontSize = '0.8rem';
+                titleEl.style.color = 'var(--lns-muted)';
+                titleEl.textContent = label;
+                barsContainer.insertAdjacentElement('afterbegin', titleEl);
+            }
+
+            function renderDescription() {
+                const ln = lnCache[currentToken];
+                switch (step) {
+                    case 0:
+                        descEl.innerHTML =
+                            `Raw input vector <b>x</b> for token "<b>${currentToken}</b>". Values can be unnormalized.`;
+                        break;
+                    case 1:
+                        descEl.innerHTML =
+                            `Subtract mean <b>μ</b> = ${ln.mu.toFixed(3)} to center the vector. Now zero mean.`;
+                        break;
+                    case 2:
+                        descEl.innerHTML =
+                            `Divide by standard deviation <b>√(σ²+ε)</b> = ${ln.std.toFixed(3)}. Result: zero mean, unit variance.`;
+                        break;
+                    case 3:
+                        descEl.innerHTML =
+                            `Apply learned <b>scale γ</b> = [${gamma.join(', ')}] and <b>shift β</b> = [${beta.join(', ')}] → final output.`;
+                        break;
+                }
+            }
+
+            function highlightEquation() {
+                // Remove all highlights
+                Object.values(eqSpans).forEach(span => span.classList.remove('lns-highlight'));
+                // Add highlights based on step
+                if (step === 0) {
+                    eqSpans.xmu.classList.add('lns-highlight');
+                } else if (step === 1) {
+                    eqSpans.xmu.classList.add('lns-highlight');
+                } else if (step === 2) {
+                    eqSpans.sqrt.classList.add('lns-highlight');
+                    eqSpans.xhat2.classList.add('lns-highlight');
+                } else if (step === 3) {
+                    eqSpans.gamma.classList.add('lns-highlight');
+                    eqSpans.beta.classList.add('lns-highlight');
+                    eqSpans.y.classList.add('lns-highlight');
+                }
+            }
+
+            function renderDots() {
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i < totalSteps; i++) {
+                    const dot = document.createElement('button');
+                    dot.className = 'lns-dot' + (i === step ? ' lns-dot-active' : '');
+                    dot.addEventListener('click', () => {
+                        step = i;
+                        updateAll();
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+            }
+
+            function updateAll() {
+                renderTokens();
+                renderBars();
+                renderDescription();
+                highlightEquation();
+                renderDots();
+                prevBtn.disabled = step === 0;
+                nextBtn.disabled = step === totalSteps - 1;
+            }
+
+            // ---- Event listeners ----
+            tokenContainer.addEventListener('click', (e) => {
+                const btn = e.target.closest('.lns-token-btn');
+                if (!btn) return;
+                currentToken = btn.textContent.trim();
+                updateAll();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (step > 0) { step--;
+                    updateAll(); }
+            });
+            nextBtn.addEventListener('click', () => {
+                if (step < totalSteps - 1) { step++;
+                    updateAll(); }
+            });
+
+            // Keyboard support
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' && step < totalSteps - 1) { step++;
+                    updateAll(); }
+                if (e.key === 'ArrowLeft' && step > 0) { step--;
+                    updateAll(); }
+            });
+
+            // Initial render
+            renderTokens();
+            updateAll();
+        })();
 </script>
 </body>
 </html>
