@@ -1977,7 +1977,12 @@ we use 2 different methods to generate embeddings one to capture the position.
       K = \text{qkv}[:,:,\,d:2d],\quad
       V = \text{qkv}[:,:,\,2d:3d].
       \]
+
     </li>
+    <video src="videos/scene1.mp4" autoplay muted playsinline disablePictureInPicture
+       onended="this.pause()"
+       style="width:100%; max-width:600px; display:block; pointer-events:none;">
+</video>
     <li>
       <strong>Divide into heads.</strong>
       Let <em>n<sub>heads</sub></em> be the number of attention heads (e.g. 12 for GPT‑2 small)
@@ -1989,6 +1994,10 @@ we use 2 different methods to generate embeddings one to capture the position.
       V \to (B, n_{\text{heads}}, T, d_k).
       \]
     </li>
+    <video src="videos/scene2.mp4" autoplay muted playsinline disablePictureInPicture
+       onended="this.pause()"
+       style="width:100%; max-width:600px; display:block; pointer-events:none;">
+</video>
     <li>
       <strong>Compute raw attention scores.</strong>
       For each head, the unnormalised attention logits are the scaled dot products between
@@ -2002,6 +2011,10 @@ we use 2 different methods to generate embeddings one to capture the position.
       S_h = \frac{Q_h K_h^\top}{\sqrt{d_k}} \quad\in \mathbb{R}^{T\times T}.
       \]
     </li>
+    <video src="videos/scene3.mp4" autoplay muted playsinline disablePictureInPicture
+       onended="this.pause()"
+       style="width:100%; max-width:600px; display:block; pointer-events:none;">
+</video>
     <li>
       <strong>Apply the causal mask.</strong>
       GPT‑2 is an autoregressive model; the <em>i</em>‑th query must only attend to positions
@@ -2018,6 +2031,10 @@ we use 2 different methods to generate embeddings one to capture the position.
       \tilde{S}_h = S_h + M.
       \]
     </li>
+    <video src="videos/scene4.mp4" autoplay muted playsinline disablePictureInPicture
+       onended="this.pause()"
+       style="width:100%; max-width:600px; display:block; pointer-events:none;">
+</video>
     <li>
       <strong>Softmax normalisation.</strong>
       Convert masked scores to attention probabilities:
@@ -2027,6 +2044,10 @@ we use 2 different methods to generate embeddings one to capture the position.
       \]
       Because of the mask, all probabilities for future positions (<em>j > i</em>) are zero.
     </li>
+    <video src="videos/scene5.mp4" autoplay muted playsinline disablePictureInPicture
+       onended="this.pause()"
+       style="width:100%; max-width:600px; display:block; pointer-events:none;">
+</video>
     <li>
       <strong>Weighted sum of values.</strong>
       For each head, the output is a convex combination of the value vectors:
@@ -2035,6 +2056,10 @@ we use 2 different methods to generate embeddings one to capture the position.
       \]
       This is repeated for every head, yielding <em>n<sub>heads</sub></em> output tensors.
     </li>
+    <video src="videos/scene6.mp4" autoplay muted playsinline disablePictureInPicture
+       onended="this.pause()"
+       style="width:100%; max-width:600px; display:block; pointer-events:none;">
+</video>
     <li>
       <strong>Concatenate heads and project.</strong>
       The per‑head outputs are concatenated along the <em>d<sub>k</sub></em> dimension, restoring
@@ -2049,6 +2074,10 @@ we use 2 different methods to generate embeddings one to capture the position.
       \text{Attn}(h) = O_{\text{concat}}\, W_{\text{c\_proj}} + b_{\text{c\_proj}}.
       \]
     </li>
+    <video src="videos/scene7.mp4" autoplay muted playsinline disablePictureInPicture
+       onended="this.pause()"
+       style="width:100%; max-width:600px; display:block; pointer-events:none;">
+</video>
   </ol>
 
 
@@ -2111,25 +2140,7 @@ we use 2 different methods to generate embeddings one to capture the position.
  
 
   <h4>Integration into the decoder block</h4>
-  <p>
-    In GPT‑2, the attention sub‑layer is wrapped with a residual connection and
-    layer normalisation (pre‑norm style). If <strong>LN<sub>1</sub></strong> denotes the
-    first layer norm, the full block computes:
-    \[
-    h' = h + \text{Attn}\big(\text{LN}_1(h)\big),
-    \]
-    followed by a feed‑forward network with its own residual connection.
-    The same attention mechanism (with the same masking rule) is applied in all
-    <em>N</em> decoder layers.
-  </p>
 
-  <p class="math-note">
-    <em>Key detail:</em> the causal mask enforces the autoregressive property.
-    At training time, the entire sequence is processed in parallel, but the mask
-    prevents the model from peeking at future tokens. During generation, the same
-    mask is used, naturally allowing the model to attend only to the tokens
-    produced so far.
-  </p>
 </div>
     <div class="canvas-frame reveal">
       <span class="frame-tag" id="attn-head-tag">HEAD 1 / 8</span>
