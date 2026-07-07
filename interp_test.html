@@ -1684,11 +1684,18 @@ code {
     </div>
   </a>
   <nav>
-    <a href="#l01">Embeddings</a>
-    <a href="#l03">Attention</a>
-    <a href="#l05">Feed-Forward</a>
-    <a href="#l06">Residual</a>
-    <a href="#specs">Model Card</a>
+    <a href="#l01">Tokenization</a>
+    <a href="#l02">Encoding</a>
+    <a href="#l03">Self attention</a>
+
+    <a href="#l04">Residual Stream</a>
+    <a href="#l05">Feed forward layer</a>
+
+    <a href="#l06">Decoder block</a>
+
+    <a href="#l07">Unembedding</a>
+    
+    <a href="#l08">Model Card</a>
     <span class="nav-status">RUNNING</span>
   </nav>
   <button id="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
@@ -1908,7 +1915,7 @@ Wait a minute …. Before we jump ahead of ourselves let us establish some defin
         </div>
     </div>
 </section>
-<!-- L02 POSITIONAL ENCODING -->
+<!-- L02  ENCODING -->
 <section class="section" id="l02" data-layer="2" data-layer-label="Positional Encoding" style="background:var(--bg2)">
   
   
@@ -2129,7 +2136,7 @@ we use 2 different methods to generate embeddings one to capture the position.
 
   </div>
 </section>
-
+<!-- L03  Normalization -->
 <section class="section" id="l03" data-layer="3" data-layer-label="Layer Normalization" style="background:var(--bg2)">
   
 
@@ -2171,7 +2178,7 @@ we use 2 different methods to generate embeddings one to capture the position.
   </p>
 </section>
 
-<!-- L03 SELF ATTENTION -->
+<!-- L04 SELF ATTENTION -->
 <section class="section" id="l04" data-layer="4" data-layer-label="Self-Attention">
   <div class="section-inner">
     <div class="reveal">
@@ -2461,20 +2468,23 @@ we use 2 different methods to generate embeddings one to capture the position.
   </div>
 </section>
 
-<!-- L06 RESIDUAL STREAM -->
+<!-- L05 RESIDUAL STREAM -->
 <section class="section" id="l05" data-layer="6" data-layer-label="Residual Stream">
-  <div class="section-inner">
+  <div class="section-inner" style="font-family:'IBM Plex Mono',monospace;">
     <div class="reveal">
       <p class="section-label">Layer 06 · The Information Highway</p>
       <h2 class="section-title">RESIDUAL <span>STREAM</span></h2>
-      <p class="section-desc">A residual stream is the place where after the execution of the each block the model writes to as the data is passed between the layers it under goes massive amount of dimenionsal changes often mapping from higher to lower dimensions and as we saw with the above attention block there are multiple attention heads and several laers of these repeated pattern residual stream helps solve this problem we just simply write to a flow called residual stream </p>
+      <p class="section-desc">The residual stream is the place where after the execution of the each block whether it is the mlp block or attention block the model writes to as the data is passed between the layers it under goes massive amount of dimenionsal changes often mapping from higher to lower dimensions and viceversa  as we saw in the above section there multiple attention heads and several layers of these repeated pattern. Residual stream helps solve this problem we just simply write to a flow the so called a information highway</p>
     </div>
     <div class="canvas-frame reveal">
       <span class="frame-tag">ADDITIVE · UNNORMALIZED</span>
       <span class="frame-tag right">12 LAYERS SHOWN</span>
       <div class="corner-dec bl"></div><div class="corner-dec br"></div>
       <canvas id="resCanvas" width="1240" height="270"></canvas>
-<p>In the context of the residual stream, circuits are naturally framed as the computational pathways that read from and write to this shared, accumulated state. The residual stream acts as a high-dimensional memory where each layer adds information without overwriting the past, and interpretability research uses terminology like <em>features</em> to describe the meaningful directions encoded in its activations—concepts, entities, or grammatical properties that later components can access. Because the stream compresses many features into a single vector through <em>superposition</em>, individual neurons rarely correspond to clean, isolated concepts; instead, circuits are traced by identifying how attention heads and MLP neurons interact through the stream. <em>Path patching</em> and <em>activation patching</em> are applied directly to the residual stream to measure how specific upstream components shape the representation that downstream heads read, revealing structures like <em>induction circuits</em> that enable in-context learning. The residual stream thus becomes the central interpretive medium: features are written into it, superimposed, and then selectively read out, making it the backbone through which circuits compose complex behaviors.</p>
+<p> Residual streams play an important role in understanding the internals of the model it helps us grasp how different parts of the blocks interact. 
+  
+  <br> In the context of the residual stream, circuits are naturally framed as the computational pathways that read from and write to this shared, accumulated state. The residual stream acts as a high-dimensional memory where each layer adds information without overwriting the past, and interpretability research uses terminology like <em>features</em> to describe the meaningful directions encoded in its activations—concepts, entities, or grammatical properties that later components can access. Because the stream compresses many features into a single vector through <em>superposition</em>, individual neurons rarely correspond to clean, isolated concepts; instead, circuits are traced by identifying how attention heads and MLP neurons interact through the stream. 
+  <br><em>Path patching</em> and <em>activation patching</em> are applied directly to the residual stream to measure how specific upstream components shape the representation that downstream heads read, revealing structures like <em>induction circuits</em> that enable in-context learning. The residual stream thus becomes the central interpretive medium: features are written into it, superimposed, and then selectively read out, making it the backbone through which circuits compose complex behaviors.</p>
     </div>
         <div class="laynA-wrap" id="laynA-wrap" tabindex="0" aria-label="Interactive residual stream diagram">
         <div class="laynA-titleblock">
@@ -2515,7 +2525,7 @@ we use 2 different methods to generate embeddings one to capture the position.
 
   </div>
 </section>
-<!-- L05 FEED FORWARD -->
+<!-- L06 FEED FORWARD -->
 <section class="section" id="l06" data-layer="5" data-layer-label="Feed-Forward Network">
   <div class="section-inner">
     <div class="reveal">
@@ -2529,36 +2539,95 @@ we use 2 different methods to generate embeddings one to capture the position.
       <div class="corner-dec bl"></div><div class="corner-dec br"></div>
       <canvas id="ffnCanvas" width="1240" height="360"></canvas>
     </div>
+    <div class="reveal added-block">
+  <h3 class="subsection-title">Feed‑forward network – mathematical formulation</h3>
+  <p>The feed‑forward network (FFN) is a <strong>position‑wise</strong> sublayer. It processes each token independently, introduces non‑linearity, and contains the bulk of the model's capacity. The operation is identical for every sequence position.</p>
+
+  <h4>Standard ReLU FFN (Vaswani et al., 2017)</h4>
+  <p>Two affine transformations with a ReLU activation in between.</p>
+  <p>
+    <strong>Parameters</strong><br>
+    \(W_1 \in \mathbb{R}^{d_{\text{model}} \times d_{\text{ff}}}\), \(b_1 \in \mathbb{R}^{d_{\text{ff}}}\)<br>
+    \(W_2 \in \mathbb{R}^{d_{\text{ff}} \times d_{\text{model}}}\), \(b_2 \in \mathbb{R}^{d_{\text{model}}}\)<br>
+    \(d_{\text{ff}} = 4 \cdot d_{\text{model}}\) in the original paper.
+  </p>
+  <p><strong>Per‑token operation</strong> (for a single vector \(x \in \mathbb{R}^{d_{\text{model}}}\)):</p>
+  \[
+  \operatorname{FFN}(x) = \max(0,\; xW_1 + b_1)\,W_2 + b_2
+  \]
+  <p><strong>Full sequence</strong> (input matrix \(X \in \mathbb{R}^{n \times d_{\text{model}}}\)):</p>
+  \[
+  \operatorname{FFN}(X) = \max(0,\; XW_1 + \mathbf{1}_n b_1^T)\,W_2 + \mathbf{1}_n b_2^T
+  \]
+  <p>This is equivalent to two independent \(1\!\times\!1\) convolutions applied to every token vector.</p>
+
+  <h4>Variant: GELU activation</h4>
+  <p>Used in BERT, GPT‑2, and many encoder models. Smooth alternative to ReLU:</p>
+  \[
+  \operatorname{GELU}(x) = x \cdot \Phi(x) \approx 0.5x\left(1 + \tanh\left[\sqrt{2/\pi}\left(x + 0.044715 x^3\right)\right]\right)
+  \]
+  \[
+  \operatorname{FFN}_{\text{GELU}}(x) = \operatorname{GELU}(xW_1 + b_1)\,W_2 + b_2
+  \]
+
+  <h4>Variant: SwiGLU (gated linear unit)</h4>
+  <p>Modern large language models (PaLM, LLaMA, etc.) use a gated variant with a Swish activation, improving performance while maintaining comparable computational cost.</p>
+  <p>
+    <strong>Parameters</strong><br>
+    \(W_1, W_3 \in \mathbb{R}^{d_{\text{model}} \times d_{\text{ff}}}\), \(W_2 \in \mathbb{R}^{d_{\text{ff}} \times d_{\text{model}}}\)<br>
+    (Biases are typically omitted.)
+  </p>
+  <p><strong>Operation</strong> (element‑wise gating):</p>
+  \[
+  \operatorname{SwiGLU}(x) = \big(\operatorname{Swish}(xW_1) \;\odot\; xW_3\big)\,W_2
+  \]
+  <p>where \(\operatorname{Swish}(z) = z \cdot \sigma(z) = z \cdot \operatorname{silu}(z)\). The inner dimension \(d_{\text{ff}}\) is often rescaled (e.g., \(\frac{8}{3}d_{\text{model}}\)) to keep the parameter count similar to the standard FFN.</p>
+
+  <h4>Forward pass of the FFN sublayer</h4>
+  <p>Inside a Transformer block, the FFN is wrapped with a residual connection and layer normalisation. Given input \(X\) (after attention and residual):</p>
+  <ol class="algo-steps">
+    <li><strong>Normalise.</strong> \(\bar{X} = \operatorname{LayerNorm}(X)\)</li>
+    <li><strong>Compute FFN.</strong> \(Y = \operatorname{FFN}(\bar{X})\) using one of the formulations above.</li>
+    <li><strong>Residual addition.</strong> \(X_{\text{out}} = X + Y\)</li>
+  </ol>
+
+  <h4>Key properties</h4>
+  <ul>
+    <li><strong>No token mixing</strong> – the FFN preserves the sequence length \(n\); it operates purely as a per‑token non‑linear feature extractor.</li>
+    <li><strong>Linear complexity in \(n\)</strong> – \(O(n \cdot d_{\text{model}} \cdot d_{\text{ff}})\), unlike the quadratic self‑attention. For long sequences the FFN can dominate the per‑token computation.</li>
+    <li><strong>Memory interpretation</strong> – the large weight matrices can be viewed as key‑value memories that store linguistic and factual knowledge.</li>
+  </ul>
+</div>
     <div class="math-block reveal">
       <div class="math-line">FFN(x) = GELU(x W<sub>1</sub> + b<sub>1</sub>) W<sub>2</sub> + b<sub>2</sub></div>
       <div class="math-line">GELU(x) = x · Φ(x)</div>
       <p class="math-note">Φ is the standard normal CDF — GELU weighs each input by how likely it is to exceed a random threshold, rather than hard-clipping at zero like ReLU.</p>
     </div>
-
-
-
-    <div class="reveal added-block">
-  <h3 class="subsection-title">Position-wise, in code</h3>
-  <p>Every position runs through the identical MLP independently — no mixing across positions happens here, that already happened in attention. The expand-then-contract shape gives the network room to compute something more elaborate than a single linear pass would allow before compressing back down to the model's working width.</p>
-  <pre class="code-block"><code><span class="code-keyword">class</span> <span class="code-class">FeedForward</span>(<span class="code-class">nn.Module</span>):
-    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-variable">self</span>, <span class="code-variable">cfg</span>):
-        <span class="code-keyword">super</span>().<span class="code-function">__init__</span>()
-        <span class="code-variable">self</span>.<span class="code-variable">mlp_up_proj</span> = <span class="code-class">nn.Linear</span>(<span class="code-variable">cfg</span>.<span class="code-variable">d_model</span>, <span class="code-number">4</span> * <span class="code-variable">cfg</span>.<span class="code-variable">d_model</span>, bias=<span class="code-variable">cfg</span>.<span class="code-variable">use_bias</span>)
-        <span class="code-variable">self</span>.<span class="code-variable">activation</span> = <span class="code-class">nn.GELU</span>()
-        <span class="code-variable">self</span>.<span class="code-variable">mlp_down_proj</span> = <span class="code-class">nn.Linear</span>(<span class="code-number">4</span> * <span class="code-variable">cfg</span>.<span class="code-variable">d_model</span>, <span class="code-variable">cfg</span>.<span class="code-variable">d_model</span>, bias=<span class="code-variable">cfg</span>.<span class="code-variable">use_bias</span>)
-        <span class="code-variable">self</span>.<span class="code-variable">drop</span> = <span class="code-class">nn.Dropout</span>(<span class="code-variable">cfg</span>.<span class="code-variable">drop_prob</span>)
-    <span class="code-keyword">def</span> <span class="code-function">forward</span>(<span class="code-variable">self</span>, <span class="code-variable">x</span>):
-        <span class="code-variable">x</span> = <span class="code-variable">self</span>.<span class="code-variable">mlp_up_proj</span>(<span class="code-variable">x</span>)
-        <span class="code-variable">x</span> = <span class="code-variable">self</span>.<span class="code-variable">activation</span>(<span class="code-variable">x</span>)
-        <span class="code-variable">x</span> = <span class="code-variable">self</span>.<span class="code-variable">mlp_down_proj</span>(<span class="code-variable">x</span>)
-        <span class="code-keyword">return</span> <span class="code-variable">self</span>.<span class="code-variable">drop</span>(<span class="code-variable">x</span>)</code></pre>
+<div class="reveal added-block" style="background-color: #07020a; border: 1px solid rgba(255, 90, 160, 0.12); border-radius: 8px; padding: 24px; font-family: 'IBM Plex Mono', monospace; color: #f5d9e8; margin: 20px 0;">
+  <h3 class="subsection-title" style="font-family: 'Space Grotesk', sans-serif; color: #ff3d8a; font-weight: 600; margin: 0 0 12px 0; font-size: 1.3rem;">Position-wise, in code</h3>
+  <p style="margin: 0 0 16px 0; line-height: 1.6; color: #f5d9e8;">Every position runs through the identical MLP independently — no mixing across positions happens here, that already happened in attention. The expand-then-contract shape gives the network room to compute something more elaborate than a single linear pass would allow before compressing back down to the model's working width.</p>
+  <pre class="code-block" style="background-color: #0c0310; border: 1px solid rgba(255, 90, 160, 0.2); border-radius: 6px; padding: 16px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.5; color: #f5d9e8; margin: 0;"><code>
+<span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">class</span> <span class="code-class" style="color: #ff8c42;">FeedForward</span>(<span class="code-class" style="color: #ff8c42;">nn.Module</span>):
+    <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">def</span> <span class="code-function" style="color: #5eff9e;">__init__</span>(<span class="code-variable" style="color: #f5d9e8;">self</span>, <span class="code-variable" style="color: #f5d9e8;">cfg</span>):
+        <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">super</span>().<span class="code-function" style="color: #5eff9e;">__init__</span>()
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">mlp_up_proj</span> = <span class="code-class" style="color: #ff8c42;">nn.Linear</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">d_model</span>, <span class="code-number" style="color: #ff5252;">4</span> * <span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">d_model</span>, bias=<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">use_bias</span>)
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">activation</span> = <span class="code-class" style="color: #ff8c42;">nn.GELU</span>()
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">mlp_down_proj</span> = <span class="code-class" style="color: #ff8c42;">nn.Linear</span>(<span class="code-number" style="color: #ff5252;">4</span> * <span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">d_model</span>, <span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">d_model</span>, bias=<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">use_bias</span>)
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">drop</span> = <span class="code-class" style="color: #ff8c42;">nn.Dropout</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">drop_prob</span>)
+    <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">def</span> <span class="code-function" style="color: #5eff9e;">forward</span>(<span class="code-variable" style="color: #f5d9e8;">self</span>, <span class="code-variable" style="color: #f5d9e8;">x</span>):
+        <span class="code-variable" style="color: #f5d9e8;">x</span> = <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">mlp_up_proj</span>(<span class="code-variable" style="color: #f5d9e8;">x</span>)
+        <span class="code-variable" style="color: #f5d9e8;">x</span> = <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">activation</span>(<span class="code-variable" style="color: #f5d9e8;">x</span>)
+        <span class="code-variable" style="color: #f5d9e8;">x</span> = <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">mlp_down_proj</span>(<span class="code-variable" style="color: #f5d9e8;">x</span>)
+        <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">return</span> <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">drop</span>(<span class="code-variable" style="color: #f5d9e8;">x</span>)</code></pre>
 </div>
+
+
   </div>
 </section>
 
 
 
-<!-- L04 PIPELINE -->
+<!-- L07 Decoder block -->
 <section class="section" id="l04" data-layer="4" data-layer-label="Decoder Pipeline" style="background:var(--bg3)">
   <div class="section-inner">
     <div class="reveal">
@@ -2579,296 +2648,210 @@ we use 2 different methods to generate embeddings one to capture the position.
       <p class="math-note">Repeated for ℓ = 1 … L, then the final normalized state is projected onto the vocabulary.</p>
     </div>
     <div class="reveal added-block">
-      <h3 class="subsection-title">The forward pass, end to end</h3>
-      <p>GPT — Generative Pretrained Transformer — is the specific decoder-only recipe this walkthrough builds toward: pretrained on a broad corpus, then optionally fine-tuned for narrower tasks. There are hundreds of transformer variants pieced together from different choices at every stage, and the engineering keeps getting re-optimized with every new generation of models — but the shape of the forward pass stays remarkably consistent.</p>
-      <p>Zoomed all the way out: text is broken into tokens, each token becomes a vector via the embedding table, position information is added, and the whole sequence is pushed through N identical decoder blocks — an attention sub-layer that lets vectors exchange context, followed by a feed-forward sub-layer that updates each position independently. A final projection turns the last position's vector into a probability distribution over the entire vocabulary, and the next token is sampled from it, appended, and the whole process repeats.</p>
-      <p>Every one of these operations, underneath the abstractions, is matrix multiplication against tunable weight matrices — nothing more exotic than that. GPT-3's 175 billion parameters, for instance, are organized into tens of thousands of individual weight matrices, all falling into a small number of structural categories that repeat identically at every layer.</p>
+      <h3 class="subsection-title">The forward pass</h3>
+      <p>GPT — Generative Pretrained Transformer — is the specific decoder-only recipe this walkthrough builds towards. 
+        There are several different types of transformer varaints.
+       </p>
+
+       <li>
+        layer normalization
+       </li>
+       <li>
+        attention block 
+       </li>
+       <li>
+        normalization
+       </li>
+       <li>
+        feed forward layer
+       </li>
+       <li>
+        norm  and gets added to residual stream + repeat
+       </li>
     </div>
-    <div class="reveal added-block">
-  <h3 class="subsection-title">Assembling the decoder block</h3>
-  <pre class="code-block"><code><span class="code-keyword">class</span> <span class="code-class">DecoderBlock</span>(<span class="code-class">nn.Module</span>):
-    <span class="code-comment">"""One pre-norm attention sub-layer + one pre-norm feed-forward sub-layer,
+    <div class="reveal added-block" style="background-color: #07020a; border: 1px solid rgba(255, 90, 160, 0.12); border-radius: 8px; padding: 24px; font-family: 'IBM Plex Mono', monospace; color: #f5d9e8; margin: 20px 0;">
+  <h3 class="subsection-title" style="font-family: 'Space Grotesk', sans-serif; color: #ff3d8a; font-weight: 600; margin: 0 0 12px 0; font-size: 1.3rem;">Assembling the decoder block</h3>
+  <pre class="code-block" style="background-color: #0c0310; border: 1px solid rgba(255, 90, 160, 0.2); border-radius: 6px; padding: 16px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.5; color: #f5d9e8; margin: 0;"><code>
+<span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">class</span> <span class="code-class" style="color: #ff8c42;">DecoderBlock</span>(<span class="code-class" style="color: #ff8c42;">nn.Module</span>):
+    <span class="code-comment" style="color: #b0a0b0; font-style: italic;">"""One pre-norm attention sub-layer + one pre-norm feed-forward sub-layer,
     each wrapped in its own residual connection."""</span>
-    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-variable">self</span>, <span class="code-variable">cfg</span>):
-        <span class="code-keyword">super</span>().<span class="code-function">__init__</span>()
-        <span class="code-variable">self</span>.<span class="code-variable">pre_attn_norm</span> = <span class="code-class">LayerNorm</span>(<span class="code-variable">cfg</span>.<span class="code-variable">d_model</span>, <span class="code-variable">cfg</span>.<span class="code-variable">use_bias</span>)
-        <span class="code-variable">self</span>.<span class="code-variable">attn</span> = <span class="code-class">MultiHeadSelfAttention</span>(<span class="code-variable">cfg</span>)
-        <span class="code-variable">self</span>.<span class="code-variable">pre_mlp_norm</span> = <span class="code-class">LayerNorm</span>(<span class="code-variable">cfg</span>.<span class="code-variable">d_model</span>, <span class="code-variable">cfg</span>.<span class="code-variable">use_bias</span>)
-        <span class="code-variable">self</span>.<span class="code-variable">mlp</span> = <span class="code-class">FeedForward</span>(<span class="code-variable">cfg</span>)
-    <span class="code-keyword">def</span> <span class="code-function">forward</span>(<span class="code-variable">self</span>, <span class="code-variable">x</span>):
-        <span class="code-variable">x</span> = <span class="code-variable">x</span> + <span class="code-variable">self</span>.<span class="code-variable">attn</span>(<span class="code-variable">self</span>.<span class="code-variable">pre_attn_norm</span>(<span class="code-variable">x</span>))   <span class="code-comment"># attention sub-layer, residual add</span>
-        <span class="code-variable">x</span> = <span class="code-variable">x</span> + <span class="code-variable">self</span>.<span class="code-variable">mlp</span>(<span class="code-variable">self</span>.<span class="code-variable">pre_mlp_norm</span>(<span class="code-variable">x</span>))      <span class="code-comment"># feed-forward sub-layer, residual add</span>
-        <span class="code-keyword">return</span> <span class="code-variable">x</span></code></pre>
+    <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">def</span> <span class="code-function" style="color: #5eff9e;">__init__</span>(<span class="code-variable" style="color: #f5d9e8;">self</span>, <span class="code-variable" style="color: #f5d9e8;">cfg</span>):
+        <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">super</span>().<span class="code-function" style="color: #5eff9e;">__init__</span>()
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">pre_attn_norm</span> = <span class="code-class" style="color: #ff8c42;">LayerNorm</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">d_model</span>, <span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">use_bias</span>)
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">attn</span> = <span class="code-class" style="color: #ff8c42;">MultiHeadSelfAttention</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>)
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">pre_mlp_norm</span> = <span class="code-class" style="color: #ff8c42;">LayerNorm</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">d_model</span>, <span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">use_bias</span>)
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">mlp</span> = <span class="code-class" style="color: #ff8c42;">FeedForward</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>)
+    <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">def</span> <span class="code-function" style="color: #5eff9e;">forward</span>(<span class="code-variable" style="color: #f5d9e8;">self</span>, <span class="code-variable" style="color: #f5d9e8;">x</span>):
+        <span class="code-variable" style="color: #f5d9e8;">x</span> = <span class="code-variable" style="color: #f5d9e8;">x</span> + <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">attn</span>(<span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">pre_attn_norm</span>(<span class="code-variable" style="color: #f5d9e8;">x</span>))   <span class="code-comment" style="color: #b0a0b0; font-style: italic;"># attention sub-layer, residual add</span>
+        <span class="code-variable" style="color: #f5d9e8;">x</span> = <span class="code-variable" style="color: #f5d9e8;">x</span> + <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">mlp</span>(<span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">pre_mlp_norm</span>(<span class="code-variable" style="color: #f5d9e8;">x</span>))      <span class="code-comment" style="color: #b0a0b0; font-style: italic;"># feed-forward sub-layer, residual add</span>
+        <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">return</span> <span class="code-variable" style="color: #f5d9e8;">x</span></code></pre>
 </div>
 
 
-<div class="reveal added-block">
-  <h3 class="subsection-title">The full model</h3>
-  <p>Everything upstream — token embedding, position embedding, the stack of decoder blocks, and the tied unembedding head — is assembled once in <code>__init__</code>:</p>
-  <pre class="code-block"><code><span class="code-keyword">class</span> <span class="code-class">ForgeTransformer</span>(<span class="code-class">nn.Module</span>):
-    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-variable">self</span>, <span class="code-variable">cfg</span>):
-        <span class="code-keyword">super</span>().<span class="code-function">__init__</span>()
-        <span class="code-variable">self</span>.<span class="code-variable">cfg</span> = <span class="code-variable">cfg</span>
-        <span class="code-variable">self</span>.<span class="code-variable">backbone</span> = <span class="code-class">nn.ModuleDict</span>(<span class="code-function">dict</span>(
-            token_embedding=<span class="code-class">nn.Embedding</span>(<span class="code-variable">cfg</span>.<span class="code-variable">vocab_size</span>, <span class="code-variable">cfg</span>.<span class="code-variable">d_model</span>),
-            position_embedding=<span class="code-class">nn.Embedding</span>(<span class="code-variable">cfg</span>.<span class="code-variable">max_seq_len</span>, <span class="code-variable">cfg</span>.<span class="code-variable">d_model</span>),
-            embed_dropout=<span class="code-class">nn.Dropout</span>(<span class="code-variable">cfg</span>.<span class="code-variable">drop_prob</span>),
-            layers=<span class="code-class">nn.ModuleList</span>([<span class="code-class">DecoderBlock</span>(<span class="code-variable">cfg</span>) <span class="code-keyword">for</span> <span class="code-variable">_</span> <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-variable">cfg</span>.<span class="code-variable">num_layers</span>)]),
-            final_norm=<span class="code-class">LayerNorm</span>(<span class="code-variable">cfg</span>.<span class="code-variable">d_model</span>, <span class="code-variable">cfg</span>.<span class="code-variable">use_bias</span>),
+<div class="reveal added-block" style="background-color: #07020a; border: 1px solid rgba(255, 90, 160, 0.12); border-radius: 8px; padding: 24px; font-family: 'IBM Plex Mono', monospace; color: #f5d9e8; margin: 20px 0;">
+  <h3 class="subsection-title" style="font-family: 'Space Grotesk', sans-serif; color: #ff3d8a; font-weight: 600; margin: 0 0 12px 0; font-size: 1.3rem;">The full model</h3>
+  <p style="margin: 0 0 16px 0; line-height: 1.6; color: #f5d9e8;">Everything upstream — token embedding, position embedding, the stack of decoder blocks, and the tied unembedding head — is assembled once in <code>__init__</code>:</p>
+  <pre class="code-block" style="background-color: #0c0310; border: 1px solid rgba(255, 90, 160, 0.2); border-radius: 6px; padding: 16px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.5; color: #f5d9e8; margin: 0;"><code>
+<span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">class</span> <span class="code-class" style="color: #ff8c42;">ForgeTransformer</span>(<span class="code-class" style="color: #ff8c42;">nn.Module</span>):
+    <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">def</span> <span class="code-function" style="color: #5eff9e;">__init__</span>(<span class="code-variable" style="color: #f5d9e8;">self</span>, <span class="code-variable" style="color: #f5d9e8;">cfg</span>):
+        <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">super</span>().<span class="code-function" style="color: #5eff9e;">__init__</span>()
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">cfg</span> = <span class="code-variable" style="color: #f5d9e8;">cfg</span>
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">backbone</span> = <span class="code-class" style="color: #ff8c42;">nn.ModuleDict</span>(<span class="code-function" style="color: #5eff9e;">dict</span>(
+            token_embedding=<span class="code-class" style="color: #ff8c42;">nn.Embedding</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">vocab_size</span>, <span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">d_model</span>),
+            position_embedding=<span class="code-class" style="color: #ff8c42;">nn.Embedding</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">max_seq_len</span>, <span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">d_model</span>),
+            embed_dropout=<span class="code-class" style="color: #ff8c42;">nn.Dropout</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">drop_prob</span>),
+            layers=<span class="code-class" style="color: #ff8c42;">nn.ModuleList</span>([<span class="code-class" style="color: #ff8c42;">DecoderBlock</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>) <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">for</span> <span class="code-variable" style="color: #f5d9e8;">_</span> <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">in</span> <span class="code-function" style="color: #5eff9e;">range</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">num_layers</span>)]),
+            final_norm=<span class="code-class" style="color: #ff8c42;">LayerNorm</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">d_model</span>, <span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">use_bias</span>),
         ))
-        <span class="code-variable">self</span>.<span class="code-variable">lm_head</span> = <span class="code-class">nn.Linear</span>(<span class="code-variable">cfg</span>.<span class="code-variable">d_model</span>, <span class="code-variable">cfg</span>.<span class="code-variable">vocab_size</span>, bias=<span class="code-keyword">False</span>)
-        <span class="code-comment"># weight tying: the unembedding is literally the embedding matrix, transposed</span>
-        <span class="code-variable">self</span>.<span class="code-variable">backbone</span>.<span class="code-variable">token_embedding</span>.<span class="code-variable">weight</span> = <span class="code-variable">self</span>.<span class="code-variable">lm_head</span>.<span class="code-variable">weight</span></code></pre>
-  <p>And <code>forward</code> runs the actual pass — embed, loop through every decoder block, normalize, then either compute a training loss or return only the last position's logits for inference:</p>
-  <pre class="code-block"><code>    <span class="code-keyword">def</span> <span class="code-function">forward</span>(<span class="code-variable">self</span>, <span class="code-variable">token_ids</span>, <span class="code-variable">targets</span>=<span class="code-keyword">None</span>):
-        <span class="code-variable">batch</span>, <span class="code-variable">seq_len</span> = <span class="code-variable">token_ids</span>.<span class="code-function">size</span>()
-        <span class="code-variable">positions</span> = <span class="code-function">torch.arange</span>(<span class="code-variable">seq_len</span>, device=<span class="code-variable">token_ids</span>.<span class="code-variable">device</span>)
-        <span class="code-variable">tok_vec</span> = <span class="code-variable">self</span>.<span class="code-variable">backbone</span>.<span class="code-variable">token_embedding</span>(<span class="code-variable">token_ids</span>)
-        <span class="code-variable">pos_vec</span> = <span class="code-variable">self</span>.<span class="code-variable">backbone</span>.<span class="code-variable">position_embedding</span>(<span class="code-variable">positions</span>)
-        <span class="code-variable">x</span> = <span class="code-variable">self</span>.<span class="code-variable">backbone</span>.<span class="code-variable">embed_dropout</span>(<span class="code-variable">tok_vec</span> + <span class="code-variable">pos_vec</span>)
-        <span class="code-keyword">for</span> <span class="code-variable">layer</span> <span class="code-keyword">in</span> <span class="code-variable">self</span>.<span class="code-variable">backbone</span>.<span class="code-variable">layers</span>:
-            <span class="code-variable">x</span> = <span class="code-variable">layer</span>(<span class="code-variable">x</span>)
-        <span class="code-variable">x</span> = <span class="code-variable">self</span>.<span class="code-variable">backbone</span>.<span class="code-variable">final_norm</span>(<span class="code-variable">x</span>)
-        <span class="code-keyword">if</span> <span class="code-variable">targets</span> <span class="code-keyword">is</span> <span class="code-keyword">not</span> <span class="code-keyword">None</span>:
-            <span class="code-variable">logits</span> = <span class="code-variable">self</span>.<span class="code-variable">lm_head</span>(<span class="code-variable">x</span>)
-            <span class="code-variable">loss</span> = <span class="code-function">F.cross_entropy</span>(<span class="code-variable">logits</span>.<span class="code-function">view</span>(-<span class="code-number">1</span>, <span class="code-variable">logits</span>.<span class="code-function">size</span>(-<span class="code-number">1</span>)), <span class="code-variable">targets</span>.<span class="code-function">view</span>(-<span class="code-number">1</span>), ignore_index=-<span class="code-number">1</span>)
-        <span class="code-keyword">else</span>:
-            <span class="code-comment"># inference: only the last position's logits are actually needed</span>
-            <span class="code-variable">logits</span> = <span class="code-variable">self</span>.<span class="code-variable">lm_head</span>(<span class="code-variable">x</span>[:, [-<span class="code-number">1</span>], :])
-            <span class="code-variable">loss</span> = <span class="code-keyword">None</span>
-        <span class="code-keyword">return</span> <span class="code-variable">logits</span>, <span class="code-variable">loss</span></code></pre>
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">lm_head</span> = <span class="code-class" style="color: #ff8c42;">nn.Linear</span>(<span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">d_model</span>, <span class="code-variable" style="color: #f5d9e8;">cfg</span>.<span class="code-variable" style="color: #f5d9e8;">vocab_size</span>, bias=<span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">False</span>)
+        <span class="code-comment" style="color: #b0a0b0; font-style: italic;"># weight tying: the unembedding is literally the embedding matrix, transposed</span>
+        <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">backbone</span>.<span class="code-variable" style="color: #f5d9e8;">token_embedding</span>.<span class="code-variable" style="color: #f5d9e8;">weight</span> = <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">lm_head</span>.<span class="code-variable" style="color: #f5d9e8;">weight</span></code></pre>
+  <p style="margin: 0 0 16px 0; line-height: 1.6; color: #f5d9e8;">And <code>forward</code> runs the actual pass — embed, loop through every decoder block, normalize, then either compute a training loss or return only the last position's logits for inference:</p>
+  <pre class="code-block" style="background-color: #0c0310; border: 1px solid rgba(255, 90, 160, 0.2); border-radius: 6px; padding: 16px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.5; color: #f5d9e8; margin: 0;"><code>
+    <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">def</span> <span class="code-function" style="color: #5eff9e;">forward</span>(<span class="code-variable" style="color: #f5d9e8;">self</span>, <span class="code-variable" style="color: #f5d9e8;">token_ids</span>, <span class="code-variable" style="color: #f5d9e8;">targets</span>=<span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">None</span>):
+        <span class="code-variable" style="color: #f5d9e8;">batch</span>, <span class="code-variable" style="color: #f5d9e8;">seq_len</span> = <span class="code-variable" style="color: #f5d9e8;">token_ids</span>.<span class="code-function" style="color: #5eff9e;">size</span>()
+        <span class="code-variable" style="color: #f5d9e8;">positions</span> = <span class="code-function" style="color: #5eff9e;">torch.arange</span>(<span class="code-variable" style="color: #f5d9e8;">seq_len</span>, device=<span class="code-variable" style="color: #f5d9e8;">token_ids</span>.<span class="code-variable" style="color: #f5d9e8;">device</span>)
+        <span class="code-variable" style="color: #f5d9e8;">tok_vec</span> = <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">backbone</span>.<span class="code-variable" style="color: #f5d9e8;">token_embedding</span>(<span class="code-variable" style="color: #f5d9e8;">token_ids</span>)
+        <span class="code-variable" style="color: #f5d9e8;">pos_vec</span> = <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">backbone</span>.<span class="code-variable" style="color: #f5d9e8;">position_embedding</span>(<span class="code-variable" style="color: #f5d9e8;">positions</span>)
+        <span class="code-variable" style="color: #f5d9e8;">x</span> = <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">backbone</span>.<span class="code-variable" style="color: #f5d9e8;">embed_dropout</span>(<span class="code-variable" style="color: #f5d9e8;">tok_vec</span> + <span class="code-variable" style="color: #f5d9e8;">pos_vec</span>)
+        <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">for</span> <span class="code-variable" style="color: #f5d9e8;">layer</span> <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">in</span> <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">backbone</span>.<span class="code-variable" style="color: #f5d9e8;">layers</span>:
+            <span class="code-variable" style="color: #f5d9e8;">x</span> = <span class="code-variable" style="color: #f5d9e8;">layer</span>(<span class="code-variable" style="color: #f5d9e8;">x</span>)
+        <span class="code-variable" style="color: #f5d9e8;">x</span> = <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">backbone</span>.<span class="code-variable" style="color: #f5d9e8;">final_norm</span>(<span class="code-variable" style="color: #f5d9e8;">x</span>)
+        <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">if</span> <span class="code-variable" style="color: #f5d9e8;">targets</span> <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">is</span> <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">not</span> <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">None</span>:
+            <span class="code-variable" style="color: #f5d9e8;">logits</span> = <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">lm_head</span>(<span class="code-variable" style="color: #f5d9e8;">x</span>)
+            <span class="code-variable" style="color: #f5d9e8;">loss</span> = <span class="code-function" style="color: #5eff9e;">F.cross_entropy</span>(<span class="code-variable" style="color: #f5d9e8;">logits</span>.<span class="code-function" style="color: #5eff9e;">view</span>(-<span class="code-number" style="color: #ff5252;">1</span>, <span class="code-variable" style="color: #f5d9e8;">logits</span>.<span class="code-function" style="color: #5eff9e;">size</span>(-<span class="code-number" style="color: #ff5252;">1</span>)), <span class="code-variable" style="color: #f5d9e8;">targets</span>.<span class="code-function" style="color: #5eff9e;">view</span>(-<span class="code-number" style="color: #ff5252;">1</span>), ignore_index=-<span class="code-number" style="color: #ff5252;">1</span>)
+        <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">else</span>:
+            <span class="code-comment" style="color: #b0a0b0; font-style: italic;"># inference: only the last position's logits are actually needed</span>
+            <span class="code-variable" style="color: #f5d9e8;">logits</span> = <span class="code-variable" style="color: #f5d9e8;">self</span>.<span class="code-variable" style="color: #f5d9e8;">lm_head</span>(<span class="code-variable" style="color: #f5d9e8;">x</span>[:, [-<span class="code-number" style="color: #ff5252;">1</span>], :])
+            <span class="code-variable" style="color: #f5d9e8;">loss</span> = <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">None</span>
+        <span class="code-keyword" style="color: #ff3d8a; font-weight: bold;">return</span> <span class="code-variable" style="color: #f5d9e8;">logits</span>, <span class="code-variable" style="color: #f5d9e8;">loss</span></code></pre>
 </div>
-<div class="reveal added-block">
-  <h3 class="subsection-title">Sampling the next token</h3>
-  <p>The raw, unnormalized scores coming out of the unembedding matrix are called <strong>logits</strong>. Softmax turns them into a valid probability distribution: exponentiate every value, then divide by the sum, so everything lands between 0 and 1 and the whole set sums to 1. A <strong>temperature</strong> term reshapes the distribution before sampling — at temperature 0 the model always takes the single most likely token (deterministic, and often a little dull); raising it flattens the distribution and gives lower-probability tokens more of a chance, at the cost of coherence if pushed too far.</p>
-  <pre class="code-block"><code><span class="code-keyword">@torch.no_grad</span>()
-<span class="code-keyword">def</span> <span class="code-function">generate</span>(<span class="code-variable">self</span>, <span class="code-variable">token_ids</span>, <span class="code-variable">max_new_tokens</span>, <span class="code-variable">temperature</span>=<span class="code-number">1.0</span>, <span class="code-variable">top_k</span>=<span class="code-keyword">None</span>):
-    <span class="code-keyword">for</span> <span class="code-variable">_</span> <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-variable">max_new_tokens</span>):
-        <span class="code-comment"># crop context to the model's max window if it's grown too long</span>
-        <span class="code-variable">context</span> = <span class="code-variable">token_ids</span> <span class="code-keyword">if</span> <span class="code-variable">token_ids</span>.<span class="code-function">size</span>(<span class="code-number">1</span>) &lt;= <span class="code-variable">self</span>.<span class="code-variable">cfg</span>.<span class="code-variable">max_seq_len</span> <span class="code-keyword">else</span> <span class="code-variable">token_ids</span>[:, -<span class="code-variable">self</span>.<span class="code-variable">cfg</span>.<span class="code-variable">max_seq_len</span>:]
-        <span class="code-variable">logits</span>, <span class="code-variable">_</span> = <span class="code-variable">self</span>(<span class="code-variable">context</span>)
-        <span class="code-variable">logits</span> = <span class="code-variable">logits</span>[:, -<span class="code-number">1</span>, :] / <span class="code-variable">temperature</span>          <span class="code-comment"># scale by temperature</span>
-        <span class="code-keyword">if</span> <span class="code-variable">top_k</span> <span class="code-keyword">is</span> <span class="code-keyword">not</span> <span class="code-keyword">None</span>:                             <span class="code-comment"># optionally restrict to top-k candidates</span>
-            <span class="code-variable">values</span>, <span class="code-variable">_</span> = <span class="code-function">torch.topk</span>(<span class="code-variable">logits</span>, <span class="code-function">min</span>(<span class="code-variable">top_k</span>, <span class="code-variable">logits</span>.<span class="code-function">size</span>(-<span class="code-number">1</span>)))
-            <span class="code-variable">logits</span>[<span class="code-variable">logits</span> &lt; <span class="code-variable">values</span>[:, [-<span class="code-number">1</span>]]] = -<span class="code-function">float</span>(<span class="code-string">"inf"</span>)
-        <span class="code-variable">probs</span> = <span class="code-function">F.softmax</span>(<span class="code-variable">logits</span>, dim=-<span class="code-number">1</span>)
-        <span class="code-variable">next_id</span> = <span class="code-function">torch.multinomial</span>(<span class="code-variable">probs</span>, num_samples=<span class="code-number">1</span>)  <span class="code-comment"># sample, don't just argmax</span>
-        <span class="code-variable">token_ids</span> = <span class="code-function">torch.cat</span>((<span class="code-variable">token_ids</span>, <span class="code-variable">next_id</span>), dim=<span class="code-number">1</span>)
-    <span class="code-keyword">return</span> <span class="code-variable">token_ids</span></code></pre>
-</div>
+
+
+
+
   </div>
 </section>
 
-<!-- L07 LAYER ACTIVATIONS -->
-<section class="section" id="l07" data-layer="7" data-layer-label="Layer Activations" style="background:var(--bg2)">
+
+
+<!-- L08 UNEMBEDDING LAYER -->
+  <section class="section" id="l08" data-layer="1" data-layer-label="Token Unembedding">
   <div class="section-inner">
+
+
     <div class="reveal">
-      <p class="section-label">Layer 07 · Depth-Wise Probing</p>
-      <h2 class="section-title">ACTIVATION <span>HEAT ACROSS DEPTH</span></h2>
-      <p class="section-desc">Probing hidden states at every layer reveals a rough division of labor — early layers track syntax and local structure, middle layers carry induction and copying behavior, late layers sharpen toward the final vocabulary distribution.</p>
+      <p class="section-label">Layer 01 · Output Representation</p>
+      <h2 class="section-title">UNEMBEDDING <span>TOKENS</span></h2>
     </div>
-    <div class="canvas-frame reveal">
-      <span class="frame-tag">x: LAYER DEPTH</span>
-      <span class="frame-tag right">y: TOKEN POSITION</span>
-      <div class="corner-dec bl"></div><div class="corner-dec br"></div>
-      <canvas id="actCanvas" width="1240" height="360"></canvas>
-    </div>
-    <div class="math-block reveal">
-      <div class="math-line">ŷ = argmax( W<sub>probe</sub> · h<sub>ℓ</sub> + b<sub>probe</sub> )</div>
-      <p class="math-note">A linear probe trained on the frozen hidden state at layer ℓ — its accuracy is a rough proxy for what that depth has learned.</p>
-    </div>
+
     <div class="reveal added-block">
-      <h3 class="subsection-title">Reading the depth axis</h3>
-      <p>Across the L stacked decoder blocks, the hidden state h<sub>ℓ</sub> is read from and rewritten at every layer ℓ = 1 … L. Probing those intermediate states is how the rough division of labor above gets discovered in the first place — and it's exactly why interpretability work tends to treat depth itself as an axis worth visualizing, not just the final output.</p>
-      <p>A minimal linear probe makes this concrete — freeze the backbone entirely, and train only a small classifier on top of the hidden state at a chosen layer:</p>
-      <pre class="code-block"><code># Linear probe: the backbone is frozen, only `probe` receives gradients
-hidden_states = model.get_hidden_state(token_ids, layer=target_layer)   # (batch, seq_len, d_model)
-probe = nn.Linear(d_model, num_classes)
-logits = probe(hidden_states.detach())                                   # .detach() blocks backbone gradients
-loss = F.cross_entropy(logits.view(-1, num_classes), labels.view(-1))
-# repeat across every layer — probe accuracy vs. depth is the plot above</code></pre>
+      <h3 class="subsection-title">From hidden state to token: the unembedding pipeline</h3>
+      <p>At the final layer of the transformer, each position in the sequence holds a hidden state vector \(\mathbf{h} \in \mathbb{R}^{d_{\text{model}}}\). For autoregressive generation, the hidden state at the <em>last</em> position is used to predict the next token. The unembedding matrix \(W_U \in \mathbb{R}^{|\mathcal{V}| \times d_{\text{model}}}\) maps this hidden state to a score for every token in the vocabulary:</p>
+      \[
+      \mathbf{z} = W_U \, \mathbf{h} \qquad \text{(logits)}
+      \]
+      <p>Applying the softmax function yields a proper probability distribution:</p>
+      \[
+      P(t_i \mid \text{context}) = \frac{\exp(z_i / \tau)}{\sum_{j=1}^{|\mathcal{V}|} \exp(z_j / \tau)}
+      \]
+      <p>where \(\tau\) is the temperature parameter — lower values sharpen the distribution (more deterministic), higher values flatten it (more exploratory). At \(\tau=1\) this is the standard softmax. The model then either selects the token with the highest probability (greedy decoding) or samples from the distribution. Finally, the chosen token ID is decoded back to text by reversing the BPE merge rules — recursively expanding merged tokens until only raw bytes remain, then decoding those bytes via UTF-8.</p>
+      <p>The interactive tool below demonstrates this entire pipeline for a single position, using the same 4‑dimensional toy embedding space and small vocabulary introduced in the BPE encoding example above.</p>
+    </div>
+
+    <!-- Unembedding interactive visualization -->
+    <div class="bpe-container">
+      <p>The tool below walks through the unembedding process step by step. We start with a hidden state vector \(\mathbf{h}\) (the output of the transformer for the last position) and trace it all the way back to readable text. Click <b>Next Step</b> to begin.</p>
+      <br>
+      <h2 class="bpe-heading">Hidden State → Logits → Probability → Token → Text</h2>
+      <canvas id="unembed-canvas" width="740" height="560"></canvas>
+      <div class="bpe-step-desc" id="unembed-description">Click <b>Next Step</b> to begin the unembedding journey</div>
+      <div class="bpe-controls">
+        <button class="bpe-btn" id="unembed-next-btn">Next Step</button>
+        <button class="bpe-btn" id="unembed-reset-btn">Reset</button>
+      </div>
+      <div class="bpe-info">
+        <p><strong>Hidden state h:</strong> \([0.50,\; 0.60,\; 0.40,\; 0.30]\) &nbsp;(output from final transformer layer, last position)</p>
+        <p><strong>Unembedding matrix \(W_U\):</strong> \(12 \times 4\) &nbsp;·&nbsp; one row per token in our toy vocabulary</p>
+        <p><strong>Temperature \(\tau = 1.0\)</strong> for the softmax (standard scaling)</p>
+        <p><strong>Predicted token:</strong> 257 → expands to <em>"run"</em> after BPE decoding</p>
+      </div>
+    </div>
+
+    <div class="reveal added-block">
+      <h3 class="subsection-title">Mathematical formulation of unembedding &amp; decoding</h3>
+      <h4>Step 1 — Logit computation</h4>
+      <p>Given hidden state \(\mathbf{h} \in \mathbb{R}^{d}\) and unembedding matrix \(W_U \in \mathbb{R}^{|\mathcal{V}|\times d}\):</p>
+      \[
+      z_i = \sum_{k=1}^{d} (W_U)_{i,k} \cdot h_k \quad \text{for } i = 1,\dots,|\mathcal{V}|
+      \]
+      <p>Equivalently, \(\mathbf{z} = W_U \mathbf{h}\). Each logit \(z_i\) is the dot product between the hidden state and the learned vector for token \(i\).</p>
+
+      <h4>Step 2 — Softmax with temperature</h4>
+      \[
+      P(t_i) = \frac{\exp(z_i / \tau)}{\sum_{j=1}^{|\mathcal{V}|} \exp(z_j / \tau)}
+      \]
+      <p>As \(\tau \to 0\), the distribution approaches a one-hot encoding of the argmax token (greedy). As \(\tau \to \infty\), it approaches a uniform distribution.</p>
+
+      <h4>Step 3 — Token selection</h4>
+      \[
+      t^* = \arg\max_i P(t_i) \quad \text{(greedy)} \quad \text{or} \quad t^* \sim P(t) \quad \text{(sampling)}
+      \]
+
+      <h4>Step 4 — BPE decoding</h4>
+      <p>Given token \(t^*\), recursively apply the inverse of the merge list \(\mathcal{M}\):</p>
+      <ol class="algo-steps">
+        <li>If \(t^* \leq 255\), it is a raw byte — emit the corresponding UTF-8 byte.</li>
+        <li>Otherwise, look up the merge rule \((p,q) \to t^*\) in \(\mathcal{M}\) and recursively decode \(p\) then \(q\).</li>
+        <li>Concatenate all emitted bytes and decode the UTF-8 byte stream to obtain the final string.</li>
+      </ol>
+      <p>This guarantees a lossless round-trip: <code>decode(encode(s)) = s</code> for any Unicode string \(s\).</p>
+    </div>
+
+    <div class="reveal added-block">
+      <h3 class="subsection-title">Weight tying: why \(W_U\) often equals \(W_E^\top\)</h3>
+      <p>In many transformer architectures (including GPT-2/3, LLaMA, and others), the unembedding matrix is not independently learned — instead, it's set to the transpose of the embedding matrix: \(W_U = W_E^\top\). This is called <strong>weight tying</strong>. The intuition is elegant: if the embedding for "run" is the vector that <em>represents</em> that token in the input space, then the same vector should serve as the <em>detector</em> for that token in the output space. The dot product \(\mathbf{h} \cdot \mathbf{e}_{\text{token}}\) measures how closely the hidden state aligns with that token's learned representation.</p>
+      <p>Weight tying reduces the parameter count by \(|\mathcal{V}| \times d_{\text{model}}\) (roughly 50,257 × 768 ≈ 38.6M parameters for a small GPT-style model) and has been shown to improve generalization, especially for rare tokens whose output embeddings would otherwise receive very little gradient signal during training.</p>
     </div>
   </div>
+
 </section>
-<!-- L08 ATTENTION ROUTING -->
-<section class="section" id="l08" data-layer="8" data-layer-label="Attention Routing">
-  <div class="section-inner">
-    <div class="reveal">
-      <p class="section-label">Layer 08 · Cross-Token Routing</p>
-      <h2 class="section-title">ATTENTION <span>ROUTING MAP</span></h2>
-      <p class="section-desc">Drawn as arcs over the token sequence, attention edges reveal recognizable circuits — induction heads copying from earlier repeats, previous-token heads, and broad heads that attend back to the sequence start.</p>
-    </div>
-    <div class="canvas-frame reveal">
-      <span class="frame-tag">SEQUENCE LENGTH = 24</span>
-      <span class="frame-tag right">4 HEADS OVERLAID</span>
-      <div class="corner-dec bl"></div><div class="corner-dec br"></div>
-      <canvas id="routeCanvas" width="1240" height="320"></canvas>
-    </div>
-    <div class="math-block reveal">
-      <div class="math-line">P(x<sub>t+1</sub>=B | …,A,B,…,A) &nbsp;≫&nbsp; P(x<sub>t+1</sub>=B | …,A)</div>
-      <p class="math-note">The induction signature: once "A → B" has appeared in context, a later A sharply raises the model's assigned probability for B.</p>
-    </div>
-    <div class="reveal added-block">
-      <h3 class="subsection-title">Building intuition with edge cases</h3>
-      <p>Before implementing a full GPT, it helps to reason through toy models built from nothing but attention — heavily inspired by Anthropic's original induction-heads write-up, which showed that specific attention heads, termed <strong>induction heads</strong>, can explain a surprising amount of in-context learning in small models, and that these heads only reliably develop once a model has at least two attention layers.</p>
-      <p><strong>Zero layers.</strong> Strip the attention blocks out entirely and what's left is just the embedding matrix W<sub>e</sub> and the unembedding matrix W<sub>u</sub> — a bigram model, predicting the next token from nothing but the current one. If any of this doesn't click yet, don't worry — the full recap lives back in the GPT dissection above.</p>
-      <p><strong>One layer.</strong> With a single attention layer, the model gains one step of "looking back." Given a current token C and some earlier token A, if the pattern "A … B C" has appeared before, the model can copy information from A forward to influence what follows C — even across intervening tokens.</p>
-      <p><strong>Two layers.</strong> Stacking a second attention-only layer is what enables the induction phenomenon by name: roughly, "if … A B … A, then predict B" — similar in spirit to how induction reasoning works, which is where the name comes from, though the mechanism is more subtle than that one-line summary suggests. It's exactly the kind of circuit an attention routing map like this one is built to surface: previous-token heads, induction heads copying from earlier repeats, and broader heads that simply attend back to the start of the sequence.</p>
-    </div>
-    <div class="reveal added-block">
-      <h3 class="subsection-title">Scoring induction heads</h3>
-      <p>One concrete way to find these heads: build a sequence where a random block of tokens repeats once, then check which heads attend from a token back to whatever followed that same token on its previous occurrence.</p>
-      <pre class="code-block"><code># attn_weights: (num_heads, seq_len, seq_len) for a sequence whose second half
-# repeats its first half token-for-token
-def induction_score(attn_weights, seq_len):
-    half = seq_len // 2
-    scores = []
-    for h in range(attn_weights.size(0)):
-        # does position i attend back to the token that followed its previous occurrence?
-        offset_diag = torch.diagonal(attn_weights[h], offset=-(half - 1))
-        scores.append(offset_diag.mean().item())
-    return scores   # one induction score per head — the routing map above plots the winners</code></pre>
-    </div>
-  </div>
-</section>
-<!-- MODEL CARD / SPECS -->
+
+
+<!-- L08 Model card -->
 <section class="section" id="specs" style="background:var(--bg3)">
   <div class="section-inner">
     <div class="reveal">
       <p class="section-label">Model Card</p>
-      <h2 class="section-title">FORGE-1 <span>SPECIFICATIONS</span></h2>
+      <h2 class="section-title">GPT-3 <span>SPECIFICATIONS</span></h2>
     </div>
     <div class="spec-grid reveal">
       <div class="spec-panel tilt-el">
         <div class="spec-panel-title">Architecture</div>
         <div class="spec-row"><span class="spec-key">TYPE</span><span class="spec-val accent-cyan">Decoder-Only Transformer</span></div>
-        <div class="spec-row"><span class="spec-key">PARAMETERS</span><span class="spec-val">70.6 B</span></div>
-        <div class="spec-row"><span class="spec-key">LAYERS</span><span class="spec-val accent-cyan">80</span></div>
-        <div class="spec-row"><span class="spec-key">ATTENTION HEADS</span><span class="spec-val">64 (8 KV groups)</span></div>
-        <div class="spec-row"><span class="spec-key">HIDDEN DIM</span><span class="spec-val">8,192</span></div>
-        <div class="spec-row"><span class="spec-key">FFN DIM</span><span class="spec-val">28,672</span></div>
-        <div class="spec-row"><span class="spec-key">POSITION SCHEME</span><span class="spec-val accent-amber">RoPE θ=500K</span></div>
-        <div class="spec-row"><span class="spec-key">VOCAB SIZE</span><span class="spec-val">128,256</span></div>
+        <div class="spec-row"><span class="spec-key">PARAMETERS</span><span class="spec-val">175.0 B</span></div>
+        <div class="spec-row"><span class="spec-key">LAYERS</span><span class="spec-val accent-cyan">96</span></div>
+        <div class="spec-row"><span class="spec-key">ATTENTION HEADS</span><span class="spec-val">96</span></div>
+        <div class="spec-row"><span class="spec-key">HIDDEN DIM</span><span class="spec-val">12,288</span></div>
+        <div class="spec-row"><span class="spec-key">FFN DIM</span><span class="spec-val">49,152</span></div>
+        <div class="spec-row"><span class="spec-key">POSITION SCHEME</span><span class="spec-val">Learned Absolute Positional Embeddings</span></div>
+        <div class="spec-row"><span class="spec-key">VOCAB SIZE</span><span class="spec-val">50,257</span></div>
       </div>
       <div class="spec-panel tilt-el">
-        <div class="spec-panel-title">Training & Inference</div>
-        <div class="spec-row"><span class="spec-key">TRAINING TOKENS</span><span class="spec-val accent-violet">15.0 T</span></div>
-        <div class="spec-row"><span class="spec-key">CONTEXT WINDOW</span><span class="spec-val">128 K</span></div>
-        <div class="spec-row"><span class="spec-key">PRECISION</span><span class="spec-val">BF16 / FP8 mix</span></div>
+        <div class="spec-panel-title">Training &amp; Inference</div>
+        <div class="spec-row"><span class="spec-key">TRAINING TOKENS</span><span class="spec-val accent-violet">300 B</span></div>
+        <div class="spec-row"><span class="spec-key">CONTEXT WINDOW</span><span class="spec-val">2,048</span></div>
+        <div class="spec-row"><span class="spec-key">PRECISION</span><span class="spec-val">FP16 mixed precision</span></div>
         <div class="spec-row"><span class="spec-key">OPTIMIZER</span><span class="spec-val">AdamW, cosine decay</span></div>
-        <div class="spec-row"><span class="spec-key">ATTENTION KERNEL</span><span class="spec-val accent-cyan">FlashAttention-3</span></div>
-        <div class="spec-row"><span class="spec-key">KV CACHE / SEQ</span><span class="spec-val">~5.2 GB @ 128K</span></div>
-        <div class="spec-row"><span class="spec-key">ALIGNMENT</span><span class="spec-val">SFT + RLHF + DPO</span></div>
-        <div class="spec-row"><span class="spec-key">TOTAL TRAIN FLOPs</span><span class="spec-val accent-amber">~6.3 × 10²⁴</span></div>
+        <div class="spec-row"><span class="spec-key">ATTENTION KERNEL</span><span class="spec-val">Custom CUDA (dense/sparse)</span></div>
+        <div class="spec-row"><span class="spec-key">KV CACHE / SEQ</span><span class="spec-val">~9.0 GB @ 2,048 (FP16)</span></div>
+        <div class="spec-row"><span class="spec-key">ALIGNMENT</span><span class="spec-val">None (zero/few‑shot pretrained)</span></div>
+        <div class="spec-row"><span class="spec-key">TOTAL TRAIN FLOPs</span><span class="spec-val accent-amber">~3.15 × 10²³</span></div>
       </div>
     </div>
     <div class="math-block reveal">
       <div class="math-line">C ≈ 6 · N · D</div>
-      <p class="math-note">N is parameter count, D is training tokens — the back-of-envelope compute estimate behind FORGE-1's ~6.3 × 10²⁴ total training FLOPs (70.6B params × 15.0T tokens × 6).</p>
-    </div>
-    <div class="reveal added-block">
-      <h3 class="subsection-title">Notation used throughout</h3>
-      <div class="table-scroll">
-      <table class="ref-table">
-        <thead><tr><th>Symbol</th><th>Meaning</th><th>Config name</th></tr></thead>
-        <tbody>
-          <tr><td>V</td><td>Vocabulary size</td><td>vocab_size</td></tr>
-          <tr><td>T_max</td><td>Maximum sequence length (block size)</td><td>max_seq_len</td></tr>
-          <tr><td>L</td><td>Number of decoder layers</td><td>num_layers</td></tr>
-          <tr><td>H</td><td>Number of attention heads</td><td>num_heads</td></tr>
-          <tr><td>d</td><td>Model (embedding) dimension</td><td>d_model</td></tr>
-          <tr><td>d_h</td><td>Per-head dimension, d / H</td><td>head_dim</td></tr>
-          <tr><td>p_drop</td><td>Dropout probability</td><td>drop_prob</td></tr>
-          <tr><td>bias</td><td>Whether Linear/LayerNorm layers carry a bias term</td><td>use_bias</td></tr>
-        </tbody>
-      </table>
-      </div>
-    </div>
-    <div class="reveal added-block">
-      <h3 class="subsection-title">A reference config, in code</h3>
-      <pre class="code-block"><code>@dataclass
-class ForgeConfig:
-    max_seq_len: int = 1024      # T_max — context window during training
-    vocab_size: int = 50304      # V — padded up from 50,257 for kernel efficiency
-    num_layers: int = 12         # L — decoder blocks stacked
-    num_heads: int = 12          # H — attention heads per block
-    d_model: int = 768           # d — model width
-    drop_prob: float = 0.0       # p_drop — 0 for pretraining, 0.1+ for finetuning
-    use_bias: bool = True        # bias — True mirrors GPT-2, False trains slightly faster</code></pre>
-      <p>(Shown at reference scale — FORGE-1 itself runs 80 layers, 64 heads, and a hidden dimension of 8,192, per the panel above.)</p>
-    </div>
-    <div class="reveal added-block">
-      <h3 class="subsection-title">Counting parameters</h3>
-      <pre class="code-block"><code>def count_parameters(self, exclude_position_embedding=True):
-    """Total parameter count. Position embeddings are excluded by convention;
-    token embeddings are kept, since weight tying means they double as the
-    final unembedding projection."""
-    total = sum(p.numel() for p in self.parameters())
-    if exclude_position_embedding:
-        total -= self.backbone.position_embedding.weight.numel()
-    return total</code></pre>
-    </div>
-    <div class="reveal added-block">
-      <h3 class="subsection-title">The training loop</h3>
-      <p>Training runs single-GPU or distributed via <code>torchrun</code>, using gradient accumulation to simulate a larger batch size than fits in memory, a cosine learning-rate schedule with linear warmup, and automatic mixed precision. Condensed from the original single-file training script — checkpointing, DDP setup, and logging trimmed for length but functionally unchanged.</p>
-      <p>Core config first — batching, optimizer hyperparameters, and the warmup/decay schedule bounds:</p>
-      <pre class="code-block"><code># -------------------- core training config --------------------
-out_dir = "checkpoints"
-eval_interval = 2000
-eval_iters = 200
-always_save_checkpoint = True
-# data / batching
-dataset_name = "openwebtext"
-grad_accum_steps = 5 * 8        # simulate a larger batch than fits in memory
-micro_batch_size = 12
-max_seq_len = 1024
-# optimizer
-peak_lr = 6e-4
-max_iters = 600_000
-weight_decay = 1e-1
-beta1, beta2 = 0.9, 0.95
-grad_clip = 1.0
-# cosine LR schedule with warmup
-warmup_iters = 2000
-lr_decay_iters = 600_000
-min_lr = 6e-5</code></pre>
-      <p>The schedule itself — linear warmup into a cosine decay, with a floor once decay finishes:</p>
-      <pre class="code-block"><code>def get_lr(step):
-    if step &lt; warmup_iters:                        # linear warmup
-        return peak_lr * (step + 1) / (warmup_iters + 1)
-    if step > lr_decay_iters:                       # floor after decay finishes
-        return min_lr
-    progress = (step - warmup_iters) / (lr_decay_iters - warmup_iters)
-    coeff = 0.5 * (1.0 + math.cos(math.pi * progress))    # cosine decay, 1 → 0
-    return min_lr + coeff * (peak_lr - min_lr)</code></pre>
-      <p>Parameter groups split so weight decay only ever applies to actual weight matrices — biases and norm parameters are excluded:</p>
-      <pre class="code-block"><code># -------------------- optimizer groups --------------------
-def configure_optimizer(model, weight_decay, lr, betas, device_type):
-    params = {n: p for n, p in model.named_parameters() if p.requires_grad}
-    # only matrices (2D+) get weight decay — biases and norms are excluded
-    decay = [p for p in params.values() if p.dim() >= 2]
-    no_decay = [p for p in params.values() if p.dim() < 2]
-    groups = [
-        {"params": decay, "weight_decay": weight_decay},
-        {"params": no_decay, "weight_decay": 0.0},
-    ]
-    use_fused = device_type == "cuda"
-    return torch.optim.AdamW(groups, lr=lr, betas=betas, fused=use_fused)</code></pre>
-      <p>And the step itself — accumulate gradients across several micro-batches before a single optimizer update:</p>
-      <pre class="code-block"><code># -------------------- training step (single micro-batch) --------------------
-for step in range(max_iters):
-    lr = get_lr(step)
-    for group in optimizer.param_groups:
-        group["lr"] = lr
-    for micro_step in range(grad_accum_steps):
-        logits, loss = model(input_ids, target_ids)
-        loss = loss / grad_accum_steps             # normalize for accumulation
-        scaler.scale(loss).backward()
-    scaler.unscale_(optimizer)
-    torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
-    scaler.step(optimizer)
-    scaler.update()
-    optimizer.zero_grad(set_to_none=True)</code></pre>
+      <p class="math-note">N is parameter count, D is training tokens — the back-of-envelope compute estimate behind GPT-3's ~3.15 × 10²³ total training FLOPs (175B params × 300B tokens × 6).</p>
     </div>
   </div>
 </section>
@@ -2999,10 +2982,16 @@ for step in range(max_iters):
     <div>
       <div class="f-head">Layers</div>
       <ul class="f-list">
-        <li><a href="#l01">Embeddings</a></li>
-        <li><a href="#l03">Self-Attention</a></li>
-        <li><a href="#l05">Feed-Forward</a></li>
-        <li><a href="#l08">Attention Routing</a></li>
+        <ul>
+  <li><a href="#l01">Tokenization</a></li>
+  <li><a href="#l02">Encoding</a></li>
+  <li><a href="#l03">Self attention</a></li>
+  <li><a href="#l04">Residual Stream</a></li>
+  <li><a href="#l05">Feed forward layer</a></li>
+  <li><a href="#l06">Decoder block</a></li>
+  <li><a href="#l07">Unembedding</a></li>
+  <li><a href="#l08">Model Card</a></li>
+</ul>
       </ul>
     </div>
     <div>
@@ -3022,7 +3011,7 @@ for step in range(max_iters):
   </div>
   <div class="f-bottom">
     <span class="f-copy">© 2025 LATENT STACK — AUTHOR: MUKUL NAMAGIRI</span>
-    <span class="f-copy">BUILT FOR THE AESTHETIC OF IT</span>
+    <span class="f-copy">Factity</span>
   </div>
 </footer>
 
@@ -6542,6 +6531,451 @@ document.querySelectorAll('.reveal').forEach(el=>{
             renderDots(0);
             updateAll(0);
         })();
+      (function() {
+      // ── Toy vocabulary & embeddings (same as embeddings tool) ──
+      const VOCAB = [
+        { id: 32, label: "32: ' '" },
+        { id: 110, label: "110: 'n'" },
+        { id: 111, label: "111: 'o'" },
+        { id: 114, label: "114: 'r'" },
+        { id: 117, label: "117: 'u'" },
+        { id: 256, label: "256: 'ru'" },
+        { id: 257, label: "257: 'run'" },
+        { id: 258, label: "258: 'run '" },
+        { id: 259, label: "259: 'run r'" },
+        { id: 260, label: "260: 'run ru'" },
+        { id: 261, label: "261: 'run run'" },
+        { id: 50256, label: "50256: '<|end|>'" },
+      ];
+
+      const embeddings = {
+        32: [0.10, 0.00, 0.00, 0.10],
+        110: [0.20, 0.50, 0.10, 0.40],
+        111: [0.10, 0.20, 0.30, 0.50],
+        114: [0.60, 0.20, 0.10, 0.30],
+        117: [0.20, 0.30, 0.70, 0.10],
+        256: [0.50, 0.30, 0.50, 0.20],
+        257: [0.50, 0.60, 0.40, 0.30],
+        258: [0.40, 0.50, 0.30, 0.30],
+        259: [0.45, 0.40, 0.35, 0.30],
+        260: [0.40, 0.45, 0.50, 0.25],
+        261: [0.35, 0.50, 0.30, 0.35],
+        50256: [0.00, 0.10, 0.00, 0.00],
+      };
+
+      const hVector = [0.50, 0.60, 0.40, 0.30]; // hidden state
+
+      // ── Compute logits & probabilities ──
+      function computeLogits() {
+        return VOCAB.map(tok => {
+          const e = embeddings[tok.id];
+          const dot = hVector[0]*e[0] + hVector[1]*e[1] + hVector[2]*e[2] + hVector[3]*e[3];
+          return { token: tok, logit: dot };
+        });
+      }
+
+      function softmax(logitsArr, temp = 1.0) {
+        const scaled = logitsArr.map(l => l.logit / temp);
+        const maxS = Math.max(...scaled);
+        const exps = scaled.map(s => Math.exp(s - maxS));
+        const sumExps = exps.reduce((a,b)=>a+b,0);
+        return logitsArr.map((l,i) => ({...l, prob: exps[i]/sumExps}));
+      }
+
+      const rawLogits = computeLogits();
+      const probs = softmax(rawLogits, 1.0);
+      let winner = probs.reduce((best, cur) => cur.prob > best.prob ? cur : best, probs[0]);
+
+      // ── BPE decode helper ──
+      function decodeToken(id) {
+        if (id <= 255) return String.fromCharCode(id);
+        const mergeMap = { 256:[114,117], 257:[256,110], 258:[257,32], 259:[258,114], 260:[259,117], 261:[260,110] };
+        if (mergeMap[id]) {
+          const [a,b] = mergeMap[id];
+          return decodeToken(a) + decodeToken(b);
+        }
+        return `[${id}]`;
+      }
+
+      // ── Canvas setup ──
+      const canvas = document.getElementById('unembed-canvas');
+      const ctx = canvas.getContext('2d');
+      const descDiv = document.getElementById('unembed-description');
+      const nextBtn = document.getElementById('unembed-next-btn');
+      const resetBtn = document.getElementById('unembed-reset-btn');
+
+      const W = canvas.width, H = canvas.height;
+      let currentStep = 0;
+      const TOTAL_STEPS = 7; // 0..7
+
+      // ── drawing utilities (theme colors) ──
+      const COL = {
+        bg: '#07020a',
+        panel: '#0c0310',
+        panel2: '#160518',
+        cyan: '#ff3d8a',
+        cyan2: '#ff6fae',
+        amber: '#ff8c42',
+        violet: '#b14aff',
+        rose: '#ff5252',
+        lime: '#5eff9e',
+        text: '#f5d9e8',
+        muted: '#6b4a5e',
+        dimmer: '#2a1024',
+      };
+
+      function clearCanvas() { ctx.fillStyle = COL.bg; ctx.fillRect(0,0,W,H); }
+
+      function roundRect(x,y,w,h,r,fill,stroke,lineW=1.5) {
+        ctx.beginPath();
+        ctx.moveTo(x+r,y);
+        ctx.lineTo(x+w-r,y);
+        ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+        ctx.lineTo(x+w,y+h-r);
+        ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+        ctx.lineTo(x+r,y+h);
+        ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+        ctx.lineTo(x,y+r);
+        ctx.quadraticCurveTo(x,y,x+r,y);
+        ctx.closePath();
+        if(fill){ ctx.fillStyle=fill; ctx.fill(); }
+        if(stroke){ ctx.strokeStyle=stroke; ctx.lineWidth=lineW; ctx.stroke(); }
+      }
+
+      function drawCell(x,y,w,h,text,fill,textColor=COL.text,size=11,bold=false) {
+        roundRect(x,y,w,h,5,fill,COL.dimmer,1);
+        ctx.fillStyle=textColor;
+        ctx.font=`${bold?'bold ':''}${size}px "IBM Plex Mono", monospace`;
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.fillText(text,x+w/2,y+h/2);
+      }
+
+      function arrow(x1,y1,x2,y2,color=COL.muted,lw=2) {
+        const head=8, angle=Math.atan2(y2-y1,x2-x1);
+        ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2-head*Math.cos(angle),y2-head*Math.sin(angle));
+        ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x2,y2);
+        ctx.lineTo(x2-head*Math.cos(angle-Math.PI/6),y2-head*Math.sin(angle-Math.PI/6));
+        ctx.lineTo(x2-head*Math.cos(angle+Math.PI/6),y2-head*Math.sin(angle+Math.PI/6));
+        ctx.closePath(); ctx.fillStyle=color; ctx.fill();
+      }
+
+      // ── step drawing functions ──
+      function step0() {
+        clearCanvas();
+        ctx.fillStyle=COL.cyan2; ctx.font='bold 16px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('The Hidden State Vector h',W/2,38);
+        ctx.fillStyle=COL.muted; ctx.font='13px "IBM Plex Mono", monospace';
+        ctx.fillText('Output from the final transformer layer (last position)',W/2,62);
+
+        const sx=W/2-70, sy=95, cw=130, ch=44;
+        const labels=['dim 1','dim 2','dim 3','dim 4'];
+        const fills=['#3a1a2e','#2a1a3a','#2a2a1a','#1a2a2a'];
+        for(let i=0;i<4;i++){
+          drawCell(sx,sy+i*(ch+6),cw,ch,`${labels[i]}: ${hVector[i].toFixed(2)}`,fills[i],COL.text,14,i===1);
+        }
+        ctx.fillStyle=COL.cyan; ctx.font='bold 12px "Space Grotesk", sans-serif';
+        ctx.fillText('h ∈ ℝ⁴',sx+cw/2,sy-18);
+        // bracket
+        ctx.strokeStyle=COL.muted; ctx.lineWidth=2.5;
+        ctx.beginPath(); ctx.moveTo(sx-16,sy-6); ctx.lineTo(sx-24,sy-6);
+        ctx.lineTo(sx-24,sy+4*(ch+6)-ch-6); ctx.lineTo(sx-16,sy+4*(ch+6)-ch-6); ctx.stroke();
+        arrow(sx+cw+16,sy+2*(ch+6)-ch/2, sx+cw+70,sy+2*(ch+6)-ch/2, COL.dimmer,2);
+        ctx.fillStyle=COL.muted; ctx.font='italic 11px "IBM Plex Mono", monospace'; ctx.textAlign='left';
+        ctx.fillText('Next: multiply by',sx+cw+28,sy+2*(ch+6)-ch/2-24);
+        ctx.fillText('unembedding matrix Wᵤ',sx+cw+28,sy+2*(ch+6)-ch/2-2);
+      }
+
+      function step1() {
+        clearCanvas();
+        ctx.fillStyle=COL.cyan2; ctx.font='bold 16px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('The Unembedding Matrix Wᵤ',W/2,35);
+        ctx.fillStyle=COL.muted; ctx.font='13px "IBM Plex Mono", monospace';
+        ctx.fillText('12 rows (one per vocabulary token) × 4 columns',W/2,58);
+
+        const sx=120, sy=85, cw=50, ch=24;
+        for(let c=0;c<4;c++) drawCell(sx+c*cw,sy-ch-6,cw,ch,`d${c+1}`,COL.panel2,COL.cyan2,10,true);
+        for(let r=0;r<VOCAB.length;r++){
+          const y=sy+r*ch;
+          ctx.fillStyle=COL.muted; ctx.font='10px "IBM Plex Mono", monospace'; ctx.textAlign='right';
+          ctx.fillText(VOCAB[r].id,sx-12,y+ch/2);
+          const emb=embeddings[VOCAB[r].id];
+          for(let c=0;c<4;c++){
+            drawCell(sx+c*cw,y,cw,ch,emb[c].toFixed(2),r===5?COL.amber+'20':COL.bg,COL.text,10);
+          }
+        }
+        // highlight row 257
+        ctx.strokeStyle=COL.amber; ctx.lineWidth=2.5; ctx.setLineDash([4,3]);
+        ctx.beginPath(); ctx.roundRect(sx-3,sy+5*ch-1,4*cw+6,ch+2,4); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle=COL.amber; ctx.font='italic 11px "IBM Plex Mono", monospace'; ctx.textAlign='left';
+        ctx.fillText('Row for token 257 ("run")',sx+4*cw+16,sy+5*ch+ch/2+2);
+      }
+
+      function step2() {
+        clearCanvas();
+        ctx.fillStyle=COL.cyan2; ctx.font='bold 16px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('Step 1: Matrix Multiplication — Computing Logits',W/2,32);
+        ctx.fillStyle=COL.muted; ctx.font='12px "IBM Plex Mono", monospace';
+        ctx.fillText('zᵢ = h · (row ᵢ of Wᵤ)  →  raw score for each token',W/2,52);
+
+        const hx=25, hy=85, hcw=72, hh=28;
+        for(let i=0;i<4;i++) drawCell(hx,hy+i*(hh+4),hcw,hh,hVector[i].toFixed(2),COL.panel2,COL.text,12);
+        ctx.fillStyle=COL.cyan; ctx.font='bold 11px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('h',hx+hcw/2,hy-14);
+        ctx.fillStyle=COL.text; ctx.font='bold 22px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('×',hx+hcw+25,hy+2*(hh+4));
+
+        const mx=150, my=72, mcw=38, mh=18;
+        for(let r=0;r<VOCAB.length;r++){
+          const emb=embeddings[VOCAB[r].id];
+          for(let c=0;c<4;c++) drawCell(mx+c*mcw,my+r*mh,mcw,mh,emb[c].toFixed(2),COL.bg,COL.muted,9);
+          ctx.fillStyle=COL.muted; ctx.font='9px "IBM Plex Mono", monospace'; ctx.textAlign='right';
+          ctx.fillText(VOCAB[r].id,mx-10,my+r*mh+mh/2);
+        }
+        ctx.fillStyle=COL.cyan; ctx.font='bold 10px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('Wᵤ',mx+2*mcw,my-12);
+
+        const eqX=mx+4*mcw+20;
+        ctx.fillStyle=COL.text; ctx.font='bold 22px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('=',eqX,my+6*mh);
+
+        const lx=eqX+35, ly=my, lw=90, lh=mh;
+        const sortedLogits=[...rawLogits].sort((a,b)=>b.logit-a.logit);
+        for(let i=0;i<sortedLogits.length;i++){
+          const item=sortedLogits[i];
+          const y=ly+i*lh;
+          const intensity=Math.min(1,(item.logit-0.06)/0.85);
+          const fill=`rgb(${Math.round(50+intensity*200)},${Math.round(10+intensity*60)},${Math.round(80+intensity*140)})`;
+          drawCell(lx,y,lw,lh,`${item.token.id}: ${item.logit.toFixed(3)}`,fill,COL.text,10);
+        }
+        ctx.fillStyle=COL.cyan; ctx.font='bold 10px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('logits z',lx+lw/2,ly-14);
+
+        // dot product demo
+        const drow=5, dy=my+drow*mh;
+        ctx.strokeStyle=COL.amber; ctx.lineWidth=2; ctx.setLineDash([3,2]);
+        ctx.beginPath(); ctx.roundRect(mx-3,dy-1,4*mcw+6,mh+2,3); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle=COL.amber; ctx.font='italic 10px "IBM Plex Mono", monospace'; ctx.textAlign='left';
+        ctx.fillText('dot product:',mx+4*mcw+10,dy+mh/2-6);
+        ctx.fillText('0.50×0.50 + 0.60×0.60 +',mx+4*mcw+10,dy+mh/2+8);
+        ctx.fillText('0.40×0.40 + 0.30×0.30 = 0.860',mx+4*mcw+10,dy+mh/2+22);
+      }
+
+      function step3() {
+        clearCanvas();
+        ctx.fillStyle=COL.cyan2; ctx.font='bold 16px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('Logits — Raw Scores for Each Token',W/2,35);
+        const sorted=[...rawLogits].sort((a,b)=>b.logit-a.logit);
+        const bx=130, by=65, maxW=380, bh=22, gap=6;
+        for(let i=0;i<sorted.length;i++){
+          const item=sorted[i];
+          const y=by+i*(bh+gap);
+          const w=Math.max(20,(item.logit/sorted[0].logit)*maxW);
+          ctx.fillStyle=COL.muted; ctx.font='10px "IBM Plex Mono", monospace'; ctx.textAlign='right';
+          ctx.fillText(item.token.label,bx-12,y+bh/2);
+          const grad=ctx.createLinearGradient(bx,y,bx+w,y);
+          grad.addColorStop(0,COL.cyan); grad.addColorStop(1,COL.violet);
+          roundRect(bx,y,w,bh,4,grad,null);
+          ctx.fillStyle=COL.text; ctx.font='bold 10px "IBM Plex Mono", monospace'; ctx.textAlign='left';
+          ctx.fillText(item.logit.toFixed(3),bx+w+8,y+bh/2);
+          if(w>70){ ctx.textAlign='center'; ctx.fillText(item.logit.toFixed(3),bx+w/2,y+bh/2); }
+        }
+        ctx.fillStyle=COL.muted; ctx.font='italic 12px "IBM Plex Mono", monospace'; ctx.textAlign='center';
+        ctx.fillText('Higher logit → model prefers that token more strongly',W/2,by+sorted.length*(bh+gap)+25);
+      }
+
+      function step4() {
+        clearCanvas();
+        ctx.fillStyle=COL.cyan2; ctx.font='bold 16px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('Step 2: Softmax — Converting Logits to Probabilities',W/2,32);
+        ctx.fillStyle=COL.muted; ctx.font='12px "IBM Plex Mono", monospace';
+        ctx.fillText('P(tᵢ) = exp(zᵢ) / Σ exp(zⱼ)    ·    τ = 1.0',W/2,54);
+
+        const sortedByProb=[...probs].sort((a,b)=>b.prob-a.prob);
+        const leftX=50, rightX=400, barY=80, barMaxW=220, bh=22, gap=5;
+        ctx.fillStyle=COL.cyan; ctx.font='bold 12px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('Logits z',leftX+barMaxW/2,barY-16);
+        const sortedLogits=[...rawLogits].sort((a,b)=>b.logit-a.logit);
+        for(let i=0;i<sortedLogits.length;i++){
+          const item=sortedLogits[i];
+          const y=barY+i*(bh+gap);
+          const w=Math.max(15,(item.logit/sortedLogits[0].logit)*barMaxW);
+          ctx.fillStyle=COL.muted; ctx.font='9px "IBM Plex Mono", monospace'; ctx.textAlign='right';
+          ctx.fillText(item.token.id,leftX-10,y+bh/2);
+          roundRect(leftX,y,w,bh,3,COL.violet+'40',null);
+          ctx.fillStyle=COL.text; ctx.font='9px "IBM Plex Mono", monospace'; ctx.textAlign='left';
+          ctx.fillText(item.logit.toFixed(2),leftX+w+6,y+bh/2);
+        }
+
+        arrow(leftX+barMaxW+22,barY+6*(bh+gap),rightX-22,barY+6*(bh+gap),COL.amber,3);
+        ctx.fillStyle=COL.amber; ctx.font='bold 12px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('softmax',(leftX+barMaxW+rightX)/2,barY+6*(bh+gap)-14);
+
+        ctx.fillStyle=COL.amber; ctx.font='bold 12px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('Probabilities P(t)',rightX+barMaxW/2,barY-16);
+        for(let i=0;i<sortedByProb.length;i++){
+          const item=sortedByProb[i];
+          const y=barY+i*(bh+gap);
+          const w=Math.max(15,(item.prob/sortedByProb[0].prob)*barMaxW);
+          ctx.fillStyle=COL.muted; ctx.font='9px "IBM Plex Mono", monospace'; ctx.textAlign='right';
+          ctx.fillText(item.token.id,rightX-10,y+bh/2);
+          const grad=ctx.createLinearGradient(rightX,y,rightX+w,y);
+          grad.addColorStop(0,COL.amber); grad.addColorStop(1,COL.rose);
+          roundRect(rightX,y,w,bh,3,grad,null);
+          ctx.fillStyle=COL.text; ctx.font='bold 9px "IBM Plex Mono", monospace'; ctx.textAlign='left';
+          const pct=(item.prob*100).toFixed(1)+'%';
+          ctx.fillText(pct,rightX+w+6,y+bh/2);
+          if(w>55){ ctx.textAlign='center'; ctx.fillText(pct,rightX+w/2,y+bh/2); }
+        }
+
+        const winIdx=sortedByProb.findIndex(p=>p.token.id===winner.token.id);
+        const winY=barY+winIdx*(bh+gap);
+        ctx.strokeStyle=COL.lime; ctx.lineWidth=3;
+        ctx.beginPath(); ctx.roundRect(rightX-3,winY-2,barMaxW+6,bh+4,5); ctx.stroke();
+        ctx.fillStyle=COL.lime; ctx.font='bold 10px "Space Grotesk", sans-serif'; ctx.textAlign='left';
+        ctx.fillText('← Winner!',rightX+barMaxW+55,winY+bh/2);
+      }
+
+      function step5() {
+        clearCanvas();
+        ctx.fillStyle=COL.cyan2; ctx.font='bold 16px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('Step 3: Token Selection (Argmax / Sampling)',W/2,35);
+        const sorted=[...probs].sort((a,b)=>b.prob-a.prob);
+        const bx=160, by=70, maxW=400, bh=26, gap=6;
+        for(let i=0;i<sorted.length;i++){
+          const item=sorted[i];
+          const y=by+i*(bh+gap);
+          const w=Math.max(18,(item.prob/sorted[0].prob)*maxW);
+          const isWin=item.token.id===winner.token.id;
+          ctx.fillStyle=COL.muted; ctx.font='10px "IBM Plex Mono", monospace'; ctx.textAlign='right';
+          ctx.fillText(item.token.label,bx-14,y+bh/2);
+          const fill=isWin?COL.lime:COL.violet+'60';
+          roundRect(bx,y,w,bh,5,fill,isWin?COL.lime:COL.dimmer,isWin?2.5:1);
+          ctx.fillStyle=isWin?COL.bg:COL.text; ctx.font=`${isWin?'bold ':''}10px "IBM Plex Mono", monospace`;
+          ctx.textAlign='left';
+          const pct=(item.prob*100).toFixed(1)+'%';
+          ctx.fillText(pct,bx+w+8,y+bh/2);
+          if(w>60){ ctx.textAlign='center'; ctx.fillText(pct,bx+w/2,y+bh/2); }
+        }
+        const callY=by+sorted.length*(bh+gap)+30;
+        ctx.fillStyle=COL.lime; ctx.font='bold 18px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText(`Selected Token: ${winner.token.id} — "${decodeToken(winner.token.id)}"`,W/2,callY);
+        ctx.fillStyle=COL.muted; ctx.font='italic 13px "IBM Plex Mono", monospace';
+        ctx.fillText('(Greedy decoding: pick the token with highest probability)',W/2,callY+28);
+      }
+
+      function step6() {
+        clearCanvas();
+        ctx.fillStyle=COL.cyan2; ctx.font='bold 16px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('Step 4: BPE Decoding — Reversing the Merges',W/2,32);
+        ctx.fillStyle=COL.muted; ctx.font='12px "IBM Plex Mono", monospace';
+        ctx.fillText('Recursively expand merged tokens until only raw bytes (≤255) remain',W/2,54);
+
+        const tx=W/2, ty=100;
+        function treeNode(x,y,txt,fill,textCol=COL.text,size=12,bold=false){
+          roundRect(x-42,y-18,84,36,18,fill,COL.dimmer,1.2);
+          ctx.fillStyle=textCol; ctx.font=`${bold?'bold ':''}${size}px "IBM Plex Mono", monospace`;
+          ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.fillText(txt,x,y);
+        }
+        treeNode(tx,ty,'257',COL.amber+'40',COL.amber,16,true);
+        ctx.fillStyle=COL.muted; ctx.font='10px "IBM Plex Mono", monospace';
+        ctx.fillText('"run" (merged)',tx,ty+22);
+
+        const l1y=ty+65;
+        ctx.strokeStyle=COL.muted; ctx.lineWidth=1.8;
+        ctx.beginPath(); ctx.moveTo(tx-10,ty+18); ctx.lineTo(tx-80,l1y-18); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(tx+10,ty+18); ctx.lineTo(tx+80,l1y-18); ctx.stroke();
+
+        treeNode(tx-90,l1y,'256',COL.cyan+'30',COL.cyan2,13);
+        ctx.fillStyle=COL.muted; ctx.font='9px "IBM Plex Mono", monospace'; ctx.fillText('"ru"',tx-90,l1y+20);
+        treeNode(tx+90,l1y,'110',COL.lime+'30',COL.lime,13);
+        ctx.fillText('"n"',tx+90,l1y+20);
+
+        const l2y=l1y+60;
+        ctx.beginPath(); ctx.moveTo(tx-100,l1y+18); ctx.lineTo(tx-140,l2y-18); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(tx-80,l1y+18); ctx.lineTo(tx-40,l2y-18); ctx.stroke();
+        treeNode(tx-145,l2y,'114',COL.rose+'30',COL.rose,12);
+        ctx.fillText('"r"',tx-145,l2y+20);
+        treeNode(tx-40,l2y,'117',COL.violet+'30',COL.violet,12);
+        ctx.fillText('"u"',tx-40,l2y+20);
+
+        const finalY=l2y+50;
+        ctx.fillStyle=COL.lime; ctx.font='bold 17px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('Decoded text: "run"',tx,finalY);
+        ctx.fillStyle=COL.muted; ctx.font='11px "IBM Plex Mono", monospace';
+        ctx.fillText('Bytes: [114, 117, 110] → UTF-8 → "run"',tx,finalY+24);
+        ctx.fillText('Merge rules reversed: (114,117)→256, (256,110)→257',tx,finalY+42);
+      }
+
+      function step7() {
+        clearCanvas();
+        ctx.fillStyle=COL.cyan2; ctx.font='bold 16px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('The Complete Unembedding Pipeline',W/2,30);
+
+        const boxes=[
+          {label:'Hidden\nState h',sub:'R⁴ vector',fill:COL.panel2,x:18,w:90},
+          {label:'× Wᵤ',sub:'Matrix\nmultiply',fill:COL.cyan+'20',x:128,w:80},
+          {label:'Logits z',sub:'Raw scores',fill:COL.amber+'20',x:228,w:80},
+          {label:'Softmax',sub:'τ = 1.0',fill:COL.rose+'20',x:328,w:80},
+          {label:'Argmax',sub:'Pick best',fill:COL.lime+'20',x:428,w:80},
+          {label:'Token ID',sub:'257',fill:COL.violet+'20',x:528,w:70},
+          {label:'BPE\nDecode',sub:'Reverse\nmerges',fill:COL.cyan2+'20',x:616,w:80},
+        ];
+        const by2=90, bh2=56;
+        for(let b of boxes){
+          roundRect(b.x,by2,b.w,bh2,10,b.fill,COL.border,1.5);
+          ctx.fillStyle=COL.text; ctx.font='bold 11px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+          const lines=b.label.split('\n');
+          lines.forEach((l,i)=>ctx.fillText(l,b.x+b.w/2,by2+18+i*16));
+          ctx.fillStyle=COL.muted; ctx.font='9px "IBM Plex Mono", monospace';
+          const subLines=b.sub.split('\n');
+          subLines.forEach((l,i)=>ctx.fillText(l,b.x+b.w/2,by2+bh2-10+i*12));
+        }
+        for(let i=0;i<boxes.length-1;i++){
+          arrow(boxes[i].x+boxes[i].w+4,by2+bh2/2,boxes[i+1].x-4,by2+bh2/2,COL.cyan,2.5);
+        }
+        const outY=by2+bh2+35;
+        ctx.fillStyle=COL.lime; ctx.font='bold 20px "Space Grotesk", sans-serif'; ctx.textAlign='center';
+        ctx.fillText('Output: "run"',W/2,outY);
+        ctx.fillStyle=COL.muted; ctx.font='13px "IBM Plex Mono", monospace';
+        ctx.fillText('This process repeats at every position, generating one token at a time (autoregressive).',W/2,outY+28);
+      }
+
+      const steps=[step0,step1,step2,step3,step4,step5,step6,step7];
+      const descriptions=[
+        '<b>Step 0:</b> The hidden state vector <b>h</b> — the output of the final transformer decoder layer at the last sequence position. This dense 4‑dimensional vector encodes everything the model has learned about what token should come next. (In a real model d_model is 768–4096.)',
+        '<b>Step 1:</b> The <b>unembedding matrix W<sub>U</sub></b> has one row for each token in the vocabulary. Each row is a learned vector in the same space as h. The row for token 257 ("run") is highlighted — its values will interact strongly with h.',
+        '<b>Step 2:</b> <b>Matrix multiplication:</b> each logit z<sub>i</sub> is the dot product h · (row i of W<sub>U</sub>). The higher the dot product, the more the hidden state aligns with that token\'s representation. Token 257 scores highest at <b>0.860</b>.',
+        '<b>Step 3:</b> The raw <b>logits</b> displayed as a bar chart. Notice token 257 dominates, but related tokens like 260 ("run ru") and 258 ("run ") also score relatively high — the model is considering several plausible continuations.',
+        `<b>Step 4:</b> The <b>softmax function</b> transforms logits into a proper probability distribution. Token 257 receives <b>${(winner.prob*100).toFixed(1)}%</b> of the probability mass. The exponential amplifies differences — the rich get richer.`,
+        '<b>Step 5:</b> <b>Token selection:</b> with greedy decoding we simply pick the token with the highest probability — <b>token 257</b>. In practice models often sample from this distribution (with temperature scaling) for more diverse text.',
+        '<b>Step 6:</b> <b>BPE decoding</b> reverses the merge process. Token 257 recursively expands: 257 → (256, 110) → ((114, 117), 110) → bytes [114, 117, 110] → UTF-8 → <b>"run"</b>. Every merged token ultimately resolves to raw bytes.',
+        '<b>Step 7:</b> The <b>complete pipeline</b> — from hidden state to readable text. This operation runs at every generation step, producing one new token each time. The new token is fed back into the model and the process repeats — <b>autoregressive generation</b>.',
+      ];
+
+      function render(){
+        if(steps[currentStep]) steps[currentStep]();
+        descDiv.innerHTML=descriptions[currentStep]||'';
+      }
+
+      nextBtn.addEventListener('click',()=>{
+        if(currentStep<TOTAL_STEPS){ currentStep++; render(); }
+      });
+      resetBtn.addEventListener('click',()=>{ currentStep=0; render(); });
+
+      document.addEventListener('keydown',(e)=>{
+        const rect=canvas.getBoundingClientRect();
+        if(rect.top<window.innerHeight && rect.bottom>0){
+          if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); if(currentStep<TOTAL_STEPS){ currentStep++; render(); } }
+          else if(e.key==='ArrowLeft'){ e.preventDefault(); if(currentStep>0){ currentStep--; render(); } }
+        }
+      });
+
+      render();
+      console.log('✅ Unembedding visualization ready. Winner:',winner.token.id,decodeToken(winner.token.id));
+    })();      
 </script>
 </body>
 </html>
