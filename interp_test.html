@@ -2474,49 +2474,7 @@ we use 2 different methods to generate embeddings one to capture the position.
       <span class="frame-tag right">12 LAYERS SHOWN</span>
       <div class="corner-dec bl"></div><div class="corner-dec br"></div>
       <canvas id="resCanvas" width="1240" height="270"></canvas>
-
-      <p>
-<div class="laynA-wrap" id="laynA-wrap" tabindex="0" aria-label="Interactive residual stream diagram">
-    <div class="laynA-titleblock">
-        <div class="laynA-tb-main">
-            <span class="laynA-tb-title">Residual Stream</span>
-            <span class="laynA-tb-label">Mechanism</span>
-            <span class="laynA-tb-val">Read / Write / Virtual Weights</span>
-        </div>
-        <div>
-            <span class="laynA-tb-label">Dwg No.</span>
-            <span class="laynA-tb-val">RS‑GPT2‑01</span>
-        </div>
-        <div>
-            <span class="laynA-tb-label">Layers</span>
-            <span class="laynA-tb-val" id="laynA-tb-dims">1 · 2 · 3</span>
-        </div>
-        <div class="laynA-tb-stamp" id="laynA-tb-stamp">linear ✓</div>
-    </div>
-    
-    <div class="laynA-eq" id="laynA-eq">
-        <span id="eqY">y</span><span class="laynA-eq-static"> = </span><span id="eqX">x</span><span class="laynA-eq-static"> + </span><span id="eqSum">∑</span><span id="eqWo">W_O^i</span><span class="laynA-eq-static"> f^i(</span><span id="eqWi">W_I^i</span><span class="laynA-eq-static"> x)</span>
-    </div>
-    
-    <div class="laynA-stage-outer">
-        <div id="laynA-stage" class="laynA-stage"></div>
-    </div>
-    
-    <div class="laynA-desc" id="laynA-desc"></div>
-    
-    <div class="laynA-controls">
-        <button class="laynA-btn" id="laynA-prev" aria-label="Previous step">&#8592; Prev</button>
-        <div class="laynA-dots" id="laynA-dots" role="tablist" aria-label="Step navigation"></div>
-        <button class="laynA-btn" id="laynA-next" aria-label="Next step">Next &#8594;</button>
-        <button class="laynA-btn laynA-btn-solid" id="laynA-play" aria-label="Play steps automatically">&#9654; Play</button>
-        <button class="laynA-btn" id="laynA-reset" aria-label="Reset to first step">&#8635; Reset</button>
-    </div>
-    
-    <div class="laynA-foot">
-        <b>Residual Stream</b> &middot; A sequence of layers reads from and writes to the stream with linear projections, allowing for effective gradient flow.
-    </div>
-</div>
-      </p>
+<p>In the context of the residual stream, circuits are naturally framed as the computational pathways that read from and write to this shared, accumulated state. The residual stream acts as a high-dimensional memory where each layer adds information without overwriting the past, and interpretability research uses terminology like <em>features</em> to describe the meaningful directions encoded in its activations—concepts, entities, or grammatical properties that later components can access. Because the stream compresses many features into a single vector through <em>superposition</em>, individual neurons rarely correspond to clean, isolated concepts; instead, circuits are traced by identifying how attention heads and MLP neurons interact through the stream. <em>Path patching</em> and <em>activation patching</em> are applied directly to the residual stream to measure how specific upstream components shape the representation that downstream heads read, revealing structures like <em>induction circuits</em> that enable in-context learning. The residual stream thus becomes the central interpretive medium: features are written into it, superimposed, and then selectively read out, making it the backbone through which circuits compose complex behaviors.</p>
     </div>
         <div class="laynA-wrap" id="laynA-wrap" tabindex="0" aria-label="Interactive residual stream diagram">
         <div class="laynA-titleblock">
