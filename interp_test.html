@@ -206,8 +206,8 @@ nav a:hover::after{width:100%}
 .frame-tag{position:absolute;top:0;left:0;font-family:var(--mono);font-size:.48rem;letter-spacing:.18em;color:var(--cyan);background:rgba(7,13,22,.9);border-right:1px solid var(--border2);border-bottom:1px solid var(--border2);padding:.3rem .6rem;z-index:6;text-transform:uppercase;}
 .frame-tag.right{left:auto;right:0;border-right:none;border-left:1px solid var(--border2);color:var(--amber);}
 /* REVEAL */
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .85s,transform .85s;}
-.reveal.visible{opacity:1;transform:none}
+.reveal{opacity:1;transform:translateY(22px);transition:opacity .85s,transform .85s;}
+
 /* POSTS GRID */
 .posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:3.5rem;}
 .post-card{background:var(--panel);border:1px solid var(--border);padding:1.9rem;position:relative;overflow:hidden;transition:border-color .4s,background .4s;}
@@ -1656,6 +1656,182 @@ code {
                 gap: 8px;
             }
         }
+/* ══════════════ SAFE MOBILE FIX (no sections hidden) ══════════════ */
+@media (max-width: 768px) {
+  /* Prevent horizontal overflow without breaking absolute/fixed elements */
+  html, body {
+    overflow-x: hidden;
+  }
+
+  /* Only force wrapping on text containers, not on * */
+  .section,
+  .section-inner,
+  .hero-sub,
+  .section-desc,
+  .post-excerpt,
+  .added-note p,
+  .added-block p,
+  .algo-steps li,
+  .resource-links li,
+  .spec-row,
+  .f-brand-desc,
+  .cta-desc,
+  .post-meta,
+  .frame-tag,
+  .legend-item {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+
+  /* Code blocks: wrap, don't hide */
+  .code-block,
+  .cosmic-code pre,
+  pre,
+  .code-block code {
+    white-space: pre-wrap !important;
+    word-break: break-word;
+    overflow-x: auto;          /* keep a scrollbar if absolutely needed, but mostly wrap */
+    max-width: 100%;
+    font-size: 0.65rem;
+    padding: 0.8rem;
+  }
+
+  /* Tables scroll internally */
+  .table-scroll {
+    overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ref-table {
+    min-width: auto;
+    width: 100%;
+  }
+  .ref-table thead th,
+  .ref-table tbody td {
+    white-space: normal;
+    word-break: break-word;
+    font-size: 0.65rem;
+    padding: 0.4rem 0.5rem;
+  }
+
+  /* Sections – no overflow:hidden, just ensure they fill width */
+  .section {
+    padding: 3rem 1rem;
+    max-width: 100%;
+  }
+  .section-inner {
+    max-width: 100%;
+  }
+
+  /* Hero area (keep the 3D background intact) */
+  #hero {
+    padding: 0 1rem 2.5rem;
+  }
+  .hero-title {
+    font-size: 2.2rem;
+    line-height: 1.1;
+    word-break: break-word;
+  }
+
+  /* Posts, specs, footer – responsive grids */
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: 1px;
+  }
+  .spec-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .footer-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Lab rail – keep it stacked but visible */
+  #lab-layout {
+    flex-direction: column;
+  }
+  #diagram-rail {
+    position: relative;
+    top: auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: auto;
+    height: 50vh;          /* still visible */
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Hide the scroll hint and depth rail as originally designed on mobile */
+  .hero-scroll-hint,
+  #depth-rail,
+  #depth-readout {
+    display: none;
+  }
+
+  /* CTA form stacks */
+  .cta-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cta-input, .cta-btn {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Math & equation blocks */
+  .math-block {
+    padding: 1rem 1.2rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+  .math-line {
+    font-size: 0.85rem;
+    word-break: break-word;
+  }
+
+  /* Interactive widgets scale down */
+  .bpe-container,
+  .vec-container,
+  .gptA-wrap,
+  .laynA-wrap,
+  .lns-simple-wrap {
+    max-width: 100%;
+    padding: 12px 8px;
+  }
+
+  /* etc. (keep the rest of your previous section-level adjustments) */
+}
+/* Ensure the main content column fills the screen and doesn’t push out */
+#content-col {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Scale all canvases inside content sections (NOT the hero 3D canvas) */
+.section canvas,
+.canvas-frame canvas,
+#bpe-canvas,
+#vec-canvas,
+#oscilloCanvas,
+#perfCanvas {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+/* For canvas containers that clip overflow – allow them to show the full scaled canvas */
+.canvas-frame {
+  overflow: visible !important;
+}
+
+/* If any canvas still gets cut, force it to 100% width (only where appropriate) */
+.canvas-frame canvas {
+  width: 100% !important;
+}
+
 </style>
 </head>
 <body>
@@ -1686,16 +1862,20 @@ code {
   <nav>
     <a href="#l01">Tokenization</a>
     <a href="#l02">Encoding</a>
-    <a href="#l03">Self attention</a>
 
-    <a href="#l04">Residual Stream</a>
-    <a href="#l05">Feed forward layer</a>
+    <a href="#l03">Normalization</a>
+    <a href="#l04">Self attention</a>
 
-    <a href="#l06">Decoder block</a>
+    <a href="#l05">Residual Stream</a>
+    <a href="#l06">Feed forward layer</a>
 
-    <a href="#l07">Unembedding</a>
+    <a href="#l07">Decoder block</a>
+
+    <a href="#l08">Unembedding</a>
     
-    <a href="#l08">Model Card</a>
+      <a href="#l09">Model Card</a>
+  
+  
     <span class="nav-status">RUNNING</span>
   </nav>
   <button id="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
@@ -1781,7 +1961,7 @@ code {
 
       
     <div class="reveal">
-      <p class="section-label">Layer 01 · Input Representation</p>
+      <p class="section-label">01 TOKENIZATION</p>
       <h2 class="section-title">GENERATING <span>TOKENS </span></h2>
       </div>
 
@@ -1922,7 +2102,7 @@ Wait a minute …. Before we jump ahead of ourselves let us establish some defin
   
   <div class="section-inner">
     <div class="reveal">
-      <p class="section-label">Layer 02 · Order Injection</p>
+      <p class="section-label">2 ENCODING</p>
       <h2 class="section-title">Encoding <span>Scheme</span></h2>
 
 <div class="reveal added-block">
@@ -2140,7 +2320,7 @@ we use 2 different methods to generate embeddings one to capture the position.
 <section class="section" id="l03" data-layer="3" data-layer-label="Layer Normalization" style="background:var(--bg2)">
   
 
-    <p class="section-label">Layer 03 · Normalization</p>
+    <p class="section-label">03 · Normalization</p>
       <h2 class="section-title">Vector <span>Normalization</span></h2>
 
     <p>
@@ -2182,7 +2362,7 @@ we use 2 different methods to generate embeddings one to capture the position.
 <section class="section" id="l04" data-layer="4" data-layer-label="Self-Attention">
   <div class="section-inner">
     <div class="reveal">
-      <p class="section-label">Layer 03 · Scaled Dot-Product Attention</p>
+      <p class="section-label">04 · Scaled Dot-Product Attention</p>
       <h2 class="section-title">SELF-<span>ATTENTION</span></h2>
       <p class="section-desc">After the layer normalization step is done the embeddings get passed onto the attention block. This is probabaly the phase that defines the classic transformer architecture and distinguishes from rest of the neural nets.</p>
     </div>
@@ -2469,10 +2649,10 @@ we use 2 different methods to generate embeddings one to capture the position.
 </section>
 
 <!-- L05 RESIDUAL STREAM -->
-<section class="section" id="l05" data-layer="6" data-layer-label="Residual Stream">
+<section class="section" id="l05" data-layer="5" data-layer-label="Residual Stream">
   <div class="section-inner" style="font-family:'IBM Plex Mono',monospace;">
     <div class="reveal">
-      <p class="section-label">Layer 06 · The Information Highway</p>
+      <p class="section-label">05 RESIDUAL STREAM</p>
       <h2 class="section-title">RESIDUAL <span>STREAM</span></h2>
       <p class="section-desc">The residual stream is the place where after the execution of the each block whether it is the mlp block or attention block the model writes to as the data is passed between the layers it under goes massive amount of dimenionsal changes often mapping from higher to lower dimensions and viceversa  as we saw in the above section there multiple attention heads and several layers of these repeated pattern. Residual stream helps solve this problem we just simply write to a flow the so called a information highway</p>
     </div>
@@ -2526,10 +2706,10 @@ we use 2 different methods to generate embeddings one to capture the position.
   </div>
 </section>
 <!-- L06 FEED FORWARD -->
-<section class="section" id="l06" data-layer="5" data-layer-label="Feed-Forward Network">
+<section class="section" id="l06" data-layer="6" data-layer-label="Feed-Forward Network">
   <div class="section-inner">
     <div class="reveal">
-      <p class="section-label">Layer 05 · Position-Wise MLP</p>
+      <p class="section-label">06 FEED FORWARD LAYER</p>
       <h2 class="section-title">FEED-<span>FORWARD NETWORK</span></h2>
       <p class="section-desc">Every position is independently expanded to roughly four times the model width, pushed through a GELU nonlinearity, then projected back down — the part of the network most often credited with storing factual knowledge.</p>
     </div>
@@ -2628,10 +2808,10 @@ we use 2 different methods to generate embeddings one to capture the position.
 
 
 <!-- L07 Decoder block -->
-<section class="section" id="l04" data-layer="4" data-layer-label="Decoder Pipeline" style="background:var(--bg3)">
+<section class="section" id="l07" data-layer="7" data-layer-label="Decoder Pipeline" style="background:var(--bg3)">
   <div class="section-inner">
     <div class="reveal">
-      <p class="section-label">Layer 04 · Full Forward Pass</p>
+      <p class="section-label">07 DECODER BLOCK</p>
       <h2 class="section-title">THE DECODER <span>BLOCK PIPELINE</span></h2>
       <p class="section-desc">Tokenize, embed, add position, then loop through N identical decoder blocks — each a pre-norm attention sub-layer and a pre-norm feed-forward sub-layer, both wrapped in a residual add — before a final projection to vocabulary logits.</p>
     </div>
@@ -2736,12 +2916,12 @@ we use 2 different methods to generate embeddings one to capture the position.
 
 
 <!-- L08 UNEMBEDDING LAYER -->
-  <section class="section" id="l08" data-layer="1" data-layer-label="Token Unembedding">
+  <section class="section" id="l08" data-layer="8" data-layer-label="Token Unembedding">
   <div class="section-inner">
 
 
     <div class="reveal">
-      <p class="section-label">Layer 01 · Output Representation</p>
+      <p class="section-label">08 UMEMBEDDING LAYER</p>
       <h2 class="section-title">UNEMBEDDING <span>TOKENS</span></h2>
     </div>
 
@@ -2818,8 +2998,8 @@ we use 2 different methods to generate embeddings one to capture the position.
 </section>
 
 
-<!-- L08 Model card -->
-<section class="section" id="specs" style="background:var(--bg3)">
+<!-- L09 Model card -->
+<section class="section" id="L09" style="background:var(--bg3)">
   <div class="section-inner">
     <div class="reveal">
       <p class="section-label">Model Card</p>
@@ -2983,14 +3163,19 @@ we use 2 different methods to generate embeddings one to capture the position.
       <div class="f-head">Layers</div>
       <ul class="f-list">
         <ul>
+
+<ul>
   <li><a href="#l01">Tokenization</a></li>
   <li><a href="#l02">Encoding</a></li>
-  <li><a href="#l03">Self attention</a></li>
-  <li><a href="#l04">Residual Stream</a></li>
-  <li><a href="#l05">Feed forward layer</a></li>
-  <li><a href="#l06">Decoder block</a></li>
-  <li><a href="#l07">Unembedding</a></li>
-  <li><a href="#l08">Model Card</a></li>
+  <li><a href="#l03">Normalization</a></li>
+  <li><a href="#l04">Self attention</a></li>
+  <li><a href="#l05">Residual Stream</a></li>
+  <li><a href="#l06">Feed forward layer</a></li>
+  <li><a href="#l07">Decoder block</a></li>
+  <li><a href="#l08">Unembedding</a></li>
+  <li><a href="#l09">Model Card</a></li>
+</ul>
+
 </ul>
       </ul>
     </div>
@@ -4057,11 +4242,11 @@ document.querySelectorAll('.reveal').forEach(el=>{
                 pos: 'l02',
                 ln1: 'l03',
                 attn: 'l04',
-                add1: 'l06',
-                ln2: 'l04',
-                ffn: 'l05',
-                add2: 'l06',
-                output: 'l07',
+                add1: 'l05',
+                ln2: 'l03',
+                ffn: 'l06',
+                add2: 'l03',
+                output: 'l08',
             };
 
             function jumpToComponent(key) {
@@ -6975,7 +7160,25 @@ document.querySelectorAll('.reveal').forEach(el=>{
 
       render();
       console.log('✅ Unembedding visualization ready. Winner:',winner.token.id,decodeToken(winner.token.id));
-    })();      
+    })();  
+     window.addEventListener('load', function() {
+    // Small delay to let CSS & WebGL settle
+    setTimeout(function() {
+      window.dispatchEvent(new Event('resize'));
+    }, 200);
+  });
+    (function() {
+    const mobileNav = document.getElementById('mobile-nav');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+
+    // Close the menu immediately on load
+    if (mobileNav && mobileNav.classList.contains('open')) {
+      mobileNav.classList.remove('open');
+      if (menuBtn) menuBtn.classList.remove('active');
+    }
+
+    // Also close when any anchor inside it is clicked (your existing code is fine)
+  })();    
 </script>
 </body>
 </html>
