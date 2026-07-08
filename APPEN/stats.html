@@ -1777,8 +1777,228 @@
             </div>
             <!-- END OF ALL SECTIONS -->
            
-           
-           
+           <!-- A3.121 -->
+<div class="section-block" id="a3-121">
+    <div class="section-heading"><span class="section-num-large">A3.121</span><h2 class="section-title-large">Chi-squared Distribution</h2></div>
+    <div class="section-body">
+        <p>The chi-squared distribution with <em>k</em> degrees of freedom arises as the sum of squares of <em>k</em> independent standard normal random variables. It is a special case of the gamma distribution and plays a central role in hypothesis testing, confidence interval construction, and goodness-of-fit tests.</p>
+        <div class="equation-block">\[ f(x;k) = \frac{1}{2^{k/2}\Gamma(k/2)} x^{k/2 - 1} e^{-x/2}, \qquad x > 0, \]</div>
+        <p>Its mean is <em>k</em> and variance <em>2k</em>. For large <em>k</em>, the distribution approximates a normal distribution. In statistical learning, the chi-squared distribution underlies likelihood ratio tests and the Wilks phenomenon for nested model comparison.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$k$</span><span class="var-desc">degrees of freedom (positive integer).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.122 -->
+<div class="section-block" id="a3-122">
+    <div class="section-heading"><span class="section-num-large">A3.122</span><h2 class="section-title-large">Log-normal Distribution</h2></div>
+    <div class="section-body">
+        <p>If <em>X</em> follows a normal distribution with mean <em>μ</em> and variance <em>σ²</em>, then <em>Y = e<sup>X</sup></em> is log-normally distributed. It models positive, right-skewed quantities such as incomes, biological sizes, and failure times in reliability engineering.</p>
+        <div class="equation-block">\[ f(y;\mu,\sigma) = \frac{1}{y\,\sigma\sqrt{2\pi}} \exp\!\left(-\frac{(\ln y - \mu)^2}{2\sigma^2}\right), \qquad y > 0, \]</div>
+        <p>The parameters <em>μ</em> and <em>σ</em> are the mean and standard deviation of the underlying normal variable. The log-normal distribution is heavy-tailed and commonly used in Bayesian modelling as a prior for positive scale parameters.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\mu$</span><span class="var-desc">location parameter (log-scale mean).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\sigma$</span><span class="var-desc">scale parameter (log-scale standard deviation, positive).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.123 -->
+<div class="section-block" id="a3-123">
+    <div class="section-heading"><span class="section-num-large">A3.123</span><h2 class="section-title-large">Inverse Gaussian Distribution</h2></div>
+    <div class="section-body">
+        <p>The inverse Gaussian (or Wald) distribution describes the first-passage time of a Brownian motion with drift. It is a two-parameter family that supports positive reals and is widely used in survival analysis, accelerated life testing, and as a mixing distribution in hierarchical models.</p>
+        <div class="equation-block">\[ f(x;\mu,\lambda) = \sqrt{\frac{\lambda}{2\pi x^3}} \exp\!\left(-\frac{\lambda (x - \mu)^2}{2\mu^2 x}\right), \qquad x > 0, \]</div>
+        <p>The parameter <em>μ > 0</em> is the mean, and <em>λ > 0</em> controls the shape. As <em>λ</em> grows, the distribution approaches a normal; smaller <em>λ</em> yields heavier tails.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\mu$</span><span class="var-desc">mean parameter (positive).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\lambda$</span><span class="var-desc">shape parameter (positive).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.124 -->
+<div class="section-block" id="a3-124">
+    <div class="section-heading"><span class="section-num-large">A3.124</span><h2 class="section-title-large">Asymmetric Laplace Distribution (ALAAM)</h2></div>
+    <div class="section-body">
+        <p>The asymmetric Laplace distribution generalises the symmetric Laplace to allow different rates of exponential decay on each side of a location parameter. It is used in quantile regression, Bayesian inference for median regression, and financial modelling of skewed returns.</p>
+        <div class="equation-block">\[ f(x;\mu,\sigma,p) = \frac{p(1-p)}{\sigma} \exp\!\left(-\frac{x-\mu}{\sigma}\bigl[p - I(x < \mu)\bigr]\right), \]</div>
+        <p>where <em>μ</em> is the location, <em>σ > 0</em> the scale, and <em>0 < p < 1</em> determines the skewness (<em>p = 0.5</em> recovers symmetry). This formulation is particularly convenient for likelihood-based quantile estimation.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\mu$</span><span class="var-desc">location parameter.</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\sigma$</span><span class="var-desc">scale parameter (positive).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$p$</span><span class="var-desc">skewness parameter (probability, 0 < p < 1).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.125 -->
+<div class="section-block" id="a3-125">
+    <div class="section-heading"><span class="section-num-large">A3.125</span><h2 class="section-title-large">Pareto Distribution (Fixed Minimum)</h2></div>
+    <div class="section-body">
+        <p>The Pareto distribution (type I) models quantities bounded below by a known minimum <em>x<sub>m</sub></em> and is characterised by a power-law tail. It appears in wealth distribution, city sizes, and natural phenomena exhibiting scale invariance.</p>
+        <div class="equation-block">\[ f(x;\alpha, x_m) = \frac{\alpha \, x_m^{\alpha}}{x^{\alpha+1}}, \qquad x \ge x_m, \]</div>
+        <p>With <em>x<sub>m</sub> > 0</em> fixed, the shape parameter <em>α > 0</em> controls tail heaviness; the mean exists only for <em>α > 1</em> and the variance for <em>α > 2</em>. It is the canonical distribution for extreme value theory.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\alpha$</span><span class="var-desc">shape parameter (positive), tail index.</span></li>
+            <li class="var-def-item"><span class="var-symbol">$x_m$</span><span class="var-desc">fixed minimum (scale parameter, positive).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.126 -->
+<div class="section-block" id="a3-126">
+    <div class="section-heading"><span class="section-num-large">A3.126</span><h2 class="section-title-large">Weibull Distribution (Fixed Shape)</h2></div>
+    <div class="section-body">
+        <p>The Weibull distribution is widely used in reliability engineering and survival analysis to model lifetimes. When the shape parameter <em>k</em> is known, the remaining scale parameter controls the time scale of failures.</p>
+        <div class="equation-block">\[ f(x;\lambda, k) = \frac{k}{\lambda} \left(\frac{x}{\lambda}\right)^{k-1} \exp\!\left(-\left(\frac{x}{\lambda}\right)^k\right), \qquad x \ge 0, \]</div>
+        <p>Given a fixed <em>k > 0</em>, the distribution is a one-parameter exponential family in <em>λ</em>. The hazard function is increasing for <em>k > 1</em>, decreasing for <em>k < 1</em>, and constant (exponential) for <em>k = 1</em>.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\lambda$</span><span class="var-desc">scale parameter (positive).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$k$</span><span class="var-desc">known shape parameter (positive, fixed).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.127 -->
+<div class="section-block" id="a3-127">
+    <div class="section-heading"><span class="section-num-large">A3.127</span><h2 class="section-title-large">Laplace Distribution (Known Mean)</h2></div>
+    <div class="section-body">
+        <p>The Laplace (double-exponential) distribution, with known location <em>μ</em>, is the maximum entropy distribution on the real line for a fixed mean absolute deviation. It serves as a robust alternative to the normal in regression and Bayesian lasso.</p>
+        <div class="equation-block">\[ f(x;\mu,b) = \frac{1}{2b} \exp\!\left(-\frac{|x-\mu|}{b}\right), \qquad x \in \mathbb{R}, \]</div>
+        <p>With <em>μ</em> fixed, the scale parameter <em>b > 0</em> controls dispersion. The Laplace distribution generates sparsity when used as a prior for coefficients in linear models, leading to the L1-penalised likelihood interpretation.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\mu$</span><span class="var-desc">known location parameter.</span></li>
+            <li class="var-def-item"><span class="var-symbol">$b$</span><span class="var-desc">scale parameter (positive).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.128 -->
+<div class="section-block" id="a3-128">
+    <div class="section-heading"><span class="section-num-large">A3.128</span><h2 class="section-title-large">Continuous Bernoulli Distribution</h2></div>
+    <div class="section-body">
+        <p>The continuous Bernoulli distribution extends the Bernoulli to the unit interval (0, 1), parameterised by <em>λ ∈ (0,1)</em>. It is used in variational autoencoders and as a probabilistic model for continuous proportions.</p>
+        <div class="equation-block">\[ f(x;\lambda) = \frac{\lambda^x (1-\lambda)^{1-x}}{ \int_0^1 \lambda^t (1-\lambda)^{1-t}\,dt }, \qquad x \in (0,1), \]</div>
+        <p>The normalising constant can be expressed as <em>C(λ) = \frac{2\tanh^{-1}(1-2\lambda)}{1-2\lambda}</em> for <em>λ ≠ 0.5</em>, and <em>C(0.5)=2</em>. The distribution is not exponential family except when the normaliser is treated as fixed.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\lambda$</span><span class="var-desc">shape parameter, 0 < λ < 1.</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.129 -->
+<div class="section-block" id="a3-129">
+    <div class="section-heading"><span class="section-num-large">A3.129</span><h2 class="section-title-large">Inverse Gamma Distribution</h2></div>
+    <div class="section-body">
+        <p>If <em>X</em> follows a gamma distribution with shape <em>α</em> and rate <em>β</em>, then <em>Y = 1/X</em> is inverse-gamma distributed. It is the conjugate prior for the variance of a normal distribution and for scale parameters in Bayesian hierarchical models.</p>
+        <div class="equation-block">\[ f(x;\alpha,\beta) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{-\alpha-1} e^{-\beta/x}, \qquad x > 0, \]</div>
+        <p>Both parameters are positive. The inverse gamma has a heavy right tail and finite mean only for <em>α > 1</em>. It appears naturally as the marginal posterior of a variance parameter under a normal-inverse-gamma conjugate model.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\alpha$</span><span class="var-desc">shape parameter (positive).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\beta$</span><span class="var-desc">scale parameter (positive).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.130 -->
+<div class="section-block" id="a3-130">
+    <div class="section-heading"><span class="section-num-large">A3.130</span><h2 class="section-title-large">Generalised Inverse Gaussian Distribution</h2></div>
+    <div class="section-body">
+        <p>The generalised inverse Gaussian (GIG) distribution encompasses the inverse Gaussian, gamma, and inverse gamma as special cases. It is a flexible three-parameter family for positive data, often used as the mixing distribution in normal variance-mean mixtures.</p>
+        <div class="equation-block">\[ f(x;\lambda,\chi,\psi) = \frac{(\psi/\chi)^{\lambda/2}}{2 K_\lambda(\sqrt{\chi\psi})} x^{\lambda-1} \exp\!\left(-\frac{\chi/x + \psi x}{2}\right), \qquad x > 0, \]</div>
+        <p>Here <em>K<sub>λ</sub></em> is a modified Bessel function of the second kind. The domain of parameters allows various tail behaviours; for instance, the hyperbolic distribution arises as a normal variance-mean mixture with a GIG mixing law.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\lambda$</span><span class="var-desc">tail parameter (real).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\chi$</span><span class="var-desc">scale parameter (non-negative).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\psi$</span><span class="var-desc">scale parameter (non-negative).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.131 -->
+<div class="section-block" id="a3-131">
+    <div class="section-heading"><span class="section-num-large">A3.131</span><h2 class="section-title-large">Scaled Inverse Chi-squared Distribution</h2></div>
+    <div class="section-body">
+        <p>The scaled inverse chi-squared distribution is a reparameterisation of the inverse gamma, widely used as a conjugate prior for a normal variance <em>σ²</em> in Bayesian analysis. It is parameterised by degrees of freedom <em>ν</em> and a scale <em>σ₀²</em>.</p>
+        <div class="equation-block">\[ f(x;\nu,\sigma_0^2) = \frac{(\nu\sigma_0^2/2)^{\nu/2}}{\Gamma(\nu/2)} x^{-\nu/2 - 1} \exp\!\left(-\frac{\nu\sigma_0^2}{2x}\right), \qquad x > 0, \]</div>
+        <p>The distribution has mode at <em>σ₀²</em> when <em>ν > 2</em> and is the sampling distribution of <em>σ₀²/χ²<sub>ν</sub></em>. It provides a conditionally conjugate prior for variance components in hierarchical linear models.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\nu$</span><span class="var-desc">degrees of freedom (positive).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\sigma_0^2$</span><span class="var-desc">scale parameter (positive).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.132 -->
+<div class="section-block" id="a3-132">
+    <div class="section-heading"><span class="section-num-large">A3.132</span><h2 class="section-title-large">Multivariate Normal Distribution</h2></div>
+    <div class="section-body">
+        <p>The multivariate normal (Gaussian) distribution generalises the univariate normal to <em>k</em> dimensions and is the most important continuous distribution in multivariate statistics, machine learning, and spatial modelling.</p>
+        <div class="equation-block">\[ f(\mathbf{x};\boldsymbol{\mu},\boldsymbol{\Sigma}) = (2\pi)^{-k/2} |\boldsymbol{\Sigma}|^{-1/2} \exp\!\left(-\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{x}-\boldsymbol{\mu})\right), \]</div>
+        <p>where <em>μ</em> is the mean vector and <em>Σ</em> the positive-definite covariance matrix. All marginal and conditional distributions are normal; linear transformations remain normal. It underpins Gaussian processes, Kalman filters, and principal component analysis.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\boldsymbol{\mu}$</span><span class="var-desc">mean vector (length k).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\boldsymbol{\Sigma}$</span><span class="var-desc">covariance matrix (k×k, positive definite).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.133 -->
+<div class="section-block" id="a3-133">
+    <div class="section-heading"><span class="section-num-large">A3.133</span><h2 class="section-title-large">Categorical Distribution (All Variants)</h2></div>
+    <div class="section-body">
+        <p>The categorical distribution models a single trial with <em>K</em> possible outcomes. It is parameterised by a probability vector <em>p = (p₁,…,p<sub>K</sub>)</em> where <em>p<sub>i</sub> ≥ 0</em> and <em>∑ p<sub>i</sub> = 1</em>. All variants (generalised Bernoulli, one-hot encoding) reduce to this basic form.</p>
+        <div class="equation-block">\[ \Pr(X = i) = p_i, \qquad i = 1,\ldots,K. \]</div>
+        <p>The distribution is the building block of multinomial models, softmax classification, and discrete choice models. In the exponential family form, the natural parameter is the log-odds with respect to a reference category.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$p_i$</span><span class="var-desc">probability of category i (sum to 1).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$K$</span><span class="var-desc">number of categories (positive integer).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.134 -->
+<div class="section-block" id="a3-134">
+    <div class="section-heading"><span class="section-num-large">A3.134</span><h2 class="section-title-large">Multinomial Distribution (All Variants)</h2></div>
+    <div class="section-body">
+        <p>The multinomial distribution generalises the binomial to <em>n</em> independent categorical trials over <em>K</em> outcomes. The probability mass function gives the count vector <em>(x₁,…,x<sub>K</sub>)</em> with <em>∑ x<sub>i</sub> = n</em>.</p>
+        <div class="equation-block">\[ \Pr(X_1=x_1,\dots,X_K=x_K) = \frac{n!}{x_1!\cdots x_K!} \prod_{i=1}^K p_i^{x_i}. \]</div>
+        <p>All variants—including the multinomial as a sum of independent categoricals, the binomial as the special case <em>K=2</em>, and the conditional multinomial—share this core structure. It is the canonical model for counts in contingency tables and document-term matrices.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$p_i$</span><span class="var-desc">cell probability (i = 1,…,K).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$n$</span><span class="var-desc">total number of trials (positive integer).</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- A3.135 -->
+<div class="section-block" id="a3-135">
+    <div class="section-heading"><span class="section-num-large">A3.135</span><h2 class="section-title-large">Dirichlet Distribution (All Variants)</h2></div>
+    <div class="section-body">
+        <p>The Dirichlet distribution is the conjugate prior to the categorical and multinomial distributions. It is defined on the <em>(K‑1)</em>-dimensional probability simplex and is parameterised by a concentration vector <em>α = (α₁,…,α<sub>K</sub>)</em> with all <em>α<sub>i</sub> > 0</em>.</p>
+        <div class="equation-block">\[ f(\mathbf{p};\boldsymbol{\alpha}) = \frac{1}{\mathrm{B}(\boldsymbol{\alpha})} \prod_{i=1}^{K} p_i^{\alpha_i - 1}, \qquad p_i \ge 0,\; \sum_{i=1}^K p_i = 1, \]</div>
+        <p>where <em>B(α)</em> is the multivariate Beta function. All variants—symmetric Dirichlet (α<sub>i</sub> all equal), the Beta distribution (<em>K=2</em>), and Dirichlet process priors—extend naturally from this form. It is central to topic models, Bayesian mixture models, and compositional data analysis.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$\boldsymbol{\alpha}$</span><span class="var-desc">concentration parameter vector (all entries positive).</span></li>
+        </ul>
+    </div>
+</div>
+          
+<!-- A3.136 -->
+<div class="section-block" id="a3-136">
+    <div class="section-heading"><span class="section-num-large">A3.136</span><h2 class="section-title-large">Wishart Distribution</h2></div>
+    <div class="section-body">
+        <p>The Wishart distribution is a multivariate generalisation of the chi-squared distribution, defined over symmetric positive-definite matrices. It arises as the distribution of the sample covariance matrix for multivariate normal observations and serves as the conjugate prior for the precision matrix in Bayesian multivariate analysis.</p>
+        <div class="equation-block">\[ f(\mathbf{X};\mathbf{V},n) = \frac{|\mathbf{X}|^{(n-p-1)/2} \exp\!\bigl(-\tfrac{1}{2}\operatorname{tr}(\mathbf{V}^{-1}\mathbf{X})\bigr)}{2^{np/2}|\mathbf{V}|^{n/2}\Gamma_p(n/2)}, \qquad \mathbf{X} \succ 0, \]</div>
+        <p>Here <em>n ≥ p</em> are the degrees of freedom, <em>V</em> is a <em>p×p</em> positive-definite scale matrix, and <em>Γ<sub>p</sub></em> is the multivariate gamma function. The Wishart plays a fundamental role in covariance estimation, Gaussian graphical models, and random matrix theory.</p>
+        <ul class="var-def-list">
+            <li class="var-def-item"><span class="var-symbol">$n$</span><span class="var-desc">degrees of freedom (integer, n ≥ p).</span></li>
+            <li class="var-def-item"><span class="var-symbol">$\mathbf{V}$</span><span class="var-desc">scale matrix (p×p, positive definite).</span></li>
+        </ul>
+    </div>
+</div>
            
            
             <!-- END OF ALL SECTIONS -->
@@ -1917,7 +2137,24 @@
 <li><a href="#a3-118"><span class="sb-nav-num">A13.118</span> Monte Carlo EstimationML</a></li>
 <li><a href="#a3-119"><span class="sb-nav-num">A13.119</span> Exchangeability and de Finetti's TheoremML</a></li>
 <li><a href="#a3-120"><span class="sb-nav-num">A13.120</span> Generalization Gap and PAC LearningML</a></li>
-                </ul>
+<li><a href="#a3-121"><span class="sb-nav-num">A13.121</span> Chi-squared Distribution</a></li>
+<li><a href="#a3-122"><span class="sb-nav-num">A13.122</span> Log-normal Distribution</a></li>
+<li><a href="#a3-123"><span class="sb-nav-num">A13.123</span> Inverse Gaussian Distribution</a></li>
+<li><a href="#a3-124"><span class="sb-nav-num">A13.124</span> Asymmetric Laplace Distribution (ALAAM)</a></li>
+<li><a href="#a3-125"><span class="sb-nav-num">A13.125</span> Pareto Distribution (Fixed Minimum)</a></li>
+<li><a href="#a3-126"><span class="sb-nav-num">A13.126</span> Weibull Distribution (Fixed Shape)</a></li>
+<li><a href="#a3-127"><span class="sb-nav-num">A13.127</span> Laplace Distribution (Known Mean)</a></li>
+<li><a href="#a3-128"><span class="sb-nav-num">A13.128</span> Continuous Bernoulli Distribution</a></li>
+<li><a href="#a3-129"><span class="sb-nav-num">A13.129</span> Inverse Gamma Distribution</a></li>
+<li><a href="#a3-130"><span class="sb-nav-num">A13.130</span> Generalised Inverse Gaussian Distribution</a></li>
+<li><a href="#a3-131"><span class="sb-nav-num">A13.131</span> Scaled Inverse Chi-squared Distribution</a></li>
+<li><a href="#a3-132"><span class="sb-nav-num">A13.132</span> Multivariate Normal Distribution</a></li>
+<li><a href="#a3-133"><span class="sb-nav-num">A13.133</span> Categorical Distribution (All Variants)</a></li>
+<li><a href="#a3-134"><span class="sb-nav-num">A13.134</span> Multinomial Distribution (All Variants)</a></li>
+<li><a href="#a3-135"><span class="sb-nav-num">A13.135</span> Dirichlet Distribution (All Variants)</a></li>
+<li><a href="#a3-136"><span class="sb-nav-num">A13.136</span> Wishart Distribution</a></li>                
+
+</ul>
             </div>
             <div class="sb-section">
                 <div class="sb-heading">Notation</div>
