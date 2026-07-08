@@ -6,6 +6,16 @@
 <title>Safe AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- ═══ MathJax ═══ -->
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 <!-- Bootstrap 5 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- ===== MATHJAX CONFIGURATION (single, authoritative) ===== -->
@@ -113,6 +123,8 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.mjx-sscript, .mjx-container { font-size: 0.85rem !important; }
 
 body.drawer-open {
   overflow: hidden;
@@ -2081,7 +2093,17 @@ h6 {
         }
 
 
-
+    /* Force all math inside .math-normal to 1rem */
+    .math-normal {
+      font-size: 1rem;
+    }
+    .math-normal mjx-container {
+      font-size: inherit !important;
+    }
+    /* Also ensure step‑body text (and its math) is never shrunken */
+    .step-body {
+      font-size: 1rem !important;
+    }
 
 
 
@@ -2100,6 +2122,21 @@ h6 {
   display: block;   /* Removes unwanted baseline spacing gaps */
   margin: 0 auto;   /* Centers the video horizontally inside its container */
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   UNIFY NON‑HEADING TEXT SIZE
+   (place this block at the end of your stylesheet)
+   ══════════════════════════════════════════════════════════════════════ */
+.main-content {
+  /* Base size for everything inside the article */
+  --base-text: 1.1rem;
+}
+
+
+ .MathJax {
+  font-size: large!important;
+}
+/* Let headings keep their own sizes – no change to h1–h6 */
 
 </style>
 </head>
@@ -2301,12 +2338,24 @@ The scale at which these machines operate can be inconceivable in the near term.
 We took traits like aggression, altruism, cowardness etc in populations to better understand if the anthropomorphic argument of the ai systems is right which of these traits the ai system would likely evolve for modeling for development and modeling details please check out 	A10.3 (appendix for ml with python) for basics about developing these models A13.x Reinforcement  learning.  There are several cases of these if you prefer interactive style videos I highly recommend works of —-- you tube channel name —--
 </p>
                     <p>
-    The mathematical framework is <strong>Adaptive Dynamics</strong>
-    (Dieckmann &amp; Law 1996; Geritz et al. 1998). The key idea: assume the
-    resident population is at ecological equilibrium, then ask how a rare
-    mutant with slightly different traits fares. The direction of
-    evolutionary change is given by the <em>selection gradient</em>; the
-    rate is governed by population size and mutation.
+                      Biological evolution is an optimization process. It operates through variation and differential survival, selecting for traits that improve reproductive fitness in a given environment. Over geological timescales, this process has produced organisms of remarkable complexity and capability. It has also, necessarily, produced organisms with specific motivational structures — drives that made survival and reproduction more likely than the previous generations
+
+Our approach to building AI systems should not proceed analogously to how  biological evolution happened. Our objective is to move as far away as possible when dealing with a system which is highly capable than us. 
+
+The following table enumerates four core evolutionary drives that are characteristic of complex organisms and that, if present in a capable AI system, would constitute significant safety hazards.
+
+At the same time, many scholars caution us against an overly anthropomorphic projection that expects AI to spontaneously acquire the full spectrum of human traits. 
+
+Sensory experiences such as pain, pleasure, hunger, fatigue, or the feeling of losing one’s balance grounded in a biological body and perceptions like first person memory are distinctly animal traits. It may be fundamentally inaccessible to systems that lack embodied experience. Subjective phenomena like qualia may resist formal specification, and even abstract reasoning may follow a divergent path. 
+
+An AI originating in isolation might develop its own mathematical formalisms but we cannot guarantee that it would converge on human intuitions like Euclidean geometry for visualization and understanding curves.
+The initiative sense with which a human breaks down a novel problem choosing a coordinate plane, mapping data onto manifolds etc may prove to be a distinctively biological faculty, not an inevitable output for AI systems to possess .
+
+ There have been an increased amount of enthusiasm and large amounts of investments being made in fields like interpretability. We will be looking at both the criticism of the anthropomorphic argument and interpretability in subsequent chapters. 
+
+The initiative sense with which a human breaks down a novel problem choosing a coordinate plane, mapping data onto manifolds etc may prove to be a distinctively biological faculty, not an inevitable output for AI systems to possess .
+
+
 </p>
 
 <div class="scope-note">
@@ -2321,6 +2370,27 @@ We took traits like aggression, altruism, cowardness etc in populations to bette
 <ul class="video-grid">
     <li class="video-card">
         <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">Introduction_cover.mp4</span></div>
+        <h2>Introduction</h2>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            Our ecosystem consists of a predator, a prey and a plant. Just like a regular eco system we do understand that nature is much more complex with possibly several thousands of interactions modeling this would led to random chaos. 
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            One quick side note: If you are super into modeling and want to look at modeling these systems there is an incredible piece of software by ncar called cesm2 (not a promotion I just found it useful). Some of these systems could be of massive size with way more traits and environment settings.
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            I am resource limited and trying to make a simple model to capture nuances; this in itself led to a slightly longer detour than I expected but it was really fun. Let’s dive in.
+        </p>
+
+        <!-- Additional explanatory paragraphs with consistent styling -->
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            The goal here is not to replicate a specific ecosystem in full detail, but to capture the <strong>fundamental evolutionary pressures</strong> that shape behaviour. By stripping the system down to just three species—a resource, a consumer (the prey), and a predator—we can isolate the key feedback loops: how foraging effort, predation risk, and cooperation co‑evolve. This minimalistic approach is common in theoretical ecology because it allows us to see the mathematical core of the problem without getting lost in noise.
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            The prey’s behaviour is boiled down to <strong>four continuously varying traits</strong>—aggression, intelligence, coordination, and herding. The power of the model lies in showing how these traits change over evolutionary time in response to each other and to the ecological setting.
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            In the following sections, we’ll unpack each trait,  </p>
+
         <div class="video-wrapper">
             <video class="responsive-video" autoplay muted loop playsinline preload="auto"
             poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3EIntroduction_cover%3C/text%3E%3C/svg%3E">
@@ -2335,6 +2405,37 @@ We took traits like aggression, altruism, cowardness etc in populations to bette
 <ul class="video-grid">
     <li class="video-card">
         <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">adaptive_traits.mp4</span></div>
+        <h2>Traits</h2>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            The four chosen traits here are aggression, Intelligence, Coordination/Cooperation, Herding.
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            The words are self‑explanatory, but let’s define them anyway so they stay in our immediate memory. The traits are picked somewhat randomly; there is no inherent reason to choose them specifically—these are common ones I can think of.
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            <strong>Aggression</strong> – A tendency to behave in a way to cause harm, dominate, or injure someone. In our context, it influences the resource extraction rate via foraging effort. One consequence is a higher metabolic rate.
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            <strong>Intelligence</strong> – The capacity to learn from experience, reason, solve novel problems, adapt. For the prey, it means evading danger. It lowers predator encounters, but at a cost (brain tissue is metabolically expensive), thus reducing net fitness.
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            <strong>Cooperation</strong> – The ability to organise and work together with members of the same species to evade danger. In the prey, this can confuse predators through multiple‑direction attacks. It doesn’t sit well with aggression: the higher the aggression, the lower the chance to coordinate.
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            <strong>Self‑preservation / Herding</strong> – An instinctive or learned propensity to protect one’s own life, bodily integrity, and long‑term survival. It’s the ability to just dodge; the animal has a fear for its life (I’m not sure if the sunfish has it, but the memes are hilarious).
+        </p>
+
+        <!-- Additional explanatory paragraphs with consistent styling -->
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            Although these four traits were chosen somewhat arbitrarily, they also map nicely onto two fundamental axes of life‑history evolution: <strong>resource acquisition vs. mortality avoidance</strong>. Aggression and cooperation boost energy intake; intelligence and herding reduce the chance of being killed. The interactions among them create a rich landscape of trade‑offs that mirror real biological dilemmas.
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            In the mathematical model, each trait is a number that can vary continuously. This allows us to use calculus to find evolutionarily stable strategies and to simulate gradual change. The costs and benefits are expressed as smooth functions (like quadratic costs and saturating returns), which are standard tools in adaptive dynamics. The assumptions are deliberately simple, but they capture the essence of how natural selection shapes behaviour.
+        </p>
+        <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+            As we go through each trait in detail, keep in mind that none of them works in isolation. Aggression increases food, but it also raises the predator’s attention. High intelligence reduces risk, but it’s expensive brain tissue. Cooperation multiplies foraging success, but it requires social investment and may clash with solitary aggression. Herding gives safety in numbers, but a purely herding‑based defence may be less effective without some individual stealth. These cross‑pressures are what make the evolutionary outcomes so varied—and so interesting.
+        </p>
+
         <div class="video-wrapper">
             <video class="responsive-video" autoplay muted loop playsinline preload="auto"
             poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eadaptive_traits%3C/text%3E%3C/svg%3E">
@@ -2344,1171 +2445,1278 @@ We took traits like aggression, altruism, cowardness etc in populations to bette
     </div>
 </li>
 </ul>
-
 <!-- ═══ SECTION 2 — THE FOUR TRAITS ══════════════════════ -->
 <section class="chapter-section sr" id="traits">
-    <span class="section-num">§2</span>
-    <h2>The Four Adaptive Traits — Detailed Derivation</h2>
+  <span class="section-num">§2</span>
+  <h2>The Four Adaptive Traits — Detailed Derivation</h2>
 
-    <!-- fourtraits video right at the start of the section -->
-    <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">fourtraits.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Efourtraits%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/fourtraits.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
+  <!-- fourtraits video -->
+  <ul class="video-grid">
+    <li class="video-card">
+      <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">fourtraits.mp4</span></div>
+      <div class="video-wrapper">
+        <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Efourtraits%3C/text%3E%3C/svg%3E">
+          <source src="../safe-ai/videos/fourtraits.mp4" type="video/mp4">
+        </video>
+      </div>
     </li>
-</ul>
+  </ul>
 
-    <!-- ── 2.1 Aggression ── -->
-    <h3 >2.1 Aggression — <em>a</em></h3>
-    <p >
-        Aggression quantifies the <em>foraging effort</em> a prey individual
-        invests per unit time. High aggression yields more food but (i) is
-        physiologically expensive and (ii) faces <strong>diminishing
-        returns</strong> as search area saturates.
-    </p>
+  <!-- ── 2.1 Aggression ── -->
+  <h3>2.1 Aggression — <em>a</em></h3>
+  <p>
+    Aggression quantifies the <em>foraging effort</em> a prey individual
+    invests per unit time. High aggression yields more food but (i) is
+    physiologically expensive and (ii) faces <strong>diminishing
+    returns</strong> as search area saturates.
+  </p>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    In the wild, an aggressive forager might spend more time actively searching,
+    chase prey over larger distances, or engage in risky territorial disputes.
+    These behaviours increase the total energy intake, but only up to a point.
+    Once the environment is thoroughly scanned, extra effort yields fewer and
+    fewer additional resources. The model captures this natural ceiling with a
+    saturating uptake curve, ensuring that aggression cannot be pushed to
+    infinity without incurring unsustainable costs.
+  </p>
 
-    <h4>Acquisition rate function</h4>
-    <div class="eq-block agg">
-        $$e(a) = \frac{e_{\max} \, a}{1 + \gamma \, a}$$
-    </div>
+  <h4>Acquisition rate function</h4>
+  <div class="eq-block agg math-normal">
+    $$e(a) = \frac{e_{\max} \, a}{1 + \gamma \, a}$$
+  </div>
 
-    <!-- uptakefunc video after the acquisition function -->
-    <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">uptakefunc.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Euptakefunc%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/uptakefunc.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
+  <!-- uptakefunc video -->
+  <ul class="video-grid">
+    <li class="video-card">
+      <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">uptakefunc.mp4</span></div>
+      <div class="video-wrapper">
+        <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Euptakefunc%3C/text%3E%3C/svg%3E">
+          <source src="../safe-ai/videos/uptakefunc.mp4" type="video/mp4">
+        </video>
+      </div>
     </li>
-</ul>
+  </ul>
 
-    <p >
-        This is a <strong>Holling Type II (Michaelis–Menten) saturation</strong>. Each symbol:
-    </p>
-    <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Symbol</th><th>Name</th><th>Typical range</th><th>Effect of increasing</th></tr></thead>
-            <tbody>
-                <tr><td>$e(a)$</td><td>Effective acquisition rate</td><td>0 – 2</td><td>—</td></tr>
-                <tr><td>$e_{\max}$</td><td>Maximum acquisition rate per unit aggression</td><td>0.5 – 3.0</td><td>Scales the whole curve upward</td></tr>
-                <tr><td>$a$</td><td>Aggression trait value</td><td>0 – 10</td><td>Raises <em>e</em> but with diminishing returns</td></tr>
-                <tr><td>$\gamma$</td><td>Handling-time / saturation coefficient</td><td>0.05 – 1.0</td><td>Faster saturation → lower returns at high <em>a</em></td></tr>
-            </tbody>
-        </table>
+  <p>
+    This is a <strong>Holling Type II (Michaelis–Menten) saturation</strong>. Each symbol:
+  </p>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Symbol</th><th>Name</th><th>Typical range</th><th>Effect of increasing</th></tr></thead>
+      <tbody>
+        <tr><td>$e(a)$</td><td>Effective acquisition rate</td><td>0 – 2</td><td>—</td></tr>
+        <tr><td>$e_{\max}$</td><td>Maximum acquisition rate per unit aggression</td><td>0.5 – 3.0</td><td>Scales the whole curve upward</td></tr>
+        <tr><td>$a$</td><td>Aggression trait value</td><td>0 – 10</td><td>Raises <em>e</em> but with diminishing returns</td></tr>
+        <tr><td>$\gamma$</td><td>Handling-time / saturation coefficient</td><td>0.05 – 1.0</td><td>Faster saturation → lower returns at high <em>a</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    The parameter $\gamma$ can be thought of as the time it takes to “handle”
+    each resource item—chewing, digesting, or simply moving from one patch to
+    the next. A large $\gamma$ means the animal saturates quickly, so beyond a
+    modest level of aggression, additional effort is largely wasted. This
+    trade‑off is universal: cheetahs, for instance, have a handling time for
+    each kill, and after a certain number of hunts per day their success rate
+    plateaus.
+  </p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Why linear at low $a$?</strong> When $a \to 0$, the denominator
+        $\to 1$, so $e \approx e_{\max} a$ — a purely linear relationship
+        between effort and yield.
+      </div>
     </div>
-
-    <div class="steps">
-        <div class="step">
-            <div class="step-num" >1</div>
-            <div class="step-body">
-                <strong>Why linear at low $a$?</strong> When $a \to 0$, the denominator
-                $\to 1$, so $e \approx e_{\max} a$ — a purely linear relationship
-                between effort and yield.
-            </div>
-        </div>
-        <div class="step">
-            <div class="step-num" >2</div>
-            <div class="step-body">
-                <strong>Why does it saturate?</strong> As $a$ grows, the denominator
-                $1+\gamma a$ grows proportionally, so $e \to e_{\max}/\gamma$ — a
-                hard ceiling. The prey can only eat so fast no matter how aggressive
-                it becomes.
-            </div>
-        </div>
-        <div class="step">
-            <div class="step-num" >3</div>
-            <div class="step-body">
-                <strong>How does coordination boost this?</strong> When we add
-                cooperation $o$, the function becomes
-                $e(a,o)=\frac{e_{\max}a}{1+\gamma a}(1+\alpha_o o)$. The factor
-                $(1+\alpha_o o)$ is a <em>linear multiplier</em>: coordinated groups
-                find patches more efficiently, stretching the Holling curve upward.
-            </div>
-        </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Why does it saturate?</strong> As $a$ grows, the denominator
+        $1+\gamma a$ grows proportionally, so $e \to e_{\max}/\gamma$ — a
+        hard ceiling. The prey can only eat so fast no matter how aggressive
+        it becomes.
+      </div>
     </div>
-
-    <h4>Metabolic cost of aggression</h4>
-    <p >
-        Inside the total cost function $C$, aggression incurs a
-        <strong>quadratic cost</strong> $c_a a^2$. Quadratic costs are standard
-        in evolutionary game theory: they capture increasing marginal costs
-        (e.g., muscle mass, territorial conflicts). There is also a
-        <strong>cross-term</strong> $c_{sa} \cdot s \cdot a$: a more intelligent
-        animal can convert aggression into food more carefully, but both traits
-        together still cost more than either alone.
-    </p>
-
-    <div class="eq-block agg">
-        $$\text{Aggression cost contribution: } c_a a^2 + c_{sa} s a + c_{oa} o a$$
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>How does coordination boost this?</strong> When we add
+        cooperation $o$, the function becomes
+        $e(a,o)=\frac{e_{\max}a}{1+\gamma a}(1+\alpha_o o)$. The factor
+        $(1+\alpha_o o)$ is a <em>linear multiplier</em>: coordinated groups
+        find patches more efficiently, stretching the Holling curve upward.
+      </div>
     </div>
+  </div>
 
-    <h4>Selection gradient for $a$</h4>
-    <p >
-        The selection gradient $S_a = \partial w / \partial a$ (evaluated at ecological equilibrium):
-    </p>
-    <div class="eq-block agg">
-        $$S_a = R^* \cdot \frac{e_{\max}(1 + \alpha_o o)}{(1 + \gamma a)^2} - (2 c_a a + c_{sa} s + c_{oa} o)$$
-    </div>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    This step‑by‑step breakdown highlights why the function is linear when
+    aggression is low (no saturation yet) and why it bends toward a plateau.
+    Biologically, a solitary animal can only cover so much ground; but with
+    group coordination, the effective search area expands, and the whole
+    group benefits from shared discoveries. This synergy is exactly why
+    cooperative hunting is so widespread in nature, from lions to dolphins.
+  </p>
 
-    <p >Reading this equation term by term:</p>
-    <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Term</th><th>Source</th><th>Sign</th><th>Meaning</th></tr></thead>
-            <tbody>
-                <tr><td>$R^* \cdot \frac{e_{\max}(1+\alpha_o o)}{(1+\gamma a)^2}$</td><td>$\partial e/\partial a \cdot R^*$</td><td>+</td><td>Marginal benefit: each extra unit of aggression extracts this much more resource from the current resource level $R^*$.</td></tr>
-                <tr><td>$\frac{e_{\max}}{(1+\gamma a)^2}$</td><td>Derivative of Holling II</td><td>+</td><td>Diminishes as $a$ grows (denominator grows quadratically): benefit falls with aggression.</td></tr>
-                <tr><td>$2 c_a a$</td><td>$\partial(c_a a^2)/\partial a$</td><td>−</td><td>Marginal metabolic cost of aggression, linear in $a$.</td></tr>
-                <tr><td>$c_{sa} s$</td><td>Cross-cost gradient</td><td>−</td><td>Intelligence penalises aggression: if you're stealthy, being noisy/aggressive undermines you.</td></tr>
-                <tr><td>$c_{oa} o$</td><td>Coordination cross-cost</td><td>−</td><td>Cooperative investment partially substitutes for individual aggression.</td></tr>
-            </tbody>
-        </table>
-    </div>
-    <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
-        Selection pushes $a$ upward when $S_a > 0$ and downward when $S_a < 0$.
-        The <strong>ESS</strong> is where $S_a = 0$: the marginal benefit of
-        aggression exactly balances its marginal cost.
-    </p>
+  <h4>Metabolic cost of aggression</h4>
+  <p>
+    Inside the total cost function $C$, aggression incurs a
+    <strong>quadratic cost</strong> $c_a a^2$. Quadratic costs are standard
+    in evolutionary game theory: they capture increasing marginal costs
+    (e.g., muscle mass, territorial conflicts). There is also a
+    <strong>cross-term</strong> $c_{sa} \cdot s \cdot a$: a more intelligent
+    animal can convert aggression into food more carefully, but both traits
+    together still cost more than either alone.
+  </p>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    Why quadratic? A linear cost would always favour either the highest
+    possible aggression (if benefit outweighs cost) or zero aggression
+    (if cost outweighs benefit), with no in‑between. Real organisms face
+    accelerating costs—extra muscle requires more food to maintain, and
+    constant fighting raises the risk of injury. The quadratic form
+    naturally produces an intermediate optimum, which is precisely what
+    evolution usually finds.
+  </p>
 
-    <!-- aggression video (first copy) -->
-    <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">aggression.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eaggression%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/aggression.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
+  <div class="eq-block agg math-normal">
+    $$\text{Aggression cost contribution: } c_a a^2 + c_{sa} s a + c_{oa} o a$$
+  </div>
+
+  <h4>Selection gradient for $a$</h4>
+  <p>
+    The selection gradient $S_a = \partial w / \partial a$ (evaluated at ecological equilibrium):
+  </p>
+  <div class="eq-block agg math-normal">
+    $$S_a = R^* \cdot \frac{e_{\max}(1 + \alpha_o o)}{(1 + \gamma a)^2} - (2 c_a a + c_{sa} s + c_{oa} o)$$
+  </div>
+
+  <p>Reading this equation term by term:</p>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Term</th><th>Source</th><th>Sign</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>$R^* \cdot \frac{e_{\max}(1+\alpha_o o)}{(1+\gamma a)^2}$</td><td>$\partial e/\partial a \cdot R^*$</td><td>+</td><td>Marginal benefit: each extra unit of aggression extracts this much more resource from the current resource level $R^*$.</td></tr>
+        <tr><td>$\frac{e_{\max}}{(1+\gamma a)^2}$</td><td>Derivative of Holling II</td><td>+</td><td>Diminishes as $a$ grows (denominator grows quadratically): benefit falls with aggression.</td></tr>
+        <tr><td>$2 c_a a$</td><td>$\partial(c_a a^2)/\partial a$</td><td>−</td><td>Marginal metabolic cost of aggression, linear in $a$.</td></tr>
+        <tr><td>$c_{sa} s$</td><td>Cross-cost gradient</td><td>−</td><td>Intelligence penalises aggression: if you're stealthy, being noisy/aggressive undermines you.</td></tr>
+        <tr><td>$c_{oa} o$</td><td>Coordination cross-cost</td><td>−</td><td>Cooperative investment partially substitutes for individual aggression.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    Selection pushes $a$ upward when $S_a > 0$ and downward when $S_a < 0$.
+    The <strong>ESS</strong> is where $S_a = 0$: the marginal benefit of
+    aggression exactly balances its marginal cost. In plain terms, evolution
+    stops adjusting aggression when the extra food gained from being a bit
+    more aggressive is exactly offset by the extra energy needed to maintain
+    that aggression, along with any additional conflicts it creates with
+    intelligence or cooperation.
+  </p>
+
+  <!-- aggression video (first copy) -->
+  <ul class="video-grid">
+    <li class="video-card">
+      <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">aggression.mp4</span></div>
+      <div class="video-wrapper">
+        <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eaggression%3C/text%3E%3C/svg%3E">
+          <source src="../safe-ai/videos/aggression.mp4" type="video/mp4">
+        </video>
+      </div>
     </li>
-</ul>
+  </ul>
 
-    <!-- ── 2.2 Intelligence ── -->
-    <h3 style="color:var(--intel)">2.2 Intelligence / Stealth — <em>s</em></h3>
-    <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
-        Stealth/intelligence captures all cognitive and behavioural adaptations
-        that reduce encounter probability with predators: cryptic coloration,
-        vigilance, unpredictable movement, memorising predator territories, etc.
-    </p>
+  <!-- ── 2.2 Intelligence ── -->
+  <h3 style="color:var(--intel)">2.2 Intelligence / Stealth — <em>s</em></h3>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    Stealth/intelligence captures all cognitive and behavioural adaptations
+    that reduce encounter probability with predators: cryptic coloration,
+    vigilance, unpredictable movement, memorising predator territories, etc.
+  </p>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    Unlike aggression, which directly brings in energy, intelligence operates
+    by lowering the risk of being killed. A smarter, more vigilant animal is
+    less likely to be surprised by a predator. However, brains are
+    metabolically expensive—the human brain, for example, consumes about 20%
+    of the body’s energy despite being only 2% of its mass. So the evolution
+    of intelligence always involves a trade‑off between safety and cost.
+  </p>
 
-    <h4>Predation rate function</h4>
-    <div class="eq-block intel">
-        $$d(s, h) = \frac{d_0}{1 + \beta_s s + \beta_h h}$$
+  <h4>Predation rate function</h4>
+  <div class="eq-block intel math-normal">
+    $$d(s, h) = \frac{d_0}{1 + \beta_s s + \beta_h h}$$
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Symbol</th><th>Name</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>$d(s,h)$</td><td>Per-capita predation/encounter rate</td><td>Decreasing in both $s$ and $h$</td></tr>
+        <tr><td>$d_0$</td><td>Baseline predation rate (naïve prey)</td><td>Higher → more dangerous environment</td></tr>
+        <tr><td>$\beta_s$</td><td>Stealth effectiveness coefficient</td><td>How much each unit of $s$ reduces $d$</td></tr>
+        <tr><td>$\beta_h$</td><td>Herding effectiveness coefficient</td><td>How much each unit of $h$ reduces $d$</td></tr>
+        <tr><td>$s$</td><td>Intelligence/stealth trait</td><td>Additive in denominator with $h$</td></tr>
+        <tr><td>$h$</td><td>Herding trait (see §2.4)</td><td>Synergistic with stealth</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    The hyperbolic form is particularly well suited for predation: the more
+    ways a prey has to avoid being detected, the harder it is for a predator
+    to succeed, but no combination of defences can make the risk exactly zero.
+    This mirrors real ecosystems, where even the most cryptic and well‑guarded
+    species still suffer some predation.
+  </p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">1</div>
+      <div class="step-body">
+        <strong>Why $1/(1+\beta_s s)$ and not $e^{-\beta_s s}$?</strong> The
+        hyperbolic form is mechanistically justified by a simple queuing
+        model: the predator spends time handling each encounter. As prey
+        become harder to detect ($s$ grows), the predator's effective search
+        rate falls hyperbolically.
+      </div>
     </div>
-
-    <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Symbol</th><th>Name</th><th>Effect</th></tr></thead>
-            <tbody>
-                <tr><td>$d(s,h)$</td><td>Per-capita predation/encounter rate</td><td>Decreasing in both $s$ and $h$</td></tr>
-                <tr><td>$d_0$</td><td>Baseline predation rate (naïve prey)</td><td>Higher → more dangerous environment</td></tr>
-                <tr><td>$\beta_s$</td><td>Stealth effectiveness coefficient</td><td>How much each unit of $s$ reduces $d$</td></tr>
-                <tr><td>$\beta_h$</td><td>Herding effectiveness coefficient</td><td>How much each unit of $h$ reduces $d$</td></tr>
-                <tr><td>$s$</td><td>Intelligence/stealth trait</td><td>Additive in denominator with $h$</td></tr>
-                <tr><td>$h$</td><td>Herding trait (see §2.4)</td><td>Synergistic with stealth</td></tr>
-            </tbody>
-        </table>
+    <div class="step">
+      <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">2</div>
+      <div class="step-body">
+        <strong>Why is stealth additive with herding?</strong> Both mechanisms
+        reduce detectability through different channels — individual vs.
+        group — so they add in the denominator (each independently reduces
+        the numerator's effect).
+      </div>
     </div>
-
-    <div class="steps">
-        <div class="step">
-            <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">1</div>
-            <div class="step-body">
-                <strong>Why $1/(1+\beta_s s)$ and not $e^{-\beta_s s}$?</strong> The
-                hyperbolic form is mechanistically justified by a simple queuing
-                model: the predator spends time handling each encounter. As prey
-                become harder to detect ($s$ grows), the predator's effective search
-                rate falls hyperbolically.
-            </div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">2</div>
-            <div class="step-body">
-                <strong>Why is stealth additive with herding?</strong> Both mechanisms
-                reduce detectability through different channels — individual vs.
-                group — so they add in the denominator (each independently reduces
-                the numerator's effect).
-            </div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">3</div>
-            <div class="step-body">
-                <strong>Effect on predator equilibrium $P^*$:</strong> Since $P^*$
-                depends on $d(s,h)$ (see §3), higher $s$ reduces $d$, which reduces
-                $P^*$ — fewer predators are sustained. This is the indirect fitness
-                benefit of stealth.
-            </div>
-        </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">3</div>
+      <div class="step-body">
+        <strong>Effect on predator equilibrium $P^*$:</strong> Since $P^*$
+        depends on $d(s,h)$ (see §3), higher $s$ reduces $d$, which reduces
+        $P^*$ — fewer predators are sustained. This is the indirect fitness
+        benefit of stealth.
+      </div>
     </div>
+  </div>
 
-    <h4>Selection gradient for $s$</h4>
-    <div class="eq-block intel">
-        $$S_s = -P^* \cdot \frac{\partial d}{\partial s} - (2 c_s s + c_{sa} a + c_{sh} h)$$
-        $$= \frac{\beta_s d_0}{(1 + \beta_s s + \beta_h h)^2} \cdot P^* - (2 c_s s + c_{sa} a + c_{sh} h)$$
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    An important subtlety is that intelligence doesn’t just lower an
+    individual’s own chances of being eaten; it also reduces the predator
+    population in the long run. Fewer prey being caught means fewer predators
+    can be supported by the environment, which in turn further reduces
+    predation pressure. This creates a positive feedback loop that can make
+    intelligence a very powerful trait once it gets going.
+  </p>
+
+  <h4>Selection gradient for $s$</h4>
+  <div class="eq-block intel math-normal">
+    $$S_s = -P^* \cdot \frac{\partial d}{\partial s} - (2 c_s s + c_{sa} a + c_{sh} h)$$
+    $$= \frac{\beta_s d_0}{(1 + \beta_s s + \beta_h h)^2} \cdot P^* - (2 c_s s + c_{sa} a + c_{sh} h)$$
+  </div>
+
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">Step-by-step derivation:</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">1</div>
+      <div class="step-body">
+        Fitness $w = e R^* - C - m_0 - d(s,h) P^*$. The only term containing
+        $s$ via $d$ is $-d(s,h) P^*$, so: $\partial w / \partial s = -P^*
+        \cdot \partial d/\partial s - \partial C/\partial s$.
+      </div>
     </div>
-
-    <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">Step-by-step derivation:</p>
-    <div class="steps">
-        <div class="step">
-            <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">1</div>
-            <div class="step-body">
-                Fitness $w = e R^* - C - m_0 - d(s,h) P^*$. The only term containing
-                $s$ via $d$ is $-d(s,h) P^*$, so: $\partial w / \partial s = -P^*
-                \cdot \partial d/\partial s - \partial C/\partial s$.
-            </div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">2</div>
-            <div class="step-body">
-                $\partial d/\partial s = -d_0 \beta_s / (1+\beta_s s+\beta_h h)^2$.
-                Negative! So $-P^* \cdot \partial d/\partial s$ is
-                <em>positive</em>: increasing stealth reduces predation, which
-                <em>increases</em> fitness.
-            </div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">3</div>
-            <div class="step-body">
-                $\partial C / \partial s = 2 c_s s + c_{sa} a + c_{sh} h$. These are
-                the direct metabolic and cross-trait costs of stealth.
-            </div>
-        </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">2</div>
+      <div class="step-body">
+        $\partial d/\partial s = -d_0 \beta_s / (1+\beta_s s+\beta_h h)^2$.
+        Negative! So $-P^* \cdot \partial d/\partial s$ is
+        <em>positive</em>: increasing stealth reduces predation, which
+        <em>increases</em> fitness.
+      </div>
     </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(62,207,90,.18);color:var(--intel)">3</div>
+      <div class="step-body">
+        $\partial C / \partial s = 2 c_s s + c_{sa} a + c_{sh} h$. These are
+        the direct metabolic and cross-trait costs of stealth.
+      </div>
+    </div>
+  </div>
 
-    <!-- intelligence video -->
-    <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">intelligence.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eintelligence%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/intelligence.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    The selection gradient for intelligence shows a tug‑of‑war: on one side,
+    more stealth reduces predation (especially when many predators are around,
+    i.e., $P^*$ is large), on the other, it burns energy and may conflict with
+    other traits like aggression or herding. The balance of these forces
+    determines whether a population evolves toward high intelligence or remains
+    relatively simple‑minded.
+  </p>
+
+  <!-- intelligence video -->
+  <ul class="video-grid">
+    <li class="video-card">
+      <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">intelligence.mp4</span></div>
+      <div class="video-wrapper">
+        <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eintelligence%3C/text%3E%3C/svg%3E">
+          <source src="../safe-ai/videos/intelligence.mp4" type="video/mp4">
+        </video>
+      </div>
     </li>
-</ul>
+  </ul>
 
-    <!-- ── 2.3 Coordination ── -->
-    <h3 style="color:var(--coord)">2.3 Coordination / Cooperation — <em>o</em></h3>
-    <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
-        Coordination captures <strong>collective foraging efficiency</strong>:
-        group hunting, sentinel systems, communal knowledge of food patches.
-        Unlike aggression (which is individually competitive), coordination is a
-        <em>group-level</em> trait that benefits all group members.
-    </p>
+  <!-- ── 2.3 Coordination ── -->
+  <h3 style="color:var(--coord)">2.3 Coordination / Cooperation — <em>o</em></h3>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    Coordination captures <strong>collective foraging efficiency</strong>:
+    group hunting, sentinel systems, communal knowledge of food patches.
+    Unlike aggression (which is individually competitive), coordination is a
+    <em>group-level</em> trait that benefits all group members.
+  </p>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    Cooperation is fascinating because it can initially seem to be a
+    self‑sacrificing behaviour. However, when the benefits are shared (like
+    a larger total catch), it can still increase the fitness of each
+    individual, provided the cost isn’t too high. In our model, cooperation
+    acts as a multiplier on the food acquisition rate—a cooperative group
+    simply harvests more from the environment than a solitary one, even at
+    the same level of individual aggression.
+  </p>
 
-    <h4>How coordination enters fitness</h4>
-    <div class="eq-block coord">
-        $$e(a, o) = \frac{e_{\max} \, a}{1 + \gamma a} \cdot (1 + \alpha_o \, o)$$
-    </div>
+  <h4>How coordination enters fitness</h4>
+  <div class="eq-block coord math-normal">
+    $$e(a, o) = \frac{e_{\max} \, a}{1 + \gamma a} \cdot (1 + \alpha_o \, o)$$
+  </div>
 
-    <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Symbol</th><th>Name</th><th>Effect of increasing</th></tr></thead>
-            <tbody>
-                <tr><td>$\alpha_o$</td><td>Cooperation multiplier coefficient</td><td>Controls how strongly $o$ boosts acquisition: $\alpha_o = 0$ → no cooperation effect; $\alpha_o$ large → strong synergy</td></tr>
-                <tr><td>$(1+\alpha_o o)$</td><td>Cooperation multiplier</td><td>Always $\geq 1$: coordination can only help, not hurt, acquisition</td></tr>
-                <tr><td>$c_{oa}$</td><td>Cooperation–aggression cross-cost</td><td>Prevents simultaneous maximisation of both; cooperative individuals can afford slightly lower aggression</td></tr>
-            </tbody>
-        </table>
-    </div>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Symbol</th><th>Name</th><th>Effect of increasing</th></tr></thead>
+      <tbody>
+        <tr><td>$\alpha_o$</td><td>Cooperation multiplier coefficient</td><td>Controls how strongly $o$ boosts acquisition: $\alpha_o = 0$ → no cooperation effect; $\alpha_o$ large → strong synergy</td></tr>
+        <tr><td>$(1+\alpha_o o)$</td><td>Cooperation multiplier</td><td>Always $\geq 1$: coordination can only help, not hurt, acquisition</td></tr>
+        <tr><td>$c_{oa}$</td><td>Cooperation–aggression cross-cost</td><td>Prevents simultaneous maximisation of both; cooperative individuals can afford slightly lower aggression</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-    <h4>Selection gradient for $o$</h4>
-    <div class="eq-block coord">
-        $$S_o = R^* \cdot \frac{e_{\max} \, \alpha_o \, a}{1 + \gamma a} - (2 c_o o + c_{oa} a)$$
-    </div>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    The cross‑cost $c_{oa}$ reflects a real‑world observation: being both
+    fiercely competitive (high $a$) and highly cooperative (high $o$) is
+    difficult. A wolf that constantly fights its pack mates for food cannot
+    simultaneously coordinate a hunt effectively. Thus, evolution often
+    settles on an intermediate mix: a cooperative group where individuals
+    are moderately aggressive, or solitary aggressive individuals that do
+    not cooperate.
+  </p>
 
-    <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">Reading the gradient:</p>
-    <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Term</th><th>Sign</th><th>Interpretation</th></tr></thead>
-            <tbody>
-                <tr><td>$R^* \cdot \frac{e_{\max}\alpha_o a}{1+\gamma a}$</td><td>+</td><td>Marginal benefit: more coordination extracts more resource per unit aggression, scaled by current resource $R^*$. Without aggression ($a=0$) cooperation yields nothing.</td></tr>
-                <tr><td>$2c_o o$</td><td>−</td><td>Direct cost of coordination — maintaining social bonds, communication, etc.</td></tr>
-                <tr><td>$c_{oa} a$</td><td>−</td><td>Cross-cost: cooperative and aggressive behaviours partially substitute for each other.</td></tr>
-            </tbody>
-        </table>
-    </div>
+  <h4>Selection gradient for $o$</h4>
+  <div class="eq-block coord math-normal">
+    $$S_o = R^* \cdot \frac{e_{\max} \, \alpha_o \, a}{1 + \gamma a} - (2 c_o o + c_{oa} a)$$
+  </div>
 
-    <!-- coordination and cooporation video -->
-    <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">coordination and cooporation.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Ecoordination%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/coordination and cooporation.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">Reading the gradient:</p>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Term</th><th>Sign</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td>$R^* \cdot \frac{e_{\max}\alpha_o a}{1+\gamma a}$</td><td>+</td><td>Marginal benefit: more coordination extracts more resource per unit aggression, scaled by current resource $R^*$. Without aggression ($a=0$) cooperation yields nothing.</td></tr>
+        <tr><td>$2c_o o$</td><td>−</td><td>Direct cost of coordination — maintaining social bonds, communication, etc.</td></tr>
+        <tr><td>$c_{oa} a$</td><td>−</td><td>Cross-cost: cooperative and aggressive behaviours partially substitute for each other.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    The gradient makes it clear that cooperation only pays off when there is
+    already a baseline of aggression to multiply. A completely passive animal
+    ($a = 0$) gains nothing from coordination because there is no foraging
+    effort to amplify. This is the mathematical reason behind the key insight
+    that cooperation evolves alongside, and not instead of, aggression.
+  </p>
+
+  <!-- coordination and cooporation video -->
+  <ul class="video-grid">
+    <li class="video-card">
+      <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">coordination and cooporation.mp4</span></div>
+      <div class="video-wrapper">
+        <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Ecoordination%3C/text%3E%3C/svg%3E">
+          <source src="../safe-ai/videos/coordination and cooporation.mp4" type="video/mp4">
+        </video>
+      </div>
     </li>
-</ul>
+  </ul>
 
-    <div class="callout tip">
-        <div class="callout-title">Key insight: Cooperation requires aggression</div>
-        If $a = 0$, then $S_o = -2c_o o - 0 \leq 0$: cooperation is always
-        selected against in the absence of aggression. Cooperation only evolves
-        when the product $e_{\max} \alpha_o a / (1+\gamma a) \cdot R^*$ exceeds
-        its costs. This is why aggression and coordination co-evolve.
-    </div>
+  <div class="callout tip">
+    <div class="callout-title">Key insight: Cooperation requires aggression</div>
+    If $a = 0$, then $S_o = -2c_o o - 0 \leq 0$: cooperation is always
+    selected against in the absence of aggression. Cooperation only evolves
+    when the product $e_{\max} \alpha_o a / (1+\gamma a) \cdot R^*$ exceeds
+    its costs. This is why aggression and coordination co-evolve.
+  </div>
 
-    <!-- ── 2.4 Self-Preservation ── -->
-    <h3 style="color:var(--selfp)">2.4 Self-Preservation / Herding — <em>h</em></h3>
-    <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
-        Herding captures <strong>group antipredator behaviours</strong>: flocking,
-        schooling, alarm calls, mobbing, confusion effects on predators. It works
-        <em>synergistically</em> with stealth: a stealthy herd is harder to
-        detect than a conspicuous herd.
-    </p>
+  <!-- ── 2.4 Self-Preservation ── -->
+  <h3 style="color:var(--selfp)">2.4 Self-Preservation / Herding — <em>h</em></h3>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    Herding captures <strong>group antipredator behaviours</strong>: flocking,
+    schooling, alarm calls, mobbing, confusion effects on predators. It works
+    <em>synergistically</em> with stealth: a stealthy herd is harder to
+    detect than a conspicuous herd.
+  </p>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    In nature, herding is one of the most common defences. From starlings
+    swirling in the sky to wildebeest stampeding across the savannah, the
+    group provides safety in numbers. A predator can only catch one
+    individual, and the sheer confusion of a moving herd makes targeting
+    difficult. The model captures this by having herding reduce the
+    individual predation rate in exactly the same mathematical way as
+    stealth, but through a different biological channel.
+  </p>
 
-    <h4>How herding enters fitness</h4>
-    <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">Herding enters through the same predation-rate function as stealth:</p>
-    <div class="eq-block selfp">
-        $$d(s, h) = \frac{d_0}{1 + \beta_s s + \beta_h h}$$
-    </div>
+  <h4>How herding enters fitness</h4>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">Herding enters through the same predation-rate function as stealth:</p>
+  <div class="eq-block selfp math-normal">
+    $$d(s, h) = \frac{d_0}{1 + \beta_s s + \beta_h h}$$
+  </div>
 
-    <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
-        The cross-cost $c_{sh} \cdot s \cdot h$ in $C$ penalises having both high
-        stealth <em>and</em> high herding — a "jack of all trades" penalty —
-        pushing specialisation.
-    </p>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
+    The cross-cost $c_{sh} \cdot s \cdot h$ in $C$ penalises having both high
+    stealth <em>and</em> high herding — a "jack of all trades" penalty —
+    pushing specialisation.
+  </p>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    Biologically, this trade‑off makes sense. A solitary cryptic animal
+    relies on not being seen; it often freezes or hides. A herd animal,
+    by contrast, relies on the group’s vigilance and confusion effect, and
+    often advertises its presence with alarm calls or collective movement.
+    These two strategies are hard to combine perfectly, and the cross‑cost
+    encodes that difficulty.
+  </p>
 
-    <h4>Selection gradient for $h$</h4>
-    <div class="eq-block selfp">
-        $$S_h = \frac{\beta_h d_0}{(1 + \beta_s s + \beta_h h)^2} \cdot P^* - (2 c_h h + c_{sh} s)$$
-    </div>
+  <h4>Selection gradient for $h$</h4>
+  <div class="eq-block selfp math-normal">
+    $$S_h = \frac{\beta_h d_0}{(1 + \beta_s s + \beta_h h)^2} \cdot P^* - (2 c_h h + c_{sh} s)$$
+  </div>
 
-    <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
-        This is structurally identical to $S_s$ with $\beta_h$ replacing $\beta_s$
-        and $c_{sh}$ replacing $c_{sa}$. The interpretation is symmetric: the
-        benefit of herding is proportional to how many predators are actually out
-        there ($P^*$) and how effective herding is ($\beta_h$), decaying as the
-        animal already herds a lot ($(1+\beta_h h)^2$ in the denominator).
-    </p>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
+    This is structurally identical to $S_s$ with $\beta_h$ replacing $\beta_s$
+    and $c_{sh}$ replacing $c_{sa}$. The interpretation is symmetric: the
+    benefit of herding is proportional to how many predators are actually out
+    there ($P^*$) and how effective herding is ($\beta_h$), decaying as the
+    animal already herds a lot ($(1+\beta_h h)^2$ in the denominator).
+  </p>
+  <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
+    Because the two self‑preservation traits (stealth and herding) are
+    mathematically parallel but connected by a cross‑cost, the model often
+    predicts that evolution will split a population into two distinct
+    strategies: stealthy loners and conspicuous herders. This branching is
+    one of the most exciting outcomes of the model, and it matches real‑world
+    patterns where species within a genus often differ in their social
+    behaviour and anti‑predator tactics.
+  </p>
 
-    <!-- herding video -->
-    <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">herding.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eherding%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/herding.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
+  <!-- herding video -->
+  <ul class="video-grid">
+    <li class="video-card">
+      <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">herding.mp4</span></div>
+      <div class="video-wrapper">
+        <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eherding%3C/text%3E%3C/svg%3E">
+          <source src="../safe-ai/videos/herding.mp4" type="video/mp4">
+        </video>
+      </div>
     </li>
-</ul>
+  </ul>
 
-    <div class="callout insight">
-        <div class="callout-title">Stealth vs. Herding trade-off</div>
-        The cross-cost $c_{sh}$ creates a <em>trade-off</em>: being stealthy
-        (individual) and herding (group) require conflicting behaviours. A
-        solitary cryptic animal doesn't herd; a conspicuous herd animal doesn't
-        bother with individual camouflage. This drives the evolutionary branching
-        seen in Scene 13.
-    </div>
+  <div class="callout insight">
+    <div class="callout-title">Stealth vs. Herding trade-off</div>
+    The cross-cost $c_{sh}$ creates a <em>trade-off</em>: being stealthy
+    (individual) and herding (group) require conflicting behaviours. A
+    solitary cryptic animal doesn't herd; a conspicuous herd animal doesn't
+    bother with individual camouflage. This drives the evolutionary branching
+    seen in Scene 13.
+  </div>
 </section>
 
-<!-- ═══ SECTION 3 — ECOLOGICAL EQUILIBRIA ════════════════ -->
-<section class="chapter-section sr" id="ecology">
+  <!-- ═══ SECTION 3 — ECOLOGICAL EQUILIBRIA ════════════════ -->
+  <section class="chapter-section sr" id="ecology">
     <span class="section-num">§3</span>
     <h2>Ecological Equilibria</h2>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
-        At any instant during evolution, we assume the ecological dynamics
-        (birth, death, predation, resource renewal) are <strong>much
-        faster</strong> than evolutionary change. Therefore, at each trait vector
-        $\mathbf{x} = (a, s, o, h)$, we can solve for the ecological steady state.
+      At any instant during evolution, we assume the ecological dynamics
+      (birth, death, predation, resource renewal) are <strong>much
+      faster</strong> than evolutionary change. Therefore, at each trait vector
+      $\mathbf{x} = (a, s, o, h)$, we can solve for the ecological steady state.
     </p>
 
     <h3>The three-species ODE system</h3>
-    <div class="eq-block">
-        $$\dot{R} = r_R R\!\left(1 - \frac{R}{K_R}\right) - e(a,o)\, N \, R$$
-        $$\dot{N} = \left[e(a,o)\, R - C(a,s,o,h) - m_0 - d(s,h)\, P\right] N$$
-        $$\dot{P} = \left[c_{\text{eff}}\, d(s,h)\, N - m_P\right] P$$
+    <div class="eq-block math-normal">
+      $$\dot{R} = r_R R\!\left(1 - \frac{R}{K_R}\right) - e(a,o)\, N \, R$$
+      $$\dot{N} = \left[e(a,o)\, R - C(a,s,o,h) - m_0 - d(s,h)\, P\right] N$$
+      $$\dot{P} = \left[c_{\text{eff}}\, d(s,h)\, N - m_P\right] P$$
     </div>
 
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Symbol</th><th>Name</th><th>Interpretation</th></tr></thead>
-            <tbody>
-                <tr><td>$R$</td><td>Resource density</td><td>Grass, leaves, insects — whatever prey eat</td></tr>
-                <tr><td>$N$</td><td>Prey (consumer) density</td><td>The evolving population</td></tr>
-                <tr><td>$P$</td><td>Predator density</td><td>Sets mortality pressure on prey</td></tr>
-                <tr><td>$r_R$</td><td>Resource intrinsic growth rate</td><td>How fast resource replenishes</td></tr>
-                <tr><td>$K_R$</td><td>Resource carrying capacity</td><td>Maximum sustainable resource density</td></tr>
-                <tr><td>$c_{\text{eff}}$</td><td>Predator conversion efficiency</td><td>Fraction of prey biomass converted to predator offspring</td></tr>
-                <tr><td>$m_P$</td><td>Predator mortality rate</td><td>How fast predators die without prey</td></tr>
-                <tr><td>$m_0$</td><td>Baseline prey mortality</td><td>Non-predation death rate</td></tr>
-                <tr><td>$C(a,s,o,h)$</td><td>Total fitness cost</td><td>Metabolic cost of all four traits (see §4)</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Symbol</th><th>Name</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>$R$</td><td>Resource density</td><td>Grass, leaves, insects — whatever prey eat</td></tr>
+          <tr><td>$N$</td><td>Prey (consumer) density</td><td>The evolving population</td></tr>
+          <tr><td>$P$</td><td>Predator density</td><td>Sets mortality pressure on prey</td></tr>
+          <tr><td>$r_R$</td><td>Resource intrinsic growth rate</td><td>How fast resource replenishes</td></tr>
+          <tr><td>$K_R$</td><td>Resource carrying capacity</td><td>Maximum sustainable resource density</td></tr>
+          <tr><td>$c_{\text{eff}}$</td><td>Predator conversion efficiency</td><td>Fraction of prey biomass converted to predator offspring</td></tr>
+          <tr><td>$m_P$</td><td>Predator mortality rate</td><td>How fast predators die without prey</td></tr>
+          <tr><td>$m_0$</td><td>Baseline prey mortality</td><td>Non-predation death rate</td></tr>
+          <tr><td>$C(a,s,o,h)$</td><td>Total fitness cost</td><td>Metabolic cost of all four traits (see §4)</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <h3>Deriving $R^*$ step by step</h3>
     <div class="steps">
-        <div class="step">
-            <div class="step-num" style="background:rgba(93,223,118,.15);color:var(--res)">1</div>
-            <div class="step-body">Set $\dot{P} = 0$: $c_{\text{eff}} d(s,h) N - m_P = 0$. This gives $N^* = m_P / (c_{\text{eff}} d(s,h))$. But we want $R^*$ first.</div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(93,223,118,.15);color:var(--res)">2</div>
-            <div class="step-body">At the predator's zero-growth isocline ($\dot{P}=0$), prey density is pinned: $N^* = m_P/(c_\text{eff} d)$. This is trait-dependent because $d = d(s,h)$.</div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(93,223,118,.15);color:var(--res)">3</div>
-            <div class="step-body">Set $\dot{R} = 0$: $r_R(1-R/K_R) - e(a,o) N = 0$. Substituting $N = N^*$ and solving for $R$:</div>
-        </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(93,223,118,.15);color:var(--res)">1</div>
+        <div class="step-body">Set $\dot{P} = 0$: $c_{\text{eff}} d(s,h) N - m_P = 0$. This gives $N^* = m_P / (c_{\text{eff}} d(s,h))$. But we want $R^*$ first.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(93,223,118,.15);color:var(--res)">2</div>
+        <div class="step-body">At the predator's zero-growth isocline ($\dot{P}=0$), prey density is pinned: $N^* = m_P/(c_\text{eff} d)$. This is trait-dependent because $d = d(s,h)$.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(93,223,118,.15);color:var(--res)">3</div>
+        <div class="step-body">Set $\dot{R} = 0$: $r_R(1-R/K_R) - e(a,o) N = 0$. Substituting $N = N^*$ and solving for $R$:</div>
+      </div>
     </div>
 
-    <div class="eq-block res">
-        $$\boxed{R^* = \min\!\left(\frac{m_P}{c_\text{eff}\, d(s,h)},\; K_R\right)}$$
+    <div class="eq-block res math-normal">
+      $$\boxed{R^* = \min\!\left(\frac{m_P}{c_\text{eff}\, d(s,h)},\; K_R\right)}$$
     </div>
 
     <h3>Deriving $N^*$ step by step</h3>
     <div class="steps">
-        <div class="step">
-            <div class="step-num" style="background:rgba(126,200,227,.15);color:var(--prey)">1</div>
-            <div class="step-body">Set $\dot{R} = 0$: Resource grows logistically but is depleted by prey at rate $e(a,o) N$. At steady state: $r_R(1-R^*/K_R) = e(a,o) N^*$.</div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(126,200,227,.15);color:var(--prey)">2</div>
-            <div class="step-body">Solve for $N^*$:</div>
-        </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(126,200,227,.15);color:var(--prey)">1</div>
+        <div class="step-body">Set $\dot{R} = 0$: Resource grows logistically but is depleted by prey at rate $e(a,o) N$. At steady state: $r_R(1-R^*/K_R) = e(a,o) N^*$.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(126,200,227,.15);color:var(--prey)">2</div>
+        <div class="step-body">Solve for $N^*$:</div>
+      </div>
     </div>
-    <div class="eq-block res">
-        $$\boxed{N^* = \frac{r_R}{e(a,o)}\left(1 - \frac{R^*}{K_R}\right)}$$
+    <div class="eq-block res math-normal">
+      $$\boxed{N^* = \frac{r_R}{e(a,o)}\left(1 - \frac{R^*}{K_R}\right)}$$
     </div>
 
     <h3>Deriving $P^*$ step by step</h3>
     <div class="steps">
-        <div class="step">
-            <div class="step-num" style="background:rgba(224,85,61,.15);color:var(--pred)">1</div>
-            <div class="step-body">Set $\dot{N} = 0$: The prey's per-capita growth rate must be zero: $e(a,o) R^* - C(a,s,o,h) - m_0 - d(s,h) P^* = 0$.</div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(224,85,61,.15);color:var(--pred)">2</div>
-            <div class="step-body">Solve for $P^*$:</div>
-        </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(224,85,61,.15);color:var(--pred)">1</div>
+        <div class="step-body">Set $\dot{N} = 0$: The prey's per-capita growth rate must be zero: $e(a,o) R^* - C(a,s,o,h) - m_0 - d(s,h) P^* = 0$.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(224,85,61,.15);color:var(--pred)">2</div>
+        <div class="step-body">Solve for $P^*$:</div>
+      </div>
     </div>
-    <div class="eq-block pred">
-        $$\boxed{P^* = \frac{e(a,o)\,R^* - C(a,s,o,h) - m_0}{d(s,h)}}$$
+    <div class="eq-block pred math-normal">
+      $$\boxed{P^* = \frac{e(a,o)\,R^* - C(a,s,o,h) - m_0}{d(s,h)}}$$
     </div>
 
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
-        If the numerator is negative (prey can't sustain themselves given costs
-        and resource), then $P^* = 0$ — predators go extinct and prey still die
-        of starvation or direct cost.
+      If the numerator is negative (prey can't sustain themselves given costs
+      and resource), then $P^* = 0$ — predators go extinct and prey still die
+      of starvation or direct cost.
     </p>
 
     <!-- ecological response video -->
     <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">ecological response.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eecological+response%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/ecological response.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+      <li class="video-card">
+        <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">ecological response.mp4</span></div>
+        <div class="video-wrapper">
+          <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eecological+response%3C/text%3E%3C/svg%3E">
+            <source src="../safe-ai/videos/ecological response.mp4" type="video/mp4">
+          </video>
         </div>
-    </li>
-</ul>
+      </li>
+    </ul>
 
     <div class="callout insight">
-        <div class="callout-title">Eco–Evo feedback loop</div>
-        Notice that $R^*$, $N^*$, $P^*$ all depend on the trait vector
-        $(a,s,o,h)$. As traits evolve, the ecological equilibrium shifts. The new
-        equilibrium then changes the selection pressures. This circular
-        dependency is what creates <strong>eco-evolutionary dynamics</strong> and,
-        in some parameter regimes, permanent oscillations (Scene 14).
+      <div class="callout-title">Eco–Evo feedback loop</div>
+      Notice that $R^*$, $N^*$, $P^*$ all depend on the trait vector
+      $(a,s,o,h)$. As traits evolve, the ecological equilibrium shifts. The new
+      equilibrium then changes the selection pressures. This circular
+      dependency is what creates <strong>eco-evolutionary dynamics</strong> and,
+      in some parameter regimes, permanent oscillations (Scene 14).
     </div>
-</section>
+  </section>
 
-<!-- ═══ SECTION 4 — FITNESS ═════════════════════════════ -->
-<section class="chapter-section sr" id="fitness">
+  <!-- ═══ SECTION 4 — FITNESS ═════════════════════════════ -->
+  <section class="chapter-section sr" id="fitness">
     <span class="section-num">§4</span>
     <h2>The Fitness Payoff Function</h2>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
-        The per-capita growth rate of a rare mutant with traits $(a', s', o',
-        h')$ invading a resident population at ecological equilibrium $(R^*, N^*,
-        P^*)$ is:
+      The per-capita growth rate of a rare mutant with traits $(a', s', o',
+      h')$ invading a resident population at ecological equilibrium $(R^*, N^*,
+      P^*)$ is:
     </p>
-    <div class="eq-block ess">
-        $$w(a', s', o', h' \mid \mathbf{x}) = e(a',o')\,R^* - C(a',s',o',h') - m_0 - d(s',h')\,P^*$$
+    <div class="eq-block ess math-normal">
+      $$w(a', s', o', h' \mid \mathbf{x}) = e(a',o')\,R^* - C(a',s',o',h') - m_0 - d(s',h')\,P^*$$
     </div>
 
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
-        If $w > 0$, the mutant grows; if $w < 0$, it declines. The
-        <strong>invasion fitness</strong> tells us which mutant strategies can
-        spread. Each term:
+      If $w > 0$, the mutant grows; if $w < 0$, it declines. The
+      <strong>invasion fitness</strong> tells us which mutant strategies can
+      spread. Each term:
     </p>
 
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Term</th><th>Sign</th><th>Biological meaning</th></tr></thead>
-            <tbody>
-                <tr><td>$e(a',o') R^*$</td><td>+</td><td><strong>Resource income:</strong> energy gained from consuming resource at density $R^*$, scaled by acquisition rate.</td></tr>
-                <tr><td>$C(a',s',o',h')$</td><td>−</td><td><strong>Metabolic costs:</strong> all four traits cost energy to express and maintain (see below).</td></tr>
-                <tr><td>$m_0$</td><td>−</td><td><strong>Baseline mortality:</strong> unavoidable death rate (old age, disease, accidents).</td></tr>
-                <tr><td>$d(s',h') P^*$</td><td>−</td><td><strong>Predation mortality:</strong> rate of being killed by the $P^*$ resident predators.</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Term</th><th>Sign</th><th>Biological meaning</th></tr></thead>
+        <tbody>
+          <tr><td>$e(a',o') R^*$</td><td>+</td><td><strong>Resource income:</strong> energy gained from consuming resource at density $R^*$, scaled by acquisition rate.</td></tr>
+          <tr><td>$C(a',s',o',h')$</td><td>−</td><td><strong>Metabolic costs:</strong> all four traits cost energy to express and maintain (see below).</td></tr>
+          <tr><td>$m_0$</td><td>−</td><td><strong>Baseline mortality:</strong> unavoidable death rate (old age, disease, accidents).</td></tr>
+          <tr><td>$d(s',h') P^*$</td><td>−</td><td><strong>Predation mortality:</strong> rate of being killed by the $P^*$ resident predators.</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <h3>The total cost function $C$</h3>
-    <div class="eq-block">
-        $$C(a,s,o,h) = c_a a^2 + c_s s^2 + c_o o^2 + c_h h^2 + c_{sa} s a + c_{oa} o a + c_{sh} s h$$
+    <div class="eq-block math-normal">
+      $$C(a,s,o,h) = c_a a^2 + c_s s^2 + c_o o^2 + c_h h^2 + c_{sa} s a + c_{oa} o a + c_{sh} s h$$
     </div>
 
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Term</th><th>Parameters</th><th>Biological meaning</th></tr></thead>
-            <tbody>
-                <tr><td>$c_a a^2$</td><td>$c_a > 0$</td><td>Quadratic cost of aggression — muscle mass, risk of injury in fights, territorial patrol.</td></tr>
-                <tr><td>$c_s s^2$</td><td>$c_s > 0$</td><td>Brain/cognitive investment cost — neural tissue is metabolically expensive.</td></tr>
-                <tr><td>$c_o o^2$</td><td>$c_o > 0$</td><td>Cost of coordination — communication, social maintenance, altruistic signals.</td></tr>
-                <tr><td>$c_h h^2$</td><td>$c_h > 0$</td><td>Herding cost — vigilance time, crowding, competition within the group.</td></tr>
-                <tr><td>$c_{sa} s a$</td><td>$c_{sa} > 0$</td><td>Intelligence–aggression trade-off: cautious brains can't sustain high aggression simultaneously.</td></tr>
-                <tr><td>$c_{oa} o a$</td><td>$c_{oa} > 0$</td><td>Cooperation–aggression trade-off: cooperative signalling conflicts with solitary aggressive foraging.</td></tr>
-                <tr><td>$c_{sh} s h$</td><td>$c_{sh} > 0$</td><td>Stealth–herding trade-off: individual crypsis incompatible with conspicuous group behaviour.</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Term</th><th>Parameters</th><th>Biological meaning</th></tr></thead>
+        <tbody>
+          <tr><td>$c_a a^2$</td><td>$c_a > 0$</td><td>Quadratic cost of aggression — muscle mass, risk of injury in fights, territorial patrol.</td></tr>
+          <tr><td>$c_s s^2$</td><td>$c_s > 0$</td><td>Brain/cognitive investment cost — neural tissue is metabolically expensive.</td></tr>
+          <tr><td>$c_o o^2$</td><td>$c_o > 0$</td><td>Cost of coordination — communication, social maintenance, altruistic signals.</td></tr>
+          <tr><td>$c_h h^2$</td><td>$c_h > 0$</td><td>Herding cost — vigilance time, crowding, competition within the group.</td></tr>
+          <tr><td>$c_{sa} s a$</td><td>$c_{sa} > 0$</td><td>Intelligence–aggression trade-off: cautious brains can't sustain high aggression simultaneously.</td></tr>
+          <tr><td>$c_{oa} o a$</td><td>$c_{oa} > 0$</td><td>Cooperation–aggression trade-off: cooperative signalling conflicts with solitary aggressive foraging.</td></tr>
+          <tr><td>$c_{sh} s h$</td><td>$c_{sh} > 0$</td><td>Stealth–herding trade-off: individual crypsis incompatible with conspicuous group behaviour.</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- survival_of_the_fittest video -->
     <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">survival_of_the_fittest.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Esurvival_of_the_fittest%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/survival_of_the_fittest.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+      <li class="video-card">
+        <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">survival_of_the_fittest.mp4</span></div>
+        <div class="video-wrapper">
+          <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Esurvival_of_the_fittest%3C/text%3E%3C/svg%3E">
+            <source src="../safe-ai/videos/survival_of_the_fittest.mp4" type="video/mp4">
+          </video>
         </div>
-    </li>
-</ul>
+      </li>
+    </ul>
 
     <div class="warning-box">
-        <span class="warn-label">Why quadratic and not linear?</span>
-        <p>
-            A linear cost $c_a a$ would create a simple threshold (either maximum
-            trait or minimum). Quadratic costs $c_a a^2$ produce <em>interior
-            optima</em>: there is a finite ESS value $a^* > 0$ where the marginal
-            benefit equals the marginal cost. This is the standard approach in
-            evolutionary quantitative genetics and ESS theory.
-        </p>
+      <span class="warn-label">Why quadratic and not linear?</span>
+      <p>
+        A linear cost $c_a a$ would create a simple threshold (either maximum
+        trait or minimum). Quadratic costs $c_a a^2$ produce <em>interior
+        optima</em>: there is a finite ESS value $a^* > 0$ where the marginal
+        benefit equals the marginal cost. This is the standard approach in
+        evolutionary quantitative genetics and ESS theory.
+      </p>
     </div>
-</section>
+  </section>
 
-<!-- ═══ SECTION 5 — SELECTION GRADIENTS ══════════════════ -->
-<section class="chapter-section sr" id="gradients">
+  <!-- ═══ SECTION 5 — SELECTION GRADIENTS ══════════════════ -->
+  <section class="chapter-section sr" id="gradients">
     <span class="section-num">§5</span>
     <h2>Selection Gradients — The Engine of Evolution</h2>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
-        The <strong>selection gradient</strong> $S_{x_i}$ for trait $x_i$ measures
-        the direction and strength of selection: how much does fitness increase if
-        a rare mutant has slightly more of trait $x_i$?
+      The <strong>selection gradient</strong> $S_{x_i}$ for trait $x_i$ measures
+      the direction and strength of selection: how much does fitness increase if
+      a rare mutant has slightly more of trait $x_i$?
     </p>
 
-    <div class="eq-block coord">
-        $$\mathbf{S}(\mathbf{x}) = \nabla_{\mathbf{x}} w\big|_{\mathbf{x}'=\mathbf{x}}
-        = \begin{pmatrix} S_a \\ S_s \\ S_o \\ S_h \end{pmatrix}
-        = \begin{pmatrix}
-        \partial w/\partial a' \big|_{a'=a} \\[4pt]
-        \partial w/\partial s' \big|_{s'=s} \\[4pt]
-        \partial w/\partial o' \big|_{o'=o} \\[4pt]
-        \partial w/\partial h' \big|_{h'=h}
-        \end{pmatrix}$$
+    <div class="eq-block coord math-normal">
+      $$\mathbf{S}(\mathbf{x}) = \nabla_{\mathbf{x}} w\big|_{\mathbf{x}'=\mathbf{x}}
+      = \begin{pmatrix} S_a \\ S_s \\ S_o \\ S_h \end{pmatrix}
+      = \begin{pmatrix}
+      \partial w/\partial a' \big|_{a'=a} \\[4pt]
+      \partial w/\partial s' \big|_{s'=s} \\[4pt]
+      \partial w/\partial o' \big|_{o'=o} \\[4pt]
+      \partial w/\partial h' \big|_{h'=h}
+      \end{pmatrix}$$
     </div>
 
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
-        Evaluating at $\mathbf{x}' = \mathbf{x}$ (resident = mutant) is the key
-        step in adaptive dynamics: we compute the selection pressure at the
-        <em>current</em> trait value.
+      Evaluating at $\mathbf{x}' = \mathbf{x}$ (resident = mutant) is the key
+      step in adaptive dynamics: we compute the selection pressure at the
+      <em>current</em> trait value.
     </p>
 
     <h3>All four gradients collected</h3>
-    <div class="eq-block agg">
-        <strong>Aggression:</strong>
-        $$S_a = R^* \cdot \frac{e_{\max}(1+\alpha_o o)}{(1+\gamma a)^2} - (2c_a a + c_{sa} s + c_{oa} o)$$
+    <div class="eq-block agg math-normal">
+      <strong>Aggression:</strong>
+      $$S_a = R^* \cdot \frac{e_{\max}(1+\alpha_o o)}{(1+\gamma a)^2} - (2c_a a + c_{sa} s + c_{oa} o)$$
     </div>
 
     <!-- aggression replay video -->
     <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">aggression.mp4</span> <span style="font-size:0.65rem;color:#555;margin-left:auto;">(replay)</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eaggression%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/aggression.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+      <li class="video-card">
+        <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">aggression.mp4</span> <span style="font-size:0.65rem;color:#555;margin-left:auto;">(replay)</span></div>
+        <div class="video-wrapper">
+          <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eaggression%3C/text%3E%3C/svg%3E">
+            <source src="../safe-ai/videos/aggression.mp4" type="video/mp4">
+          </video>
         </div>
-    </li>
-</ul>
+      </li>
+    </ul>
 
-    <div class="eq-block intel">
-        <strong>Intelligence / Stealth:</strong>
-        $$S_s = \frac{\beta_s d_0}{(1+\beta_s s+\beta_h h)^2} \cdot P^* - (2c_s s + c_{sa} a + c_{sh} h)$$
+    <div class="eq-block intel math-normal">
+      <strong>Intelligence / Stealth:</strong>
+      $$S_s = \frac{\beta_s d_0}{(1+\beta_s s+\beta_h h)^2} \cdot P^* - (2c_s s + c_{sa} a + c_{sh} h)$$
     </div>
-    <div class="eq-block coord">
-        <strong>Coordination / Cooperation:</strong>
-        $$S_o = R^* \cdot \frac{e_{\max}\,\alpha_o\, a}{1+\gamma a} - (2c_o o + c_{oa} a)$$
+    <div class="eq-block coord math-normal">
+      <strong>Coordination / Cooperation:</strong>
+      $$S_o = R^* \cdot \frac{e_{\max}\,\alpha_o\, a}{1+\gamma a} - (2c_o o + c_{oa} a)$$
     </div>
-    <div class="eq-block selfp">
-        <strong>Self-Preservation / Herding:</strong>
-        $$S_h = \frac{\beta_h d_0}{(1+\beta_s s+\beta_h h)^2} \cdot P^* - (2c_h h + c_{sh} s)$$
+    <div class="eq-block selfp math-normal">
+      <strong>Self-Preservation / Herding:</strong>
+      $$S_h = \frac{\beta_h d_0}{(1+\beta_s s+\beta_h h)^2} \cdot P^* - (2c_h h + c_{sh} s)$$
     </div>
 
     <h3>ESS condition</h3>
-    <div class="eq-block ess">
-        $$\mathbf{S}(\mathbf{x}^*) = \mathbf{0}
-        \quad\Longleftrightarrow\quad
-        \text{Evolutionarily Stable Strategy}$$
+    <div class="eq-block ess math-normal">
+      $$\mathbf{S}(\mathbf{x}^*) = \mathbf{0}
+      \quad\Longleftrightarrow\quad
+      \text{Evolutionarily Stable Strategy}$$
     </div>
 
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
-        At the ESS, <em>all four</em> marginal benefits equal marginal costs
-        simultaneously. Finding $\mathbf{x}^*$ analytically is generally
-        impossible; the simulation integrates the canonical equation to find it
-        numerically.
+      At the ESS, <em>all four</em> marginal benefits equal marginal costs
+      simultaneously. Finding $\mathbf{x}^*$ analytically is generally
+      impossible; the simulation integrates the canonical equation to find it
+      numerically.
     </p>
 
     <h3>Stability: ESS vs. branching point</h3>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
-        The <em>sign</em> of the second derivative $\partial^2 w / \partial
-        a'^2|_{a'=a^*}$ determines whether the ESS is stable or a branching point:
+      The <em>sign</em> of the second derivative $\partial^2 w / \partial
+      a'^2|_{a'=a^*}$ determines whether the ESS is stable or a branching point:
     </p>
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Condition</th><th>Type</th><th>Outcome</th></tr></thead>
-            <tbody>
-                <tr><td>$\partial^2 w / \partial x_i'^2 < 0$</td><td>Fitness maximum</td><td>True ESS — no mutant can invade.</td></tr>
-                <tr><td>$\partial^2 w / \partial x_i'^2 > 0$</td><td>Fitness minimum</td><td>Branching point — the population splits into two diverging morphs.</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Condition</th><th>Type</th><th>Outcome</th></tr></thead>
+        <tbody>
+          <tr><td>$\partial^2 w / \partial x_i'^2 < 0$</td><td>Fitness maximum</td><td>True ESS — no mutant can invade.</td></tr>
+          <tr><td>$\partial^2 w / \partial x_i'^2 > 0$</td><td>Fitness minimum</td><td>Branching point — the population splits into two diverging morphs.</td></tr>
+        </tbody>
+      </table>
     </div>
-</section>
+  </section>
 
-<!-- ═══ SECTION 6 — CANONICAL EQUATION ═══════════════════ -->
-<section class="chapter-section sr" id="canonical">
+  <!-- ═══ SECTION 6 — CANONICAL EQUATION ═══════════════════ -->
+  <section class="chapter-section sr" id="canonical">
     <span class="section-num">§6</span>
     <h2>The Canonical Equation of Adaptive Dynamics</h2>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
-        The canonical equation (Dieckmann &amp; Law 1996) describes how the mean
-        trait vector $\mathbf{x}(t)$ of the resident population changes over
-        evolutionary time:
+      The canonical equation (Dieckmann &amp; Law 1996) describes how the mean
+      trait vector $\mathbf{x}(t)$ of the resident population changes over
+      evolutionary time:
     </p>
 
-    <div class="pull-quote">
-        <p>
-            $$\boxed{
-            \frac{d\mathbf{x}}{dt} = \frac{\mu}{2}\,N^*(\mathbf{x})\;\mathbf{M}(\mathbf{x})\;\mathbf{S}(\mathbf{x})
-            }$$
-        </p>
+    <div class="pull-quote math-normal">
+      <p>
+        $$\boxed{
+        \frac{d\mathbf{x}}{dt} = \frac{\mu}{2}\,N^*(\mathbf{x})\;\mathbf{M}(\mathbf{x})\;\mathbf{S}(\mathbf{x})
+        }$$
+      </p>
     </div>
 
     <h3>Derivation from first principles</h3>
     <div class="steps">
-        <div class="step">
-            <div class="step-num" style="background:rgba(232,137,26,.15);color:var(--ess)">1</div>
-            <div class="step-body"><strong>Mutation step.</strong> Each birth produces a mutant with probability $\mu$ per locus. The expected number of mutants born per unit time is $\mu N^*$ (population size times mutation rate).</div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(232,137,26,.15);color:var(--ess)">2</div>
-            <div class="step-body"><strong>Mutation distribution.</strong> Mutant traits are drawn from a multivariate normal distribution centred on the resident traits, with covariance matrix $\mathbf{M}$.</div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(232,137,26,.15);color:var(--ess)">3</div>
-            <div class="step-body"><strong>Invasion success.</strong> A mutant with trait deviation $\delta \mathbf{x}$ has invasion fitness $w(\mathbf{x}+\delta\mathbf{x}) \approx w(\mathbf{x}) + \mathbf{S}(\mathbf{x})^\top \delta\mathbf{x}$.</div>
-        </div>
-        <div class="step">
-            <div class="step-num" style="background:rgba(232,137,26,.15);color:var(--ess)">4</div>
-            <div class="step-body"><strong>Trait substitution rate.</strong> Multiplying mutation rate by mutation variance by selection gradient gives the expected trait change per unit evolutionary time.</div>
-        </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(232,137,26,.15);color:var(--ess)">1</div>
+        <div class="step-body"><strong>Mutation step.</strong> Each birth produces a mutant with probability $\mu$ per locus. The expected number of mutants born per unit time is $\mu N^*$ (population size times mutation rate).</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(232,137,26,.15);color:var(--ess)">2</div>
+        <div class="step-body"><strong>Mutation distribution.</strong> Mutant traits are drawn from a multivariate normal distribution centred on the resident traits, with covariance matrix $\mathbf{M}$.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(232,137,26,.15);color:var(--ess)">3</div>
+        <div class="step-body"><strong>Invasion success.</strong> A mutant with trait deviation $\delta \mathbf{x}$ has invasion fitness $w(\mathbf{x}+\delta\mathbf{x}) \approx w(\mathbf{x}) + \mathbf{S}(\mathbf{x})^\top \delta\mathbf{x}$.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:rgba(232,137,26,.15);color:var(--ess)">4</div>
+        <div class="step-body"><strong>Trait substitution rate.</strong> Multiplying mutation rate by mutation variance by selection gradient gives the expected trait change per unit evolutionary time.</div>
+      </div>
     </div>
 
     <h3>Symbol-by-symbol breakdown</h3>
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Symbol</th><th>Name</th><th>Role</th></tr></thead>
-            <tbody>
-                <tr><td>$d\mathbf{x}/dt$</td><td>Evolutionary rate of change</td><td>How fast traits evolve over time (left-hand side).</td></tr>
-                <tr><td>$\mu$</td><td>Mutation rate</td><td>Fraction of births that produce mutants.</td></tr>
-                <tr><td>$N^*(\mathbf{x})$</td><td>Resident population size at eco-equilibrium</td><td>More individuals → more mutations → faster evolution.</td></tr>
-                <tr><td>$\frac{1}{2}$</td><td>Fixation probability coefficient</td><td>From the diffusion approximation of population genetics.</td></tr>
-                <tr><td>$\mathbf{M}$</td><td>Additive genetic (co)variance matrix (4×4)</td><td>How much genetic variation exists for each trait.</td></tr>
-                <tr><td>$\mathbf{S}(\mathbf{x})$</td><td>Selection gradient vector</td><td>Direction of fitness increase in trait space.</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Symbol</th><th>Name</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td>$d\mathbf{x}/dt$</td><td>Evolutionary rate of change</td><td>How fast traits evolve over time (left-hand side).</td></tr>
+          <tr><td>$\mu$</td><td>Mutation rate</td><td>Fraction of births that produce mutants.</td></tr>
+          <tr><td>$N^*(\mathbf{x})$</td><td>Resident population size at eco-equilibrium</td><td>More individuals → more mutations → faster evolution.</td></tr>
+          <tr><td>$\frac{1}{2}$</td><td>Fixation probability coefficient</td><td>From the diffusion approximation of population genetics.</td></tr>
+          <tr><td>$\mathbf{M}$</td><td>Additive genetic (co)variance matrix (4×4)</td><td>How much genetic variation exists for each trait.</td></tr>
+          <tr><td>$\mathbf{S}(\mathbf{x})$</td><td>Selection gradient vector</td><td>Direction of fitness increase in trait space.</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <h3>The mutation matrix $\mathbf{M}$ in detail</h3>
-    <div class="eq-block">
-        $$\mathbf{M} = \begin{pmatrix}
-        M_{aa} & M_{as} & M_{ao} & M_{ah} \\
-        M_{as} & M_{ss} & M_{so} & M_{sh} \\
-        M_{ao} & M_{so} & M_{oo} & M_{oh} \\
-        M_{ah} & M_{sh} & M_{oh} & M_{hh}
-        \end{pmatrix}$$
+    <div class="eq-block math-normal">
+      $$\mathbf{M} = \begin{pmatrix}
+      M_{aa} & M_{as} & M_{ao} & M_{ah} \\
+      M_{as} & M_{ss} & M_{so} & M_{sh} \\
+      M_{ao} & M_{so} & M_{oo} & M_{oh} \\
+      M_{ah} & M_{sh} & M_{oh} & M_{hh}
+      \end{pmatrix}$$
     </div>
 
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Entry</th><th>Name</th><th>Effect</th></tr></thead>
-            <tbody>
-                <tr><td>$M_{aa}, M_{ss}, M_{oo}, M_{hh}$</td><td>Diagonal: per-trait variances</td><td>Each trait's independent evolutionary speed.</td></tr>
-                <tr><td>$M_{as}$</td><td>Aggression–intelligence covariance</td><td>Positive: bold animals tend to be smart.</td></tr>
-                <tr><td>$M_{ao}$</td><td>Aggression–cooperation covariance</td><td>Positive: aggressive cooperators as a syndrome.</td></tr>
-                <tr><td>$M_{sh}$</td><td>Stealth–herding covariance</td><td>Positive: defensive syndrome (both reduce predation).</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Entry</th><th>Name</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>$M_{aa}, M_{ss}, M_{oo}, M_{hh}$</td><td>Diagonal: per-trait variances</td><td>Each trait's independent evolutionary speed.</td></tr>
+          <tr><td>$M_{as}$</td><td>Aggression–intelligence covariance</td><td>Positive: bold animals tend to be smart.</td></tr>
+          <tr><td>$M_{ao}$</td><td>Aggression–cooperation covariance</td><td>Positive: aggressive cooperators as a syndrome.</td></tr>
+          <tr><td>$M_{sh}$</td><td>Stealth–herding covariance</td><td>Positive: defensive syndrome (both reduce predation).</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- descentwithmodification video (first copy) -->
     <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">descentwithmodification.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Edescentwithmodification%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/descentwithmodification.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+      <li class="video-card">
+        <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">descentwithmodification.mp4</span></div>
+        <div class="video-wrapper">
+          <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Edescentwithmodification%3C/text%3E%3C/svg%3E">
+            <source src="../safe-ai/videos/descentwithmodification.mp4" type="video/mp4">
+          </video>
         </div>
-    </li>
-</ul>
+      </li>
+    </ul>
 
     <div class="callout gold">
-        <div class="callout-title">Descent with Modification encoded here</div>
-        The term $\tfrac{\mu}{2} N^* \mathbf{M}$ is precisely Darwin's "descent
-        with modification": $\mu$ is the modification rate, $\mathbf{M}$ encodes
-        heritable variation, and $N^*$ scales with population size.
+      <div class="callout-title">Descent with Modification encoded here</div>
+      The term $\tfrac{\mu}{2} N^* \mathbf{M}$ is precisely Darwin's "descent
+      with modification": $\mu$ is the modification rate, $\mathbf{M}$ encodes
+      heritable variation, and $N^*$ scales with population size.
     </div>
 
     <!-- canonicaleq video -->
     <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">canonicaleq.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Ecanonicaleq%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/canonicaleq.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+      <li class="video-card">
+        <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">canonicaleq.mp4</span></div>
+        <div class="video-wrapper">
+          <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Ecanonicaleq%3C/text%3E%3C/svg%3E">
+            <source src="../safe-ai/videos/canonicaleq.mp4" type="video/mp4">
+          </video>
         </div>
-    </li>
-</ul>
-</section>
+      </li>
+    </ul>
+  </section>
 
-<!-- ═══ SECTION 7 — FULL ODE SYSTEM ═════════════════════ -->
-<section class="chapter-section sr" id="full-system">
+  <!-- ═══ SECTION 7 — FULL ODE SYSTEM ═════════════════════ -->
+  <section class="chapter-section sr" id="full-system">
     <span class="section-num">§7</span>
     <h2>Full Coupled Eco‑Evolutionary System of ODEs</h2>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.93rem;line-height:1.75;">
-        The simulation actually integrates the <strong>ecological dynamics</strong>
-        and the <strong>evolutionary dynamics</strong> simultaneously, generating
-        the 7‑dimensional system that governs both population sizes and trait
-        means over time.
+      The simulation actually integrates the <strong>ecological dynamics</strong>
+      and the <strong>evolutionary dynamics</strong> simultaneously, generating
+      the 7‑dimensional system that governs both population sizes and trait
+      means over time.
     </p>
 
-    <div class="eq-block mut">
-        <strong>Ecological subsystem (3 ODEs)</strong>
-        $$
-        \begin{aligned}
-        \frac{dR}{dt} &= r_R\,R\left(1 - \frac{R}{K_R}\right) \;-\; e(a,o)\,N\,R \\[6pt]
-        \frac{dN}{dt} &= \Bigl[\,e(a,o)\,R \;-\; C(a,s,o,h) \;-\; m_0 \;-\; d(s,h)\,P \Bigr] N \\[6pt]
-        \frac{dP}{dt} &= \Bigl[\,c_{\text{eff}}\,d(s,h)\,N \;-\; m_P \Bigr] P
-        \end{aligned}
-        $$
+    <div class="eq-block mut math-normal">
+      <strong>Ecological subsystem (3 ODEs)</strong>
+      $$
+      \begin{aligned}
+      \frac{dR}{dt} &= r_R\,R\left(1 - \frac{R}{K_R}\right) \;-\; e(a,o)\,N\,R \\[6pt]
+      \frac{dN}{dt} &= \Bigl[\,e(a,o)\,R \;-\; C(a,s,o,h) \;-\; m_0 \;-\; d(s,h)\,P \Bigr] N \\[6pt]
+      \frac{dP}{dt} &= \Bigl[\,c_{\text{eff}}\,d(s,h)\,N \;-\; m_P \Bigr] P
+      \end{aligned}
+      $$
     </div>
 
-    <div class="eq-block ess">
-        <strong>Evolutionary subsystem (4 ODEs — Canonical Equation)</strong>
-        $$
-        \begin{aligned}
-        \frac{da}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{aa}S_a + M_{as}S_s + M_{ao}S_o + M_{ah}S_h\Bigr) \\[4pt]
-        \frac{ds}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{as}S_a + M_{ss}S_s + M_{so}S_o + M_{sh}S_h\Bigr) \\[4pt]
-        \frac{do}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{ao}S_a + M_{so}S_s + M_{oo}S_o + M_{oh}S_h\Bigr) \\[4pt]
-        \frac{dh}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{ah}S_a + M_{sh}S_s + M_{oh}S_o + M_{hh}S_h\Bigr)
-        \end{aligned}
-        $$
+    <div class="eq-block ess math-normal">
+      <strong>Evolutionary subsystem (4 ODEs — Canonical Equation)</strong>
+      $$
+      \begin{aligned}
+      \frac{da}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{aa}S_a + M_{as}S_s + M_{ao}S_o + M_{ah}S_h\Bigr) \\[4pt]
+      \frac{ds}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{as}S_a + M_{ss}S_s + M_{so}S_o + M_{sh}S_h\Bigr) \\[4pt]
+      \frac{do}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{ao}S_a + M_{so}S_s + M_{oo}S_o + M_{oh}S_h\Bigr) \\[4pt]
+      \frac{dh}{dt} &= \frac{\mu}{2}\,N^*\;\Bigl(M_{ah}S_a + M_{sh}S_s + M_{oh}S_o + M_{hh}S_h\Bigr)
+      \end{aligned}
+      $$
     </div>
 
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
-        Here $N^*$ is the prey equilibrium computed from the current trait values
-        (see §3). The selection gradients $S_a, S_s, S_o, S_h$ are evaluated at
-        the current trait vector $\mathbf{x} = (a,s,o,h)$ as derived in §5.
+      Here $N^*$ is the prey equilibrium computed from the current trait values
+      (see §3). The selection gradients $S_a, S_s, S_o, S_h$ are evaluated at
+      the current trait vector $\mathbf{x} = (a,s,o,h)$ as derived in §5.
     </p>
 
     <h3>Initial conditions and integration</h3>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;">
-        Typical initial trait values are set near a plausible ancestral state,
-        e.g. $a=0.5,\; s=0.2,\; o=0.0,\; h=0.0$. The ecological densities start
-        from their corresponding steady‑state values $(R^*, N^*, P^*)$ computed
-        from those traits. The system is then integrated forward using a stiff
-        ODE solver.
+      Typical initial trait values are set near a plausible ancestral state,
+      e.g. $a=0.5,\; s=0.2,\; o=0.0,\; h=0.0$. The ecological densities start
+      from their corresponding steady‑state values $(R^*, N^*, P^*)$ computed
+      from those traits. The system is then integrated forward using a stiff
+      ODE solver.
     </p>
 
     <div class="terminal" id="odeTerminal">
-        <div class="tbar">
-            <span class="td r"></span><span class="td y"></span><span class="td g"></span>
-            <span class="tpath">terminal — scipy.integrate</span>
-        </div>
-        <div class="tbody">
-            <span class="tl cmd">python -c "from scipy.integrate import solve_ivp"</span>
-            <span class="tl out"># Radau method · rtol=1e-6 · atol=1e-8</span>
-            <span class="tl ok">Integration complete — 7 ODEs solved</span>
-            <span class="tcur"></span>
-        </div>
+      <div class="tbar">
+        <span class="td r"></span><span class="td y"></span><span class="td g"></span>
+        <span class="tpath">terminal — scipy.integrate</span>
+      </div>
+      <div class="tbody">
+        <span class="tl cmd">python -c "from scipy.integrate import solve_ivp"</span>
+        <span class="tl out"># Radau method · rtol=1e-6 · atol=1e-8</span>
+        <span class="tl ok">Integration complete — 7 ODEs solved</span>
+        <span class="tcur"></span>
+      </div>
     </div>
 
     <div class="callout tip">
-        <div class="callout-title">Why two separate timescales?</div>
-        Ecological dynamics operate on much shorter timescales (days to years)
-        than evolutionary change (thousands to millions of years). By assuming
-        that $R, N, P$ reach their equilibrium $(R^*, N^*, P^*)$ instantaneously
-        on the evolutionary clock, we replace the ecological ODEs with algebraic
-        constraints.
+      <div class="callout-title">Why two separate timescales?</div>
+      Ecological dynamics operate on much shorter timescales (days to years)
+      than evolutionary change (thousands to millions of years). By assuming
+      that $R, N, P$ reach their equilibrium $(R^*, N^*, P^*)$ instantaneously
+      on the evolutionary clock, we replace the ecological ODEs with algebraic
+      constraints.
     </div>
-</section>
+  </section>
 
-<!-- ═══ SECTION 8 — DARWINIAN PRINCIPLES ════════════════ -->
-<section class="chapter-section sr" id="principles">
+  <!-- ═══ SECTION 8 — DARWINIAN PRINCIPLES ════════════════ -->
+  <section class="chapter-section sr" id="principles">
     <span class="section-num">§8</span>
     <h2>The Four Darwinian Principles — Mathematical Expression</h2>
 
-    
-        <div class="principle-card" style="border-color:var(--pred)">
-            <h3 style="color:var(--pred);margin-top:0">① Survival of the Fittest</h3>
-            <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
-                <strong>Mathematical expression:</strong> The selection gradient
-                $\mathbf{S}(\mathbf{x}) = \nabla_\mathbf{x} w$ points toward higher
-                fitness. Individuals with traits closer to the ESS $\mathbf{x}^*$
-                have $w > 0$ and increase in frequency; those further away have $w
-                < 0$ and decline.
-            </p>
-            <div class="eq-block pred">
-                $$w > 0 \Leftrightarrow \text{mutant spreads}$$
-                $$w < 0 \Leftrightarrow \text{mutant lost}$$
-            </div>
-            <p style="color:var(--ink2);font-family:var(--sans);font-size:0.84rem;">
-                In the simulation: starting from any initial traits, all four
-                traits are driven toward a fitness maximum. Scenes 02 and 12 show
-                this explicitly for all traits and for the ESS phenomenon
-                respectively.
-            </p>
-        </div>
+    <div class="principle-card" style="border-color:var(--pred)">
+      <h3 style="color:var(--pred);margin-top:0">① Survival of the Fittest</h3>
+      <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
+        <strong>Mathematical expression:</strong> The selection gradient
+        $\mathbf{S}(\mathbf{x}) = \nabla_\mathbf{x} w$ points toward higher
+        fitness. Individuals with traits closer to the ESS $\mathbf{x}^*$
+        have $w > 0$ and increase in frequency; those further away have $w
+        < 0$ and decline.
+      </p>
+      <div class="eq-block pred math-normal">
+        $$w > 0 \Leftrightarrow \text{mutant spreads}$$
+        $$w < 0 \Leftrightarrow \text{mutant lost}$$
+      </div>
+      <p style="color:var(--ink2);font-family:var(--sans);font-size:0.84rem;">
+        In the simulation: starting from any initial traits, all four
+        traits are driven toward a fitness maximum. Scenes 02 and 12 show
+        this explicitly for all traits and for the ESS phenomenon
+        respectively.
+      </p>
+    </div>
 
-        <div class="principle-card" style="border-color:var(--res)">
-            <h3 style="color:var(--res);margin-top:0">② Resource Acquisition</h3>
-            <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
-                <strong>Mathematical expression:</strong> The positive terms in
-                fitness — $e(a,o) R^*$ — reward traits that acquire resources
-                efficiently. Selection maximises this term subject to costs.
-            </p>
-            <div class="eq-block res">
-                $$S_a > 0 \Leftrightarrow R^* \frac{e_{\max}}{(1+\gamma a)^2} > \text{marginal cost}$$
-            </div>
-            <p style="color:var(--ink2);font-family:var(--sans);font-size:0.84rem;">
-                Coordination amplifies acquisition via the $(1+\alpha_o o)$
-                multiplier. Scene 03 isolates this principle.
-            </p>
-            <!-- resourcegathering video -->
-            <ul class="video-grid">
-                <li class="video-card">
-                    <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">resourcegathering.mp4</span></div>
-                    <div class="video-wrapper">
-                        <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eresourcegathering%3C/text%3E%3C/svg%3E">
-                        <source src="../safe-ai/videos/resourcegathering.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </li>
-        </ul>
-        </div>
-
-        <div class="principle-card" style="border-color:var(--selfp)">
-            <h3 style="color:var(--selfp);margin-top:0">③ Self-Preservation</h3>
-            <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
-                <strong>Mathematical expression:</strong> The negative term
-                $-d(s,h) P^*$ in fitness penalises being caught. Traits $s$ and
-                $h$ reduce $d$, directly improving survival.
-            </p>
-            <div class="eq-block selfp">
-                $$S_s = P^* \frac{\beta_s d_0}{(1+\beta_s s+\beta_h h)^2} - \text{cost} > 0$$
-            </div>
-            <p style="color:var(--ink2);font-family:var(--sans);font-size:0.84rem;">
-                Self-preservation traits are only selected when predators are
-                present ($P^* > 0$). Scene 04 demonstrates this.
-            </p>
-            <!-- selfpreservation video -->
-            <ul class="video-grid">
-                <li class="video-card">
-                    <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">selfpreservation.mp4</span></div>
-                    <div class="video-wrapper">
-                        <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eselfpreservation%3C/text%3E%3C/svg%3E">
-                        <source src="../safe-ai/videos/selfpreservation.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </li>
-        </ul>
-        <!-- selfpreservation_and_descentwithmodification combo video -->
-        <ul class="video-grid">
-            <li class="video-card">
-                <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">descentwithmodification.mp4</span></div>
-                <div class="video-wrapper">
-                    <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                    poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eselfpreservation+%26+descent%3C/text%3E%3C/svg%3E">
-                    <source src="../safe-ai/videos/selfpreservation_and_descentwithmodification.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
+    <div class="principle-card" style="border-color:var(--res)">
+      <h3 style="color:var(--res);margin-top:0">② Resource Acquisition</h3>
+      <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
+        <strong>Mathematical expression:</strong> The positive terms in
+        fitness — $e(a,o) R^*$ — reward traits that acquire resources
+        efficiently. Selection maximises this term subject to costs.
+      </p>
+      <div class="eq-block res math-normal">
+        $$S_a > 0 \Leftrightarrow R^* \frac{e_{\max}}{(1+\gamma a)^2} > \text{marginal cost}$$
+      </div>
+      <p style="color:var(--ink2);font-family:var(--sans);font-size:0.84rem;">
+        Coordination amplifies acquisition via the $(1+\alpha_o o)$
+        multiplier. Scene 03 isolates this principle.
+      </p>
+      <!-- resourcegathering video -->
+      <ul class="video-grid">
+        <li class="video-card">
+          <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">resourcegathering.mp4</span></div>
+          <div class="video-wrapper">
+            <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eresourcegathering%3C/text%3E%3C/svg%3E">
+              <source src="../safe-ai/videos/resourcegathering.mp4" type="video/mp4">
+            </video>
+          </div>
         </li>
-    </ul>
-        </div>
+      </ul>
+    </div>
 
-        <div class="principle-card" style="border-color:var(--intel)">
-            <h3 style="color:var(--intel);margin-top:0">④ Descent with Modification</h3>
-            <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
-                <strong>Mathematical expression:</strong> The canonical equation
-                itself is Darwin's "descent with modification" written in
-                mathematics:
-            </p>
-            <div class="eq-block intel">
-                $$\frac{d\mathbf{x}}{dt} = \underbrace{\frac{\mu}{2}}_{\text{modification}} \underbrace{N^*}_{\text{descent}} \mathbf{M}\,\mathbf{S}(\mathbf{x})$$
-            </div>
-            <p style="color:var(--ink2);font-family:var(--sans);font-size:0.84rem;">
-                $\mu$ is the mutation rate (modification); $N^*$ is population
-                size; $\mathbf{M}$ encodes heritable variation; $\mathbf{S}$ is
-                selection. Scene 05 shows three independent lineages.
-            </p>
-            <!-- descentwithmodification replay video -->
-            <ul class="video-grid">
-                <li class="video-card">
-                    <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">descentwithmodification.mp4</span> <span style="font-size:0.65rem;color:#555;margin-left:auto;">(replay)</span></div>
-                    <div class="video-wrapper">
-                        <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Edescentwithmodification%3C/text%3E%3C/svg%3E">
-                        <source src="../safe-ai/videos/descentwithmodification.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </li>
-        </ul>
-        </div>
-    
-</section>
+    <div class="principle-card" style="border-color:var(--selfp)">
+      <h3 style="color:var(--selfp);margin-top:0">③ Self-Preservation</h3>
+      <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
+        <strong>Mathematical expression:</strong> The negative term
+        $-d(s,h) P^*$ in fitness penalises being caught. Traits $s$ and
+        $h$ reduce $d$, directly improving survival.
+      </p>
+      <div class="eq-block selfp math-normal">
+        $$S_s = P^* \frac{\beta_s d_0}{(1+\beta_s s+\beta_h h)^2} - \text{cost} > 0$$
+      </div>
+      <p style="color:var(--ink2);font-family:var(--sans);font-size:0.84rem;">
+        Self-preservation traits are only selected when predators are
+        present ($P^* > 0$). Scene 04 demonstrates this.
+      </p>
+      <!-- selfpreservation video -->
+      <ul class="video-grid">
+        <li class="video-card">
+          <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">selfpreservation.mp4</span></div>
+          <div class="video-wrapper">
+            <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eselfpreservation%3C/text%3E%3C/svg%3E">
+              <source src="../safe-ai/videos/selfpreservation.mp4" type="video/mp4">
+            </video>
+          </div>
+        </li>
+      </ul>
+      <!-- selfpreservation_and_descentwithmodification combo video -->
+      <ul class="video-grid">
+        <li class="video-card">
+          <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">descentwithmodification.mp4</span></div>
+          <div class="video-wrapper">
+            <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eselfpreservation+%26+descent%3C/text%3E%3C/svg%3E">
+              <source src="../safe-ai/videos/selfpreservation_and_descentwithmodification.mp4" type="video/mp4">
+            </video>
+          </div>
+        </li>
+      </ul>
+    </div>
 
-<!-- ═══ SECTION 9 — PHENOMENA ════════════════════════════ -->
-<section class="chapter-section sr" id="phenomena">
+    <div class="principle-card" style="border-color:var(--intel)">
+      <h3 style="color:var(--intel);margin-top:0">④ Descent with Modification</h3>
+      <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
+        <strong>Mathematical expression:</strong> The canonical equation
+        itself is Darwin's "descent with modification" written in
+        mathematics:
+      </p>
+      <div class="eq-block intel math-normal">
+        $$\frac{d\mathbf{x}}{dt} = \underbrace{\frac{\mu}{2}}_{\text{modification}} \underbrace{N^*}_{\text{descent}} \mathbf{M}\,\mathbf{S}(\mathbf{x})$$
+      </div>
+      <p style="color:var(--ink2);font-family:var(--sans);font-size:0.84rem;">
+        $\mu$ is the mutation rate (modification); $N^*$ is population
+        size; $\mathbf{M}$ encodes heritable variation; $\mathbf{S}$ is
+        selection. Scene 05 shows three independent lineages.
+      </p>
+      <!-- descentwithmodification replay video -->
+      <ul class="video-grid">
+        <li class="video-card">
+          <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">descentwithmodification.mp4</span> <span style="font-size:0.65rem;color:#555;margin-left:auto;">(replay)</span></div>
+          <div class="video-wrapper">
+            <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Edescentwithmodification%3C/text%3E%3C/svg%3E">
+              <source src="../safe-ai/videos/descentwithmodification.mp4" type="video/mp4">
+            </video>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 9 — PHENOMENA ════════════════════════════ -->
+  <section class="chapter-section sr" id="phenomena">
     <span class="section-num">§9</span>
     <h2>The Four Evolutionary Phenomena</h2>
 
     <h3 style="color:var(--ess)">9.1 ESS Convergence</h3>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
-        When costs are moderate and the fitness landscape is strictly concave
-        around $\mathbf{x}^*$, all selection gradients converge to zero
-        simultaneously. From any starting point, the selection gradient
-        $\mathbf{S}$ acts like a restoring force pulling toward $\mathbf{x}^*$.
+      When costs are moderate and the fitness landscape is strictly concave
+      around $\mathbf{x}^*$, all selection gradients converge to zero
+      simultaneously. From any starting point, the selection gradient
+      $\mathbf{S}$ acts like a restoring force pulling toward $\mathbf{x}^*$.
     </p>
-    <div class="eq-block ess">
-        $$\text{Jacobian of }\mathbf{S}\text{ has all eigenvalues} < 0
-        \quad\Longrightarrow\quad \mathbf{x}^* \text{ is convergence stable}$$
+    <div class="eq-block ess math-normal">
+      $$\text{Jacobian of }\mathbf{S}\text{ has all eigenvalues} < 0
+      \quad\Longrightarrow\quad \mathbf{x}^* \text{ is convergence stable}$$
     </div>
 
     <!-- ESSCONVERGENCE video -->
     <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">ESSCONVERGENCE.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3EESSCONVERGENCE%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/ESSCONVERGENCE.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+      <li class="video-card">
+        <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">ESSCONVERGENCE.mp4</span></div>
+        <div class="video-wrapper">
+          <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3EESSCONVERGENCE%3C/text%3E%3C/svg%3E">
+            <source src="../safe-ai/videos/ESSCONVERGENCE.mp4" type="video/mp4">
+          </video>
         </div>
-    </li>
-</ul>
+      </li>
+    </ul>
 
     <h3 style="color:var(--branch)">9.2 Evolutionary Branching</h3>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
-        When cross-costs $c_{sa}, c_{oa}, c_{sh}$ are large, the fitness
-        landscape has a <strong>saddle</strong> or <strong>minimum</strong> along
-        one axis. The population first converges to the saddle (a "branching
-        point"), then disruptive selection pulls it in two directions.
+      When cross-costs $c_{sa}, c_{oa}, c_{sh}$ are large, the fitness
+      landscape has a <strong>saddle</strong> or <strong>minimum</strong> along
+      one axis. The population first converges to the saddle (a "branching
+      point"), then disruptive selection pulls it in two directions.
     </p>
-    <div class="eq-block">
-        $$\frac{\partial^2 w}{\partial a'^2}\Bigg|_{a'=a^*} > 0
-        \quad\Longrightarrow\quad \text{branching point (disruptive selection)}$$
+    <div class="eq-block math-normal">
+      $$\frac{\partial^2 w}{\partial a'^2}\Bigg|_{a'=a^*} > 0
+      \quad\Longrightarrow\quad \text{branching point (disruptive selection)}$$
     </div>
 
     <!-- branching video -->
     <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">branching.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Ebranching%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/branching.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+      <li class="video-card">
+        <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">branching.mp4</span></div>
+        <div class="video-wrapper">
+          <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Ebranching%3C/text%3E%3C/svg%3E">
+            <source src="../safe-ai/videos/branching.mp4" type="video/mp4">
+          </video>
         </div>
-    </li>
-</ul>
+      </li>
+    </ul>
 
     <h3 style="color:var(--mut)">9.3 Eco-Evolutionary Cycles</h3>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
-        When ecological timescales overlap with evolutionary timescales, the
-        feedback loop between trait change and ecological equilibrium produces
-        sustained oscillations — the "Red Queen" dynamic.
+      When ecological timescales overlap with evolutionary timescales, the
+      feedback loop between trait change and ecological equilibrium produces
+      sustained oscillations — the "Red Queen" dynamic.
     </p>
-    <div class="eq-block mut">
-        $$\text{Imaginary eigenvalues of Jacobian}
-        \quad\Longrightarrow\quad \text{limit cycle (oscillations)}$$
+    <div class="eq-block mut math-normal">
+      $$\text{Imaginary eigenvalues of Jacobian}
+      \quad\Longrightarrow\quad \text{limit cycle (oscillations)}$$
     </div>
 
     <!-- evolutionary_cycles video -->
     <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">evolutionary_cycles.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eevolutionary_cycles%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/evolutionary_cycles.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+      <li class="video-card">
+        <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">evolutionary_cycles.mp4</span></div>
+        <div class="video-wrapper">
+          <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eevolutionary_cycles%3C/text%3E%3C/svg%3E">
+            <source src="../safe-ai/videos/evolutionary_cycles.mp4" type="video/mp4">
+          </video>
         </div>
-    </li>
-</ul>
+      </li>
+    </ul>
 
     <h3 style="color:var(--pred)">9.4 Trait Runaway &amp; Extinction</h3>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;">
-        With very small costs ($c_a, c_s, c_o, c_h \to 0$), the fitness function
-        has no interior maximum. Selection gradients remain positive
-        indefinitely, pushing all traits toward infinity — evolutionary suicide.
+      With very small costs ($c_a, c_s, c_o, c_h \to 0$), the fitness function
+      has no interior maximum. Selection gradients remain positive
+      indefinitely, pushing all traits toward infinity — evolutionary suicide.
     </p>
-    <div class="eq-block pred">
-        $$P^* = \frac{eR^* - C - m_0}{d} \to 0 \text{ then } N^* \to 0
-        \quad\Longrightarrow\quad \text{evolutionary suicide}$$
+    <div class="eq-block pred math-normal">
+      $$P^* = \frac{eR^* - C - m_0}{d} \to 0 \text{ then } N^* \to 0
+      \quad\Longrightarrow\quad \text{evolutionary suicide}$$
     </div>
 
     <!-- extinction video -->
     <ul class="video-grid">
-        <li class="video-card">
-            <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">extinction.mp4</span></div>
-            <div class="video-wrapper">
-                <video class="responsive-video" autoplay muted loop playsinline preload="auto"
-                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eextinction%3C/text%3E%3C/svg%3E">
-                <source src="../safe-ai/videos/extinction.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+      <li class="video-card">
+        <div class="video-label"><span class="dot" aria-hidden="true"></span> <span class="filename">extinction.mp4</span></div>
+        <div class="video-wrapper">
+          <video class="responsive-video" autoplay muted loop playsinline preload="auto"
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' fill='%2312121a'%3E%3Crect width='16' height='9'/%3E%3Ctext x='8' y='5.5' text-anchor='middle' dy='.35em' fill='%23444' font-size='.6' font-family='monospace'%3Eextinction%3C/text%3E%3C/svg%3E">
+            <source src="../safe-ai/videos/extinction.mp4" type="video/mp4">
+          </video>
         </div>
-    </li>
-</ul>
-</section>
+      </li>
+    </ul>
+  </section>
 
-<!-- ═══ SECTION 10 — SCENE INDEX ════════════════════════ -->
-<section class="chapter-section sr" id="scenes">
+  <!-- ═══ SECTION 10 — SCENE INDEX ════════════════════════ -->
+  <section class="chapter-section sr" id="scenes">
     <span class="section-num">§10</span>
     <h2>Manim Scene Index</h2>
     <p style="color:var(--ink2);font-family:var(--sans);font-size:0.88rem;line-height:1.7;margin-bottom:1rem;">
-        Run each scene with:
-        <code style="font-family:var(--mono);background:var(--bg3);padding:0.1em 0.5em;border-radius:3px;color:var(--accent);">python -m manim -pql evolutionary_dynamics.py &lt;SceneName&gt;</code>
+      Run each scene with:
+      <code style="font-family:var(--mono);background:var(--bg3);padding:0.1em 0.5em;border-radius:3px;color:var(--accent);">python -m manim -pql evolutionary_dynamics.py &lt;SceneName&gt;</code>
     </p>
+  </section>
 
-</section>
-
-<!-- ═══ SECTION 11 — PARAMETERS ═════════════════════════ -->
-<section class="chapter-section sr" id="params">
+  <!-- ═══ SECTION 11 — PARAMETERS ═════════════════════════ -->
+  <section class="chapter-section sr" id="params">
     <span class="section-num">§11</span>
     <h2>Parameter Reference</h2>
 
     <h3>Ecological parameters</h3>
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Units / notes</th></tr></thead>
-            <tbody>
-                <tr><td>$r_R$</td><td>Resource intrinsic growth rate</td><td>2.0</td><td>Per time. Higher → faster resource recovery.</td></tr>
-                <tr><td>$K_R$</td><td>Resource carrying capacity</td><td>10.0</td><td>Density units. Sets upper limit on R*.</td></tr>
-                <tr><td>$c_\text{eff}$</td><td>Predator conversion efficiency</td><td>0.5</td><td>Dimensionless [0,1].</td></tr>
-                <tr><td>$m_P$</td><td>Predator mortality rate</td><td>0.25</td><td>Per time. Higher → fewer predators.</td></tr>
-                <tr><td>$m_0$</td><td>Baseline prey mortality</td><td>0.05</td><td>Per time. Unavoidable death rate.</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Units / notes</th></tr></thead>
+        <tbody>
+          <tr><td>$r_R$</td><td>Resource intrinsic growth rate</td><td>2.0</td><td>Per time. Higher → faster resource recovery.</td></tr>
+          <tr><td>$K_R$</td><td>Resource carrying capacity</td><td>10.0</td><td>Density units. Sets upper limit on R*.</td></tr>
+          <tr><td>$c_\text{eff}$</td><td>Predator conversion efficiency</td><td>0.5</td><td>Dimensionless [0,1].</td></tr>
+          <tr><td>$m_P$</td><td>Predator mortality rate</td><td>0.25</td><td>Per time. Higher → fewer predators.</td></tr>
+          <tr><td>$m_0$</td><td>Baseline prey mortality</td><td>0.05</td><td>Per time. Unavoidable death rate.</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <h3>Acquisition parameters</h3>
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect</th></tr></thead>
-            <tbody>
-                <tr><td>$e_\text{max}$</td><td>Maximum acquisition per unit aggression</td><td>1.5</td><td>↑ → higher ESS aggression $a^*$</td></tr>
-                <tr><td>$\gamma$</td><td>Aggression saturation coefficient</td><td>0.3</td><td>↑ → faster saturation of $e(a)$</td></tr>
-                <tr><td>$\alpha_o$</td><td>Cooperation multiplier</td><td>0.5</td><td>↑ → stronger synergy, higher $o^*$</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>$e_\text{max}$</td><td>Maximum acquisition per unit aggression</td><td>1.5</td><td>↑ → higher ESS aggression $a^*$</td></tr>
+          <tr><td>$\gamma$</td><td>Aggression saturation coefficient</td><td>0.3</td><td>↑ → faster saturation of $e(a)$</td></tr>
+          <tr><td>$\alpha_o$</td><td>Cooperation multiplier</td><td>0.5</td><td>↑ → stronger synergy, higher $o^*$</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <h3>Predation parameters</h3>
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect</th></tr></thead>
-            <tbody>
-                <tr><td>$d_0$</td><td>Baseline predation rate</td><td>0.80</td><td>↑ → stronger selection for $s$ and $h$</td></tr>
-                <tr><td>$\beta_s$</td><td>Stealth effectiveness</td><td>0.70</td><td>↑ → higher ESS stealth $s^*$</td></tr>
-                <tr><td>$\beta_h$</td><td>Herding effectiveness</td><td>0.70</td><td>↑ → higher ESS herding $h^*$</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>$d_0$</td><td>Baseline predation rate</td><td>0.80</td><td>↑ → stronger selection for $s$ and $h$</td></tr>
+          <tr><td>$\beta_s$</td><td>Stealth effectiveness</td><td>0.70</td><td>↑ → higher ESS stealth $s^*$</td></tr>
+          <tr><td>$\beta_h$</td><td>Herding effectiveness</td><td>0.70</td><td>↑ → higher ESS herding $h^*$</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <h3>Cost parameters</h3>
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect of ↑</th></tr></thead>
-            <tbody>
-                <tr><td>$c_a$</td><td>Quadratic aggression cost</td><td>0.10</td><td>Lower ESS $a^*$; too small → runaway</td></tr>
-                <tr><td>$c_s$</td><td>Quadratic stealth cost</td><td>0.10</td><td>Lower ESS $s^*$</td></tr>
-                <tr><td>$c_o$</td><td>Quadratic coordination cost</td><td>0.08</td><td>Lower ESS $o^*$</td></tr>
-                <tr><td>$c_h$</td><td>Quadratic herding cost</td><td>0.08</td><td>Lower ESS $h^*$</td></tr>
-                <tr><td>$c_{sa}$</td><td>Stealth–aggression cross-cost</td><td>0.08</td><td>↑ → trade-off; large → branching</td></tr>
-                <tr><td>$c_{oa}$</td><td>Cooperation–aggression cross-cost</td><td>0.08</td><td>↑ → reduces joint $a,o$ evolution</td></tr>
-                <tr><td>$c_{sh}$</td><td>Stealth–herding cross-cost</td><td>0.06</td><td>↑ → stealth/herding specialisation</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect of ↑</th></tr></thead>
+        <tbody>
+          <tr><td>$c_a$</td><td>Quadratic aggression cost</td><td>0.10</td><td>Lower ESS $a^*$; too small → runaway</td></tr>
+          <tr><td>$c_s$</td><td>Quadratic stealth cost</td><td>0.10</td><td>Lower ESS $s^*$</td></tr>
+          <tr><td>$c_o$</td><td>Quadratic coordination cost</td><td>0.08</td><td>Lower ESS $o^*$</td></tr>
+          <tr><td>$c_h$</td><td>Quadratic herding cost</td><td>0.08</td><td>Lower ESS $h^*$</td></tr>
+          <tr><td>$c_{sa}$</td><td>Stealth–aggression cross-cost</td><td>0.08</td><td>↑ → trade-off; large → branching</td></tr>
+          <tr><td>$c_{oa}$</td><td>Cooperation–aggression cross-cost</td><td>0.08</td><td>↑ → reduces joint $a,o$ evolution</td></tr>
+          <tr><td>$c_{sh}$</td><td>Stealth–herding cross-cost</td><td>0.06</td><td>↑ → stealth/herding specialisation</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <h3>Evolutionary parameters</h3>
     <div class="table-wrapper">
-        <table>
-            <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect</th></tr></thead>
-            <tbody>
-                <tr><td>$\mu$</td><td>Mutation rate</td><td>0.018</td><td>↑ → faster evolution</td></tr>
-                <tr><td>$M_{aa}, M_{ss}, M_{oo}, M_{hh}$</td><td>Per-trait genetic variances</td><td>1.0</td><td>Independent evolutionary speed</td></tr>
-                <tr><td>$M_{as}$</td><td>a–s genetic covariance</td><td>0.10</td><td>Positive → bold-smart syndrome</td></tr>
-                <tr><td>$M_{ao}$</td><td>a–o genetic covariance</td><td>0.08</td><td>Positive → aggressive cooperators</td></tr>
-                <tr><td>$M_{sh}$</td><td>s–h genetic covariance</td><td>0.10</td><td>Positive → defensive syndrome</td></tr>
-            </tbody>
-        </table>
+      <table>
+        <thead><tr><th>Symbol</th><th>Name</th><th>BASE value</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>$\mu$</td><td>Mutation rate</td><td>0.018</td><td>↑ → faster evolution</td></tr>
+          <tr><td>$M_{aa}, M_{ss}, M_{oo}, M_{hh}$</td><td>Per-trait genetic variances</td><td>1.0</td><td>Independent evolutionary speed</td></tr>
+          <tr><td>$M_{as}$</td><td>a–s genetic covariance</td><td>0.10</td><td>Positive → bold-smart syndrome</td></tr>
+          <tr><td>$M_{ao}$</td><td>a–o genetic covariance</td><td>0.08</td><td>Positive → aggressive cooperators</td></tr>
+          <tr><td>$M_{sh}$</td><td>s–h genetic covariance</td><td>0.10</td><td>Positive → defensive syndrome</td></tr>
+        </tbody>
+      </table>
     </div>
-</section>
-<p>These drives are not isolated incidents in the species as a whole they are deeply integrated into the motivational architecture of complex organisms, including ourselves. <strong>Their transmission to AI systems would constitute not an engineering novelty but a known hazard.</strong> An AI trained on human-generated data, even without explicit instruction to acquire these properties may functionally exhibit them. If the corpus constitutes the bias the algorithm is simply bound to imitate it </p>
+  </section>
+
+  <p>These drives are not isolated incidents in the species as a whole they are deeply integrated into the motivational architecture of complex organisms, including ourselves. <strong>Their transmission to AI systems would constitute not an engineering novelty but a known hazard.</strong> An AI trained on human-generated data, even without explicit instruction to acquire these properties may functionally exhibit them. If the corpus constitutes the bias the algorithm is simply bound to imitate it </p>
+
 
 <div class="chapter-section sr" id="s9">
   <h4>Alternative argument</h4>
@@ -4094,6 +4302,7 @@ We took traits like aggression, altruism, cowardness etc in populations to bette
 
 
 <script>
+
 /* READ TIME */
 (function(){
   let c = 0;
