@@ -1,1112 +1,1707 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Transformer Block · Anatomy of a Decoder Layer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --bg: #07020a;
-        --bg2: #0d0310;
-        --cyan: #ff3d8a;
-        --cyan2: #ff6fae;
-        --amber: #ff8c42;
-        --violet: #b14aff;
-        --rose: #ff5252;
-        --lime: #5eff9e;
-        --text: #f5d9e8;
-        --muted: #6b4a5e;
-    }
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    html,
-    body {
-        background: var(--bg);
-        overflow: hidden;
-        font-family: 'JetBrains Mono', 'Courier New', monospace;
-        height: 100vh;
-        width: 100vw;
-        cursor: default;
-    }
-    canvas {
-        inset: 0;
-        width: 100%;
-        height: 100%;
-    }
-    #hint {
-        position: fixed;
-        bottom: 1.15rem;
-        left: 50%;
-        transform: translateX(-50%);
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.62rem;
-        font-weight: 500;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: rgba(255, 111, 174, 0.6);
-        pointer-events: none;
-        z-index: 10;
-        text-align: center;
-    }
-    @media (prefers-reduced-motion: no-preference) {
-        #hint {
-            animation: hintPulse 3.4s ease-in-out infinite;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interpretability — Visual Representations</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ─── CSS Variables (Dark Theme) ─────────────────────────── */
+        :root {
+            --font-size: 16px;
+            --background: #070b14;
+            --foreground: #dde3ed;
+            --card: #0d1220;
+            --card-foreground: #dde3ed;
+            --popover: #0d1220;
+            --popover-foreground: #dde3ed;
+            --primary: #8b9fff;
+            --primary-foreground: #070b14;
+            --secondary: #141c2e;
+            --secondary-foreground: #dde3ed;
+            --muted: #141c2e;
+            --muted-foreground: #6e7d99;
+            --accent: #e2a44b;
+            --accent-foreground: #070b14;
+            --destructive: #e05a5a;
+            --destructive-foreground: #ffffff;
+            --border: rgba(255, 255, 255, 0.07);
+            --input: transparent;
+            --input-background: #141c2e;
+            --switch-background: #2a3550;
+            --font-weight-medium: 500;
+            --font-weight-normal: 400;
+            --ring: #8b9fff;
+            --chart-1: #8b9fff;
+            --chart-2: #e2a44b;
+            --chart-3: #6ee7b7;
+            --chart-4: #f472b6;
+            --chart-5: #60a5fa;
+            --radius: 0.375rem;
+            --sidebar: #0d1220;
+            --sidebar-foreground: #dde3ed;
+            --sidebar-primary: #8b9fff;
+            --sidebar-primary-foreground: #070b14;
+            --sidebar-accent: #141c2e;
+            --sidebar-accent-foreground: #dde3ed;
+            --sidebar-border: rgba(255, 255, 255, 0.07);
+            --sidebar-ring: #8b9fff;
+            --text-2xl: 1.5rem;
+            --text-xl: 1.25rem;
+            --text-lg: 1.125rem;
+            --text-base: 1rem;
         }
-    }
-    @keyframes hintPulse {
-        0%,
-        100% {
-            opacity: 0.4;
+
+        /* ─── Reset & Base ──────────────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            border-color: var(--border);
+            outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
         }
-        50% {
-            opacity: 1;
+
+        html {
+            font-size: var(--font-size);
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-    }
-    #hint::after {
-        content: '';
-        display: block;
-        width: 28px;
-        height: 1px;
-        margin: 0.5rem auto 0;
-        background: linear-gradient(90deg, transparent, rgba(255, 111, 174, 0.7), transparent);
-    }
-</style>
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--foreground);
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        /* ─── Typography ────────────────────────────────────────── */
+        .display {
+            font-family: 'Newsreader', Georgia, serif;
+        }
+        .mono {
+            font-family: 'DM Mono', 'Courier New', monospace;
+        }
+
+        h1 {
+            font-size: var(--text-2xl);
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+        }
+        h2 {
+            font-size: var(--text-xl);
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+        }
+        h3 {
+            font-size: var(--text-lg);
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+        }
+        h4 {
+            font-size: var(--text-base);
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+        }
+        label {
+            font-size: var(--text-base);
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+        }
+        button {
+            font-size: var(--text-base);
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        input {
+            font-size: var(--text-base);
+            font-weight: var(--font-weight-normal);
+            line-height: 1.5;
+            font-family: inherit;
+        }
+
+        /* ─── Prose Styles ──────────────────────────────────────── */
+        .prose p {
+            color: #a0aec0;
+            line-height: 1.8;
+            font-size: 0.97rem;
+            font-weight: 300;
+            margin-bottom: 1.1em;
+        }
+        .prose h2 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.75rem;
+            font-weight: 300;
+            color: #dde3ed;
+            line-height: 1.25;
+            margin: 2.5rem 0 0.75rem;
+        }
+        .prose h3 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            font-weight: 300;
+            color: #c4cfe6;
+            margin: 2rem 0 0.5rem;
+        }
+        .prose strong {
+            color: #c4cfe6;
+            font-weight: 500;
+        }
+        .prose code {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.82em;
+            background: rgba(139, 159, 255, 0.1);
+            color: #a5b4fc;
+            padding: 0.1em 0.4em;
+            border-radius: 3px;
+        }
+        .prose blockquote {
+            border-left: 2px solid rgba(139, 159, 255, 0.35);
+            padding-left: 1.25rem;
+            margin: 1.5rem 0;
+            color: #8892a4;
+            font-style: italic;
+        }
+        .prose figure {
+            margin: 2rem 0;
+        }
+        .prose figcaption {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: #6e7d99;
+            margin-top: 0.6rem;
+            text-align: center;
+        }
+        .prose em {
+            font-style: italic;
+        }
+
+        /* ─── Layout ────────────────────────────────────────────── */
+        .page-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            padding-top: 5rem;
+            padding-bottom: 6rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .page-container {
+                grid-template-columns: 200px 1fr;
+                gap: 4rem;
+            }
+        }
+
+        /* ─── Nav ───────────────────────────────────────────────── */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            border-bottom: 1px solid var(--border);
+            background: rgba(7, 11, 20, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            height: 52px;
+        }
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .nav-links a {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        .nav-links a:hover {
+            color: var(--foreground);
+        }
+
+        /* ─── TOC Sidebar ───────────────────────────────────────── */
+        .toc-sidebar {
+            display: none;
+        }
+        @media (min-width: 1024px) {
+            .toc-sidebar {
+                display: block;
+            }
+        }
+        .toc-sticky {
+            position: sticky;
+            top: 6rem;
+        }
+        .toc-heading {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .toc-link {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: #6e7d99;
+            display: block;
+            padding: 0.35rem 0;
+            transition: color 0.15s;
+            text-decoration: none;
+            border-left: 2px solid transparent;
+            padding-left: 0.75rem;
+        }
+        .toc-link:hover {
+            color: #dde3ed;
+        }
+        .toc-link.active {
+            color: #8b9fff;
+            border-left-color: #8b9fff;
+        }
+        .toc-meta {
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+        .toc-meta-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            margin-bottom: 0.25rem;
+        }
+        .toc-meta-value {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--foreground);
+        }
+        .toc-meta-value+.toc-meta-label {
+            margin-top: 0.75rem;
+        }
+
+        /* ─── Card / Demo Containers ────────────────────────────── */
+        .demo-card {
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            background: #0a0f1e;
+        }
+        .demo-card-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .demo-card-body {
+            padding: 1.25rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        @media (min-width: 768px) {
+            .demo-card-body {
+                flex-wrap: nowrap;
+            }
+        }
+
+        /* ─── Buttons ───────────────────────────────────────────── */
+        .pill-btn {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #6e7d99;
+            transition: all 0.15s;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .pill-btn:hover {
+            color: #dde3ed;
+        }
+        .pill-btn.active {
+            border-color: rgba(139, 159, 255, 0.4);
+            background: rgba(139, 159, 255, 0.15);
+            color: #8b9fff;
+        }
+
+        /* ─── Animations ────────────────────────────────────────── */
+        .fade-up {
+            animation: fadeUp 0.5s ease both;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* ─── Utility ───────────────────────────────────────────── */
+        .text-accent {
+            color: var(--accent);
+        }
+        .text-muted {
+            color: var(--muted-foreground);
+        }
+        .text-primary {
+            color: var(--primary);
+        }
+        .text-foreground {
+            color: var(--foreground);
+        }
+        .border-border {
+            border-color: var(--border);
+        }
+        .tracking-widest {
+            letter-spacing: 0.1em;
+        }
+        .uppercase {
+            text-transform: uppercase;
+        }
+        .italic {
+            font-style: italic;
+        }
+        .font-light {
+            font-weight: 300;
+        }
+        .leading-relaxed {
+            line-height: 1.7;
+        }
+        .leading-tight {
+            line-height: 1.25;
+        }
+        .mt-2 {
+            margin-top: 0.5rem;
+        }
+        .mt-10 {
+            margin-top: 2.5rem;
+        }
+        .mt-16 {
+            margin-top: 4rem;
+        }
+        .mb-1 {
+            margin-bottom: 0.25rem;
+        }
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+        .mb-5 {
+            margin-bottom: 1.25rem;
+        }
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+        .mb-12 {
+            margin-bottom: 3rem;
+        }
+        .pt-8 {
+            padding-top: 2rem;
+        }
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .gap-1 {
+            gap: 0.25rem;
+        }
+        .gap-2 {
+            gap: 0.5rem;
+        }
+        .gap-3 {
+            gap: 0.75rem;
+        }
+        .gap-6 {
+            gap: 1.5rem;
+        }
+        .flex {
+            display: flex;
+        }
+        .flex-col {
+            flex-direction: column;
+        }
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        .items-center {
+            align-items: center;
+        }
+        .items-start {
+            align-items: flex-start;
+        }
+        .justify-between {
+            justify-content: space-between;
+        }
+        .flex-1 {
+            flex: 1;
+        }
+        .flex-shrink-0 {
+            flex-shrink: 0;
+        }
+        .self-start {
+            align-self: flex-start;
+        }
+        .ml-auto {
+            margin-left: auto;
+        }
+        .space-y-1\.5>*+* {
+            margin-top: 0.375rem;
+        }
+        .space-y-3>*+* {
+            margin-top: 0.75rem;
+        }
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+        .rounded-full {
+            border-radius: 9999px;
+        }
+        .w-2 {
+            width: 0.5rem;
+        }
+        .h-2 {
+            height: 0.5rem;
+        }
+        .h-1\.5 {
+            height: 0.375rem;
+        }
+        .h-full {
+            height: 100%;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .text-xs {
+            font-size: 0.75rem;
+        }
+        .text-sm {
+            font-size: 0.875rem;
+        }
+        .text-xl {
+            font-size: 1.25rem;
+        }
+        .transition-all {
+            transition: all 0.2s;
+        }
+        .transition-colors {
+            transition: color 0.15s, background-color 0.15s;
+        }
+        .transition-opacity {
+            transition: opacity 0.15s;
+        }
+        .hover\:opacity-70:hover {
+            opacity: 0.7;
+        }
+        .hover\:text-foreground:hover {
+            color: var(--foreground);
+        }
+        .no-underline {
+            text-decoration: none;
+        }
+        .relative {
+            position: relative;
+        }
+        .absolute {
+            position: absolute;
+        }
+        .inset-0 {
+            inset: 0;
+        }
+        .overflow-hidden {
+            overflow: hidden;
+        }
+        .cursor-pointer {
+            cursor: pointer;
+        }
+        .grid {
+            display: grid;
+        }
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media (min-width: 768px) {
+            .md\:grid-cols-4 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        @media (min-width: 768px) {
+            .md\:flex-nowrap {
+                flex-wrap: nowrap;
+            }
+        }
+
+        /* ─── Specific component tweaks ─────────────────────────── */
+        .saliency-grid-cell {
+            position: absolute;
+            width: 17px;
+            height: 17px;
+            border-radius: 2px;
+            transition: background 0.06s;
+        }
+        .attention-grid-cell {
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+        }
+        .jspace-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .jspace-legend-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 9999px;
+            flex-shrink: 0;
+        }
+    </style>
 </head>
 <body>
-    <canvas id="c"></canvas>
-    <div id="hint">Hover any stage to inspect</div>
-    <script>
-        (() => {
-            const canvas = document.getElementById('c');
-            const ctx = canvas.getContext('2d');
-            const PAL = {
-                cyan: '#ff3d8a',
-                cyan2: '#ff6fae',
-                amber: '#ff8c42',
-                violet: '#b14aff',
-                rose: '#ff5252',
-                lime: '#5eff9e',
-                bg: '#07020a',
-                bg2: '#0d0310',
-                panel: '#0c0310',
-                text: '#f5d9e8',
-                muted: '#6b4a5e',
-                dimmer: '#2a1024',
-            };
 
-            function rgba(hex, a) {
-                const r = parseInt(hex.slice(1, 3), 16),
-                    g = parseInt(hex.slice(3, 5), 16),
-                    b = parseInt(hex.slice(5, 7), 16);
-                return `rgba(${r},${g},${b},${a})`;
+    <!-- ─── Nav ──────────────────────────────────────────────────── -->
+    <nav class="nav-bar">
+        <div class="nav-inner">
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+                <span class="display" style="font-size:0.875rem;font-weight:300;color:var(--foreground);">Interpretability</span>
+                <span style="color:var(--border);margin:0 0.25rem;">/</span>
+                <span class="mono" style="font-size:0.75rem;color:var(--muted-foreground);">Visual Representations</span>
+            </div>
+            <div class="nav-links">
+                <a href="#">Archive</a>
+                <a href="#">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ─── Page Layout ──────────────────────────────────────────── -->
+    <div class="page-container">
+
+        <!-- TOC Sidebar -->
+        <aside class="toc-sidebar">
+            <div class="toc-sticky">
+                <div class="toc-heading">Contents</div>
+                <nav id="toc-nav">
+                    <a href="#saliency" class="toc-link" data-section="saliency">Saliency Maps</a>
+                    <a href="#jspace" class="toc-link" data-section="jspace">J-Space</a>
+                    <a href="#attention" class="toc-link" data-section="attention">Attention in ViTs</a>
+                    <a href="#maxact" class="toc-link" data-section="maxact">Activation Maximization</a>
+                </nav>
+                <div class="toc-meta">
+                    <div class="toc-meta-label">Published</div>
+                    <div class="toc-meta-value">July 2025</div>
+                    <div class="toc-meta-label">Reading time</div>
+                    <div class="toc-meta-value">~12 min</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Article -->
+        <article class="prose" style="max-width:none;">
+
+            <!-- Header -->
+            <header class="fade-up" style="margin-bottom:3rem;">
+                <div class="mono text-xs text-accent tracking-widest uppercase mb-5">Essay · Vision Models</div>
+                <h1 class="display font-light leading-tight mb-5" style="font-size:2.8rem;color:#dde3ed;">
+                    How vision models learn<br>
+                    <em class="italic" style="color:#8b9fff;">to see</em>
+                </h1>
+                <p style="color:var(--muted-foreground);line-height:1.7;margin-bottom:1.5rem;font-weight:300;font-size:1.05rem;">
+                    An exploration of saliency maps, Jacobian representation spaces, and
+                    attention structures in modern vision transformers — with interactive visualizations.
+                </p>
+                <div style="display:flex;gap:1.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1rem 0;">
+                    <div>
+                        <div class="mono text-xs" style="color:var(--muted-foreground);">Author</div>
+                        <div class="mono text-xs" style="color:var(--foreground);margin-top:0.125rem;">Research Notes</div>
+                    </div>
+                    <div>
+                        <div class="mono text-xs" style="color:var(--muted-foreground);">Topic</div>
+                        <div class="mono text-xs" style="color:var(--foreground);margin-top:0.125rem;">Interpretability · ViT · CNNs</div>
+                    </div>
+                </div>
+            </header>
+
+            <p>
+                When a neural network classifies an image, it doesn't <em>look</em> the way we do.
+                It propagates activations through layers of learned transformations, compressing
+                and expanding representations until a final linear combination of features produces
+                a prediction. The challenge of interpretability is making that process legible.
+            </p>
+            <p>
+                Over the last decade, a small set of core techniques has emerged: gradient-based
+                attribution, representation geometry, and attention visualization. Each peels back
+                a different layer of abstraction. None is complete on its own.
+            </p>
+
+            <!-- §1 Saliency -->
+            <section id="saliency">
+                <h2>Saliency maps: which pixels matter?</h2>
+                <p>
+                    The simplest interpretability question is attribution — given a prediction,
+                    which input regions caused it? Saliency maps answer this via the gradient
+                    of the output class score with respect to each input pixel:
+                </p>
+                <blockquote>
+                    S(x) = |∂f_c / ∂x| — the magnitude of how much each pixel, if perturbed,
+                    would change the class score.
+                </blockquote>
+                <p>
+                    This is called <strong>vanilla gradient</strong> or simple backpropagation saliency.
+                    It's fast — a single backward pass — and surprisingly informative, despite
+                    its known instability to adversarial noise.
+                </p>
+
+                <figure>
+                    <div class="demo-card" id="saliency-demo">
+                        <div class="demo-card-header">
+                            <span class="mono text-xs" style="color:var(--muted-foreground);">vanilla gradient saliency</span>
+                            <div class="flex gap-1" id="saliency-class-btns">
+                                <button class="pill-btn active" data-class="0">golden retriever</button>
+                                <button class="pill-btn" data-class="1">tabby cat</button>
+                                <button class="pill-btn" data-class="2">fire truck</button>
+                            </div>
+                        </div>
+                        <div class="demo-card-body" id="saliency-body">
+                            <div class="relative flex-shrink-0" id="saliency-grid-container" style="width:252px;height:252px;">
+                                <!-- Filled by JS -->
+                            </div>
+                            <div class="flex flex-col gap-3 flex-1" style="min-width:180px;">
+                                <div>
+                                    <div class="mono text-xs mb-1" id="saliency-class-label" style="color:#f59e0b;">predicted class</div>
+                                    <div class="display text-xl font-light" style="color:#dde3ed;" id="saliency-class-name">golden retriever</div>
+                                </div>
+                                <div>
+                                    <div class="mono text-xs" style="color:var(--muted-foreground);margin-bottom:0.25rem;">confidence</div>
+                                    <div style="display:flex;align-items:center;gap:0.75rem;">
+                                        <div class="flex-1 h-1.5 rounded-full" style="background:rgba(255,255,255,0.06);">
+                                            <div class="h-full rounded-full" id="saliency-confidence-bar" style="width:87%;background:#f59e0b;transition:width 0.8s ease;"></div>
+                                        </div>
+                                        <span class="mono text-xs" id="saliency-confidence-text" style="color:#f59e0b;">87.3%</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top:0.5rem;">
+                                    <div class="mono text-xs" style="color:var(--muted-foreground);margin-bottom:0.5rem;">gradient magnitude</div>
+                                    <div class="flex gap-2 items-center">
+                                        <div class="w-2 h-2 rounded-full" id="saliency-legend-high" style="background:#f59e0b;"></div>
+                                        <span class="mono text-xs" style="color:var(--muted-foreground);">high activation</span>
+                                    </div>
+                                    <div class="flex gap-2 items-center" style="margin-top:0.25rem;">
+                                        <div class="w-2 h-2 rounded-full" style="background:rgba(13,18,32,0.6);border:1px solid #2a3550;"></div>
+                                        <span class="mono text-xs" style="color:var(--muted-foreground);">no contribution</span>
+                                    </div>
+                                </div>
+                                <button id="saliency-rerun-btn" class="mono text-xs px-4 py-2 rounded border transition-all self-start"
+                                style="border:1px solid rgba(245,158,11,0.33);color:#f59e0b;background:rgba(245,158,11,0.067);margin-top:0.5rem;padding:0.5rem 1rem;border-radius:0.25rem;">
+                                re-run backprop →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <figcaption>
+                    Vanilla gradient saliency. Select a class above; the heatmap shows which
+                    spatial regions carry the highest gradient magnitude. Re-run to watch the
+                    backward pass animate.
+                </figcaption>
+            </figure>
+
+            <h3>Beyond vanilla gradients</h3>
+            <p>
+                Vanilla saliency has a saturation problem: in regions where the model is
+                highly confident, gradients become flat even though the features are critical.
+                Several methods address this.
+            </p>
+            <p>
+                <strong>Integrated Gradients</strong> accumulates gradients along a linear path
+                from a baseline (often a black image) to the actual input, satisfying an axiom
+                called <em>completeness</em> — the attributions sum to the total output difference.
+                <strong> SmoothGrad</strong> adds Gaussian noise n times and averages, reducing
+                high-frequency artifacts at the cost of n forward passes. <strong>GradCAM</strong>
+                avoids per-pixel resolution by pooling gradients over spatial feature maps in
+                the final convolutional layer, producing coarser but more stable localizations.
+            </p>
+            <p>
+                None of these is universally superior. The choice depends on the downstream use:
+                debugging a misclassification, explaining to a non-expert, or formally auditing
+                a model's decision process each demands a different fidelity-stability tradeoff.
+            </p>
+        </section>
+
+        <!-- §2 J-Space -->
+        <section id="jspace">
+            <h2>J-Space: the Jacobian as geometry</h2>
+            <p>
+                Gradient-based attribution tells us where a model looks. A different question
+                is <em>how</em> the model has structured its internal representations — what
+                geometry has it learned in activation space?
+            </p>
+            <p>
+                The <strong>Jacobian matrix</strong> <code>J(x) = ∂f/∂x</code> evaluated at
+                an input <code>x</code> is a local linearization of the network. Its rows
+                point in the directions of steepest ascent for each output class; its singular
+                values tell us how much each of those directions amplifies or attenuates.
+            </p>
+            <p>
+                Projecting a dataset of inputs through their per-sample Jacobians — call it
+                the <strong>J-space embedding</strong> — yields a representation that captures
+                both the input's content and the model's local sensitivity structure. Unlike
+                penultimate-layer activations, J-space preserves information about which
+                input directions the model considers <em>discriminative</em> rather than merely
+                which are <em>active</em>.
+            </p>
+
+            <figure>
+                <div class="demo-card" id="jspace-demo">
+                    <div class="demo-card-header">
+                        <span class="mono text-xs" style="color:var(--muted-foreground);">Jacobian feature space — ResNet-50 layer 4</span>
+                        <button id="jspace-play-btn" class="pill-btn" style="border:1px solid var(--border);">pause</button>
+                    </div>
+                    <div class="demo-card-body">
+                        <svg id="jspace-svg" width="340" height="280" style="flex-shrink:0;"></svg>
+                        <div class="flex flex-col gap-3" style="min-width:180px;">
+                            <p class="text-xs" style="color:var(--muted-foreground);line-height:1.6;font-weight:300;font-size:0.8rem;">
+                                Each point is an image projected through the network's Jacobian matrix — a linearization
+                                of how the model responds to local perturbations around that input.
+                            </p>
+                            <p class="text-xs" style="color:var(--muted-foreground);line-height:1.6;font-weight:300;font-size:0.8rem;">
+                                Semantically similar images cluster tightly, suggesting the Jacobian encodes
+                                category structure even in mid-layer representations.
+                            </p>
+                            <div style="margin-top:0.5rem;" id="jspace-legend">
+                                <!-- Filled by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <figcaption>
+                    2D UMAP projection of the J-space embedding for 100 ImageNet images
+                    (ResNet-50, layer 4 Jacobian, top-2 singular vectors). Hover a cluster
+                    to highlight its class.
+                </figcaption>
+            </figure>
+
+            <p>
+                The structure visible here — tight, separated clusters — has a direct
+                interpretation: images that activate similar Jacobian directions cluster
+                together. This means the model has learned approximately <em>class-conditional</em>
+                sensitivity structure. A golden retriever and a tabby cat activate different
+                discriminative directions in weight space, even when their raw pixel distributions overlap.
+            </p>
+            <h3>Why J-space matters for interpretability</h3>
+            <p>
+                Standard activation-space analysis asks: <em>what did this layer output?</em>
+                J-space analysis asks: <em>what would have changed the output?</em> The latter
+                is closer to the counterfactual reasoning we care about in safety-critical
+                applications. A model that gets the right answer for wrong reasons —
+                relying on texture shortcuts, dataset artifacts, or spurious correlations —
+                may produce similar activations to a well-calibrated model while having
+                a very different J-space geometry.
+            </p>
+            <p>
+                This makes J-space a useful probe for <strong>shortcut learning</strong>.
+                If a model's J-space clusters cleanly by spurious feature (background color,
+                photographer watermark) rather than semantic category, the Jacobian exposes it
+                before it can cause a deployment failure.
+            </p>
+        </section>
+
+        <!-- §3 Attention -->
+        <section id="attention">
+            <h2>Attention in Vision Transformers</h2>
+            <p>
+                Convolutional networks process images in fixed local neighborhoods. Vision
+                Transformers (ViTs) divide an image into a grid of patches and process them
+                as a sequence using self-attention — allowing every patch to attend to every
+                other patch in a single layer.
+            </p>
+            <p>
+                This makes attention weights a natural interpretability target: they tell us,
+                for each query patch, which other patches the model weighted most heavily when
+                computing its representation. In practice, attention is heads × patches × patches,
+                so the question "what is this model attending to?" requires choosing how to
+                aggregate across heads and layers.
+            </p>
+
+            <figure>
+                <div class="demo-card" id="attention-demo">
+                    <div class="demo-card-header">
+                        <span class="mono text-xs" style="color:var(--muted-foreground);">ViT attention — click to set query patch</span>
+                        <div class="flex gap-1 ml-auto" id="attn-head-btns">
+                            <button class="pill-btn active" data-head="0">head 0</button>
+                            <button class="pill-btn" data-head="1">head 3</button>
+                            <button class="pill-btn" data-head="2">head 7</button>
+                            <button class="pill-btn" data-head="3">head 11</button>
+                        </div>
+                    </div>
+                    <div class="demo-card-body">
+                        <div id="attn-grid" style="display:grid;grid-template-columns:repeat(7,36px);gap:2px;flex-shrink:0;">
+                            <!-- Filled by JS -->
+                        </div>
+                        <div class="flex flex-col gap-3" style="min-width:180px;">
+                            <p class="text-xs" style="color:var(--muted-foreground);line-height:1.6;font-weight:300;font-size:0.8rem;">
+                                The orange patch is the <span class="mono" style="color:#e2a44b;">query</span> — the patch
+                                asking "which other patches am I attending to?" Brighter blue indicates higher attention weight.
+                            </p>
+                            <p class="text-xs" style="color:var(--muted-foreground);line-height:1.6;font-weight:300;font-size:0.8rem;">
+                                Different heads learn qualitatively different attention patterns.
+                                Early heads tend toward local patterns; later heads show long-range semantic structure.
+                            </p>
+                            <div style="margin-top:0.5rem;display:flex;align-items:center;gap:0.75rem;">
+                                <span class="mono text-xs" style="color:var(--muted-foreground);">low attention</span>
+                                <div style="height:0.5rem;width:6rem;border-radius:0.125rem;background:linear-gradient(to right,rgba(13,18,32,1),rgba(139,159,255,1));"></div>
+                                <span class="mono text-xs" style="color:var(--muted-foreground);">high</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <figcaption>
+                    Self-attention weights from a ViT-B/16 (simulated). Click any patch to set
+                    it as the query; brightness shows attention weight. Switch heads to see how
+                    different heads specialize.
+                </figcaption>
+            </figure>
+
+            <h3>The head specialization hypothesis</h3>
+            <p>
+                A persistent empirical finding is that different attention heads learn
+                qualitatively different functions. Some heads attend locally, functioning
+                like edge detectors. Others span the image, picking up long-range semantic
+                dependencies — "this patch looks like an ear, which correlates with the
+                dog-snout patch at the other side of the image."
+            </p>
+            <p>
+                <strong>Attention Rollout</strong> propagates attention maps through all layers
+                by multiplying adjacency matrices, accounting for skip connections via identity
+                mixing. The result is a per-token "receptive field" in attention-space — analogous
+                to the spatial receptive field in CNNs, but dynamically computed per input.
+            </p>
+            <p>
+                The limitation is well-known: attention weight ≠ causal importance. A head
+                can attend strongly to a patch while that patch contributes minimally to the
+                final prediction (if subsequent MLP layers suppress the signal). Coupling
+                attention maps with gradient information — <strong>Grad-CAM over attention</strong>
+                — partially addresses this by weighting maps by their gradient w.r.t. the class score.
+            </p>
+        </section>
+
+        <!-- §4 Activation Maximization -->
+        <section id="maxact">
+            <h2>Activation maximization: what does a neuron want?</h2>
+            <p>
+                Saliency and attention tell us which parts of a given input mattered.
+                Activation maximization inverts the question: <em>what input would maximally
+                excite a given neuron?</em> This is found by gradient ascent in image space,
+                starting from noise and iterating:
+            </p>
+            <blockquote>
+                x* = argmax_x f_i(x) − λ·R(x)
+            </blockquote>
+            <p>
+                where <code>f_i</code> is the activation of unit <code>i</code> and
+                <code>R(x)</code> is a regularizer discouraging unnatural images (total variation,
+                Gaussian blur, frequency penalization, or a learned image prior).
+            </p>
+
+            <figure>
+                <div class="demo-card">
+                    <div class="demo-card-body" style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+                        <div class="flex flex-col gap-2" id="maxact-cell-0">
+                            <canvas width="96" height="96" style="border-radius:4px;"></canvas>
+                            <div class="mono text-xs" style="color:var(--muted-foreground);">layer 1 · neuron 23</div>
+                            <div class="mono text-xs" style="color:#8b9fff;font-size:0.68rem;">Gabor edge detector (45°)</div>
+                        </div>
+                        <div class="flex flex-col gap-2" id="maxact-cell-1">
+                            <canvas width="96" height="96" style="border-radius:4px;"></canvas>
+                            <div class="mono text-xs" style="color:var(--muted-foreground);">layer 2 · neuron 71</div>
+                            <div class="mono text-xs" style="color:#8b9fff;font-size:0.68rem;">high-frequency texture</div>
+                        </div>
+                        <div class="flex flex-col gap-2" id="maxact-cell-2">
+                            <canvas width="96" height="96" style="border-radius:4px;"></canvas>
+                            <div class="mono text-xs" style="color:var(--muted-foreground);">layer 3 · neuron 142</div>
+                            <div class="mono text-xs" style="color:#8b9fff;font-size:0.68rem;">curve / arc detector</div>
+                        </div>
+                        <div class="flex flex-col gap-2" id="maxact-cell-3">
+                            <canvas width="96" height="96" style="border-radius:4px;"></canvas>
+                            <div class="mono text-xs" style="color:var(--muted-foreground);">layer 4 · neuron 8</div>
+                            <div class="mono text-xs" style="color:#8b9fff;font-size:0.68rem;">color blob (warm)</div>
+                        </div>
+                    </div>
+                </div>
+                <figcaption>
+                    Synthetic activation maximization patterns for four neurons at different network depths.
+                    Early layers show Gabor-like edge detectors; deeper layers produce complex textural structures.
+                    (Animated — patterns evolve continuously via gradient ascent simulation.)
+                </figcaption>
+            </figure>
+
+            <h3>From neurons to concepts</h3>
+            <p>
+                Early conv layers reliably produce Gabor filters — oriented edge detectors at
+                various frequencies. This isn't surprising; it replicates the primary visual cortex.
+                What's remarkable is that it emerges from random initialization and gradient descent,
+                not from architectural inductive bias.
+            </p>
+            <p>
+                Deeper layers are more interesting and harder to interpret. A single neuron in
+                layer 4 might respond maximally to "a dog snout seen from slightly below, with
+                golden fur, in warm light" — a combination so specific it resists any single English
+                label. This is the <strong>polysemanticity problem</strong>: neurons at intermediate
+                depth respond to multiple distinct, unrelated concepts, presumably because the
+                network has learned to reuse representational capacity via superposition.
+            </p>
+            <p>
+                Sparse dictionary learning — training a sparse autoencoder to reconstruct layer
+                activations from an overcomplete basis — is the current best approach to decomposing
+                polysemantic neurons into monosemantic features. Each basis vector corresponds to
+                a single interpretable direction; their activation maximizations are far cleaner
+                than those of raw neurons.
+            </p>
+
+            <h3>Closing thoughts</h3>
+            <p>
+                Each technique described here illuminates a different facet of a vision model's
+                learned representation. No single method gives the full picture. Saliency maps
+                identify attribution but not mechanism. J-space characterizes representation
+                geometry but not causal structure. Attention weights are legible but not
+                causally faithful. Activation maximization synthesizes preferred stimuli but
+                conflates multiple functions.
+            </p>
+            <p>
+                The deeper ambition — a complete mechanistic account of how a model transforms
+                pixel values into semantic predictions — remains open. Progress is coming from
+                combining these tools: using attention to identify candidate circuits, patching
+                to verify causality, and sparse decomposition to isolate features. The field
+                is young. The images are starting to come into focus.
+            </p>
+        </section>
+
+        <!-- Footer refs -->
+        <div style="margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border);">
+            <div class="mono text-xs tracking-widest uppercase mb-4" style="color:var(--muted-foreground);">Further Reading</div>
+            <div class="space-y-3">
+                <div style="display:flex;gap:0.75rem;">
+                    <span class="mono text-xs flex-shrink-0" style="color:var(--muted-foreground);padding-top:0.125rem;">Simonyan et al., 2014</span>
+                    <a href="#" class="mono text-xs no-underline transition-opacity leading-relaxed" style="color:var(--primary);">Deep Inside Convolutional Networks: Visualising Image Classification Models and Saliency Maps</a>
+                </div>
+                <div style="display:flex;gap:0.75rem;">
+                    <span class="mono text-xs flex-shrink-0" style="color:var(--muted-foreground);padding-top:0.125rem;">Sundararajan et al., 2017</span>
+                    <a href="#" class="mono text-xs no-underline transition-opacity leading-relaxed" style="color:var(--primary);">Axiomatic Attribution for Deep Networks (Integrated Gradients)</a>
+                </div>
+                <div style="display:flex;gap:0.75rem;">
+                    <span class="mono text-xs flex-shrink-0" style="color:var(--muted-foreground);padding-top:0.125rem;">Dosovitskiy et al., 2020</span>
+                    <a href="#" class="mono text-xs no-underline transition-opacity leading-relaxed" style="color:var(--primary);">An Image is Worth 16×16 Words: Transformers for Image Recognition at Scale</a>
+                </div>
+                <div style="display:flex;gap:0.75rem;">
+                    <span class="mono text-xs flex-shrink-0" style="color:var(--muted-foreground);padding-top:0.125rem;">Elhage et al., 2022</span>
+                    <a href="#" class="mono text-xs no-underline transition-opacity leading-relaxed" style="color:var(--primary);">Toy Models of Superposition</a>
+                </div>
+                <div style="display:flex;gap:0.75rem;">
+                    <span class="mono text-xs flex-shrink-0" style="color:var(--muted-foreground);padding-top:0.125rem;">Bricken et al., 2023</span>
+                    <a href="#" class="mono text-xs no-underline transition-opacity leading-relaxed" style="color:var(--primary);">Towards Monosemanticity: Decomposing Language Models with Dictionary Learning</a>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+
+<script>
+    (function() {
+        // ─── Seeded Random ────────────────────────────────────────
+        function seededRandom(seed) {
+            const x = Math.sin(seed + 1) * 43758.5453;
+            return x - Math.floor(x);
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // ─── 1. SALIENCY MAP DEMO ──────────────────────────────────
+        // ═══════════════════════════════════════════════════════════
+        const GRID = 14;
+        const CLASSES = ["golden retriever", "tabby cat", "fire truck"];
+        const CLASS_COLORS = ["#f59e0b", "#a78bfa", "#f87171"];
+        const CLASS_RGB = [
+            [245, 158, 11],
+            [167, 139, 250],
+            [248, 113, 113]
+        ];
+        const CLASS_BG_RGB = [
+            "180,140,80",
+            "120,100,160",
+            "180,80,80"
+        ];
+
+        function buildSaliency(classIdx) {
+            const result = [];
+            for (let i = 0; i < GRID * GRID; i++) {
+                const row = Math.floor(i / GRID);
+                const col = i % GRID;
+                const cx = [7, 4, 10][classIdx % 3];
+                const cy = [7, 9, 5][classIdx % 3];
+                const dist = Math.sqrt((col - cx) ** 2 + (row - cy) ** 2);
+                const base = Math.max(0, 1 - dist / 6.5);
+                const noise = seededRandom(i * 7 + classIdx * 131) * 0.22;
+                result.push(Math.min(1, base * 1.2 + noise));
             }
+            return result;
+        }
 
-            const reducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)')
-                .matches);
-            const ambientScale = reducedMotion ? 0.18 : 1;
+        let saliencyClassIdx = 0;
+        let saliencyProgress = 0;
+        let saliencyRunning = false;
+        let saliencyCurrent = Array(GRID * GRID).fill(0);
+        let saliencyTarget = buildSaliency(0);
+        let saliencyRafId = null;
+        let saliencyStartTime = 0;
 
-            const LW = 960,
-                LH = 1400;
-            const CX = LW / 2;
-            const BOX = { w: 190, h: 44 };
-            const SMALL = { w: 100, h: 38 };
-            const ATT_W = 310,
-                ATT_H = 240;
-            const FFN_W = 260,
-                FFN_H = 170;
+        const saliencyGridContainer = document.getElementById('saliency-grid-container');
+        const saliencyClassLabel = document.getElementById('saliency-class-label');
+        const saliencyClassName = document.getElementById('saliency-class-name');
+        const saliencyConfidenceBar = document.getElementById('saliency-confidence-bar');
+        const saliencyConfidenceText = document.getElementById('saliency-confidence-text');
+        const saliencyLegendHigh = document.getElementById('saliency-legend-high');
+        const saliencyRerunBtn = document.getElementById('saliency-rerun-btn');
+        const saliencyClassBtns = document.getElementById('saliency-class-btns');
 
-            const comps = {
-                embed: { x: CX - BOX.w / 2, y: 110, w: BOX.w, h: BOX.h, c: PAL.cyan, label: 'TOKEN EMBEDDING',
-                    type: 'io' },
-                pos: { x: CX - SMALL.w / 2, y: 190, w: SMALL.w, h: SMALL.h, c: PAL.cyan2, label: '+ POSITION',
-                    type: 'add' },
-                ln1: { x: CX - SMALL.w / 2, y: 264, w: SMALL.w, h: SMALL.h, c: PAL.violet, label: 'LAYER NORM',
-                    type: 'norm' },
-                attn: { x: CX - ATT_W / 2, y: 338, w: ATT_W, h: ATT_H, c: PAL.amber, label: 'MULTI-HEAD\nATTENTION',
-                    type: 'attention' },
-                add1: { x: CX - 22, y: 610, w: 44, h: 44, c: PAL.rose, label: '⊕', type: 'add' },
-                ln2: { x: CX - SMALL.w / 2, y: 688, w: SMALL.w, h: SMALL.h, c: PAL.violet, label: 'LAYER NORM',
-                    type: 'norm' },
-                ffn: { x: CX - FFN_W / 2, y: 760, w: FFN_W, h: FFN_H, c: PAL.lime, label: 'FEED FORWARD',
-                type: 'ffn' },
-                add2: { x: CX - 22, y: 960, w: 44, h: 44, c: PAL.rose, label: '⊕', type: 'add' },
-                output: { x: CX - BOX.w / 2, y: 1038, w: BOX.w, h: BOX.h, c: PAL.cyan,
-                    label: 'OUTPUT\nPROJECTION', type: 'io' },
-            };
+        // Build the saliency grid DOM once
+        function buildSaliencyGridDOM() {
+            saliencyGridContainer.innerHTML = '';
+            // Background layer
+            const bgLayer = document.createElement('div');
+            bgLayer.className = 'absolute inset-0 rounded overflow-hidden';
+            bgLayer.style.cssText =
+                'background:linear-gradient(135deg,#1a1f35 0%,#111827 100%);border-radius:0.25rem;';
+            bgLayer.id = 'saliency-bg-layer';
+            saliencyGridContainer.appendChild(bgLayer);
 
-            const seq = ['embed', 'pos', 'ln1', 'attn', 'add1', 'ln2', 'ffn', 'add2', 'output'];
-            const stepIndex = {};
-            seq.forEach((k, i) => stepIndex[k] = i + 1);
+            // Saliency overlay container
+            const overlayContainer = document.createElement('div');
+            overlayContainer.className = 'absolute inset-0';
+            overlayContainer.id = 'saliency-overlay';
+            saliencyGridContainer.appendChild(overlayContainer);
 
-            const INFO = {
-                embed: {
-                    tag: 'INPUT',
-                    formula: 'h = E[token_id]',
-                    facts: [
-                        'A lookup table sized vocab_size × d_model',
-                        'Typical scale: 50K–200K vocab, 512–12,288 dims',
-                        'Weights are often tied to the output projection',
-                    ],
-                },
-                pos: {
-                    tag: 'ENCODE',
-                    formula: 'PE(p,2i) = sin(p / 10000^(2i/d))',
-                    facts: [
-                        'Injects token order into the embedding',
-                        'Newer LLMs often use rotary (RoPE) instead',
-                        'Without it, attention sees an unordered set',
-                    ],
-                },
-                ln1: {
-                    tag: 'NORMALIZE',
-                    formula: 'y = γ·(x − μ)/√(σ² + ε) + β',
-                    facts: [
-                        'Rescales each token vector independently',
-                        'Pre-norm placement stabilizes deep stacks',
-                        'γ and β are learned per-channel parameters',
-                    ],
-                },
-                attn: {
-                    tag: 'MIX TOKENS',
-                    formula: 'softmax(QKᵀ / √d_k) · V',
-                    facts: [
-                        'Every token builds a Query, scores all Keys',
-                        'A causal mask hides future tokens from each row',
-                        '8–96 heads run in parallel, then concatenate',
-                    ],
-                },
-                add1: {
-                    tag: 'RESIDUAL',
-                    formula: 'x_out = x_in + Sublayer(x_in)',
-                    facts: [
-                        'Skip connection preserves the original signal',
-                        'Keeps gradients flowing through deep networks',
-                        'The residual stream is the model\u2019s shared memory',
-                    ],
-                },
-                ln2: {
-                    tag: 'NORMALIZE',
-                    formula: 'y = γ·(x − μ)/√(σ² + ε) + β',
-                    facts: [
-                        'Same operation as the first layer norm',
-                        'Re-centers the stream before the MLP reads it',
-                        'Cheap relative to attention or the feed-forward pass',
-                    ],
-                },
-                ffn: {
-                    tag: 'TRANSFORM',
-                    formula: 'GELU(xW₁ + b₁)W₂ + b₂',
-                    facts: [
-                        'Applied identically to every token position',
-                        'Hidden layer is roughly 4× wider than d_model',
-                        'Thought to store much of the model\u2019s learned facts',
-                    ],
-                },
-                add2: {
-                    tag: 'RESIDUAL',
-                    formula: 'x_out = x_in + Sublayer(x_in)',
-                    facts: [
-                        'Second skip connection, same role as the first',
-                        'Lets the MLP contribute an update, not a replacement',
-                        'Stream now carries attention + MLP contributions',
-                    ],
-                },
-                output: {
-                    tag: 'DECODE',
-                    formula: 'logits = h · Wᵀ_embed',
-                    facts: [
-                        'Projects the final hidden state to vocab scores',
-                        'Softmax + temperature / top-p picks the next token',
-                        'Repeats autoregressively, one token at a time',
-                    ],
-                },
-            };
+            // Progress bar container
+            const progressContainer = document.createElement('div');
+            progressContainer.className = 'absolute bottom-0 left-0 right-0';
+            progressContainer.style.cssText = 'height:2px;background:rgba(255,255,255,0.08);';
+            progressContainer.id = 'saliency-progress-container';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'h-full transition-all';
+            progressBar.id = 'saliency-progress-bar';
+            progressBar.style.cssText = 'width:0%;background:' + CLASS_COLORS[0] + ';height:100%;';
+            progressContainer.appendChild(progressBar);
+            saliencyGridContainer.appendChild(progressContainer);
+        }
 
-            const res1 = { sx: CX - 140, sy: comps.ln1.y + comps.ln1.h / 2, ex: CX + 30, ey: comps.add1.y + comps
-                    .add1.h / 2 };
-            const res2 = { sx: CX - 140, sy: comps.ln2.y + comps.ln2.h / 2, ex: CX + 30, ey: comps.add2.y + comps
-                    .add2.h / 2 };
-
-            const mainFlows = [],
-                resFlows1 = [],
-                resFlows2 = [];
-            for (let i = 0; i < 45; i++) mainFlows.push({ seg: 0, t: Math.random(), speed: (0.0015 + Math.random() *
-                    0.005) * ambientScale, col: PAL.cyan, sz: 1.5 + Math.random() * 2.5, ph: Math.random() * 6.28 });
-            for (let i = 0; i < 18; i++) resFlows1.push({ t: Math.random(), speed: (0.0018 + Math.random() * 0.004) *
-                    ambientScale, sz: 1.2 + Math.random() * 2, ph: Math.random() * 6.28 });
-            for (let i = 0; i < 18; i++) resFlows2.push({ t: Math.random(), speed: (0.0018 + Math.random() * 0.004) *
-                    ambientScale, sz: 1.2 + Math.random() * 2, ph: Math.random() * 6.28 });
-            const bgParts = Array.from({ length: 30 }, () => ({
-                x: Math.random() * LW,
-                y: Math.random() * LH,
-                r: 0.4 + Math.random() * 1.6,
-                sp: (0.04 + Math.random() * 0.3) * ambientScale,
-                dr: (Math.random() - 0.5) * 0.25 * ambientScale,
-                col: [PAL.cyan, PAL.amber, PAL.violet, PAL.lime][Math.floor(Math.random() * 4)],
-                ph: Math.random() * 7
-            }));
-
-            let view = { focusX: LW / 2, focusY: LH / 2, scale: 1 };
-            const ANIM_DURATION = 0.75;
-            let animProgress = 1;
-            let animStartView = { focusX: LW / 2, focusY: LH / 2, scale: 1 };
-            let animTargetView = { focusX: LW / 2, focusY: LH / 2, scale: 1 };
-            let hoveredComp = null;
-            let baseScale = 1;
-            let W, H, dpr;
-
-            function easeInOutCubic(t) {
-                return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        function updateSaliencyBackground() {
+            const bgLayer = document.getElementById('saliency-bg-layer');
+            if (!bgLayer) return;
+            let html = '';
+            const bgRgb = CLASS_BG_RGB[saliencyClassIdx];
+            for (let i = 0; i < GRID * GRID; i++) {
+                const row = Math.floor(i / GRID);
+                const col = i % GRID;
+                const base = seededRandom(i * 3 + 17) * 0.08;
+                html +=
+                    `<div style="position:absolute;left:${col*18}px;top:${row*18}px;width:18px;height:18px;background:rgba(${bgRgb},${base});"></div>`;
             }
+            bgLayer.innerHTML = html;
+        }
 
-            function updateViewTarget() {
-                animStartView = { focusX: view.focusX, focusY: view.focusY, scale: view.scale };
-                if (hoveredComp) {
-                    const comp = comps[hoveredComp];
-                    animTargetView = { focusX: comp.x + comp.w / 2, focusY: comp.y + comp.h / 2, scale: baseScale *
-                            1.5 };
+        function updateSaliencyOverlay() {
+            const overlay = document.getElementById('saliency-overlay');
+            if (!overlay) return;
+            const [r, g, b] = CLASS_RGB[saliencyClassIdx];
+            let html = '';
+            for (let i = 0; i < GRID * GRID; i++) {
+                const row = Math.floor(i / GRID);
+                const col = i % GRID;
+                const v = saliencyCurrent[i] || 0;
+                const alpha = v * 0.88;
+                html +=
+                    `<div style="position:absolute;left:${col*18}px;top:${row*18}px;width:17px;height:17px;border-radius:2px;background:rgba(${r},${g},${b},${alpha});transition:background 0.06s;"></div>`;
+            }
+            overlay.innerHTML = html;
+        }
+
+        function updateSaliencyProgress() {
+            const progressBar = document.getElementById('saliency-progress-bar');
+            const progressContainer = document.getElementById('saliency-progress-container');
+            if (progressBar) {
+                progressBar.style.width = (saliencyProgress * 100) + '%';
+                progressBar.style.background = CLASS_COLORS[saliencyClassIdx];
+            }
+            if (progressContainer) {
+                progressContainer.style.display = saliencyRunning ? 'block' : 'none';
+            }
+        }
+
+        function updateSaliencyUI() {
+            const color = CLASS_COLORS[saliencyClassIdx];
+            saliencyClassLabel.style.color = color;
+            saliencyClassName.textContent = CLASSES[saliencyClassIdx];
+            saliencyConfidenceBar.style.background = color;
+            saliencyConfidenceText.style.color = color;
+            saliencyLegendHigh.style.background = color;
+            saliencyRerunBtn.style.borderColor = color + '55';
+            saliencyRerunBtn.style.color = color;
+            saliencyRerunBtn.style.background = color + '11';
+            updateSaliencyBackground();
+            updateSaliencyOverlay();
+            updateSaliencyProgress();
+        }
+
+        function runSaliencyBackprop() {
+            if (saliencyRafId) cancelAnimationFrame(saliencyRafId);
+            saliencyRunning = true;
+            saliencyProgress = 0;
+            saliencyCurrent = Array(GRID * GRID).fill(0);
+            saliencyTarget = buildSaliency(saliencyClassIdx);
+            saliencyStartTime = performance.now();
+            updateSaliencyUI();
+            saliencyRerunBtn.textContent = 'propagating…';
+            saliencyRerunBtn.disabled = true;
+            saliencyRerunBtn.style.color = '#6e7d99';
+            saliencyRerunBtn.style.borderColor = 'transparent';
+            saliencyRerunBtn.style.background = 'rgba(255,255,255,0.03)';
+
+            function animate(now) {
+                const elapsed = now - saliencyStartTime;
+                const t = Math.min(elapsed / 1400, 1);
+                saliencyProgress = t;
+                saliencyCurrent = saliencyTarget.map(v => v * t + seededRandom(v * 1000) * 0.05 * (1 - t));
+                updateSaliencyOverlay();
+                updateSaliencyProgress();
+                if (t < 1) {
+                    saliencyRafId = requestAnimationFrame(animate);
                 } else {
-                    animTargetView = { focusX: LW / 2, focusY: LH / 2, scale: baseScale };
-                }
-                animProgress = 0;
-            }
-
-            function drawBox(x, y, w, h, c, fa = 0.08, sa = 0.35, sw = 1.2, hover = false, time = 0) {
-                ctx.save();
-                if (hover) { ctx.shadowColor = c;
-                    ctx.shadowBlur = 16; }
-                const grad = ctx.createLinearGradient(x, y, x, y + h);
-                grad.addColorStop(0, rgba(PAL.bg2, Math.min(1, fa * 1.7)));
-                grad.addColorStop(1, rgba(PAL.bg2, fa * 0.6));
-                ctx.fillStyle = grad;
-                ctx.strokeStyle = rgba(c, hover ? Math.min(1, sa * 2.5) : sa);
-                ctx.lineWidth = sw;
-                ctx.beginPath();
-                ctx.roundRect(x, y, w, h, 6);
-                ctx.fill();
-                ctx.stroke();
-                ctx.strokeStyle = rgba('#ffffff', hover ? 0.12 : 0.05);
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(x + 7, y + 1.1);
-                ctx.lineTo(x + w - 7, y + 1.1);
-                ctx.stroke();
-                ctx.restore();
-                if (hover) {
-                    const pulse = 4 + 2.4 * Math.sin(time * 4);
-                    ctx.save();
-                    ctx.strokeStyle = rgba(c, 0.16 + 0.08 * Math.sin(time * 4));
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.roundRect(x - pulse, y - pulse, w + pulse * 2, h + pulse * 2, 8 + pulse);
-                    ctx.stroke();
-                    ctx.restore();
+                    saliencyCurrent = [...saliencyTarget];
+                    saliencyRunning = false;
+                    updateSaliencyOverlay();
+                    updateSaliencyProgress();
+                    saliencyRerunBtn.textContent = 're-run backprop →';
+                    saliencyRerunBtn.disabled = false;
+                    const color = CLASS_COLORS[saliencyClassIdx];
+                    saliencyRerunBtn.style.color = color;
+                    saliencyRerunBtn.style.borderColor = color + '55';
+                    saliencyRerunBtn.style.background = color + '11';
+                    saliencyRafId = null;
                 }
             }
+            saliencyRafId = requestAnimationFrame(animate);
+        }
 
-            function drawLabel(x, y, w, h, text, c) {
-                const lines = text.split('\n');
-                ctx.fillStyle = rgba(c, 0.92);
-                ctx.font = "600 9.5px 'JetBrains Mono', monospace";
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                const lh = 13,
-                    sy = y + h / 2 - ((lines.length - 1) * lh) / 2;
-                lines.forEach((l, i) => ctx.fillText(l, x + w / 2, sy + i * lh));
-            }
-
-            function drawStepBadge(comp, key, hover, time) {
-                const n = stepIndex[key];
-                if (!n) return;
-                const bx = comp.x - 2,
-                    by = comp.y - 2;
-                ctx.save();
-                ctx.textBaseline = 'middle';
-                ctx.beginPath();
-                ctx.arc(bx, by, 9, 0, 2 * Math.PI);
-                ctx.fillStyle = rgba(PAL.bg2, 0.92);
-                ctx.fill();
-                ctx.strokeStyle = rgba(comp.c, hover ? 0.95 : 0.5);
-                ctx.lineWidth = 1;
-                ctx.stroke();
-                ctx.fillStyle = rgba(comp.c, hover ? 1 : 0.8);
-                ctx.font = "700 8px 'JetBrains Mono', monospace";
-                ctx.textAlign = 'center';
-                ctx.fillText(String(n).padStart(2, '0'), bx, by + 0.5);
-                ctx.restore();
-            }
-
-            function arrow(x1, y1, x2, y2, c = PAL.cyan, ap = 0.35) {
-                ctx.save();
-                ctx.shadowColor = c;
-                ctx.shadowBlur = 3;
-                ctx.strokeStyle = rgba(c, ap);
-                ctx.lineWidth = 1.2;
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.stroke();
-                const ang = Math.atan2(y2 - y1, x2 - x1);
-                ctx.fillStyle = rgba(c, ap + 0.15);
-                ctx.beginPath();
-                ctx.moveTo(x2, y2);
-                ctx.lineTo(x2 - 7 * Math.cos(ang - 0.55), y2 - 7 * Math.sin(ang - 0.55));
-                ctx.lineTo(x2 - 7 * Math.cos(ang + 0.55), y2 - 7 * Math.sin(ang + 0.55));
-                ctx.closePath();
-                ctx.fill();
-                ctx.restore();
-            }
-
-            function wrapText(text, maxWidth, font) {
-                ctx.font = font;
-                const words = text.split(' ');
-                const lines = [];
-                let line = '';
-                words.forEach(word => {
-                    const test = line ? line + ' ' + word : word;
-                    if (ctx.measureText(test).width > maxWidth && line) {
-                        lines.push(line);
-                        line = word;
-                    } else {
-                        line = test;
-                    }
-                });
-                if (line) lines.push(line);
-                return lines;
-            }
-
-            function drawAttention(comp, t) {
-                const { x, y, w, h } = comp;
-                const qkvY = y + 30,
-                    qkvW = 60,
-                    qkvH = 30,
-                    gap = 18;
-                const qx = x + 40,
-                    kx = x + 40 + qkvW + gap,
-                    vx = x + 40 + 2 * (qkvW + gap);
-                [qx, kx, vx].forEach((cx, i) => {
-                    drawBox(cx, qkvY, qkvW, qkvH, PAL.cyan, 0.1, 0.45);
-                    ctx.fillStyle = rgba(PAL.cyan, 0.85);
-                    ctx.font = "700 11px 'JetBrains Mono'";
-                    ctx.textAlign = 'center';
-                    ctx.fillText(['Q', 'K', 'V'][i], cx + qkvW / 2, qkvY + qkvH / 2);
-                });
-                const matY = qkvY + qkvH + 20,
-                    matSize = 90,
-                    cells = 8,
-                    cell = matSize / cells;
-                const mx = x + (w - matSize) / 2;
-                ctx.fillStyle = rgba(PAL.dimmer, 0.7);
-                ctx.fillRect(mx, matY, matSize, matSize);
-                for (let i = 0; i < cells; i++) {
-                    let rowSum = 0;
-                    const row = [];
-                    for (let j = 0; j < cells; j++) {
-                        const raw = j <= i ? Math.exp(-Math.abs(i - j) / (1.2 + 0.4 * Math.sin(t + i * 0.4))) : 0;
-                        row.push(raw);
-                        rowSum += raw;
-                    }
-                    for (let j = 0; j < cells; j++) {
-                        const v = row[j] / (rowSum || 1);
-                        ctx.fillStyle = j > i ? rgba(PAL.dimmer, 0.4) : rgba(PAL.amber, Math.min(v * 3, 1) * 0.9);
-                        ctx.fillRect(mx + j * cell + 0.5, matY + i * cell + 0.5, cell - 1, cell - 1);
-                    }
-                }
-                ctx.strokeStyle = rgba(PAL.amber, 0.5);
-                ctx.lineWidth = 1;
-                ctx.strokeRect(mx, matY, matSize, matSize);
-                ctx.fillStyle = rgba(PAL.amber, 0.6);
-                ctx.font = "600 8px 'JetBrains Mono'";
-                ctx.textAlign = 'center';
-                ctx.fillText('SOFTMAX(QKᵀ/√dₖ)', mx + matSize / 2, matY - 6);
-                const outY = matY + matSize + 18;
-                drawBox(x + 40, outY, w - 80, 30, PAL.lime, 0.08, 0.4);
-                ctx.fillStyle = rgba(PAL.lime, 0.8);
-                ctx.font = "600 9px 'JetBrains Mono'";
-                ctx.fillText('WEIGHTED SUM (ATTENTION OUTPUT)', x + w / 2, outY + 15);
-                ctx.fillStyle = rgba(PAL.amber, 0.5);
-                ctx.font = "500 7px 'JetBrains Mono'";
-                ctx.fillText('8 HEADS PARALLEL', x + w / 2, outY + 40);
-            }
-
-            function drawFFN(comp, t) {
-                const { x, y, w, h } = comp;
-                const midX = x + w / 2,
-                    colL = x + 30,
-                    colR = x + w - 30;
-                const topY = y + 35,
-                    botY = y + h - 35;
-                const inCount = 8,
-                    hidCount = 28,
-                    outCount = 8;
-                const inAct = Array.from({ length: inCount }, (_, i) => Math.max(0, Math.sin(t * 1.5 + i * 0.7) * 0.7 +
-                    0.45));
-                const hidAct = Array.from({ length: hidCount }, (_, i) => Math.max(0, Math.sin(t * 2.2 + i * 0.35) * 0.85 +
-                    0.35));
-                const outAct = Array.from({ length: outCount }, (_, i) => Math.max(0, Math.cos(t * 1.1 + i * 0.6) * 0.65 +
-                    0.5));
-                ctx.lineWidth = 0.4;
-                for (let i = 0; i < inCount; i++) {
-                    const iy = topY + (i + 0.5) * (botY - topY) / inCount;
-                    for (let h2 = 0; h2 < hidCount; h2 += 2) {
-                        const hy = topY + (h2 + 0.5) * (botY - topY) / hidCount;
-                        const a = inAct[i] * hidAct[h2] * 0.22;
-                        if (a < 0.02) continue;
-                        ctx.strokeStyle = rgba(PAL.cyan, a);
-                        ctx.beginPath();
-                        ctx.moveTo(colL, iy);
-                        ctx.lineTo(midX, hy);
-                        ctx.stroke();
-                    }
-                }
-                for (let h2 = 0; h2 < hidCount; h2 += 2) {
-                    const hy = topY + (h2 + 0.5) * (botY - topY) / hidCount;
-                    for (let o = 0; o < outCount; o++) {
-                        const oy = topY + (o + 0.5) * (botY - topY) / outCount;
-                        const a = hidAct[h2] * outAct[o] * 0.22;
-                        if (a < 0.02) continue;
-                        ctx.strokeStyle = rgba(PAL.lime, a);
-                        ctx.beginPath();
-                        ctx.moveTo(midX, hy);
-                        ctx.lineTo(colR, oy);
-                        ctx.stroke();
-                    }
-                }
-
-                function neurons(cx, count, acts, col, rmax) {
-                    for (let i = 0; i < count; i++) {
-                        const cy = topY + (i + 0.5) * (botY - topY) / count;
-                        const a = acts[i] || 0;
-                        const r = rmax * (0.25 + a * 0.75);
-                        ctx.beginPath();
-                        ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-                        ctx.fillStyle = rgba(col, 0.35 + a * 0.6);
-                        ctx.fill();
-                        if (a > 0.65) { ctx.shadowColor = col;
-                            ctx.shadowBlur = 8;
-                            ctx.fill();
-                            ctx.shadowBlur = 0; }
-                    }
-                }
-                neurons(colL, inCount, inAct, PAL.cyan, 4.5);
-                neurons(midX, hidCount, hidAct, PAL.amber, 2.5);
-                neurons(colR, outCount, outAct, PAL.lime, 4.5);
-                ctx.fillStyle = rgba(PAL.cyan, 0.6);
-                ctx.font = "600 7px 'JetBrains Mono'";
-                ctx.textAlign = 'center';
-                ctx.fillText('d_model', colL, topY - 10);
-                ctx.fillText('4× GELU', midX, topY - 10);
-                ctx.fillText('d_model', colR, topY - 10);
-            }
-
-            function drawAnnotations(t) {
-                const cycle = t % 20;
-                const fade = (start, dur) => {
-                    const p = Math.max(0, Math.min(1, (cycle - start) / dur));
-                    return (p < 0.1 ? p * 10 : p > 0.9 ? (1 - p) * 10 : 1);
-                };
-                ctx.textBaseline = 'middle';
-                ctx.font = "500 8.5px 'JetBrains Mono', monospace";
-                const anns = [
-                    { y: comps.embed.y + 20, txt: 'Lookup token vector', c: PAL.cyan, t0: 0.5 },
-                    { y: comps.pos.y + 15, txt: 'Add sinusoidal position', c: PAL.cyan2, t0: 2 },
-                    { y: comps.ln1.y + 15, txt: 'Normalize across features', c: PAL.violet, t0: 3.5 },
-                    { y: comps.attn.y + 40, txt: 'Q/K/V linear projections', c: PAL.cyan, t0: 5 },
-                    { y: comps.attn.y + 120, txt: 'Scaled dot-product + softmax', c: PAL.amber, t0: 6.5 },
-                    { y: comps.attn.y + 190, txt: 'Weighted sum over values', c: PAL.lime, t0: 8 },
-                    { y: comps.add1.y, txt: 'Residual add (skip connection)', c: PAL.rose, t0: 9.5 },
-                    { y: comps.ffn.y + 50, txt: 'Expand to 4× hidden dim', c: PAL.cyan, t0: 11 },
-                    { y: comps.ffn.y + 110, txt: 'GELU nonlinearity', c: PAL.amber, t0: 12.5 },
-                    { y: comps.add2.y, txt: 'Residual add', c: PAL.rose, t0: 14 },
-                    { y: comps.output.y + 15, txt: 'Project to vocabulary', c: PAL.cyan, t0: 15.5 },
-                ];
-                anns.forEach(a => {
-                    const alpha = fade(a.t0, 1.8) * 0.85;
-                    if (alpha < 0.02) return;
-                    ctx.fillStyle = rgba(a.c, alpha);
-                    ctx.textAlign = 'right';
-                    ctx.fillText(a.txt, comps.attn.x - 25, a.y);
-                });
-            }
-
-            function drawMiniVisual(key, x, y, w, h, time) {
-                const innerX = x,
-                    innerY = y,
-                    innerW = w,
-                    innerH = h;
-                switch (key) {
-                    case 'embed': {
-                        const points = [
-                            { x: 0.2, y: 0.3, label: 'king' }, { x: 0.25, y: 0.25, label: 'queen' },
-                            { x: 0.15, y: 0.42, label: 'prince' },
-                            { x: 0.72, y: 0.68, label: 'cat' }, { x: 0.8, y: 0.6, label: 'dog' },
-                            { x: 0.5, y: 0.18, label: 'run' }, { x: 0.58, y: 0.12, label: 'jump' },
-                        ];
-                        points.forEach(p => {
-                            const px = innerX + p.x * innerW + Math.sin(time * 2 + p.x * 10) * 2;
-                            const py = innerY + p.y * innerH + Math.cos(time * 1.5 + p.y * 8) * 2;
-                            ctx.fillStyle = rgba(PAL.cyan, 0.85);
-                            ctx.shadowColor = PAL.cyan;
-                            ctx.shadowBlur = 4;
-                            ctx.beginPath();
-                            ctx.arc(px, py, 2.6, 0, 2 * Math.PI);
-                            ctx.fill();
-                            ctx.shadowBlur = 0;
-                            ctx.fillStyle = rgba(PAL.text, 0.65);
-                            ctx.font = "7px 'JetBrains Mono'";
-                            ctx.textAlign = 'left';
-                            ctx.fillText(p.label, px + 5, py + 3);
-                        });
-                        break;
-                    }
-                    case 'pos': {
-                        for (let i = 0; i < 4; i++) {
-                            const freq = 1 + i * 0.8;
-                            const col = [PAL.cyan, PAL.amber, PAL.violet, PAL.lime][i];
-                            ctx.beginPath();
-                            for (let xx = 0; xx < innerW; xx += 2) {
-                                const tPos = (xx / innerW) * Math.PI * 2 * freq + time * 3;
-                                const yy = innerY + innerH / 2 + Math.sin(tPos) * innerH * 0.36;
-                                if (xx === 0) ctx.moveTo(innerX + xx, yy);
-                                else ctx.lineTo(innerX + xx, yy);
-                            }
-                            ctx.strokeStyle = rgba(col, 0.8);
-                            ctx.lineWidth = 1.2;
-                            ctx.stroke();
-                        }
-                        break;
-                    }
-                    case 'ln1':
-                    case 'ln2': {
-                        const bars = 8;
-                        for (let i = 0; i < bars; i++) {
-                            const val = 0.3 + 0.4 * Math.sin(time * 3 + i);
-                            const bh = val * innerH * 0.78;
-                            ctx.fillStyle = rgba(PAL.violet, 0.7);
-                            ctx.fillRect(innerX + i * (innerW / bars) + 2, innerY + innerH - bh, innerW / bars - 4,
-                                bh);
-                        }
-                        ctx.strokeStyle = rgba(PAL.cyan, 0.5);
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(innerX, innerY + innerH / 2);
-                        ctx.lineTo(innerX + innerW, innerY + innerH / 2);
-                        ctx.stroke();
-                        break;
-                    }
-                    case 'attn': {
-                        const gridSize = 50,
-                            cells = 3;
-                        const gx = innerX + (innerW - gridSize) / 2,
-                            gy = innerY + 14;
-                        for (let i = 0; i < cells; i++) {
-                            for (let j = 0; j < cells; j++) {
-                                const val = j <= i ? Math.exp(-Math.abs(i - j) / 1.5) : 0;
-                                ctx.fillStyle = j > i ? rgba(PAL.dimmer, 0.5) : rgba(PAL.amber, val * 0.9);
-                                ctx.fillRect(gx + j * (gridSize / cells), gy + i * (gridSize / cells), gridSize /
-                                    cells - 1, gridSize / cells - 1);
-                            }
-                        }
-                        ctx.strokeStyle = rgba(PAL.amber, 0.7);
-                        ctx.strokeRect(gx, gy, gridSize, gridSize);
-                        arrow(innerX + 6, gy + gridSize / 2, gx, gy + gridSize / 2, PAL.cyan, 0.6);
-                        arrow(gx + gridSize, gy + gridSize / 2, innerX + innerW - 6, gy + gridSize / 2, PAL.lime,
-                        0.6);
-                        ctx.fillStyle = rgba(PAL.amber, 0.8);
-                        ctx.font = "7px 'JetBrains Mono'";
-                        ctx.textAlign = 'center';
-                        ctx.fillText('SOFTMAX', gx + gridSize / 2, gy + gridSize + 13);
-                        break;
-                    }
-                    case 'add1':
-                    case 'add2': {
-                        const vecX = innerX + 16,
-                            vecY = innerY + innerH / 2;
-                        ctx.fillStyle = rgba(PAL.cyan, 0.85);
-                        ctx.beginPath();
-                        ctx.arc(vecX, vecY - 14, 3.6, 0, 2 * Math.PI);
-                        ctx.fill();
-                        ctx.fillStyle = rgba(PAL.amber, 0.85);
-                        ctx.beginPath();
-                        ctx.arc(vecX, vecY + 14, 3.6, 0, 2 * Math.PI);
-                        ctx.fill();
-                        arrow(vecX, vecY - 14, vecX + innerW - 36, vecY - 14, PAL.cyan, 0.6);
-                        arrow(vecX, vecY + 14, vecX + innerW - 36, vecY + 14, PAL.amber, 0.6);
-                        arrow(vecX + innerW - 36, vecY - 14, vecX + innerW - 36, vecY + 9, PAL.rose, 0.7);
-                        ctx.fillStyle = rgba(PAL.rose, 0.9);
-                        ctx.shadowColor = PAL.rose;
-                        ctx.shadowBlur = 6;
-                        ctx.beginPath();
-                        ctx.arc(vecX + innerW - 36, vecY + 9, 4.5, 0, 2 * Math.PI);
-                        ctx.fill();
-                        ctx.shadowBlur = 0;
-                        ctx.fillStyle = rgba(PAL.text, 0.6);
-                        ctx.font = "7px 'JetBrains Mono'";
-                        ctx.textAlign = 'left';
-                        ctx.fillText('input', vecX + 6, vecY - 14 + 3);
-                        ctx.fillText('sublayer(x)', vecX + 6, vecY + 14 + 3);
-                        break;
-                    }
-                    case 'ffn': {
-                        const midX = innerX + innerW / 2;
-                        for (let i = 0; i < 5; i++) {
-                            const iy = innerY + 16 + i * (innerH - 32) / 4;
-                            ctx.fillStyle = rgba(PAL.cyan, 0.7);
-                            ctx.beginPath();
-                            ctx.arc(innerX + 8, iy, 2.6, 0, 2 * Math.PI);
-                            ctx.fill();
-                            ctx.fillStyle = rgba(PAL.lime, 0.7);
-                            ctx.beginPath();
-                            ctx.arc(innerX + innerW - 8, iy, 2.6, 0, 2 * Math.PI);
-                            ctx.fill();
-                            for (let h2 = 0; h2 < 8; h2++) {
-                                const hy = innerY + 16 + h2 * (innerH - 32) / 7;
-                                ctx.strokeStyle = rgba(PAL.amber, 0.15);
-                                ctx.lineWidth = 0.5;
-                                ctx.beginPath();
-                                ctx.moveTo(innerX + 8, iy);
-                                ctx.lineTo(midX, hy);
-                                ctx.stroke();
-                                ctx.beginPath();
-                                ctx.moveTo(midX, hy);
-                                ctx.lineTo(innerX + innerW - 8, iy);
-                                ctx.stroke();
-                            }
-                        }
-                        ctx.fillStyle = rgba(PAL.amber, 0.85);
-                        ctx.font = "7px 'JetBrains Mono'";
-                        ctx.textAlign = 'center';
-                        ctx.fillText('4× GELU', midX, innerY + innerH - 4);
-                        break;
-                    }
-                    case 'output': {
-                        const vocab = 6;
-                        const probs = Array.from({ length: vocab }, (_, i) => Math.exp(-(i - 2) * (i - 2) * 0.4));
-                        const maxProb = Math.max(...probs);
-                        for (let i = 0; i < vocab; i++) {
-                            const barH = (probs[i] / maxProb) * innerH * 0.68;
-                            ctx.fillStyle = i === 2 ? PAL.amber : PAL.cyan;
-                            if (i === 2) { ctx.shadowColor = PAL.amber;
-                                ctx.shadowBlur = 6; }
-                            ctx.fillRect(innerX + i * (innerW / vocab) + 2, innerY + innerH - barH - 4, innerW /
-                                vocab - 4, barH);
-                            ctx.shadowBlur = 0;
-                        }
-                        ctx.fillStyle = rgba(PAL.amber, 0.9);
-                        ctx.font = "7px 'JetBrains Mono'";
-                        ctx.textAlign = 'center';
-                        ctx.fillText('NEXT-TOKEN DISTRIBUTION', innerX + innerW / 2, innerY + 8);
-                        break;
-                    }
-                }
-            }
-
-            function drawPopup(comp, key, time) {
-                const info = INFO[key];
-                const popupW = 248;
-                const factFont = "500 8.3px 'JetBrains Mono', monospace";
-                const factMaxW = popupW - 44;
-                let factLineTotal = 0;
-                const factWraps = info.facts.map(f => {
-                    const lines = wrapText(f, factMaxW, factFont);
-                    factLineTotal += lines.length;
-                    return lines;
-                });
-                const PAD_TOP = 14,
-                    TAG_H = 13,
-                    TITLE_H = 13,
-                    DIV_GAP = 9;
-                const VISUAL_H = 72,
-                    GAP1 = 9,
-                    FORMULA_H = 25,
-                    GAP2 = 11;
-                const FACT_LINE_H = 11,
-                    FACT_GAP = 7,
-                    PAD_BOTTOM = 13;
-                const factsH = info.facts.length * FACT_GAP + factLineTotal * FACT_LINE_H;
-                const popupH = PAD_TOP + TAG_H + TITLE_H + DIV_GAP + VISUAL_H + GAP1 + FORMULA_H + GAP2 + factsH +
-                    PAD_BOTTOM;
-
-                let anchorX = comp.x + comp.w + 22;
-                let flipped = false;
-                if (anchorX + popupW > LW - 8) { anchorX = comp.x - popupW - 22;
-                    flipped = true; }
-                let anchorY = comp.y + comp.h / 2 - popupH / 2;
-                if (anchorY < 96) anchorY = 96;
-                if (anchorY + popupH > LH - 10) anchorY = LH - 10 - popupH;
-
-                ctx.save();
-                ctx.strokeStyle = rgba(comp.c, 0.4);
-                ctx.lineWidth = 1;
-                ctx.setLineDash([2, 3]);
-                ctx.beginPath();
-                ctx.moveTo(flipped ? comp.x : comp.x + comp.w, comp.y + comp.h / 2);
-                ctx.lineTo(flipped ? anchorX + popupW : anchorX, comp.y + comp.h / 2);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                ctx.restore();
-
-                ctx.save();
-                ctx.shadowColor = rgba(comp.c, 0.45);
-                ctx.shadowBlur = 24;
-                ctx.fillStyle = rgba(PAL.panel, 0.97);
-                ctx.beginPath();
-                ctx.roundRect(anchorX, anchorY, popupW, popupH, 10);
-                ctx.fill();
-                ctx.restore();
-
-                ctx.save();
-                ctx.strokeStyle = rgba(comp.c, 0.55);
-                ctx.lineWidth = 1.3;
-                ctx.beginPath();
-                ctx.roundRect(anchorX, anchorY, popupW, popupH, 10);
-                ctx.stroke();
-                ctx.strokeStyle = rgba('#ffffff', 0.07);
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(anchorX + 8, anchorY + 1.2);
-                ctx.lineTo(anchorX + popupW - 8, anchorY + 1.2);
-                ctx.stroke();
-                ctx.restore();
-
-                ctx.save();
-                ctx.textBaseline = 'alphabetic';
-                let cy = anchorY + PAD_TOP;
-
-                ctx.textAlign = 'left';
-                ctx.fillStyle = rgba(comp.c, 0.9);
-                ctx.font = "700 7.5px 'JetBrains Mono', monospace";
-                ctx.fillText('STEP ' + String(stepIndex[key]).padStart(2, '0') + '  ·  ' + info.tag, anchorX + 14, cy);
-                cy += TAG_H;
-
-                ctx.fillStyle = rgba(PAL.text, 0.96);
-                ctx.font = "700 11.5px 'JetBrains Mono', monospace";
-                ctx.fillText(comp.label.replace('\n', ' '), anchorX + 14, cy);
-                cy += TITLE_H;
-
-                ctx.strokeStyle = rgba(comp.c, 0.28);
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(anchorX + 14, cy);
-                ctx.lineTo(anchorX + popupW - 14, cy);
-                ctx.stroke();
-                cy += DIV_GAP;
-
-                const visY = cy;
-                ctx.save();
-                ctx.beginPath();
-                ctx.rect(anchorX + 10, visY, popupW - 20, VISUAL_H);
-                ctx.clip();
-                drawMiniVisual(key, anchorX + 10, visY, popupW - 20, VISUAL_H, time);
-                ctx.restore();
-                cy = visY + VISUAL_H + GAP1;
-
-                ctx.fillStyle = rgba(PAL.dimmer, 0.6);
-                ctx.beginPath();
-                ctx.roundRect(anchorX + 12, cy, popupW - 24, FORMULA_H, 5);
-                ctx.fill();
-                ctx.strokeStyle = rgba(comp.c, 0.22);
-                ctx.lineWidth = 1;
-                ctx.stroke();
-                ctx.fillStyle = rgba(PAL.cyan2, 0.95);
-                ctx.font = "600 8.6px 'JetBrains Mono', monospace";
-                ctx.textAlign = 'center';
-                ctx.fillText(info.formula, anchorX + popupW / 2, cy + FORMULA_H / 2 + 3);
-                cy += FORMULA_H + GAP2;
-
-                ctx.textAlign = 'left';
-                factWraps.forEach(lines => {
-                    ctx.fillStyle = rgba(comp.c, 0.85);
-                    ctx.beginPath();
-                    ctx.arc(anchorX + 17, cy - 3, 1.6, 0, 2 * Math.PI);
-                    ctx.fill();
-                    ctx.fillStyle = rgba(PAL.text, 0.72);
-                    ctx.font = factFont;
-                    lines.forEach((l, i) => ctx.fillText(l, anchorX + 23, cy + i * FACT_LINE_H));
-                    cy += lines.length * FACT_LINE_H + FACT_GAP;
-                });
-                ctx.restore();
-            }
-
-            function drawLegend() {
-                const items = [
-                    { c: PAL.cyan, label: 'I/O · ENCODE' },
-                    { c: PAL.violet, label: 'NORMALIZE' },
-                    { c: PAL.amber, label: 'ATTENTION' },
-                    { c: PAL.lime, label: 'FEED-FORWARD' },
-                    { c: PAL.rose, label: 'RESIDUAL' },
-                ];
-                ctx.save();
-                ctx.font = "600 7.5px 'JetBrains Mono', monospace";
-                ctx.textBaseline = 'middle';
-                const dotR = 3,
-                    gap = 26;
-                const widths = items.map(it => ctx.measureText(it.label).width + dotR * 2 + 7);
-                const totalW = widths.reduce((a, b) => a + b, 0) + gap * (items.length - 1);
-                let lx = CX - totalW / 2;
-                const ly = 1172;
-                items.forEach((it, i) => {
-                    ctx.beginPath();
-                    ctx.arc(lx + dotR, ly, dotR, 0, 2 * Math.PI);
-                    ctx.fillStyle = rgba(it.c, 0.85);
-                    ctx.fill();
-                    ctx.fillStyle = rgba(PAL.muted, 0.85);
-                    ctx.textAlign = 'left';
-                    ctx.fillText(it.label, lx + dotR * 2 + 7, ly + 0.5);
-                    lx += widths[i] + gap;
-                });
-                ctx.restore();
-            }
-
-            function logicalMouseFromEvent(e) {
-                const sx = e.clientX,
-                    sy = e.clientY;
-                const lx = (sx - canvas.width / 2 / dpr) / view.scale + view.focusX;
-                const ly = (sy - canvas.height / 2 / dpr) / view.scale + view.focusY;
-                return { lx, ly };
-            }
-
-            function getHoveredComponent(lx, ly) {
-                for (const [key, comp] of Object.entries(comps)) {
-                    if (lx >= comp.x && lx <= comp.x + comp.w && ly >= comp.y && ly <= comp.y + comp.h) return key;
-                }
-                return null;
-            }
-
-            function resize() {
-                const rect = canvas.parentElement.getBoundingClientRect();
-                W = rect.width || window.innerWidth;
-                H = rect.height || window.innerHeight;
-                dpr = Math.min(window.devicePixelRatio || 1, 2);
-                canvas.width = W * dpr;
-                canvas.height = H * dpr;
-                const newBaseScale = Math.min(W / LW, H / LH);
-                if (Math.abs(newBaseScale - baseScale) > 0.0001) {
-                    baseScale = newBaseScale;
-                    animStartView = { focusX: view.focusX, focusY: view.focusY, scale: view.scale };
-                    if (hoveredComp) {
-                        const comp = comps[hoveredComp];
-                        animTargetView = { focusX: comp.x + comp.w / 2, focusY: comp.y + comp.h / 2, scale: baseScale *
-                                1.5 };
-                    } else {
-                        animTargetView = { focusX: LW / 2, focusY: LH / 2, scale: baseScale };
-                    }
-                    animProgress = 0;
-                }
-                if (!hoveredComp && animProgress >= 1) {
-                    view.scale = baseScale;
-                    view.focusX = LW / 2;
-                    view.focusY = LH / 2;
-                    animStartView = { focusX: view.focusX, focusY: view.focusY, scale: view.scale };
-                    animTargetView = { focusX: view.focusX, focusY: view.focusY, scale: view.scale };
-                }
-            }
-
-            window.addEventListener('mousemove', (e) => {
-                const { lx, ly } = logicalMouseFromEvent(e);
-                const newHover = getHoveredComponent(lx, ly);
-                if (newHover !== hoveredComp) { hoveredComp = newHover;
-                    updateViewTarget(); }
-            });
-            window.addEventListener('touchmove', (e) => {
-                if (e.touches.length > 0) {
-                    const { lx, ly } = logicalMouseFromEvent({ clientX: e.touches[0].clientX, clientY: e.touches[
-                            0].clientY });
-                    const newHover = getHoveredComponent(lx, ly);
-                    if (newHover !== hoveredComp) { hoveredComp = newHover;
-                        updateViewTarget(); }
-                }
-            }, { passive: true });
-            window.addEventListener('touchend', () => {
-                if (hoveredComp) { hoveredComp = null;
-                    updateViewTarget(); }
-            });
-            window.addEventListener('resize', resize);
-
-            let time = 0,
-                lastT = 0;
-
-            function animate(ts) {
-                if (!lastT) lastT = ts;
-                const dt = Math.min((ts - lastT) / 1000, 0.1);
-                lastT = ts;
-                time += dt;
-
-                if (animProgress < 1) {
-                    animProgress = Math.min(1, animProgress + dt / ANIM_DURATION);
-                    const t = easeInOutCubic(animProgress);
-                    view.focusX = animStartView.focusX + (animTargetView.focusX - animStartView.focusX) * t;
-                    view.focusY = animStartView.focusY + (animTargetView.focusY - animStartView.focusY) * t;
-                    view.scale = animStartView.scale + (animTargetView.scale - animStartView.scale) * t;
+        saliencyClassBtns.addEventListener('click', function(e) {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const classIdx = parseInt(btn.getAttribute('data-class'));
+            if (isNaN(classIdx) || classIdx === saliencyClassIdx) return;
+            saliencyClassIdx = classIdx;
+            // Update button styles
+            const buttons = saliencyClassBtns.querySelectorAll('button');
+            buttons.forEach(b => {
+                const ci = parseInt(b.getAttribute('data-class'));
+                const color = CLASS_COLORS[ci];
+                if (ci === classIdx) {
+                    b.classList.add('active');
+                    b.style.background = color + '22';
+                    b.style.color = color;
+                    b.style.borderColor = color + '55';
                 } else {
-                    view.focusX = animTargetView.focusX;
-                    view.focusY = animTargetView.focusY;
-                    view.scale = animTargetView.scale;
+                    b.classList.remove('active');
+                    b.style.background = 'transparent';
+                    b.style.color = '#6e7d99';
+                    b.style.borderColor = 'transparent';
                 }
+            });
+            updateSaliencyUI();
+            runSaliencyBackprop();
+        });
 
-                ctx.setTransform(1, 0, 0, 1, 0, 0);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-                ctx.clearRect(0, 0, W, H);
-                ctx.save();
-                ctx.translate(W / 2, H / 2);
-                ctx.scale(view.scale, view.scale);
-                ctx.translate(-view.focusX, -view.focusY);
+        saliencyRerunBtn.addEventListener('click', function() {
+            if (saliencyRunning) return;
+            runSaliencyBackprop();
+        });
 
-                const bgGrad = ctx.createRadialGradient(CX, LH * 0.42, 60, CX, LH * 0.42, LH * 0.78);
-                bgGrad.addColorStop(0, '#170617');
-                bgGrad.addColorStop(0.55, PAL.bg2);
-                bgGrad.addColorStop(1, PAL.bg);
-                ctx.fillStyle = bgGrad;
-                ctx.fillRect(0, 0, LW, LH);
+        // Initialize saliency demo
+        buildSaliencyGridDOM();
+        updateSaliencyBackground();
+        updateSaliencyUI();
+        // Auto-run on load
+        setTimeout(runSaliencyBackprop, 300);
 
-                ctx.strokeStyle = rgba(PAL.cyan, 0.02);
-                ctx.lineWidth = 0.5;
-                for (let gx = 0; gx < LW; gx += 60) { ctx.beginPath();
-                    ctx.moveTo(gx, 0);
-                    ctx.lineTo(gx, LH);
-                    ctx.stroke(); }
-                for (let gy = 0; gy < LH; gy += 60) { ctx.beginPath();
-                    ctx.moveTo(0, gy);
-                    ctx.lineTo(LW, gy);
-                    ctx.stroke(); }
+        // ═══════════════════════════════════════════════════════════
+        // ─── 2. J-SPACE VIZ ────────────────────────────────────────
+        // ═══════════════════════════════════════════════════════════
+        const JSPACE_CLASSES = [
+            { name: "canines", color: "#f59e0b", center: [0.28, 0.35], spread: 0.12, n: 24 },
+            { name: "felines", color: "#a78bfa", center: [0.52, 0.22], spread: 0.1, n: 20 },
+            { name: "vehicles", color: "#f87171", center: [0.72, 0.65], spread: 0.11, n: 22 },
+            { name: "structures", color: "#6ee7b7", center: [0.35, 0.72], spread: 0.1, n: 18 },
+            { name: "text/symbols", color: "#60a5fa", center: [0.7, 0.38], spread: 0.09, n: 16 },
+        ];
 
-                bgParts.forEach(p => {
-                    p.y -= p.sp;
-                    p.x += p.dr + Math.sin(time * 0.6 + p.ph) * 0.25 * ambientScale;
-                    if (p.y < -10) p.y = LH + 10;
-                    if (p.x < -10) p.x = LW + 10;
-                    if (p.x > LW + 10) p.x = -10;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
-                    ctx.fillStyle = rgba(p.col, 0.2 + 0.15 * Math.sin(time * 2 + p.ph));
-                    ctx.fill();
-                });
-
-                ctx.save();
-                ctx.textBaseline = 'alphabetic';
-                ctx.textAlign = 'center';
-                ctx.fillStyle = rgba(PAL.muted, 0.65);
-                ctx.font = "600 8px 'JetBrains Mono', monospace";
-                ctx.fillText('D E C O D E R   L A Y E R   ·   F O R W A R D   P A S S', CX, 30);
-                const titleGrad = ctx.createLinearGradient(CX - 170, 0, CX + 170, 0);
-                titleGrad.addColorStop(0, PAL.cyan2);
-                titleGrad.addColorStop(0.5, PAL.cyan);
-                titleGrad.addColorStop(1, PAL.violet);
-                ctx.fillStyle = titleGrad;
-                ctx.font = "700 27px 'Space Grotesk', 'JetBrains Mono', sans-serif";
-                ctx.fillText('TRANSFORMER BLOCK', CX, 62);
-                ctx.fillStyle = rgba(PAL.muted, 0.55);
-                ctx.font = "500 8px 'JetBrains Mono', monospace";
-                ctx.fillText('PRE-NORM · GPT-STYLE · HOVER ANY STAGE TO INSPECT', CX, 84);
-                ctx.restore();
-
-                ctx.strokeStyle = rgba(PAL.cyan, 0.2);
-                ctx.lineWidth = 1.5;
-                ctx.setLineDash([5, 4]);
-                [res1, res2].forEach(r => {
-                    const midX = Math.min(r.sx, r.ex) - 60,
-                        midY = (r.sy + r.ey) / 2;
-                    ctx.beginPath();
-                    ctx.moveTo(r.sx, r.sy);
-                    ctx.quadraticCurveTo(midX, midY, r.ex, r.ey);
-                    ctx.stroke();
-                });
-                ctx.setLineDash([]);
-
-                Object.entries(comps).forEach(([key, comp]) => {
-                    const isHover = (key === hoveredComp);
-                    drawBox(comp.x, comp.y, comp.w, comp.h, comp.c,
-                        comp.type === 'attention' || comp.type === 'ffn' ? 0.12 : 0.06,
-                        0.35 + 0.12 * Math.sin(time * 0.7 + comp.x * 0.01), 1.2, isHover, time);
-                    drawLabel(comp.x, comp.y, comp.w, comp.h, comp.label, comp.c);
-                    drawStepBadge(comp, key, isHover, time);
-                });
-
-                for (let i = 0; i < seq.length - 1; i++) {
-                    const a = comps[seq[i]],
-                        b = comps[seq[i + 1]];
-                    arrow(a.x + a.w / 2, a.y + a.h, b.x + b.w / 2, b.y, PAL.cyan, 0.35);
-                }
-
-                drawAttention(comps.attn, time);
-                drawFFN(comps.ffn, time);
-
-                mainFlows.forEach(p => {
-                    p.t += p.speed;
-                    if (p.t > 1) { p.t = 0;
-                        p.seg = Math.floor(Math.random() * (seq.length - 1)); }
-                    const i = Math.min(p.seg, seq.length - 2);
-                    const a = comps[seq[i]],
-                        b = comps[seq[i + 1]];
-                    const fx = a.x + a.w / 2,
-                        fy = a.y + a.h,
-                        tx = b.x + b.w / 2,
-                        ty = b.y;
-                    const px = fx + (tx - fx) * p.t,
-                        py = fy + (ty - fy) * p.t + Math.sin(time * 4 + p.ph) * 2;
-                    const flick = 0.5 + 0.5 * Math.sin(time * 3 + p.ph);
-                    ctx.beginPath();
-                    ctx.arc(px, py, p.sz * flick, 0, 2 * Math.PI);
-                    ctx.fillStyle = rgba(PAL.cyan, 0.7 + flick * 0.3);
-                    ctx.shadowColor = PAL.cyan;
-                    ctx.shadowBlur = p.sz * 5 * flick;
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                });
-
-                [resFlows1, resFlows2].forEach((arr, idx) => {
-                    const r = idx === 0 ? res1 : res2;
-                    const midX = Math.min(r.sx, r.ex) - 60,
-                        midY = (r.sy + r.ey) / 2;
-                    arr.forEach(p => {
-                        p.t += p.speed;
-                        if (p.t > 1) p.t -= 1;
-                        const t = p.t;
-                        const px = (1 - t) * (1 - t) * r.sx + 2 * (1 - t) * t * midX + t * t * r.ex;
-                        const py = (1 - t) * (1 - t) * r.sy + 2 * (1 - t) * t * midY + t * t * r.ey;
-                        const flick = 0.5 + 0.5 * Math.sin(time * 5 + p.ph);
-                        ctx.beginPath();
-                        ctx.arc(px, py, p.sz * flick, 0, 2 * Math.PI);
-                        ctx.fillStyle = rgba(PAL.cyan, 0.5 + flick * 0.4);
-                        ctx.fill();
+        function buildJSpacePoints() {
+            const points = [];
+            JSPACE_CLASSES.forEach((cls, ci) => {
+                for (let i = 0; i < cls.n; i++) {
+                    const angle = seededRandom(ci * 50 + i) * Math.PI * 2;
+                    const r = seededRandom(ci * 100 + i * 3) * cls.spread;
+                    points.push({
+                        x: cls.center[0] + Math.cos(angle) * r,
+                        y: cls.center[1] + Math.sin(angle) * r,
+                        cls: ci,
+                        color: cls.color,
+                        name: cls.name,
                     });
+                }
+            });
+            return points;
+        }
+
+        const JSPACE_POINTS = buildJSpacePoints();
+        const JSPACE_W = 340;
+        const JSPACE_H = 280;
+        let jspaceAnimStep = 0;
+        let jspacePlaying = true;
+        let jspaceHoveredCls = null;
+        let jspaceAnimId = null;
+
+        const jspaceSvg = document.getElementById('jspace-svg');
+        const jspacePlayBtn = document.getElementById('jspace-play-btn');
+        const jspaceLegend = document.getElementById('jspace-legend');
+
+        // Build SVG
+        function buildJSpaceSVG() {
+            jspaceSvg.innerHTML = '';
+
+            // Defs
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const radGrad = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');
+            radGrad.setAttribute('id', 'jspace-bg-grad');
+            radGrad.setAttribute('cx', '50%');
+            radGrad.setAttribute('cy', '50%');
+            radGrad.setAttribute('r', '60%');
+            const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop1.setAttribute('offset', '0%');
+            stop1.setAttribute('stop-color', 'rgba(139,159,255,0.04)');
+            const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop2.setAttribute('offset', '100%');
+            stop2.setAttribute('stop-color', 'transparent');
+            radGrad.appendChild(stop1);
+            radGrad.appendChild(stop2);
+            defs.appendChild(radGrad);
+            jspaceSvg.appendChild(defs);
+
+            // Background
+            const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            bgRect.setAttribute('width', JSPACE_W);
+            bgRect.setAttribute('height', JSPACE_H);
+            bgRect.setAttribute('fill', 'url(#jspace-bg-grad)');
+            jspaceSvg.appendChild(bgRect);
+
+            // Grid lines
+            [0.25, 0.5, 0.75].forEach(t => {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('stroke', 'rgba(255,255,255,0.04)');
+                g.setAttribute('stroke-width', '1');
+                const vLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                vLine.setAttribute('x1', t * JSPACE_W);
+                vLine.setAttribute('y1', 0);
+                vLine.setAttribute('x2', t * JSPACE_W);
+                vLine.setAttribute('y2', JSPACE_H);
+                const hLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                hLine.setAttribute('x1', 0);
+                hLine.setAttribute('y1', t * JSPACE_H);
+                hLine.setAttribute('x2', JSPACE_W);
+                hLine.setAttribute('y2', t * JSPACE_H);
+                g.appendChild(vLine);
+                g.appendChild(hLine);
+                jspaceSvg.appendChild(g);
+            });
+
+            // Hull group
+            const hullGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            hullGroup.id = 'jspace-hulls';
+            jspaceSvg.appendChild(hullGroup);
+
+            // Points group
+            const pointsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            pointsGroup.id = 'jspace-points';
+            jspaceSvg.appendChild(pointsGroup);
+
+            // Labels group
+            const labelsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            labelsGroup.id = 'jspace-labels';
+            jspaceSvg.appendChild(labelsGroup);
+        }
+
+        function updateJSpaceHulls() {
+            const hullGroup = document.getElementById('jspace-hulls');
+            if (!hullGroup) return;
+            hullGroup.innerHTML = '';
+            JSPACE_CLASSES.forEach((cls, ci) => {
+                const pts = JSPACE_POINTS.filter(p => p.cls === ci);
+                if (!pts.length) return;
+                const hullPoints = pts.map(p => `${p.x*JSPACE_W},${p.y*JSPACE_H}`).join(' ');
+                const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                polygon.setAttribute('points', hullPoints);
+                polygon.setAttribute('fill', cls.color);
+                polygon.setAttribute('fill-opacity', jspaceHoveredCls === ci ? '0.07' : '0.03');
+                polygon.setAttribute('stroke', cls.color);
+                polygon.setAttribute('stroke-opacity', jspaceHoveredCls === ci ? '0.3' : '0.1');
+                polygon.setAttribute('stroke-width', '1');
+                polygon.style.transition = 'fill-opacity 0.2s';
+                hullGroup.appendChild(polygon);
+            });
+        }
+
+        function updateJSpacePoints() {
+            const pointsGroup = document.getElementById('jspace-points');
+            if (!pointsGroup) return;
+            pointsGroup.innerHTML = '';
+            JSPACE_POINTS.forEach((pt, i) => {
+                const wobble = jspacePlaying ? Math.sin((jspaceAnimStep + i * 37) * 0.035) * 1.8 : 0;
+                const wobble2 = jspacePlaying ? Math.cos((jspaceAnimStep + i * 53) * 0.028) * 1.4 : 0;
+                const dim = jspaceHoveredCls !== null && jspaceHoveredCls !== pt.cls;
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', pt.x * JSPACE_W + wobble);
+                circle.setAttribute('cy', pt.y * JSPACE_H + wobble2);
+                circle.setAttribute('r', jspaceHoveredCls === pt.cls ? '4.5' : '3');
+                circle.setAttribute('fill', pt.color);
+                circle.setAttribute('fill-opacity', dim ? '0.12' : '0.75');
+                circle.style.transition = 'all 0.2s';
+                circle.style.cursor = 'pointer';
+                circle.setAttribute('data-cls', pt.cls);
+                circle.addEventListener('mouseenter', function() {
+                    jspaceHoveredCls = pt.cls;
+                    updateJSpaceAll();
                 });
+                circle.addEventListener('mouseleave', function() {
+                    jspaceHoveredCls = null;
+                    updateJSpaceAll();
+                });
+                pointsGroup.appendChild(circle);
+            });
+        }
 
-                drawLegend();
+        function updateJSpaceLabels() {
+            const labelsGroup = document.getElementById('jspace-labels');
+            if (!labelsGroup) return;
+            labelsGroup.innerHTML = '';
+            JSPACE_CLASSES.forEach((cls, ci) => {
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', cls.center[0] * JSPACE_W);
+                text.setAttribute('y', cls.center[1] * JSPACE_H - 14);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('font-size', '9');
+                text.setAttribute('fill', cls.color);
+                text.setAttribute('fill-opacity', jspaceHoveredCls === null || jspaceHoveredCls === ci ? '0.9' :
+                    '0.3');
+                text.setAttribute('font-family', 'DM Mono, monospace');
+                text.style.transition = 'fill-opacity 0.2s';
+                text.style.userSelect = 'none';
+                text.textContent = cls.name;
+                labelsGroup.appendChild(text);
+            });
+        }
 
-                if (hoveredComp) drawPopup(comps[hoveredComp], hoveredComp, time);
+        function updateJSpaceAll() {
+            updateJSpaceHulls();
+            updateJSpacePoints();
+            updateJSpaceLabels();
+            updateJSpaceLegend();
+        }
 
-                drawAnnotations(time);
+        function updateJSpaceLegend() {
+            jspaceLegend.innerHTML = '';
+            JSPACE_CLASSES.forEach((cls, i) => {
+                const div = document.createElement('div');
+                div.className = 'jspace-legend-item';
+                div.addEventListener('mouseenter', function() {
+                    jspaceHoveredCls = i;
+                    updateJSpaceAll();
+                });
+                div.addEventListener('mouseleave', function() {
+                    jspaceHoveredCls = null;
+                    updateJSpaceAll();
+                });
+                const dot = document.createElement('div');
+                dot.className = 'jspace-legend-dot';
+                dot.style.background = cls.color;
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'mono text-xs';
+                nameSpan.style.color = jspaceHoveredCls === i ? cls.color : '#6e7d99';
+                nameSpan.style.transition = 'color 0.15s';
+                nameSpan.textContent = cls.name;
+                const countSpan = document.createElement('span');
+                countSpan.className = 'mono text-xs';
+                countSpan.style.color = 'var(--muted-foreground)';
+                countSpan.style.marginLeft = 'auto';
+                countSpan.textContent = cls.n + ' samples';
+                div.appendChild(dot);
+                div.appendChild(nameSpan);
+                div.appendChild(countSpan);
+                jspaceLegend.appendChild(div);
+            });
+        }
 
-                ctx.fillStyle = rgba(PAL.muted, 0.4);
-                ctx.font = "400 8px 'JetBrains Mono'";
-                ctx.textAlign = 'center';
-                ctx.fillText('PRE-NORM · RESIDUAL STREAM · CAUSAL MASK', CX, LH - 30);
-
-                ctx.restore();
-                requestAnimationFrame(animate);
+        function jspaceAnimLoop() {
+            if (jspacePlaying) {
+                jspaceAnimStep = (jspaceAnimStep + 1) % 360;
+                updateJSpacePoints();
             }
+            jspaceAnimId = requestAnimationFrame(jspaceAnimLoop);
+        }
 
-            resize();
-            view.scale = baseScale;
-            view.focusX = LW / 2;
-            view.focusY = LH / 2;
-            animStartView = { focusX: view.focusX, focusY: view.focusY, scale: view.scale };
-            animTargetView = { focusX: view.focusX, focusY: view.focusY, scale: view.scale };
-            animProgress = 1;
-            requestAnimationFrame(animate);
-        })();
-    </script>
+        jspacePlayBtn.addEventListener('click', function() {
+            jspacePlaying = !jspacePlaying;
+            jspacePlayBtn.textContent = jspacePlaying ? 'pause' : 'play';
+            updateJSpacePoints();
+        });
+
+        // Build legend
+        updateJSpaceLegend();
+
+        // Initialize J-Space
+        buildJSpaceSVG();
+        updateJSpaceAll();
+        jspaceAnimId = requestAnimationFrame(jspaceAnimLoop);
+
+        // ═══════════════════════════════════════════════════════════
+        // ─── 3. ATTENTION VIZ ──────────────────────────────────────
+        // ═══════════════════════════════════════════════════════════
+        const PATCH_N = 7;
+        const ATTN_HEADS = ["head 0", "head 3", "head 7", "head 11"];
+        let attnHead = 0;
+        let attnQuery = Math.floor(PATCH_N / 2) * PATCH_N + Math.floor(PATCH_N / 2);
+
+        function buildAttn(head, query) {
+            const result = [];
+            const qrow = Math.floor(query / PATCH_N);
+            const qcol = query % PATCH_N;
+            for (let i = 0; i < PATCH_N * PATCH_N; i++) {
+                const row = Math.floor(i / PATCH_N);
+                const col = i % PATCH_N;
+                const dist = Math.sqrt((col - qcol) ** 2 + (row - qrow) ** 2);
+                const base = Math.exp(-dist * (0.5 + head * 0.15));
+                const noise = seededRandom(i * 11 + head * 77 + query * 13) * 0.18;
+                result.push(Math.min(1, base + noise));
+            }
+            return result;
+        }
+
+        const attnGrid = document.getElementById('attn-grid');
+        const attnHeadBtns = document.getElementById('attn-head-btns');
+
+        function renderAttnGrid() {
+            const attn = buildAttn(attnHead, attnQuery);
+            const maxV = Math.max(...attn);
+            attnGrid.innerHTML = '';
+            for (let i = 0; i < PATCH_N * PATCH_N; i++) {
+                const v = attn[i] / maxV;
+                const isQuery = i === attnQuery;
+                const cell = document.createElement('div');
+                cell.className = 'attention-grid-cell';
+                cell.style.background = isQuery ? '#e2a44b' : `rgba(139,159,255,${v*0.85})`;
+                cell.style.outline = isQuery ? '2px solid #e2a44b' : 'none';
+                cell.style.outlineOffset = '1px';
+                if (isQuery) {
+                    cell.innerHTML = '<span style="font-size:10px;color:#070b14;font-family:DM Mono,monospace;">Q</span>';
+                }
+                cell.addEventListener('click', function() {
+                    attnQuery = i;
+                    renderAttnGrid();
+                });
+                attnGrid.appendChild(cell);
+            }
+        }
+
+        attnHeadBtns.addEventListener('click', function(e) {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const headIdx = parseInt(btn.getAttribute('data-head'));
+            if (isNaN(headIdx) || headIdx === attnHead) return;
+            attnHead = headIdx;
+            const buttons = attnHeadBtns.querySelectorAll('button');
+            buttons.forEach(b => {
+                const hi = parseInt(b.getAttribute('data-head'));
+                if (hi === headIdx) {
+                    b.classList.add('active');
+                    b.style.background = 'rgba(139,159,255,0.15)';
+                    b.style.color = '#8b9fff';
+                    b.style.borderColor = 'rgba(139,159,255,0.4)';
+                } else {
+                    b.classList.remove('active');
+                    b.style.background = 'transparent';
+                    b.style.color = '#6e7d99';
+                    b.style.borderColor = 'transparent';
+                }
+            });
+            renderAttnGrid();
+        });
+
+        renderAttnGrid();
+
+        // ═══════════════════════════════════════════════════════════
+        // ─── 4. ACTIVATION MAXIMIZATION ────────────────────────────
+        // ═══════════════════════════════════════════════════════════
+        const NEURON_PATTERNS = [
+            { label: "layer 1 · neuron 23", desc: "Gabor edge detector (45°)", freq: 4, angle: 45, type: 'gabor' },
+            { label: "layer 2 · neuron 71", desc: "high-frequency texture", freq: 8, angle: 90, type: 'gabor' },
+            { label: "layer 3 · neuron 142", desc: "curve / arc detector", freq: 2.5, angle: 30, type: 'arc' },
+            { label: "layer 4 · neuron 8", desc: "color blob (warm)", freq: 1, angle: 0, type: 'blob' },
+        ];
+
+        const maxactCanvases = [];
+        const maxactPhases = [0, 0, 0, 0];
+
+        for (let i = 0; i < 4; i++) {
+            const cell = document.getElementById('maxact-cell-' + i);
+            const canvas = cell.querySelector('canvas');
+            maxactCanvases.push({ canvas, pattern: NEURON_PATTERNS[i], phase: 0 });
+        }
+
+        function drawMaxActPattern(canvas, pattern, phase) {
+            const ctx = canvas.getContext('2d');
+            const N = canvas.width;
+            const { freq, angle, label, type } = pattern;
+            const rad = (angle * Math.PI) / 180;
+            const imgData = ctx.createImageData(N, N);
+
+            for (let y = 0; y < N; y++) {
+                for (let x = 0; x < N; x++) {
+                    const nx = (x / N - 0.5) * 2;
+                    const ny = (y / N - 0.5) * 2;
+                    let v;
+
+                    if (type === 'blob') {
+                        const dist = Math.sqrt(nx * nx + ny * ny);
+                        v = Math.exp(-dist * 2) * (0.7 + 0.3 * Math.cos(phase));
+                    } else if (type === 'arc') {
+                        const r = Math.sqrt(nx * nx + ny * ny);
+                        v = Math.cos(r * freq * Math.PI + phase) * Math.exp(-r * 1.2);
+                        v = v * 0.5 + 0.5;
+                    } else {
+                        const proj = nx * Math.cos(rad) + ny * Math.sin(rad);
+                        const gauss = Math.exp(-(nx * nx + ny * ny) * 1.8);
+                        v = Math.cos(proj * freq * Math.PI + phase) * gauss;
+                        v = v * 0.5 + 0.5;
+                    }
+
+                    const idx = (y * N + x) * 4;
+                    if (type === 'blob') {
+                        imgData.data[idx] = Math.round(v * 220 + 30);
+                        imgData.data[idx + 1] = Math.round(v * 120 + 20);
+                        imgData.data[idx + 2] = Math.round(v * 40 + 10);
+                    } else {
+                        const bright = Math.round(v * 200 + 30);
+                        imgData.data[idx] = Math.round(bright * 0.55 + 30);
+                        imgData.data[idx + 1] = Math.round(bright * 0.62 + 40);
+                        imgData.data[idx + 2] = Math.round(bright * 0.95 + 60);
+                    }
+                    imgData.data[idx + 3] = 255;
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        function maxactAnimLoop() {
+            for (let i = 0; i < maxactCanvases.length; i++) {
+                maxactCanvases[i].phase += 0.025;
+                drawMaxActPattern(maxactCanvases[i].canvas, maxactCanvases[i].pattern, maxactCanvases[i].phase);
+            }
+            requestAnimationFrame(maxactAnimLoop);
+        }
+        requestAnimationFrame(maxactAnimLoop);
+
+        // ═══════════════════════════════════════════════════════════
+        // ─── 5. TOC SCROLL SPY ─────────────────────────────────────
+        // ═══════════════════════════════════════════════════════════
+        const sectionIds = ['saliency', 'jspace', 'attention', 'maxact'];
+        const tocLinks = document.querySelectorAll('.toc-link');
+        let activeSection = '';
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        activeSection = entry.target.id;
+                        updateTOCActive();
+                    }
+                }
+            }, { rootMargin: '-30% 0px -60% 0px' }
+        );
+
+        sectionIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+
+        function updateTOCActive() {
+            tocLinks.forEach(link => {
+                const section = link.getAttribute('data-section');
+                if (section === activeSection) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // ─── CLEANUP NOTE ──────────────────────────────────────────
+        // ═══════════════════════════════════════════════════════════
+        // Animation frames run for the lifetime of the page.
+        // In a full SPA you'd clean these up on unmount; here
+        // they persist as long as the page is open, which is fine
+        // for a static article page.
+
+        console.log('✨ Interpretability article ready — all visualizations active.');
+    })();
+</script>
 </body>
 </html>
-
-<!--   fix the multi head attention, encoder, mlp blocks, embedding and unembedding etc use manim -->
