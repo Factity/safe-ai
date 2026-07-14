@@ -627,10 +627,10 @@
             <div class="toc-sticky">
                 <div class="toc-heading">Contents</div>
                 <nav id="toc-nav">
-                    <a href="#saliency" class="toc-link" data-section="saliency">Saliency Maps</a>
-                    <a href="#jspace" class="toc-link" data-section="jspace">J-Space</a>
-                    <a href="#attention" class="toc-link" data-section="attention">Attention in ViTs</a>
-                    <a href="#maxact" class="toc-link" data-section="maxact">Activation Maximization</a>
+                    <a href="#saliency" class="toc-link" data-section="saliency">Interpretability</a>
+                    <a href="#jspace" class="toc-link" data-section="jspace">Types of interpre5tability</a>
+                    <a href="#attention" class="toc-link" data-section="attention">Traditional techniques</a>
+                    <a href="#maxact" class="toc-link" data-section="maxact">Deep learning based techniques</a>
                 </nav>
                 <div class="toc-meta">
                     <div class="toc-meta-label">Published</div>
@@ -646,15 +646,13 @@
 
             <!-- Header -->
             <header class="fade-up" style="margin-bottom:3rem;">
-                <div class="mono text-xs text-accent tracking-widest uppercase mb-5">Essay · Vision Models</div>
+                <div class="mono text-xs text-accent tracking-widest uppercase mb-5">Chapter 5 Interpretability and Explainability</div>
                 <h1 class="display font-light leading-tight mb-5" style="font-size:2.8rem;color:#dde3ed;">
-                    How vision models learn<br>
-                    <em class="italic" style="color:#8b9fff;">to see</em>
+                    Understanding the Internals of the <br>
+                    <em class="italic" style="color:#8b9fff;">AI models</em>
                 </h1>
-                <p style="color:var(--muted-foreground);line-height:1.7;margin-bottom:1.5rem;font-weight:300;font-size:1.05rem;">
-                    An exploration of saliency maps, Jacobian representation spaces, and
-                    attention structures in modern vision transformers — with interactive visualizations.
-                </p>
+
+
                 <div style="display:flex;gap:1.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1rem 0;">
                     <div>
                         <div class="mono text-xs" style="color:var(--muted-foreground);">Author</div>
@@ -666,6 +664,111 @@
                     </div>
                 </div>
             </header>
+
+<section>
+  <blockquote>
+    “The mind, once stretched by a new idea, never returns to its original dimensions.” — Ralph Waldo Emerson
+  </blockquote>
+
+  <p>
+    So I had this conversation about AI once, a strange but small encounter. I was asked to explain  simply: <strong>“How does AI work?”</strong> I was overwhelmed, possibly so that I have spent the last couple of years studying it. There is simply way too much and I could not get myself to a point where I could start.
+    
+   <br><br>I do <em>selective speak</em>, which I often consider to be  one of my traits — whether it is positive or negative, I am really not sure. I talk with my audience in mind. I simply was so overwhelmed that I simply said, “<strong>AI just works</strong>.” I did not give a good impression for sure; with some awkward stares we moved on.
+   
+   <br> <br>A long, long time ago I read some of <strong>Feynman’s</strong> work. Whenever I encounter the problem of breaking down a subject and doing selective speak, I often find myself going back to his work and try to understand how would he have explained it. Now, I am not no Feynman, nothing but an <em>average Joe</em>. I did what I can to break down everything I learnt about <em>“How AI works”</em> — the question of <strong>why</strong>, although <strong>what</strong> is another behemoth on its own. In this chapter we will stick with why.
+  </p>
+
+  <p>
+    I started digging, curious as I was. There are simply way too many fields, way too much stuff; condensing it all is simply not possible. And the best part about this is the people who are actually building this technology have very little grasp on the field themselves. With the ever-increasing size of the models, the use cases, the sheer scale alone should make it almost impossible to study these. Humans as we are, with the indefinite amount of grit, we started chipping away at these with our chisel.
+  </p>
+
+  <p>
+    In the spirit of 
+    <strong><u><a href="https://calteches.library.caltech.edu/51/2/CargoCult.htm" target="_blank" rel="noopener noreferrer" style="color: white;">Feynman’s Cargo Cult Science lecture</a></u></strong>, in his words:
+  </p>
+
+  <blockquote>
+    “When you study only what results you get, you never build a deeper understanding. When you study <strong>why</strong> something happens, you can refine your methods, discard dead ends, and make genuine progress.”
+  </blockquote>
+
+<section>
+  <p>
+    Any rigorous scientific study or a method should have a clear, reproducible basis. A fundamental axiom will be that <strong>ML models are no different than classical models, except in size</strong>.
+  </p>
+
+  <p>
+    Certainly, classical models like Newton’s Laws, the Standard Model, or General Relativity feel different than ML models, owing to the fact that these models are determined by physical principles, even though they may still contain parameters that need to be calibrated from data. By “<strong>classical</strong>”, we mean models created by scientists without using ML techniques. Related terms that are often used are <em>intelligibility</em> and <em>understandability</em>.
+  </p>
+
+  <p>
+    We will consider <strong>interpretability</strong> and <strong>explainability</strong> to be the primary axes of interest in understanding the <em>why</em> of the model. <strong>Interpretability</strong> concerns the ability to understand, or approximate, the inner workings of a model and how it reaches its output. <strong>Explainability</strong> concerns the ability to map the model onto existing knowledge in the relevant scientific domain.
+  </p>
+
+  <p>
+    The key difference is how we classify it. Are we able to <em>explain</em> the model? What is <em>happening</em> inside it? <strong>Interpretability</strong> is the degree to which a human can understand the cause of a decision.
+  </p>
+
+  <blockquote>
+    “A method is interpretable if a user can correctly and efficiently predict the method’s results.”
+  </blockquote>
+
+  <p>
+    The more interpretable a machine learning model, the easier it is for someone to understand why certain decisions or predictions were made. A particular model is <em>more interpretable</em> than another model if its decisions are easier to understand than the other model’s. Knowing the ‘why’ can help you learn more about the problem, the data, and the reason why a model might fail.
+  </p>
+
+
+<p>
+    In some of the cases we might not just need interpretability. In cases like reccomendation systems for movies. well researched technqiuies like ocr does not warrant the use of interpretability techniques. As you will see in the below section explaining a model is often a very compute intensive , tideous and most inmpotantly it is largely a manual task. One of the argument presented by 
+</p>
+
+
+
+
+<p>Doshi-Velez and Kim (2017), is that **the need for interpretability and explainability arises from an incompleteness in problem formalization**. This means that for many real-world tasks, the formal objective function we optimise (e.g., classification accuracy) does not capture everything that matters.A single metric like classification accuracy gives us the <strong>“what”</strong> – the prediction.
+- But it does not tell us the <strong>“why”</strong> – how the model arrived at that prediction.
+
+one of the most important benefit of doing interpretability and explainability it lets us use these systems in mission critcial scenarios. Most real world tasks are incompletely formalised, have strong ethical and moral concerns and contextual factors associated with them. Any slight error can lead to catastrophic consequenxces. 
+
+One of the important application of explanaibility and interpretability is in ai safety. It helps us avoid plothera of problems. Machine learning models deployed in real contexts have life altering decisions and with the current rate of progress they will fundamentally shape our lives. A oracle that simply gives you answers to anything but doesnt tell you how will distrupt humanity and it is deeply unsettling. 
+
+Reasons for investing in interpretability 
+
+<div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:1.5rem; margin:2rem 0;">
+  <p style="margin-top:0;"><strong>Fairness:</strong> Ensuring predictions do not implicitly or explicitly discriminate against underrepresented groups. Without interpretability, detecting and correcting bias is nearly impossible.</p>
+  <p><strong>Privacy:</strong> Verifying that sensitive information in the training data is not being inadvertently memorised and leaked through predictions.</p>
+  <p><strong>Reliability / Robustness:</strong> Confirming that the model does not produce drastically different outputs for minimally perturbed inputs (a phenomenon adversarial examples exploit). Interpretability can reveal whether the model relies on brittle features.</p>
+  <p><strong>Causality:</strong> Ensuring the model picks up only genuine causal relationships, not mere correlations that might fail under distribution shift. A model relying on non-causal features is likely to fail in the real world.</p>
+  <p style="margin-bottom:0;"><strong>Trust:</strong> Humans find it easier to trust a system that can explain its decisions. Trust is built when an explanation aligns with or respectfully challenges a user’s prior knowledge, rather than being an opaque oracle.</p>
+</div>
+<p>
+Interpretability and explanability would also allow us to analyse a prediction in counter factual terms we can analyse why a particular prediction is generated we can also elimiate why this did not.
+
+By studying these it lets us look at abnormalities, what are the influential factors etc. These explanations should also not be misrepresentataive if a particular reson reson is plusible is it transferable, generalizable etc should also be studied with the help of interpretrability 
+</p>
+</p>
+  <p>
+    from a practical stand point you should also look at when to use interpretability if you are looking to increase the model accuracy or finding a causal explanation for a particular case. The anology goes like this a particular resercher when trying to mitigate bias used various complicated interpretability techniques to find the exact reason and solved it but a simple and the optimal method is simply using the more higher quality data which is much cheaper readily avaialble and saves a lot of time.
+
+    Imagine a scenario where an AI is extremely intelligent and has derived a <strong>novel proof</strong>. When we try to understand the internals of the model we find a particular <strong>x</strong> (an internal element of the model) that is responsible for it. Now we know that to solve the proof, the model should have developed its own forms of, let’s say, <strong>y laws</strong>. Here the <strong>y laws</strong> are the <em>explanation</em> — they connect the model’s behaviour to existing scientific knowledge. The <strong>x</strong> is the <em>interpretable</em> element — it reveals what inside the model caused that behaviour. <strong>Y is for explainability, and x is for interpretability.</strong>
+  </p>
+</section>
+</section>
+
+<section id="Different types of interpretability">
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
 
             <p>
                 When a neural network classifies an image, it doesn't <em>look</em> the way we do.
