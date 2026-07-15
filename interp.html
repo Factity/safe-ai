@@ -749,15 +749,801 @@ By studying these it lets us look at abnormalities, what are the influential fac
   <p>
     from a practical stand point you should also look at when to use interpretability if you are looking to increase the model accuracy or finding a causal explanation for a particular case. The anology goes like this a particular resercher when trying to mitigate bias used various complicated interpretability techniques to find the exact reason and solved it but a simple and the optimal method is simply using the more higher quality data which is much cheaper readily avaialble and saves a lot of time.
 
+    
+    
     Imagine a scenario where an AI is extremely intelligent and has derived a <strong>novel proof</strong>. When we try to understand the internals of the model we find a particular <strong>x</strong> (an internal element of the model) that is responsible for it. Now we know that to solve the proof, the model should have developed its own forms of, let’s say, <strong>y laws</strong>. Here the <strong>y laws</strong> are the <em>explanation</em> — they connect the model’s behaviour to existing scientific knowledge. The <strong>x</strong> is the <em>interpretable</em> element — it reveals what inside the model caused that behaviour. <strong>Y is for explainability, and x is for interpretability.</strong>
+
+    - Validate that the model is solving the problem in a reasonable way.
+- Detect when the model relies on **non-causal features** for prediction, which can lead to catastrophic failures under distribution shift.
+- Find **wrong encodings or sub‑par feature engineering** that degrade performance or introduce bias.
+- In a specific case, understand **why this particular prediction was made**; if the explanation conflicts with domain knowledge, the decision-maker might question the forecast and initiate an investigation, potentially averting a harmful decision.
+
   </p>
 </section>
 </section>
 
 <section id="Different types of interpretability">
 
+<!--   different types of interpretability and explanability 
+   
+I will now take each of the formal definitions you provided and add a plain‑language explanation along with practical usage contexts.
+
+---
+
+### Global interpretability
+
+**Definition (as provided)**  
+Let \(f: \mathcal{X} \to \mathcal{Y}\) be a model and \(P_X\) a distribution over inputs. A global explanation is a function \(G[f] \in \mathcal{E}_G\) such that  
+
+\[
+\mathbb{E}_{x \sim P_X}\bigl[ \mathcal{L}\bigl( f(x),\, \hat{f}_{G}(x) \bigr) \bigr] \le \epsilon,
+\]  
+
+where \(\hat{f}_{G}\) is the prediction implied by the global explanation and \(\mathcal{L}\) is a loss.
+
+**Explanation**  
+Global interpretability summarises **how the model behaves on average across all possible inputs**. Instead of explaining a single prediction, it describes the overall relationships the model has learned—for example, which features are generally important, how a feature influences the output (on average), or a simplified set of rules that mimic the whole model. The formal condition ensures that the summary (a surrogate, a set of rules, a feature‑importance vector) reproduces the model’s predictions with high expected fidelity over the entire input distribution.
+
+**Where they are used**  
+- **Regulatory compliance and auditing:** showing that a model does not rely on prohibited features globally.  
+- **Model documentation and transparency reports:** giving stakeholders a high‑level understanding of a model’s behaviour.  
+- **Feature selection and scientific discovery:** identifying which variables truly drive the model’s decisions (e.g., in medicine or credit scoring).  
+- **Model debugging:** checking if the model has learned sensible patterns (e.g., a partial dependence plot revealing a non‑monotonic relationship that contradicts domain knowledge).
+
+---
+
+### Local interpretability
+
+**Definition (as provided)**  
+For a fixed instance \(x_0 \in \mathcal{X}\), a local explanation is a map \(\Phi_{x_0}[f] \in \mathcal{E}_L\) that approximates \(f\) in a neighbourhood \(N_\delta(x_0)\):
+
+\[
+\Phi_{x_0}[f] \;=\; \arg\min_{e \in \mathcal{E}_L} \; \int_{x \in N_\delta(x_0)} \!\! \ell\bigl( f(x), \, \hat{f}_e(x) \bigr) \, d\mu(x) \;+\; \Omega(e),
+\]  
+
+where \(\hat{f}_e\) is the local surrogate prediction, \(\ell\) is a fidelity loss, and \(\Omega(e)\) is a complexity penalty.
+
+**Explanation**  
+Local interpretability explains **why a specific prediction was made for a single input**. It builds a simple, interpretable model that is valid only in a small region around that input. The optimisation trades off fidelity to the original model (how well the simple model matches the black‑box output nearby) against the simplicity of the explanation (e.g., a sparse linear model). The result is an easy‑to‑grasp explanation tailored to one individual case.
+
+**Where they are used**  
+- **Individual decision support:** explaining to a loan applicant why their application was denied.  
+- **Medical diagnosis:** interpreting why an image was classified as malignant for a particular patient.  
+- **Model debugging at the instance level:** investigating a single misclassification or suspicious output.  
+- **Legal and ethical justification:** providing case‑specific reasons that can be contested or validated.
+
+---
+
+### Intrinsic interpretability
+
+**Definition (as provided)**  
+A model \(f \in \mathcal{F}_{\text{int}}\) is intrinsically interpretable if there exists a representation mapping \(\mathcal{R}: \mathcal{F}_{\text{int}} \to \mathcal{H}\), where \(\mathcal{H}\) is a set of human‑understandable descriptions, such that for any \(x\),  
+
+\[
+f(x) = \mathcal{R}(f)(x) \quad \text{(perfect fidelity)},
+\]  
+
+and the cognitive complexity \(C(\mathcal{R}(f)) \le K\) for some fixed small constant \(K\).
+
+**Explanation**  
+Instead of applying an external explanation tool to a black‑box model, **the model itself is simple enough to be read and understood directly**. The learned structure (a small tree, a short rule list, a sparse linear model) is the explanation. There is no approximation; the model’s own parameters form a human‑interpretable description with limited cognitive load.
+
+**Where they are used**  
+- **High‑stakes domains where trust is mandatory:** medical scoring systems (e.g., APACHE, SOFA), credit underwriting models that must be justified to regulators.  
+- **When explainability must be guaranteed:** safety‑critical systems where a black‑box explanation could be wrong.  
+- **Rapid prototyping and baseline modeling:** understanding data patterns through a transparent model before moving to more complex ones.  
+- **Settings with limited computational resources for post‑hoc explainers.**
+
+---
+
+### Post‑hoc explainability
+
+**Definition (as provided)**  
+Given a trained model \(f: \mathcal{X}\to\mathcal{Y}\), a post‑hoc explainer is a function \(\Psi\) that produces an explanation \(E = \Psi(f, \mathcal{D}, \mathcal{A})\) where \(\mathcal{D}\) is (optionally) a dataset and \(\mathcal{A}\) is an auxiliary algorithm. Crucially, \(\Psi\) does **not** modify \(f\) and treats \(f\) as a black‑box oracle. The explanation \(E\) may only approximate \(f\):
+
+\[
+\exists\, \hat{f}_E \in \mathcal{E} \quad \text{s.t.} \quad \hat{f}_E \approx f.
+\]
+
+**Explanation**  
+Post‑hoc explainability means **we leave the model untouched and, after training, apply a separate algorithm to generate explanations**. The model is treated as an opaque function; we only need its inputs and outputs (or sometimes gradients). The explanation is always an approximation of the model’s true behaviour, and it does not change how the model makes predictions.
+
+**Where they are used**  
+- **The overwhelming majority of real‑world explainability needs:** most deployed models are complex (deep nets, ensembles) and cannot be replaced by intrinsically interpretable ones without sacrificing accuracy.  
+- **Standard toolkit for data scientists:** SHAP, LIME, permutation importance are all post‑hoc.  
+- **Compliance when the model cannot be changed:** e.g., a legacy credit‑scoring system that must be explained without modification.  
+- **Model‑agnostic comparisons:** evaluating feature importance across different black‑box model types.
+
+---
+
+### Model‑specific explainability
+
+**Definition (as provided)**  
+An explainability method is model‑specific for a model family \(\mathcal{M}\) if it requires access to the internal structure (parameters \(\theta\), gradients, architecture). Formally,  
+
+\[
+\Psi_{\mathcal{M}}: \Theta_{\mathcal{M}} \times \mathcal{X} \to \mathcal{E},
+\]  
+
+where \(\Theta_{\mathcal{M}}\) is the parameter space of models in \(\mathcal{M}\), and \(\Psi_{\mathcal{M}}\) explicitly uses \(\theta\).
+
+**Explanation**  
+These methods **exploit the inner workings of a particular model type** (e.g., neural network weights or tree splits) to produce explanations. They cannot be applied to an arbitrary model; they are tailor‑made for one family. Because they see inside the model, they are often faster and more precise than model‑agnostic methods for that architecture.
+
+**Where they are used**  
+- **Deep learning interpretability:** Integrated Gradients, DeepLIFT, and Grad‑CAM require gradients and layer activations.  
+- **Tree ensembles:** TreeSHAP uses the tree structure to compute exact SHAP values in polynomial time.  
+- **Attention‑based NLP models:** attention weight visualisation (though debated).  
+- **When you have full access to model internals** and need a computationally efficient, tightly integrated explanation.
+
+---
+
+### Model‑agnostic explainability
+
+**Definition (as provided)**  
+An explainer \(\Psi\) is model‑agnostic if it relies only on query access to \(f\), i.e., for any \(f \in (\mathcal{X} \to \mathcal{Y})\),
+
+\[
+\Psi(f, x) = \Phi\bigl( \{(x_i, f(x_i))\}_{i=1}^N, x \bigr),
+\]  
+
+where \(\Phi\) is a procedure that uses only the input‑output pairs (no internal parameters or gradients).
+
+**Explanation**  
+Model‑agnostic methods **work for any model**, regardless of how it was built. They treat the model as a black box that can be queried for predictions. This makes them universally applicable, but they often require sampling many predictions and may be less precise than model‑specific techniques.
+
+**Where they are used**  
+- **Explaining proprietary or external models** where you cannot see the code or parameters (e.g., an API).  
+- **Comparing explanations across different model types** (linear vs. random forest vs. neural network) on the same dataset.  
+- **Regulated industries where the model is a vendor‑supplied black box.**  
+- **Rapid prototyping of explanations** without needing to understand the model architecture.
+
+---
+
+### Feature‑attribution methods
+
+**Definition (as provided)**  
+A feature attribution for input \(x\) is a vector \(\phi(x) \in \mathbb{R}^d\) that assigns an importance score to each feature. Many methods impose an additive decomposition:
+
+\[
+f(x) = \phi_0 + \sum_{j=1}^d \phi_j(x), \qquad \phi_0 = \mathbb{E}[f(X)].
+\]  
+
+SHAP values are the Shapley values of a cooperative game with payoff \(v(S;x) = \mathbb{E}[f(X) \mid X_S = x_S]\).
+
+**Explanation**  
+Feature‑attribution methods answer: **“How much did each input feature contribute to this prediction?”** They assign a number (positive/negative) to each feature, summing to the difference between the model’s output and a baseline. They are the most common form of local explanation, giving a clear, quantitative breakdown of influence.
+
+**Where they are used**  
+- **Consumer‑facing explanations:** “Your loan was denied mainly because of high credit utilisation (30%) and short credit history (25%).”  
+- **Model debugging and feature engineering:** identifying irrelevant or noisy features.  
+- **Scientific validation:** confirming that a model uses biologically meaningful features.  
+- **Fairness audits:** checking if protected attributes have undue influence on predictions.
+
+---
+
+### Surrogate model methods
+
+**Definition (as provided)**  
+A surrogate model method approximates the complex model \(f\) with a simple interpretable model \(g \in \mathcal{G}\). For global surrogates,  
+
+\[
+g^* = \arg\min_{g \in \mathcal{G}} \; \mathbb{E}_{x \sim P_X}\bigl[ L(f(x), g(x)) \bigr].
+\]  
+
+For local surrogates, the expectation is restricted to a local neighbourhood.
+
+**Explanation**  
+A **white‑box model (the surrogate) is trained to mimic a black‑box model**. Instead of explaining the complex model directly, we learn an inherently interpretable copy that makes similar predictions. The surrogate (e.g., a small tree or a linear model) is then presented as the explanation. Local surrogates (like LIME) mimic the model only near a specific instance.
+
+**Where they are used**  
+- **Global model understanding:** a decision tree surrogates a deep neural network to give a rough overview of decision logic.  
+- **When a black‑box model must be replaced by an interpretable one for deployment**, and the surrogate serves as a “validated” approximation.  
+- **Local explanations for any model:** LIME trains a local linear surrogate per prediction.  
+- **Debugging complex simulations:** a simple surrogate reveals the dominant driving factors.
+
+---
+
+### Example‑based methods
+
+**Definition (as provided)**  
+An example‑based explanation for a test instance \(x\) is a set of training instances \(\{z_1,\dots,z_k\}\) and their (possibly weighted) influence. Influence functions give:
+
+\[
+\mathcal{I}(z, x) = -\nabla_\theta L(x, \hat{\theta})^\top H_{\hat{\theta}}^{-1} \nabla_\theta L(z, \hat{\theta}),
+\]  
+
+where \(\hat{\theta}\) minimises the empirical loss and \(H_{\hat{\theta}}\) is the Hessian.
+
+**Explanation**  
+Instead of summarising with rules or feature weights, these methods explain by **pointing to actual training examples** that were most influential in the model’s decision. Prototypes show a representative example of a class; criticisms show poorly represented instances; influence functions quantify how removing a training point would change a prediction.
+
+**Where they are used**  
+- **Case‑based reasoning and legal analogies:** showing a judge similar past cases that led to the same outcome.  
+- **Data debugging:** identifying mislabelled or influential training samples that caused an error.  
+- **Interpretable machine learning in medicine:** showing a doctor similar patient records with known outcomes.  
+- **Recommender systems:** “You might like this because it is similar to items X, Y, Z that you purchased.”
+
+---
+
+### Rule‑based methods
+
+**Definition (as provided)**  
+An explanation is a set of logical rules \(R = \{r_k\}_{k=1}^K\) where each rule is a conjunction of conditions. For a classification model \(f\),
+
+\[
+f(x) = y \;\Longleftrightarrow\; \bigvee_{r \in R_y} r(x) = 1 \quad \text{(with high probability)}.
+\]  
+
+Extracted rules are found by minimising \(\text{error}(f, R) + \lambda \cdot \text{complexity}(R)\).
+
+**Explanation**  
+The explanation is a **small set of if‑then rules** that approximate the model’s decisions. These rules are directly human‑readable and can be verified against domain knowledge. They can be extracted from a trained model or learned jointly. Each rule provides a simple condition that, if true, strongly indicates a particular class.
+
+**Where they are used**  
+- **Interpretable classification in risk assessment:** a set of rules that explain when a transaction is flagged as fraudulent.  
+- **Medical triage systems:** rules like “if age > 65 and blood pressure > 140 then high risk.”  
+- **Regulatory compliance:** rule lists can be directly submitted as model documentation.  
+- **Building inherently interpretable systems** (e.g., CORELS, RuleFit) when accuracy must be paired with full transparency.
+
+---
+
+### Visualization‑based methods
+
+**Definition (as provided)**  
+Visual explanations are mappings into a human‑perceptible space, typically \(\mathbb{R}^2\) or a heatmap. Saliency map: \(S_{ij} = \|\nabla_{x_{ij}} f_c(x)\|\). Dimension‑reduction:  
+
+\[
+\min_{\phi} \sum_{i,j} \bigl( d_{\mathcal{X}}(x_i,x_j) - \|\phi(x_i)-\phi(x_j)\| \bigr)^2.
+\]
+
+**Explanation**  
+These methods **create images or plots that highlight what the model is “looking at”** (saliency maps, Grad‑CAM) or how data points and representations are organised (t‑SNE, UMAP). The explanation is perceptual rather than propositional—a human must interpret the visualisation.
+
+**Where they are used**  
+- **Computer vision:** heatmaps showing which pixels drive a classification (e.g., in medical imaging to highlight tumours).  
+- **Exploratory data analysis of learned representations:** projecting hidden layer activations to 2D to see if classes form clusters.  
+- **Debugging neural networks:** noticing that a saliency map highlights background instead of the object.  
+- **Human‑AI collaboration interfaces:** providing intuitive visual feedback to users.
+
+---
+
+### Counterfactual explanations
+
+**Definition (as provided)**  
+Given \(f: \mathcal{X} \to \mathcal{Y}\) and a desired output \(y^* \neq f(x_0)\), a counterfactual is a point \(x'\) solving:
+
+\[
+\begin{aligned}
+& \min_{x'} \; d(x_0, x') \\
+\text{s.t.} \quad & f(x') = y^*, \\
+& x' \in \mathcal{A}(x_0) \quad \text{(actionable constraints)},
+\end{aligned}
+\]  
+
+where \(d\) is a distance and \(\mathcal{A}(x_0)\) imposes feasibility.
+
+**Explanation**  
+Counterfactual explanations answer: **“What is the smallest change to my input that would flip the prediction to a desired outcome?”** They show a modified version of the input (e.g., “if your income were $5,000 higher, your loan would have been approved”). The focus is on actionable and realistic changes.
+
+**Where they are used**  
+- **Consumer recourse:** telling a rejected applicant exactly what they can change to get approved.  
+- **Algorithmic fairness:** ensuring that actionable changes are equally available across demographic groups.  
+- **What‑if analysis:** clinicians exploring how a patient’s risk would change if a certain biomarker were lowered.  
+- **Model debugging:** finding small perturbations that cause large, unexpected changes in the output.
+
+---
+
+### Contrastive explanations
+
+**Definition (as provided)**  
+A contrastive explanation for a factual class \(y\) and a foil class \(y'\) identifies a minimal set of features \(S\) such that altering them changes the prediction:
+
+\[
+f(x_0) = y, \quad f\bigl( (x_0 \setminus x_S) \cup x'_S \bigr) = y',
+\]  
+
+with minimal \(|S|\) or minimal change.
+
+**Explanation**  
+Instead of answering “Why class A?”, contrastive explanations answer **“Why class A rather than class B?”** They isolate the features that differentiate the predicted class from an alternative, often referred to as “why‑this‑not‑that” explanations. The explanation highlights the crucial differences between the two outcomes.
+
+**Where they are used**  
+- **Differential diagnosis in medicine:** “Why does the model predict disease X and not disease Y?” showing the key distinguishing symptoms.  
+- **Legal argumentation:** focusing on the few facts that would change the verdict.  
+- **User interfaces for decision support:** presenting a side‑by‑side comparison of what feature values led to one classification over another.  
+- **Fairness analysis:** checking if protected attributes are the distinguishing factor between two outcomes.
+
+---
+
+### Causal explanations
+
+**Definition (as provided)**  
+A causal explanation is based on a structural causal model \(\mathcal{M} = (U, V, F, P_U)\). For an intervention \(\text{do}(X_S = x_S)\),
+
+\[
+\mathbb{E}[Y \mid \text{do}(X_S = x_S)] \;-\; \mathbb{E}[Y].
+\]  
+
+Causal counterfactuals are obtained via abduction‑action‑prediction.
+
+**Explanation**  
+Causal explanations go beyond correlation and describe **what would happen if one intervened on a feature**. They use a causal graph to estimate the effect of setting a variable to a specific value, often answering “What would the prediction have been if feature \(X_i\) had taken a different value, while everything else remains the same in a causal sense?” This is strictly stronger than statistical counterfactuals because it respects causal mechanisms.
+
+**Where they are used**  
+- **Policy evaluation:** estimating the effect of a new treatment protocol on patient outcomes.  
+- **Fairness and discrimination:** understanding whether a protected attribute has a direct causal effect on the decision.  
+- **Robust recourse:** generating counterfactuals that remain valid under real‑world interventions, not just statistical correlation.  
+- **Scientific inference:** testing hypotheses about cause‑and‑effect relationships within a model.
+
+---
+
+### Semantic explanations
+
+**Definition (as provided)**  
+A semantic explanation expresses predictions via human‑understandable concepts. Let a concept encoder map \(x\) to \(v(x) \in \mathbb{R}^k\) and the model be \(f(x) = g(v(x))\). A concept‑based explanation gives importance scores \(\beta\) such that \(f(x) \approx \beta^\top v(x)\). TCAV computes sensitivity via directional derivative.
+
+**Explanation**  
+Semantic explanations **explain predictions in terms of high‑level concepts that humans naturally understand**, like “stripes,” “red,” or “wheel,” rather than raw pixels or features. They map input features to a space of meaningful concepts and then show which concepts the model uses. For instance, rather than “pixel (123, 45) contributed 0.3”, it might say “the presence of ‘fur’ concept increases the ‘dog’ score by 0.8”.
+
+**Where they are used**  
+- **Image classification:** explaining a zebra prediction by the presence of the “stripes” concept.  
+- **Medical imaging:** using concepts like “irregular margin” or “calcification” to explain tumour classifications.  
+- **Bias detection:** finding that a model uses a concept like “gender” (even implicitly) to make decisions.  
+- **Human‑friendly AI auditing:** allowing non‑technical stakeholders to review model behaviour via a concept‑based vocabulary.
+
+---
+
+### Simulatability
+
+**Definition (as provided)**  
+A model \(f\) is simulatable if a human can reproduce its computation step by step. Let \(\mathcal{A}_f\) be an algorithm for \(f\). Simulatability is:
+
+\[
+f \text{ is simulatable} \iff C(\mathcal{A}_f) \le K,
+\]  
+
+where \(K\) is a small cognitive threshold (e.g., depth ≤ 3 tree, ‖β‖₀ ≤ 5).
+
+**Explanation**  
+Simulatability means **a person can take the entire model—inputs, all parameters, and the computation rules—and manually step through it to make a prediction, without any tooling**. The model is so simple that its operation fits in a human’s working memory. This is the strongest local property of interpretability; if a model is simulatable, its reasoning is completely transparent to a human.
+
+**Where they are used**  
+- **Ultra‑transparent systems:** small rule lists used for triage in resource‑poor settings where automatic computation is unavailable.  
+- **Education:** teaching students how a model works by having them replicate the calculations.  
+- **Design target for high‑stakes decisions:** a model that can be verified by a human judge without software.  
+- **Limiting the complexity of interpretable‑by‑design models** (e.g., restricting tree depth or number of non‑zero coefficients).
+
+---
+
+### Decomposability
+
+**Definition (as provided)**  
+A model is decomposable if its prediction can be expressed as a combination of individually interpretable components:
+
+\[
+f(x) = h\bigl( g_1(x), g_2(x), \dots, g_m(x) \bigr),
+\]  
+
+where each \(g_i\) is interpretable and \(h\) is a simple composition (e.g., sum). In a GAM, \(f(x) = \sum f_j(x_j)\).
+
+**Explanation**  
+Decomposability means **the model can be broken down into independent, understandable pieces, each depending on a small subset of features, and then combined in a transparent way** (typically by addition). Each piece can be inspected and interpreted in isolation. This is a component‑wise transparency: the whole model is not necessarily small enough to simulate at once, but one can examine each additive component.
+
+**Where they are used**  
+- **Generalized additive models (GAMs) in healthcare and finance:** each feature’s shape function is plotted, giving intuitive insight.  
+- **Modular neural networks:** where separate sub‑networks are trained for distinct semantic parts and then combined.  
+- **When features naturally segment (e.g., different medical tests)**, and an expert wants to see the contribution of each test independently.  
+- **Building interpretable complex models** that retain the ability to audit individual pathways.
+
+---
+
+### Transparency‑based explanations
+
+**Definition (as provided)**  
+A model class \(\mathcal{F}\) is transparent if there exists a function \(\mathcal{T}: \mathcal{F} \to \mathcal{D}\) that maps each model to a fully faithful and human‑understandable description of its mechanism:
+
+\[
+\forall x \in \mathcal{X}, \quad f(x) = \mathcal{T}(f)(x),
+\]  
+
+and the complexity of \(\mathcal{T}(f)\) is bounded.
+
+**Explanation**  
+Transparency is the **umbrella property that combines simulatability and decomposability**. A fully transparent model is one where the entire inference algorithm can be inspected, understood, and faithfully described at all levels—parameter‑wise, component‑wise, and as a whole procedure. There is no black box; the model’s description is the model itself.
+
+**Where they are used**  
+- **Extreme regulatory environments:** where every aspect of the model must be open to scrutiny (e.g., some criminal justice risk assessments).  
+- **White‑box modelling competitions:** where the winning model must be documented and justified line‑by‑line.  
+- **Design philosophy for interpretable machine learning:** encouraging the development of models that are transparent by construction.  
+- **Audit and certification processes:** if a model’s transparency can be formally proved, it may receive certification for safety‑critical applications.
+
+---
+
+These definitions, explanations, and usage contexts together provide a complete, rigorous picture of the landscape of interpretability and explainability in machine learning.
+
+-->
 </section>
 
+<section id="interpreting linear regression ">
+
+
+
+    <!--    interpreting linear regression-->
+</section>
+
+
+<section id="interpreting logistic regression">
+
+
+
+    <!--    interpreting logistic regression-->
+</section>
+
+<section id="interpreting decision tree algorithm ">
+
+
+
+    <!--    interpreting decision tree regression-->
+</section>
+
+
+<section id="interpreting support vector machines">
+
+
+
+    <!--    interpreting support vector machines-->
+</section>
+
+
+<section id="parameter tuning and interpretability">
+
+
+
+    <!--    different parater tuning methods and how interpretability is effected -->
+</section>
+
+<section id="shap lime cpp causal ice etc etc methods">
+
+
+
+    <!--    interpreting support vector machine
+        
+    get all the math formulation how they are used what sort of tools you use pick a data set and study them for this do through data analysis and data mining     
+    s-->
+</section>
+
+
+<section id="model agnostic methods and  interpretability for those  ">
+
+
+
+    <!--  
+    pdp partial dependency methods 
+    accumated local effects 
+    feature interaction 
+    functional decomposition 
+    permuatation of feature importance 
+    lofo 
+    surrogate 
+    proto other methods 
+
+    math formulation for each of these study them using an exaple provide jupyter note book links 
+
+
+    
+    
+    -->
+</section>
+
+
+<section id="interpreting deep learning">
+
+
+
+    <!--    local methods global methods
+    learned features 
+    gradient based methods // rate of chyange of slope based methods 
+    perturbation methods math formulation etc 
+    adverserial examples 
+
+    transfer learning based interp 
+    influential instances 
+
+    
+    
+    
+    -->
+</section>
+
+<section id="Evaluation of interpretability methods ">
+
+
+
+    <!--    how good are they which one lacks what when to use what and when not to use what etc -->
+</section>
+
+<!--  use the ibm interpretability tools -->
+
+<section id="circuoits for vision models ">
+
+
+
+    <!--   taxonomy for each of different elemets of circuits 
+       
+    find a tool to create all the plots present in the chris olah works and recreate them 
+
+    cover how they came up with idea generate an animation that would help user zoom and probe 
+    
+    apply it to a different model than what they gave in the blog 
+    featuyres 
+
+    circuits 
+
+    universality 
+    
+    feature vis 
+
+    examples 
+
+    syntheic examples 
+
+    join tuning 
+
+    feature implementataion 
+
+    feature use 
+
+    hand written circuits 
+
+
+    write math formulation for how each of the frequency detectors wrk how they are bleached 
+
+    write basic introductory stuff about image procesing 
+
+    pose invaraince 
+
+    poly sematicity 
+
+    give introductory stuff about higher dimensions etc 
+
+    circuits \
+    curve deectors 
+
+    orinetation 
+
+    super position 
+
+    universality 
+
+
+
+    picks a architecture write abpout gabour types of gabour colors 
+    
+
+    why they picmked these shapes 
+
+    generate animations of the shapes find places where they occured and 
+
+    color contrast, line, shifted linestextures, curves, brightness, gabor textures, hatch textures corners line divergence 
+
+
+
+    write about how complexity and re construction of features forms across the different levels 
+
+    causality generality purity family 
+
+    human inutition \
+
+    joint tuning curves 
+
+    syntheic curves generate heat maps 
+
+    angles do radial tracing 
+
+
+    use a spline algorithm to map lines tracing the curve 
+
+   equivalent features how does symttery occure rotational translational etc etc 
+
+
+rotataional high low equivaraiance bw color circuits line curve divergence circuits 
+
+how they all put togther in circuits 
+
+write how complexity emerged which layer led to which forms of curve elements etc 
+
+What’s the difference between visualizing activations, weights, and attributions?
+In this article, we’re focusing on visualizing weights. But people often visualize activations, attributions, gradients, and much more. How should we think about the meaning of visualizing these different objects?
+
+Activations: We generally think of these as being “what” the network saw. If understanding a neural network is like reverse compiling a computer program, the neurons are the variables, and the activations are the values of those variables.
+Weights: We generally think of these as being “how” the neural network computes one layer from the previous one. In the reverse engineering analogy, these are compiled assembly instructions.
+Attributions: Attributions try to tell us the extent to which one neuron influenced a later neuron.
+[2, 3]
+We often think of this as “why” the neuron fired. We need to be careful with attributions, because they’re a human-defined object on top of a neural network rather than a fundamental object. They aren’t always well defined, and people mean different things by them. (They are very well defined if you are only operating across adjacent layers!)
+
+
+
+
+lack of contectualization 
+
+indirect interaction dimensionality 
+    
+write about brancjhes 
+
+weights banding 
+
+
+branching interventions etc 
+
+
+
+-->
+
+
+
+
+</section>
+
+
+
+<section id = "interpretability of transformer  model">
+
+
+    <!--  
+
+
+make this entire thing just one section alone 
+
+
+
+
+
+
+
+
+
+    link to your work on trasnformers
+
+    follo neel nandhas guide 
+
+
+    reverse engineering transformers 
+
+    start with zero layers 
+
+    effects of  encoding tokenization zero layer 
+    
+    
+    emergence of insuctrion circuits 
+
+    residual stream 
+
+    virtual weights 
+
+    subspaces 
+    attentrion heades additivity operations with them 
+
+
+incontet learnoing and attention heads 
+
+detailed breakdown of the argfuments 
+
+Argument 1 (Macroscopic co-occurrence): Transformer language models undergo a “phase change” early in training, during which induction heads form and simultaneously in-context learning improves dramatically.
+Argument 2 (Macroscopic co-perturbation): When we change the transformer architecture in a way that shifts whether induction heads can form (and when), the dramatic improvement in in-context learning shifts in a precisely matching way.
+Argument 3 (Direct ablation):  When we directly “knock out” induction heads at test-time in small models, the amount of in-context learning greatly decreases.
+Argument 4 (Specific examples of induction head generality): Although we define induction heads very narrowly in terms of copying literal sequences, we empirically observe that these same heads also appear to implement more sophisticated types of in-context learning, including highly abstract behaviors, making it plausible they explain a large fraction of in-context learning.
+Argument 5 (Mechanistic plausibility of induction head generality): For small models, we can explain mechanistically how induction heads work, and can show they contribute to in-context learning. Furthermore, the actual mechanism of operation suggests natural ways in which it could be re-purposed to perform more general in-context learning.
+Argument 6 (Continuity from small to large models): In the previous 5 arguments, the case for induction heads explaining in-context learning is stronger for small models than for large ones. However, many behaviors and data related to both induction heads and in-context learning are smoothly continuous from small to large models, suggesting the simplest explanation is that mechanisms are the same.
+
+superposition 
+
+mono semantic and poly semantic neurons 
+
+features directions and super position 
+
+word embeddings latent space 
+interpretable neurons 
+
+unoiversality 
+poly semantic neurons 
+
+features as arbitary neurons 
+
+featueres as interpretable properties 
+
+features of directions 
+
+privileged and non privileged basis 
+
+in residual stream 
+
+the super position hypothesis 
+
+decomposibility 
+
+linearity 
+super position 
+
+basis aligned 
+
+feature sparsity 
+
+more features 6than neurons 
+
+varying features in importance 
+
+the geometry of superposition 
+
+uniform super position 
+
+feature dimensionality 
+
+polytopes and low rank matrices 
+
+non uniform super position 
+
+perturbing a single feature 
+
+correlated and anti correlated features 
+
+local almost orthogonal bases 
+
+collapsing of correlated features 
+
+super position and learning dynamics 
+
+discerete energy level jumps 
+
+learning as a gemetric transformations 
+
+adversarial robustness 
+
+super position in a privileged basis 
+
+computataion in super position 
+
+experimental setup 
+
+superposition and sparsity 
+
+
+Distributed Representations: Composition & Superposition
+the asymmetric super position motif 
+
+safety,interpretability and solving super position 
+
+
+
+
+    kqv analysis 
+
+
+    skip trigrams 
+
+    path expansions of logits \
+
+
+    on interpretability 
+    
+
+
+
+    attention 
+
+
+    Almost Orthogonal Vectors
+
+    Compressed sensing
+
+    mlp blocks 
+    
+
+
+
+    -->
+
+</section>
 
 
 
