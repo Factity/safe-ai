@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Transformer Circuits — A Visual Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+    /* ─── CSS Variables (Dark Theme) ─────────────────────────── */
+    :root {
+        --font-size: 16px;
+        --background: #070b14;
+        --foreground: #dde3ed;
+        --card: #0d1220;
+        --card-foreground: #dde3ed;
+        --popover: #0d1220;
+        --popover-foreground: #dde3ed;
+        --primary: #8b9fff;
+        --primary-foreground: #070b14;
+        --secondary: #141c2e;
+        --secondary-foreground: #dde3ed;
+        --muted: #141c2e;
+        --muted-foreground: #6e7d99;
+        --accent: #e2a44b;
+        --accent-foreground: #070b14;
+        --destructive: #e05a5a;
+        --destructive-foreground: #ffffff;
+        --border: rgba(255, 255, 255, 0.07);
+        --input: transparent;
+        --input-background: #141c2e;
+        --switch-background: #2a3550;
+        --font-weight-medium: 500;
+        --font-weight-normal: 400;
+        --ring: #8b9fff;
+        --chart-1: #8b9fff;
+        --chart-2: #e2a44b;
+        --chart-3: #6ee7b7;
+        --chart-4: #f472b6;
+        --chart-5: #60a5fa;
+        --radius: 0.375rem;
+        --sidebar: #0d1220;
+        --sidebar-foreground: #dde3ed;
+        --sidebar-primary: #8b9fff;
+        --sidebar-primary-foreground: #070b14;
+        --sidebar-accent: #141c2e;
+        --sidebar-accent-foreground: #dde3ed;
+        --sidebar-border: rgba(255, 255, 255, 0.07);
+        --sidebar-ring: #8b9fff;
+        --text-2xl: 1.5rem;
+        --text-xl: 1.25rem;
+        --text-lg: 1.125rem;
+        --text-base: 1rem;
+    }
+    /* ─── Reset & Base ──────────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        border-color: var(--border);
+        outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
+    }
+    html {
+        font-size: var(--font-size);
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    body {
+        margin: 0;
+        background: var(--background);
+        color: var(--foreground);
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        line-height: 1.6;
+        min-height: 100vh;
+    }
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+    /* ─── Typography ────────────────────────────────────────── */
+    .display {
+        font-family: 'Newsreader', Georgia, serif;
+    }
+    .mono {
+        font-family: 'DM Mono', 'Courier New', monospace;
+    }
+    h1 {
+        font-size: var(--text-2xl);
+        font-weight: var(--font-weight-medium);
+        line-height: 1.5;
+    }
+    h2 {
+        font-size: var(--text-xl);
+        font-weight: var(--font-weight-medium);
+        line-height: 1.5;
+    }
+    h3 {
+        font-size: var(--text-lg);
+        font-weight: var(--font-weight-medium);
+        line-height: 1.5;
+    }
+    h4 {
+        font-size: var(--text-base);
+        font-weight: var(--font-weight-medium);
+        line-height: 1.5;
+    }
+    label {
+        font-size: var(--text-base);
+        font-weight: var(--font-weight-medium);
+        line-height: 1.5;
+    }
+    button {
+        font-size: var(--text-base);
+        font-weight: var(--font-weight-medium);
+        line-height: 1.5;
+        cursor: pointer;
+        font-family: inherit;
+    }
+    input {
+        font-size: var(--text-base);
+        font-weight: var(--font-weight-normal);
+        line-height: 1.5;
+        font-family: inherit;
+    }
+    /* ─── Prose Styles ──────────────────────────────────────── */
+    .prose p {
+        color: #a0aec0;
+        line-height: 1.8;
+        font-size: 0.97rem;
+        font-weight: 300;
+        margin-bottom: 1.1em;
+    }
+    .prose h2 {
+        font-family: 'Newsreader', Georgia, serif;
+        font-size: 1.75rem;
+        font-weight: 300;
+        color: #dde3ed;
+        line-height: 1.25;
+        margin: 2.5rem 0 0.75rem;
+    }
+    .prose h3 {
+        font-family: 'Newsreader', Georgia, serif;
+        font-size: 1.2rem;
+        font-style: italic;
+        font-weight: 300;
+        color: #c4cfe6;
+        margin: 2rem 0 0.5rem;
+    }
+    .prose strong {
+        color: #c4cfe6;
+        font-weight: 500;
+    }
+    .prose code {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.82em;
+        background: rgba(139, 159, 255, 0.1);
+        color: #a5b4fc;
+        padding: 0.1em 0.4em;
+        border-radius: 3px;
+    }
+    .prose blockquote {
+        border-left: 2px solid rgba(139, 159, 255, 0.35);
+        padding-left: 1.25rem;
+        margin: 1.5rem 0;
+        color: #8892a4;
+        font-style: italic;
+    }
+    .prose figure {
+        margin: 2rem 0;
+    }
+    .prose figcaption {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.75rem;
+        color: #6e7d99;
+        margin-top: 0.6rem;
+        text-align: center;
+    }
+    .prose em {
+        font-style: italic;
+    }
+    /* ─── Layout ────────────────────────────────────────────── */
+    .page-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        padding-top: 5rem;
+        padding-bottom: 6rem;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    @media (min-width: 1024px) {
+        .page-container {
+            grid-template-columns: 200px 1fr;
+            gap: 4rem;
+        }
+    }
+    /* ─── Nav ───────────────────────────────────────────────── */
+    .nav-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        border-bottom: 1px solid var(--border);
+        background: rgba(7, 11, 20, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        height: 52px;
+    }
+    .nav-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .nav-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+    .nav-links a {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        text-decoration: none;
+        transition: color 0.15s;
+    }
+    .nav-links a:hover {
+        color: var(--foreground);
+    }
+    /* ─── TOC Sidebar ───────────────────────────────────────── */
+    .toc-sidebar {
+        display: none;
+    }
+    @media (min-width: 1024px) {
+        .toc-sidebar {
+            display: block;
+        }
+    }
+    .toc-sticky {
+        position: sticky;
+        top: 6rem;
+    }
+    .toc-heading {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        margin-bottom: 1rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+    .toc-link {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.72rem;
+        color: #6e7d99;
+        display: block;
+        padding: 0.35rem 0;
+        transition: color 0.15s;
+        text-decoration: none;
+        border-left: 2px solid transparent;
+        padding-left: 0.75rem;
+    }
+    .toc-link:hover {
+        color: #dde3ed;
+    }
+    .toc-link.active {
+        color: #8b9fff;
+        border-left-color: #8b9fff;
+    }
+    .toc-meta {
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+    }
+    .toc-meta-label {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        margin-bottom: 0.25rem;
+    }
+    .toc-meta-value {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--foreground);
+    }
+    .toc-meta-value+.toc-meta-label {
+        margin-top: 0.75rem;
+    }
+    /* ─── Card / Demo Containers ────────────────────────────── */
+    .demo-card {
+        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        overflow: hidden;
+        background: #0a0f1e;
+    }
+    .demo-card-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .demo-card-body {
+        padding: 1.25rem;
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+    @media (min-width: 768px) {
+        .demo-card-body {
+            flex-wrap: nowrap;
+        }
+    }
+    /* ─── Buttons ───────────────────────────────────────────── */
+    .pill-btn {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.25rem;
+        border: 1px solid transparent;
+        background: transparent;
+        color: #6e7d99;
+        transition: all 0.15s;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    .pill-btn:hover {
+        color: #dde3ed;
+    }
+    .pill-btn.active {
+        border-color: rgba(139, 159, 255, 0.4);
+        background: rgba(139, 159, 255, 0.15);
+        color: #8b9fff;
+    }
+    /* ─── Animations ────────────────────────────────────────── */
+    .fade-up {
+        animation: fadeUp 0.5s ease both;
+    }
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+    /* ─── Utility ───────────────────────────────────────────── */
+    .text-accent {
+        color: var(--accent);
+    }
+    .text-muted {
+        color: var(--muted-foreground);
+    }
+    .text-primary {
+        color: var(--primary);
+    }
+    .text-foreground {
+        color: var(--foreground);
+    }
+    .border-border {
+        border-color: var(--border);
+    }
+    .tracking-widest {
+        letter-spacing: 0.1em;
+    }
+    .uppercase {
+        text-transform: uppercase;
+    }
+    .italic {
+        font-style: italic;
+    }
+    .font-light {
+        font-weight: 300;
+    }
+    .leading-relaxed {
+        line-height: 1.7;
+    }
+    .leading-tight {
+        line-height: 1.25;
+    }
+    .mt-2 {
+        margin-top: 0.5rem;
+    }
+    .mt-10 {
+        margin-top: 2.5rem;
+    }
+    .mt-16 {
+        margin-top: 4rem;
+    }
+    .mb-1 {
+        margin-bottom: 0.25rem;
+    }
+    .mb-2 {
+        margin-bottom: 0.5rem;
+    }
+    .mb-4 {
+        margin-bottom: 1rem;
+    }
+    .mb-5 {
+        margin-bottom: 1.25rem;
+    }
+    .mb-6 {
+        margin-bottom: 1.5rem;
+    }
+    .mb-12 {
+        margin-bottom: 3rem;
+    }
+    .pt-8 {
+        padding-top: 2rem;
+    }
+    .py-4 {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    .gap-1 {
+        gap: 0.25rem;
+    }
+    .gap-2 {
+        gap: 0.5rem;
+    }
+    .gap-3 {
+        gap: 0.75rem;
+    }
+    .gap-6 {
+        gap: 1.5rem;
+    }
+    .flex {
+        display: flex;
+    }
+    .flex-col {
+        flex-direction: column;
+    }
+    .flex-wrap {
+        flex-wrap: wrap;
+    }
+    .items-center {
+        align-items: center;
+    }
+    .items-start {
+        align-items: flex-start;
+    }
+    .justify-between {
+        justify-content: space-between;
+    }
+    .flex-1 {
+        flex: 1;
+    }
+    .flex-shrink-0 {
+        flex-shrink: 0;
+    }
+    .self-start {
+        align-self: flex-start;
+    }
+    .ml-auto {
+        margin-left: auto;
+    }
+    .space-y-1\.5>*+* {
+        margin-top: 0.375rem;
+    }
+    .space-y-3>*+* {
+        margin-top: 0.75rem;
+    }
+    .rounded-lg {
+        border-radius: 0.5rem;
+    }
+    .rounded-full {
+        border-radius: 9999px;
+    }
+    .w-2 {
+        width: 0.5rem;
+    }
+    .h-2 {
+        height: 0.5rem;
+    }
+    .h-1\.5 {
+        height: 0.375rem;
+    }
+    .h-full {
+        height: 100%;
+    }
+    .w-full {
+        width: 100%;
+    }
+    .text-xs {
+        font-size: 0.75rem;
+    }
+    .text-sm {
+        font-size: 0.875rem;
+    }
+    .text-xl {
+        font-size: 1.25rem;
+    }
+    .transition-all {
+        transition: all 0.2s;
+    }
+    .transition-colors {
+        transition: color 0.15s, background-color 0.15s;
+    }
+    .transition-opacity {
+        transition: opacity 0.15s;
+    }
+    .hover\:opacity-70:hover {
+        opacity: 0.7;
+    }
+    .hover\:text-foreground:hover {
+        color: var(--foreground);
+    }
+    .no-underline {
+        text-decoration: none;
+    }
+    .relative {
+        position: relative;
+    }
+    .absolute {
+        position: absolute;
+    }
+    .inset-0 {
+        inset: 0;
+    }
+    .overflow-hidden {
+        overflow: hidden;
+    }
+    .cursor-pointer {
+        cursor: pointer;
+    }
+    .grid {
+        display: grid;
+    }
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 768px) {
+        .md\:grid-cols-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+    @media (min-width: 768px) {
+        .md\:flex-nowrap {
+            flex-wrap: nowrap;
+        }
+    }
+    /* ─── Specific component tweaks ─────────────────────────── */
+    .saliency-grid-cell {
+        position: absolute;
+        width: 17px;
+        height: 17px;
+        border-radius: 2px;
+        transition: background 0.06s;
+    }
+    .attention-grid-cell {
+        width: 36px;
+        height: 36px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'DM Mono', monospace;
+        font-size: 10px;
+    }
+    .jspace-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+    }
+    .jspace-legend-dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 9999px;
+        flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       Additional styles for the transformer-circuits content
+       ══════════════════════════════════════════════════════════ */
+
+    .eyebrow {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.14em;
+        color: var(--muted-foreground);
+    }
+    .hero-title {
+        font-family: 'Newsreader', Georgia, serif;
+        font-weight: 300;
+        font-size: 2.6rem;
+        line-height: 1.15;
+        margin: 0.6rem 0 1rem;
+        color: var(--foreground);
+    }
+    .hero-title em { color: var(--primary); font-style: italic; }
+    section.chapter { scroll-margin-top: 5rem; }
+    section.chapter + section.chapter { margin-top: 4.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+
+    .formula {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.85rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 0.9rem 1.1rem;
+        color: #c4cfe6;
+        overflow-x: auto;
+        margin: 1rem 0 1.5rem;
+    }
+    .formula .t1 { color: var(--chart-5); }
+    .formula .t2 { color: var(--primary); }
+    .formula .t3 { color: var(--chart-3); }
+    .formula .t4 { color: var(--accent); }
+    .formula .op  { color: var(--muted-foreground); }
+
+    .demo-card-title { font-size: 0.85rem; font-weight: 500; color: var(--foreground); }
+    .demo-card-sub { font-size: 0.72rem; color: var(--muted-foreground); font-family: 'DM Mono', monospace; }
+    .controls-row { display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center; }
+    .caption-box {
+        font-size: 0.82rem;
+        color: #a0aec0;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 300;
+        min-height: 2.6em;
+        line-height: 1.6;
+        border-top: 1px dashed var(--border);
+        padding-top: 0.85rem;
+        margin-top: 0.9rem;
+    }
+    .caption-box strong { color: var(--foreground); font-weight: 500; }
+
+    svg.widget-svg { width: 100%; height: auto; display:block; }
+    .svg-wrap { width: 100%; }
+
+    /* residual stream widget */
+    .stream-stage-box { fill: var(--card); stroke: var(--border); stroke-width: 1.4; }
+    .stream-stage-label { font-family:'DM Mono',monospace; font-size:11px; fill: var(--foreground); }
+    .stream-stage-sub { font-family:'DM Mono',monospace; font-size:8.5px; fill: var(--muted-foreground); }
+    .stream-line { stroke: #2a3550; stroke-width: 3; }
+    .stream-dot { fill: var(--primary); filter: drop-shadow(0 0 6px rgba(139,159,255,0.7)); }
+    .stream-endpoint-box { fill: var(--secondary); stroke: var(--primary); stroke-width: 1.3; }
+    .stream-endpoint-label { font-family:'DM Mono',monospace; font-size: 10.5px; fill: var(--primary); }
+    .stream-plus { font-family:'DM Mono',monospace; font-size:14px; fill: var(--accent); font-weight:600; }
+
+    .anim-playing .stream-dot { animation: dotMove 6s linear infinite; }
+    .anim-paused .stream-dot { animation-play-state: paused; }
+    @keyframes dotMove { from { transform: translateX(0px); } to { transform: translateX(820px); } }
+
+    .anim-playing .glow0 { animation: pulseBox 6s ease-in-out infinite; animation-delay: 1.2s; }
+    .anim-playing .glow1 { animation: pulseBox 6s ease-in-out infinite; animation-delay: 2.4s; }
+    .anim-playing .glow2 { animation: pulseBox 6s ease-in-out infinite; animation-delay: 3.6s; }
+    .anim-playing .glow3 { animation: pulseBox 6s ease-in-out infinite; animation-delay: 4.8s; }
+    .anim-paused .glow0, .anim-paused .glow1, .anim-paused .glow2, .anim-paused .glow3 { animation-play-state: paused; }
+    @keyframes pulseBox {
+        0%   { opacity: 1; stroke: var(--accent); }
+        14%  { opacity: 0.18; stroke: var(--border); }
+        100% { opacity: 0.18; stroke: var(--border); }
+    }
+    .anim-playing .plus0 { animation: pulseText 6s ease-in-out infinite; animation-delay: 1.2s; }
+    .anim-playing .plus1 { animation: pulseText 6s ease-in-out infinite; animation-delay: 2.4s; }
+    .anim-playing .plus2 { animation: pulseText 6s ease-in-out infinite; animation-delay: 3.6s; }
+    .anim-playing .plus3 { animation: pulseText 6s ease-in-out infinite; animation-delay: 4.8s; }
+    .anim-paused .plus0, .anim-paused .plus1, .anim-paused .plus2, .anim-paused .plus3 { animation-play-state: paused; }
+    @keyframes pulseText { 0% { opacity:1; } 20% { opacity:0.15; } 100% { opacity:0.15; } }
+
+    /* token sequence widgets (one-layer / induction) */
+    .tok-box { fill: var(--secondary); stroke: var(--border); stroke-width: 1.3; transition: stroke 0.3s, fill 0.3s; }
+    .tok-box.q-active { stroke: var(--primary); stroke-width: 2; }
+    .tok-box.k-active { stroke: var(--accent); stroke-width: 2; }
+    .tok-box.k-active2 { stroke: var(--chart-3); stroke-width: 2; }
+    .tok-label { font-family:'DM Mono',monospace; font-size:15px; fill: var(--foreground); text-anchor:middle; }
+    .pos-label { font-family:'DM Mono',monospace; font-size:9.5px; fill: var(--muted-foreground); text-anchor:middle; }
+    .pred-box { fill: var(--card); stroke: var(--border); stroke-width: 1.4; transition: stroke 0.3s; }
+    .pred-box.boosted { stroke: var(--accent); stroke-width: 2; }
+    .pred-label { font-family:'DM Mono',monospace; font-size: 12.5px; text-anchor:middle; fill: var(--muted-foreground); transition: fill 0.3s; }
+    .pred-label.boosted { fill: var(--accent); }
+    .flow-arrow { fill:none; opacity:0; transition: opacity 0.5s ease; }
+    .arc-label { font-family:'DM Mono',monospace; font-size: 9.5px; opacity:0; transition: opacity 0.5s ease; }
+
+    /* head explorer */
+    .head-grid-wrap { display:flex; flex-direction:column; gap:0.4rem; }
+    .head-row-label { font-family:'DM Mono',monospace; font-size:0.68rem; color: var(--muted-foreground); margin-bottom:0.2rem; letter-spacing:0.06em; }
+    .head-btn-row { display:flex; gap:0.4rem; margin-bottom:0.7rem; }
+
+    /* path expansion */
+    .term-card {
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--chart-1);
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 0.75rem 0.9rem;
+        cursor: pointer;
+        transition: all 0.15s;
+        flex: 1 1 220px;
+    }
+    .term-card:hover { background: #10182b; }
+    .term-card.active { background: rgba(139,159,255,0.08); }
+    .term-card .term-name { font-size: 0.8rem; font-weight:500; color: var(--foreground); margin-bottom:0.2rem; }
+    .term-card .term-formula { font-family:'DM Mono',monospace; font-size: 0.68rem; color: var(--muted-foreground); }
+
+    @media (max-width: 640px) {
+        .hero-title { font-size: 2rem; }
+        .demo-card-body { padding: 1rem; }
+    }
+</style>
+</head>
+<body>
+
+<nav class="nav-bar">
+    <div class="nav-inner">
+        <span class="mono text-xs" style="letter-spacing:0.08em; color:var(--foreground);">circuits<span class="text-primary">.</span>viz</span>
+        <div class="nav-links">
+            <a href="#residual-stream">stream</a>
+            <a href="#zero-layer">zero-layer</a>
+            <a href="#one-layer">one-layer</a>
+            <a href="#induction">induction</a>
+            <a href="#path-expansion">paths</a>
+            <a href="#explorer">explorer</a>
+        </div>
+    </div>
+</nav>
+
+<div class="page-container">
+
+    <aside class="toc-sidebar">
+        <div class="toc-sticky">
+            <div class="toc-heading">On this page</div>
+            <a class="toc-link" data-target="residual-stream">01 · Residual stream</a>
+            <a class="toc-link" data-target="zero-layer">02 · Zero-layer model</a>
+            <a class="toc-link" data-target="one-layer">03 · One-layer, QK / OV</a>
+            <a class="toc-link" data-target="induction">04 · Induction heads</a>
+            <a class="toc-link" data-target="path-expansion">05 · Path expansion</a>
+            <a class="toc-link" data-target="explorer">06 · Head explorer</a>
+
+            <div class="toc-meta">
+                <div class="toc-meta-label">Scope</div>
+                <div class="toc-meta-value">Attention-only, ≤2 layers</div>
+                <div class="toc-meta-label">Format</div>
+                <div class="toc-meta-value">Interactive, no MLPs</div>
+            </div>
+        </div>
+    </aside>
+
+    <main>
+        <header class="fade-up mb-12">
+            <div class="eyebrow uppercase">Mechanistic interpretability · visual reference</div>
+            <h1 class="hero-title">Transformer circuits, <em>traced by hand</em></h1>
+            <div class="prose" style="max-width:640px;">
+                <p>How does a stack of attention heads turn a token into a prediction? Start from nothing — a model with zero layers — and add just enough machinery to explain the strangest trick a two-layer transformer can pull: an <strong>induction head</strong> completing a pattern it has never explicitly been told about. Every diagram below is live — click, hover, and step through it.</p>
+            </div>
+        </header>
+
+        <!-- ═══════════════════════ 1. RESIDUAL STREAM ═══════════════════════ -->
+        <section class="chapter" id="residual-stream">
+            <div class="prose">
+                <h2>The residual stream</h2>
+                <p>Every attention layer and every MLP in a transformer reads from one shared channel — the <strong>residual stream</strong> — and writes back into it by simple addition. Nothing is ever erased or overwritten; each layer just adds its own correction on top of whatever is already there.</p>
+                <div class="formula">x<sub>final</sub> <span class="op">=</span> <span class="t1">embed(token)</span> <span class="op">+</span> <span class="t2">attn<sub>0</sub>(x)</span> <span class="op">+</span> <span class="t2">mlp<sub>0</sub>(x)</span> <span class="op">+</span> <span class="t3">attn<sub>1</sub>(x)</span> <span class="op">+</span> <span class="t3">mlp<sub>1</sub>(x)</span> <span class="op">+ ...</span></div>
+                <p>Because the stream is a running <em>sum</em>, the whole computation is linear at the top level — which means the final logits can always be decomposed back into independent, additive contributions from each layer. That single fact is what makes everything else on this page possible.</p>
+            </div>
+
+            <div class="demo-card mt-4">
+                <div class="demo-card-header">
+                    <div>
+                        <div class="demo-card-title">Read → compute → write, one layer at a time</div>
+                        <div class="demo-card-sub">watch a token's representation move down the stream</div>
+                    </div>
+                    <div class="controls-row">
+                        <button class="pill-btn active" id="stream-toggle">⏸ pause</button>
+                    </div>
+                </div>
+                <div class="demo-card-body" style="display:block;">
+                    <div class="svg-wrap anim-playing" id="stream-anim-wrap">
+                        <svg class="widget-svg" viewBox="0 0 900 210" xmlns="http://www.w3.org/2000/svg">
+                            <!-- stream line -->
+                            <line x1="40" y1="150" x2="860" y2="150" class="stream-line" />
+
+                            <!-- endpoints -->
+                            <rect x="10" y="132" width="60" height="36" rx="6" class="stream-endpoint-box" />
+                            <text x="40" y="154" class="stream-endpoint-label" text-anchor="middle">embed</text>
+
+                            <rect x="798" y="132" width="62" height="36" rx="6" class="stream-endpoint-box" />
+                            <text x="829" y="154" class="stream-endpoint-label" text-anchor="middle">unembed</text>
+
+                            <!-- moving token dot -->
+                            <circle cx="40" cy="150" r="7" class="stream-dot" />
+
+                            <!-- stage 0: L0 attn -->
+                            <line x1="204" y1="150" x2="204" y2="95" stroke="#2a3550" stroke-width="1.5"/>
+                            <rect x="204" y="55" width="0" height="0" />
+                            <rect x="169" y="55" width="70" height="40" rx="6" class="stream-stage-box glow0" />
+                            <text x="204" y="72" class="stream-stage-label" text-anchor="middle">L0 · Attn</text>
+                            <text x="204" y="85" class="stream-stage-sub" text-anchor="middle">reads, moves info</text>
+                            <text x="204" y="140" text-anchor="middle" class="stream-plus plus0">+</text>
+
+                            <!-- stage 1: L0 mlp -->
+                            <line x1="368" y1="150" x2="368" y2="95" stroke="#2a3550" stroke-width="1.5"/>
+                            <rect x="333" y="55" width="70" height="40" rx="6" class="stream-stage-box glow1" />
+                            <text x="368" y="72" class="stream-stage-label" text-anchor="middle">L0 · MLP</text>
+                            <text x="368" y="85" class="stream-stage-sub" text-anchor="middle">per-token recall</text>
+                            <text x="368" y="140" text-anchor="middle" class="stream-plus plus1">+</text>
+
+                            <!-- stage 2: L1 attn -->
+                            <line x1="532" y1="150" x2="532" y2="95" stroke="#2a3550" stroke-width="1.5"/>
+                            <rect x="497" y="55" width="70" height="40" rx="6" class="stream-stage-box glow2" />
+                            <text x="532" y="72" class="stream-stage-label" text-anchor="middle">L1 · Attn</text>
+                            <text x="532" y="85" class="stream-stage-sub" text-anchor="middle">reads L0's writes</text>
+                            <text x="532" y="140" text-anchor="middle" class="stream-plus plus2">+</text>
+
+                            <!-- stage 3: L1 mlp -->
+                            <line x1="696" y1="150" x2="696" y2="95" stroke="#2a3550" stroke-width="1.5"/>
+                            <rect x="661" y="55" width="70" height="40" rx="6" class="stream-stage-box glow3" />
+                            <text x="696" y="72" class="stream-stage-label" text-anchor="middle">L1 · MLP</text>
+                            <text x="696" y="85" class="stream-stage-sub" text-anchor="middle">per-token recall</text>
+                            <text x="696" y="140" text-anchor="middle" class="stream-plus plus3">+</text>
+
+                            <text x="450" y="195" text-anchor="middle" class="stream-stage-sub" style="font-size:9.5px;">stream = embed + Σ (attn outputs) + Σ (mlp outputs), read by every later layer</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prose">
+                <p class="mt-4">This page only builds <strong>attention-only</strong> transformers — no MLPs — so the diagrams stay small enough to expand completely by hand. Everything below is a term in that same additive sum.</p>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════ 2. ZERO LAYER ═══════════════════════ -->
+        <section class="chapter" id="zero-layer">
+            <div class="prose">
+                <h2>Zero layers: just bigrams</h2>
+                <p>Delete every attention layer and every MLP, and only the <strong>direct path</strong> is left: an embedding matrix feeding straight into an unembedding matrix.</p>
+                <div class="formula"><span class="t1">logits</span> <span class="op">=</span> <span class="t1">W<sub>U</sub> W<sub>E</sub></span> · token</div>
+                <p>That product <code>W_U W_E</code> is a fixed matrix of size vocab × vocab. Row <em>i</em>, column <em>j</em> is exactly the log-likelihood the model assigns to token <em>j</em> following token <em>i</em> — a <strong>bigram table</strong>, nothing more. There's no attention, so no notion of context beyond "what is the current token."</p>
+            </div>
+
+            <div class="demo-card mt-4">
+                <div class="demo-card-header">
+                    <div>
+                        <div class="demo-card-title">Bigram matrix W<sub>U</sub>W<sub>E</sub></div>
+                        <div class="demo-card-sub">click a row to see what it predicts next</div>
+                    </div>
+                    <div class="mono text-xs text-muted" id="zero-selected-label">select a token →</div>
+                </div>
+                <div class="demo-card-body" style="flex-direction:column; align-items:stretch;">
+                    <div class="flex gap-6 flex-wrap items-start">
+                        <div id="zero-grid" style="display:grid; gap:3px;"></div>
+                        <div class="flex-1" style="min-width:200px;">
+                            <div class="demo-card-sub mb-2">P(next token | current token)</div>
+                            <div id="zero-bars" class="flex flex-col gap-1"></div>
+                        </div>
+                    </div>
+                    <div class="caption-box" id="zero-caption">Every cell is a fixed number learned from corpus statistics — <strong>W<sub>U</sub>W<sub>E</sub></strong> never looks left of the current token. Click <span class="mono">the</span>, <span class="mono">cat</span>, or any row label to preview its row.</div>
+                </div>
+            </div>
+
+            <div class="prose">
+                <p class="mt-4">This direct path never disappears as we add layers — it's still sitting there in every deeper model, just joined by additional terms. Adding a single attention head is what lets the model finally condition on <em>something other than the current token</em>.</p>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════ 3. ONE LAYER ═══════════════════════ -->
+        <section class="chapter" id="one-layer">
+            <div class="prose">
+                <h2>One layer: QK decides where, OV decides what</h2>
+                <p>A single attention head factors cleanly into two independent circuits that never interact with each other:</p>
+                <div class="formula"><span class="t2">W<sub>QK</sub></span> <span class="op">= W<sub>Q</sub><sup>T</sup> W<sub>K</sub></span> <span class="op"> — the </span><strong>QK circuit</strong><span class="op">: decides the attention pattern (where to look)</span></div>
+                <div class="formula"><span class="t4">W<sub>OV</sub></span> <span class="op">= W<sub>V</sub> W<sub>O</sub></span> <span class="op"> — the </span><strong>OV circuit</strong><span class="op">: decides what gets copied once attention has picked a source</span></div>
+                <p>Because these are separate matrices, the exact <em>same</em> attention pattern could be paired with a completely different OV circuit to do a different job. Below, a toy <strong>duplicate-token head</strong>: its QK circuit fires when the key token matches the query token, and its OV circuit boosts the logit for that same token — a head that predicts repetition.</p>
+            </div>
+
+            <div class="demo-card mt-4">
+                <div class="demo-card-header">
+                    <div>
+                        <div class="demo-card-title">Duplicate-token head, step by step</div>
+                        <div class="demo-card-sub">sequence: X Y Z X — what comes after the second X?</div>
+                    </div>
+                    <div class="controls-row">
+                        <button class="pill-btn active" id="ol-next">next step →</button>
+                        <button class="pill-btn" id="ol-reset">reset</button>
+                    </div>
+                </div>
+                <div class="demo-card-body" style="flex-direction:column; align-items:stretch;">
+                    <div class="svg-wrap">
+                        <svg class="widget-svg" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="arr-primary" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#8b9fff"/></marker>
+                                <marker id="arr-accent" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#e2a44b"/></marker>
+                            </defs>
+
+                            <path id="ol-qk-arrow" class="flow-arrow" d="M460,90 Q280,15 100,90" style="stroke:#8b9fff; stroke-width:2.4;" marker-end="url(#arr-primary)"/>
+                            <text id="ol-qk-label" class="arc-label" x="280" y="30" text-anchor="middle" style="fill:#8b9fff;">QK circuit: same-token match</text>
+
+                            <path id="ol-ov-arrow" class="flow-arrow" d="M100,140 Q280,205 452,160" style="stroke:#e2a44b; stroke-width:2.4;" marker-end="url(#arr-accent)"/>
+                            <text id="ol-ov-label" class="arc-label" x="280" y="192" text-anchor="middle" style="fill:#e2a44b;">OV circuit: copy token identity forward</text>
+
+                            <!-- tokens -->
+                            <g id="ol-tok-0"><rect x="60" y="90" width="80" height="50" rx="7" class="tok-box"/><text x="100" y="121" class="tok-label">X</text><text x="100" y="78" class="pos-label">pos 0</text></g>
+                            <g id="ol-tok-1"><rect x="180" y="90" width="80" height="50" rx="7" class="tok-box"/><text x="220" y="121" class="tok-label">Y</text><text x="220" y="78" class="pos-label">pos 1</text></g>
+                            <g id="ol-tok-2"><rect x="300" y="90" width="80" height="50" rx="7" class="tok-box"/><text x="340" y="121" class="tok-label">Z</text><text x="340" y="78" class="pos-label">pos 2</text></g>
+                            <g id="ol-tok-3"><rect x="420" y="90" width="80" height="50" rx="7" class="tok-box"/><text x="460" y="121" class="tok-label">X</text><text x="460" y="78" class="pos-label">pos 3 (query)</text></g>
+
+                            <rect id="ol-pred-box" x="420" y="160" width="80" height="34" rx="6" class="pred-box"/>
+                            <text id="ol-pred-label" x="460" y="182" class="pred-label">next → ?</text>
+                        </svg>
+                    </div>
+                    <div class="caption-box" id="ol-caption"><strong>Step 0.</strong> The query is the final position, holding token <span class="mono">X</span>. With no attention yet, the direct path alone gives a flat guess for what comes next.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════ 4. INDUCTION HEADS ═══════════════════════ -->
+        <section class="chapter" id="induction">
+            <div class="prose">
+                <h2>Two layers: composition and induction heads</h2>
+                <p>A second layer can read a first layer's <em>output</em>, not just the raw embedding — this is called <strong>composition</strong>. When a layer-1 head builds its keys from a layer-0 head's output, that's <strong>K-composition</strong>, and it's the mechanism behind one of the most important circuits ever found in a language model: the <strong>induction head</strong>.</p>
+                <p>Induction heads implement one rule: <em>if this exact token appeared before, predict whatever followed it last time.</em> It's the circuit that lets a model complete patterns, copy names, and follow in-context examples — a primitive form of in-context learning, built from nothing more than two attention heads stacked on top of each other.</p>
+            </div>
+
+            <div class="demo-card mt-4">
+                <div class="demo-card-header">
+                    <div>
+                        <div class="demo-card-title">Induction head, step by step</div>
+                        <div class="demo-card-sub">sequence: D E F D — what comes after the second D?</div>
+                    </div>
+                    <div class="controls-row">
+                        <button class="pill-btn active" id="ind-next">next step →</button>
+                        <button class="pill-btn" id="ind-reset">reset</button>
+                    </div>
+                </div>
+                <div class="demo-card-body" style="flex-direction:column; align-items:stretch;">
+                    <div class="svg-wrap">
+                        <svg class="widget-svg" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#60a5fa"/></marker>
+                                <marker id="arr-accent2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#e2a44b"/></marker>
+                                <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#6ee7b7"/></marker>
+                            </defs>
+
+                            <!-- prev-token arrows (layer 0), short arcs below tokens -->
+                            <g id="ind-prev-arrows">
+                                <path class="flow-arrow" d="M220,160 Q160,195 100,160" style="stroke:#60a5fa; stroke-width:2.2;" marker-end="url(#arr-blue)"/>
+                                <path class="flow-arrow" d="M340,160 Q280,195 220,160" style="stroke:#60a5fa; stroke-width:2.2;" marker-end="url(#arr-blue)"/>
+                                <path class="flow-arrow" d="M460,160 Q400,195 340,160" style="stroke:#60a5fa; stroke-width:2.2;" marker-end="url(#arr-blue)"/>
+                            </g>
+                            <text id="ind-prev-label" class="arc-label" x="280" y="223" text-anchor="middle" style="fill:#60a5fa;">Layer 0 · previous-token heads write "prev token" into the stream</text>
+
+                            <!-- induction arrow (layer 1), long arc above -->
+                            <path id="ind-arrow" class="flow-arrow" d="M460,110 Q340,20 220,110" style="stroke:#e2a44b; stroke-width:2.6;" marker-end="url(#arr-accent2)"/>
+                            <text id="ind-label" class="arc-label" x="340" y="35" text-anchor="middle" style="fill:#e2a44b;">Layer 1 · induction head: query "D" matches a key encoding "prev = D"</text>
+
+                            <!-- OV copy arrow -->
+                            <path id="ind-ov-arrow" class="flow-arrow" d="M220,160 Q340,222 452,215" style="stroke:#6ee7b7; stroke-width:2.4;" marker-end="url(#arr-green)"/>
+                            <text id="ind-ov-label" class="arc-label" x="340" y="245" text-anchor="middle" style="fill:#6ee7b7;">OV circuit copies the actual token at that position forward</text>
+
+                            <!-- tokens -->
+                            <g><rect id="ind-box-0" x="60" y="110" width="80" height="50" rx="7" class="tok-box"/><text x="100" y="141" class="tok-label">D</text><text x="100" y="98" class="pos-label">pos 0</text></g>
+                            <g><rect id="ind-box-1" x="180" y="110" width="80" height="50" rx="7" class="tok-box"/><text x="220" y="141" class="tok-label">E</text><text x="220" y="98" class="pos-label">pos 1</text></g>
+                            <g><rect id="ind-box-2" x="300" y="110" width="80" height="50" rx="7" class="tok-box"/><text x="340" y="141" class="tok-label">F</text><text x="340" y="98" class="pos-label">pos 2</text></g>
+                            <g><rect id="ind-box-3" x="420" y="110" width="80" height="50" rx="7" class="tok-box"/><text x="460" y="141" class="tok-label">D</text><text x="460" y="98" class="pos-label">pos 3 (query)</text></g>
+
+                            <rect id="ind-pred-box" x="410" y="215" width="100" height="34" rx="6" class="pred-box"/>
+                            <text id="ind-pred-label" x="460" y="237" class="pred-label">next → ?</text>
+                        </svg>
+                    </div>
+                    <div class="caption-box" id="ind-caption"><strong>Step 0.</strong> The token <span class="mono">D</span> repeats at position 3. Last time it appeared, it was followed by <span class="mono">E</span>. Can the model recover that?</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════ 5. PATH EXPANSION ═══════════════════════ -->
+        <section class="chapter" id="path-expansion">
+            <div class="prose">
+                <h2>Expanding the full equation</h2>
+                <p>Because the residual stream is additive, an attention-only transformer's logits expand into a sum of fully independent, human-readable paths. Click a term to unpack it.</p>
+            </div>
+
+            <div class="demo-card mt-4">
+                <div class="demo-card-header">
+                    <div class="demo-card-title">Logits = Σ (paths)</div>
+                </div>
+                <div class="demo-card-body" style="flex-direction:column; align-items:stretch;">
+                    <div class="flex gap-3 flex-wrap">
+                        <div class="term-card active" data-term="direct" style="border-left-color:var(--chart-5);">
+                            <div class="term-name">Direct path</div>
+                            <div class="term-formula">W<sub>U</sub> W<sub>E</sub></div>
+                        </div>
+                        <div class="term-card" data-term="l0" style="border-left-color:var(--chart-1);">
+                            <div class="term-name">Layer-0 head paths</div>
+                            <div class="term-formula">Σ<sub>h</sub> W<sub>U</sub> W<sub>OV</sub><sup>0,h</sup> A<sup>0,h</sup> W<sub>E</sub></div>
+                        </div>
+                        <div class="term-card" data-term="l1" style="border-left-color:var(--chart-3);">
+                            <div class="term-name">Layer-1 head paths</div>
+                            <div class="term-formula">Σ<sub>h</sub> W<sub>U</sub> W<sub>OV</sub><sup>1,h</sup> A<sup>1,h</sup> W<sub>E</sub></div>
+                        </div>
+                        <div class="term-card" data-term="virtual" style="border-left-color:var(--chart-2);">
+                            <div class="term-name">Virtual head paths</div>
+                            <div class="term-formula">Σ<sub>h0,h1</sub> W<sub>U</sub> W<sub>OV</sub><sup>1,h1</sup> A<sup>1,h1</sup>(A<sup>0,h0</sup>W<sub>OV</sub><sup>0,h0</sup>) W<sub>E</sub></div>
+                        </div>
+                    </div>
+                    <div class="caption-box" id="term-caption">
+                        <strong>Direct path.</strong> Skips every layer entirely — this is exactly the zero-layer bigram table from section two. It's still part of the sum in every deeper model.
+                    </div>
+                </div>
+            </div>
+
+            <div class="prose">
+                <p class="mt-4">The last term — <strong>virtual head paths</strong> — is where induction heads live: a layer-1 head's attention pattern is computed using a layer-0 head's output instead of the raw token, so the pair of heads behaves like one new, more powerful "virtual" attention head. Real models drop plenty of terms here too: MLP layers and three-or-more-layer compositions multiply out combinatorially, which is a big part of why interpretability gets so much harder as models grow.</p>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════ 6. HEAD EXPLORER ═══════════════════════ -->
+        <section class="chapter" id="explorer">
+            <div class="prose">
+                <h2>Explore head types</h2>
+                <p>Not every head is an induction head. Small attention-only transformers develop a reusable cast of characters. Pick a head below to see its attention pattern on the sequence <span class="mono">The cat chased the cat</span>.</p>
+            </div>
+
+            <div class="demo-card mt-4">
+                <div class="demo-card-header">
+                    <div>
+                        <div class="demo-card-title" id="explorer-head-name">L0 H0 — Previous-Token Head</div>
+                        <div class="demo-card-sub" id="explorer-head-sub">attends to whatever came immediately before</div>
+                    </div>
+                </div>
+                <div class="demo-card-body" style="flex-direction:column; align-items:stretch;">
+                    <div class="head-grid-wrap">
+                        <div class="head-row-label">LAYER 0</div>
+                        <div class="head-btn-row" id="explorer-row-0"></div>
+                        <div class="head-row-label">LAYER 1</div>
+                        <div class="head-btn-row" id="explorer-row-1"></div>
+                    </div>
+
+                    <div class="flex gap-6 flex-wrap items-start mt-2">
+                        <div>
+                            <div class="demo-card-sub mb-2">rows = query position · columns = key position</div>
+                            <div id="explorer-grid" style="display:grid; grid-template-columns: 30px repeat(5, 36px); gap:2px;"></div>
+                        </div>
+                        <div class="flex-1" style="min-width:200px;">
+                            <div class="jspace-legend-item mb-2">
+                                <span class="jspace-legend-dot" style="background:var(--primary);"></span>
+                                <span class="text-xs text-muted mono">darker cell = higher attention weight</span>
+                            </div>
+                            <div class="caption-box" id="explorer-caption" style="border-top:none; padding-top:0; margin-top:0.5rem;">A previous-token head is one of the simplest useful heads a model can learn: at every position, look one step back. On its own it does very little — but it's exactly the ingredient layer 1 needs to build an induction head.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prose mt-10 mb-4">
+                <p class="text-xs text-muted mono">Concepts adapted from Anthropic's transformer-circuits research (transformer-circuits.pub). Built as a visual, interactive reference — not an academic reproduction.</p>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script>
+/* ═══════════════════════ TOC scroll-spy ═══════════════════════ */
+(function initTOC(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc-link'));
+    var sections = links.map(function(l){ return document.getElementById(l.dataset.target); });
+    function onScroll(){
+        var y = window.scrollY + 120;
+        var activeIdx = 0;
+        sections.forEach(function(s, i){ if (s && s.offsetTop <= y) activeIdx = i; });
+        links.forEach(function(l, i){ l.classList.toggle('active', i === activeIdx); });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+})();
+
+/* ═══════════════════════ 1. Residual stream play/pause ═══════════════════════ */
+(function initStream(){
+    var wrap = document.getElementById('stream-anim-wrap');
+    var btn = document.getElementById('stream-toggle');
+    var playing = true;
+    btn.addEventListener('click', function(){
+        playing = !playing;
+        wrap.classList.toggle('anim-playing', playing);
+        wrap.classList.toggle('anim-paused', !playing);
+        btn.textContent = playing ? '⏸ pause' : '▶ play';
+        btn.classList.toggle('active', playing);
+    });
+})();
+
+/* ═══════════════════════ 2. Zero-layer bigram grid ═══════════════════════ */
+(function initZeroLayer(){
+    var tokens = ["the","cat","sat","on","mat"];
+    var matrix = [
+        [0.05,0.45,0.05,0.05,0.40],
+        [0.10,0.05,0.70,0.10,0.05],
+        [0.10,0.05,0.05,0.75,0.05],
+        [0.70,0.05,0.05,0.05,0.15],
+        [0.55,0.05,0.10,0.10,0.15]
+    ];
+    var grid = document.getElementById('zero-grid');
+    var cellSize = 44;
+    grid.style.gridTemplateColumns = '54px repeat(' + tokens.length + ', ' + cellSize + 'px)';
+
+    function cellColor(v){
+        var alpha = Math.min(1, v / 0.8);
+        return 'rgba(139,159,255,' + (0.08 + alpha * 0.75) + ')';
+    }
+
+    // header row (corner + column labels)
+    var corner = document.createElement('div');
+    corner.className = 'mono text-xs text-muted';
+    corner.style.cssText = 'display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;';
+    corner.textContent = '→';
+    grid.appendChild(corner);
+    tokens.forEach(function(t){
+        var el = document.createElement('div');
+        el.className = 'mono text-xs text-muted';
+        el.style.cssText = 'display:flex;align-items:center;justify-content:center;text-align:center;';
+        el.textContent = t;
+        grid.appendChild(el);
+    });
+
+    var rowEls = [];
+    tokens.forEach(function(rowTok, r){
+        var label = document.createElement('div');
+        label.className = 'mono text-xs pill-btn';
+        label.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:0;border:1px solid var(--border);border-radius:4px;';
+        label.textContent = rowTok;
+        label.dataset.row = r;
+        label.addEventListener('click', function(){ selectRow(r); });
+        grid.appendChild(label);
+        var rowCells = [];
+        tokens.forEach(function(colTok, c){
+            var cell = document.createElement('div');
+            cell.className = 'attention-grid-cell';
+            cell.style.width = cellSize + 'px';
+            cell.style.height = cellSize + 'px';
+            cell.style.background = cellColor(matrix[r][c]);
+            cell.style.color = 'rgba(221,227,237,0.85)';
+            cell.title = rowTok + ' → ' + colTok + ' : ' + Math.round(matrix[r][c]*100) + '%';
+            cell.textContent = Math.round(matrix[r][c]*100);
+            rowCells.push(cell);
+            grid.appendChild(cell);
+        });
+        rowEls.push({ label: label, cells: rowCells });
+    });
+
+    var selectedLabel = document.getElementById('zero-selected-label');
+    var barsWrap = document.getElementById('zero-bars');
+    var caption = document.getElementById('zero-caption');
+
+    function selectRow(r){
+        rowEls.forEach(function(row, i){
+            var dim = (i !== r);
+            row.label.classList.toggle('active', i === r);
+            row.cells.forEach(function(c){ c.style.opacity = dim ? 0.28 : 1; });
+        });
+        selectedLabel.textContent = 'current token: "' + tokens[r] + '"';
+        barsWrap.innerHTML = '';
+        var maxV = Math.max.apply(null, matrix[r]);
+        tokens.forEach(function(t, c){
+            var v = matrix[r][c];
+            var row = document.createElement('div');
+            row.className = 'flex items-center gap-2';
+            row.innerHTML = '<span class="mono text-xs text-muted" style="width:34px;">' + t + '</span>' +
+                '<div style="flex:1;background:var(--secondary);border-radius:3px;height:10px;overflow:hidden;">' +
+                '<div style="height:100%;width:' + (v*100) + '%;background:' + (v === maxV ? 'var(--accent)' : 'var(--primary)') + ';border-radius:3px;"></div></div>' +
+                '<span class="mono text-xs text-muted" style="width:32px;text-align:right;">' + Math.round(v*100) + '%</span>';
+            barsWrap.appendChild(row);
+        });
+        var best = tokens[matrix[r].indexOf(maxV)];
+        caption.innerHTML = 'Given only the token <strong>"' + tokens[r] + '"</strong>, the direct path\'s highest-probability guess for the next token is <strong>"' + best + '"</strong> (' + Math.round(maxV*100) + '%) — a pure bigram statistic, no context involved.';
+    }
+    selectRow(0);
+})();
+
+/* ═══════════════════════ 3. One-layer duplicate-token head ═══════════════════════ */
+(function initOneLayer(){
+    var step = 0;
+    var qkArrow = document.getElementById('ol-qk-arrow');
+    var qkLabel = document.getElementById('ol-qk-label');
+    var ovArrow = document.getElementById('ol-ov-arrow');
+    var ovLabel = document.getElementById('ol-ov-label');
+    var tok0 = document.querySelector('#ol-tok-0 rect');
+    var tok3 = document.querySelector('#ol-tok-3 rect');
+    var predBox = document.getElementById('ol-pred-box');
+    var predLabel = document.getElementById('ol-pred-label');
+    var caption = document.getElementById('ol-caption');
+    var nextBtn = document.getElementById('ol-next');
+
+    var captions = [
+        '<strong>Step 0.</strong> The query is the final position, holding token <span class="mono">X</span>. With no attention yet, the direct path alone gives a flat guess for what comes next.',
+        '<strong>Step 1 — QK circuit.</strong> This head\'s query-key matrix fires hardest when a key token matches the query token. Position 3 (<span class="mono">X</span>) attends strongly back to position 0, the only earlier <span class="mono">X</span>.',
+        '<strong>Step 2 — OV circuit.</strong> Having chosen where to look, the OV circuit copies <em>what token is there</em> — the identity <span class="mono">X</span> — forward into the residual stream, directly boosting the logit for <span class="mono">X</span> to repeat.'
+    ];
+
+    function render(){
+        qkArrow.style.opacity = step >= 1 ? 1 : 0;
+        qkLabel.style.opacity = step >= 1 ? 1 : 0;
+        ovArrow.style.opacity = step >= 2 ? 1 : 0;
+        ovLabel.style.opacity = step >= 2 ? 1 : 0;
+        tok0.classList.toggle('k-active', step >= 1);
+        tok3.classList.toggle('q-active', step >= 1);
+        predBox.classList.toggle('boosted', step >= 2);
+        predLabel.classList.toggle('boosted', step >= 2);
+        predLabel.textContent = step >= 2 ? 'next → X ✓' : 'next → ?';
+        caption.innerHTML = captions[step];
+        nextBtn.textContent = step >= 2 ? '↻ replay' : 'next step →';
+    }
+    nextBtn.addEventListener('click', function(){
+        step = (step >= 2) ? 0 : step + 1;
+        render();
+    });
+    document.getElementById('ol-reset').addEventListener('click', function(){ step = 0; render(); });
+    render();
+})();
+
+/* ═══════════════════════ 4. Induction head animation ═══════════════════════ */
+(function initInduction(){
+    var step = 0;
+    var prevArrows = document.querySelectorAll('#ind-prev-arrows .flow-arrow');
+    var prevLabel = document.getElementById('ind-prev-label');
+    var indArrow = document.getElementById('ind-arrow');
+    var indLabel = document.getElementById('ind-label');
+    var ovArrow = document.getElementById('ind-ov-arrow');
+    var ovLabel = document.getElementById('ind-ov-label');
+    var box1 = document.getElementById('ind-box-1');
+    var box3 = document.getElementById('ind-box-3');
+    var predBox = document.getElementById('ind-pred-box');
+    var predLabel = document.getElementById('ind-pred-label');
+    var caption = document.getElementById('ind-caption');
+    var nextBtn = document.getElementById('ind-next');
+
+    var captions = [
+        '<strong>Step 0.</strong> The token <span class="mono">D</span> repeats at position 3. Last time it appeared, it was followed by <span class="mono">E</span>. Can the model recover that?',
+        '<strong>Step 1 — Layer 0, previous-token heads.</strong> At every position, a layer-0 head attends one step back and writes "the previous token was ___" into the stream. The slot at position 1 now encodes both <span class="mono">E</span> <em>and</em> "prev = D".',
+        '<strong>Step 2 — Layer 1, induction head (K-composition).</strong> This head\'s keys are built from layer 0\'s output, not the raw token. The query at position 3 represents "current = D"; the only key encoding "prev = D" sits at position 1 — so attention jumps straight there.',
+        '<strong>Step 3 — OV circuit.</strong> Attention has picked position 1; the OV circuit copies the actual token stored there — <span class="mono">E</span> — forward, boosting the logit for <span class="mono">E</span> as the next token. Pattern completed.'
+    ];
+
+    function render(){
+        prevArrows.forEach(function(a){ a.style.opacity = step >= 1 ? 1 : 0; });
+        prevLabel.style.opacity = step >= 1 ? 1 : 0;
+        indArrow.style.opacity = step >= 2 ? 1 : 0;
+        indLabel.style.opacity = step >= 2 ? 1 : 0;
+        ovArrow.style.opacity = step >= 3 ? 1 : 0;
+        ovLabel.style.opacity = step >= 3 ? 1 : 0;
+        box1.querySelector('rect').classList.toggle('k-active2', step >= 2);
+        box3.querySelector('rect').classList.toggle('q-active', step >= 2);
+        predBox.classList.toggle('boosted', step >= 3);
+        predLabel.classList.toggle('boosted', step >= 3);
+        predLabel.textContent = step >= 3 ? 'next → E ✓' : 'next → ?';
+        caption.innerHTML = captions[step];
+        nextBtn.textContent = step >= 3 ? '↻ replay' : 'next step →';
+    }
+    nextBtn.addEventListener('click', function(){
+        step = (step >= 3) ? 0 : step + 1;
+        render();
+    });
+    document.getElementById('ind-reset').addEventListener('click', function(){ step = 0; render(); });
+    render();
+})();
+
+/* ═══════════════════════ 5. Path expansion term cards ═══════════════════════ */
+(function initPathExpansion(){
+    var cards = document.querySelectorAll('.term-card');
+    var caption = document.getElementById('term-caption');
+    var texts = {
+        direct: '<strong>Direct path.</strong> Skips every layer entirely — this is exactly the zero-layer bigram table from section two. It\'s still part of the sum in every deeper model.',
+        l0: '<strong>Layer-0 head paths.</strong> Each layer-0 head contributes its own independent term: attend somewhere with its QK circuit, copy a value with its OV circuit, project to logits. These paths can only condition on the raw token embedding — they can\'t yet build on another head\'s work.',
+        l1: '<strong>Layer-1 head paths.</strong> A layer-1 head can also attend and write using only the raw embedding, skipping layer 0 entirely — the same shape as a layer-0 path, just one layer later. On its own this still can\'t implement induction.',
+        virtual: '<strong>Virtual head paths.</strong> A layer-1 head\'s attention pattern computed from a layer-0 head\'s <em>output</em> rather than the raw token — K-, Q-, or V-composition. This is the only term where induction heads can exist, since it\'s the only place a layer-1 head gets to react to what a layer-0 head already found.'
+    };
+    cards.forEach(function(card){
+        card.addEventListener('click', function(){
+            cards.forEach(function(c){ c.classList.remove('active'); });
+            card.classList.add('active');
+            caption.innerHTML = texts[card.dataset.term];
+        });
+    });
+})();
+
+/* ═══════════════════════ 6. Head explorer ═══════════════════════ */
+(function initExplorer(){
+    var seqTokens = ["The","cat","chased","the","cat"];
+    var heads = [
+        { id:'L0H0', layer:0, name:'L0 H0 — Previous-Token Head', sub:'attends to whatever came immediately before',
+          desc:'A previous-token head is one of the simplest useful heads a model can learn: at every position, look one step back. On its own it does very little — but it\'s exactly the ingredient layer 1 needs to build an induction head.',
+          m:[[0.90,0.03,0.03,0.02,0.02],[0.85,0.06,0.03,0.03,0.03],[0.05,0.85,0.04,0.03,0.03],[0.04,0.04,0.85,0.04,0.03],[0.03,0.04,0.04,0.85,0.04]] },
+        { id:'L0H1', layer:0, name:'L0 H1 — Duplicate-Token Head', sub:'attends back to an earlier occurrence of the same token',
+          desc:'A duplicate-token head detects repetition directly: when the current token has appeared earlier in the sequence, attend back to that earlier copy. Pair this with the right OV circuit and it predicts "repeat the token" outright — the one-layer trick from section three.',
+          m:[[0.90,0.03,0.03,0.02,0.02],[0.05,0.85,0.04,0.03,0.03],[0.03,0.04,0.87,0.03,0.03],[0.75,0.05,0.05,0.10,0.05],[0.05,0.75,0.05,0.05,0.10]] },
+        { id:'L0H2', layer:0, name:'L0 H2 — Positional / Broad Head', sub:'attends mostly to a fixed position regardless of content',
+          desc:'Some heads barely look at content at all — they attend to a fixed position (often the very first token) almost regardless of what\'s there. These often act as a kind of default or "no-op" destination, softly aggregating broad context.',
+          m:[[0.90,0.025,0.025,0.025,0.025],[0.70,0.10,0.10,0.05,0.05],[0.60,0.15,0.10,0.10,0.05],[0.60,0.10,0.10,0.15,0.05],[0.55,0.15,0.10,0.10,0.10]] },
+        { id:'L0H3', layer:0, name:'L0 H3 — Diffuse Head', sub:'no clear pattern — attention spread thinly across all positions',
+          desc:'Not every head is cleanly interpretable. Many heads spread attention nearly uniformly across positions — contributing a small, diffuse signal that doesn\'t reduce to one tidy rule.',
+          m:[[0.22,0.20,0.19,0.20,0.19],[0.20,0.21,0.20,0.19,0.20],[0.19,0.20,0.21,0.20,0.20],[0.20,0.19,0.20,0.21,0.20],[0.20,0.20,0.19,0.20,0.21]] },
+        { id:'L1H0', layer:1, name:'L1 H0 — Induction Head', sub:'K-composes with a layer-0 previous-token head to complete patterns',
+          desc:'The star of section four. Position 4 (the second "cat") attends back to position 2 ("chased") — the token that followed the first "cat" — because its keys were K-composed from a layer-0 previous-token head. The result: predict "chased" again.',
+          m:[[0.90,0.025,0.025,0.025,0.025],[0.10,0.75,0.05,0.05,0.05],[0.10,0.10,0.70,0.05,0.05],[0.05,0.75,0.05,0.10,0.05],[0.05,0.10,0.75,0.05,0.05]] },
+        { id:'L1H1', layer:1, name:'L1 H1 — Copying Head', sub:'attends mostly to its own position, reinforcing the current token',
+          desc:'A copying head mostly attends to the current position itself, using its OV circuit to reinforce or suppress the current token\'s own logit — a simple but common building block once composition is available.',
+          m:[[0.88,0.03,0.03,0.03,0.03],[0.05,0.85,0.04,0.03,0.03],[0.04,0.04,0.87,0.03,0.02],[0.05,0.04,0.04,0.84,0.03],[0.04,0.05,0.04,0.04,0.83]] },
+        { id:'L1H2', layer:1, name:'L1 H2 — Diffuse Head', sub:'soft, roughly local attention with no single dominant target',
+          desc:'Layer-1 heads have more to work with — including layer-0 outputs — but plenty still land on soft, distributed patterns rather than one clean rule.',
+          m:[[0.30,0.20,0.15,0.20,0.15],[0.15,0.30,0.20,0.15,0.20],[0.15,0.20,0.30,0.20,0.15],[0.20,0.15,0.20,0.30,0.15],[0.15,0.20,0.15,0.20,0.30]] },
+        { id:'L1H3', layer:1, name:'L1 H3 — Diffuse Head', sub:'another distributed pattern, slightly different shape',
+          desc:'A second diffuse layer-1 head — a reminder that real models are a mix of a few sharp, nameable circuits and many blurrier, harder-to-summarize ones.',
+          m:[[0.25,0.25,0.15,0.20,0.15],[0.20,0.25,0.25,0.15,0.15],[0.15,0.20,0.25,0.25,0.15],[0.15,0.15,0.20,0.25,0.25],[0.25,0.15,0.15,0.20,0.25]] }
+    ];
+
+    var row0 = document.getElementById('explorer-row-0');
+    var row1 = document.getElementById('explorer-row-1');
+    var grid = document.getElementById('explorer-grid');
+    var nameEl = document.getElementById('explorer-head-name');
+    var subEl = document.getElementById('explorer-head-sub');
+    var captionEl = document.getElementById('explorer-caption');
+    var buttons = {};
+
+    heads.forEach(function(h){
+        var btn = document.createElement('button');
+        btn.className = 'pill-btn';
+        btn.textContent = h.id;
+        btn.addEventListener('click', function(){ selectHead(h.id); });
+        buttons[h.id] = btn;
+        (h.layer === 0 ? row0 : row1).appendChild(btn);
+    });
+
+    function cellColor(v){
+        var alpha = Math.min(1, v / 0.85);
+        return 'rgba(139,159,255,' + (0.06 + alpha * 0.8) + ')';
+    }
+
+    function buildGrid(m){
+        grid.innerHTML = '';
+        var corner = document.createElement('div');
+        grid.appendChild(corner);
+        seqTokens.forEach(function(t){
+            var el = document.createElement('div');
+            el.className = 'mono text-xs text-muted';
+            el.style.cssText = 'display:flex;align-items:center;justify-content:center;font-size:9px;text-align:center;';
+            el.textContent = t.slice(0,3);
+            grid.appendChild(el);
+        });
+        seqTokens.forEach(function(rowTok, r){
+            var label = document.createElement('div');
+            label.className = 'mono text-xs text-muted';
+            label.style.cssText = 'display:flex;align-items:center;justify-content:center;font-size:9px;';
+            label.textContent = rowTok.slice(0,3);
+            grid.appendChild(label);
+            seqTokens.forEach(function(colTok, c){
+                var cell = document.createElement('div');
+                cell.className = 'attention-grid-cell';
+                cell.style.width = '36px';
+                cell.style.height = '36px';
+                cell.style.background = cellColor(m[r][c]);
+                cell.style.color = 'rgba(221,227,237,0.8)';
+                cell.style.fontSize = '9px';
+                cell.title = rowTok + ' attends to ' + colTok + ': ' + Math.round(m[r][c]*100) + '%';
+                cell.textContent = Math.round(m[r][c]*100);
+                grid.appendChild(cell);
+            });
+        });
+    }
+
+    function selectHead(id){
+        var h = heads.find(function(x){ return x.id === id; });
+        Object.keys(buttons).forEach(function(k){ buttons[k].classList.toggle('active', k === id); });
+        nameEl.textContent = h.name;
+        subEl.textContent = h.sub;
+        captionEl.innerHTML = h.desc;
+        buildGrid(h.m);
+    }
+    selectHead('L0H0');
+})();
+</script>
+</body>
+</html>
+
+
